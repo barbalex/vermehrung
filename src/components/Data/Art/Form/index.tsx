@@ -38,7 +38,7 @@ export const ArtForm = ({
 }: {
   activeConflict: string | null
   id: string | undefined
-  row: import('../../../shared/types.ts').Art | null | undefined
+  row: import('../../../../dbModel.ts').Art | null | undefined
   setActiveConflict: (val: unknown) => void
   showFilter: boolean
   showHistory: boolean
@@ -88,7 +88,7 @@ export const ArtForm = ({
     unsetError('art')
   }, [id])
 
-  const saveToDb = async (event) => {
+  const saveToDb = async (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
     const field = event.target.name
     let value = ifIsNumericAsNumber(event.target.value)
     if (event.target.value === undefined) value = null
@@ -101,7 +101,7 @@ export const ArtForm = ({
     // only update if value has changed
     const previousValue = ifIsNumericAsNumber(row[field])
     if (value === previousValue) return
-    row.edit({ field, value })
+    row?.edit({ field, value })
   }
 
   const setsUngrouped = artsSorted
@@ -117,7 +117,7 @@ export const ArtForm = ({
 
   const aeArtIdsNotToShow = artsSorted
     .map((a) => a.ae_id)
-    .filter((ae_id) => ae_id !== row.ae_id)
+    .filter((ae_id) => ae_id !== row?.ae_id)
 
   const aeArtsFilter = (val) => {
     if (showFilter) {
@@ -147,19 +147,19 @@ export const ArtForm = ({
           <>
             {showFilter ? (
               <JesNo
-                key={`${row.id}_deleted`}
+                key={`${row?.id}_deleted`}
                 label="gelöscht"
                 name="_deleted"
-                value={row._deleted}
+                value={row?._deleted}
                 saveToDb={saveToDb}
                 error={errors?.art?._deleted}
               />
             ) : (
               <Checkbox2States
-                key={`${row.id}_deleted`}
+                key={`${row?.id}_deleted`}
                 label="gelöscht"
                 name="_deleted"
-                value={row._deleted}
+                value={row?._deleted}
                 saveToDb={saveToDb}
                 error={errors?.art?._deleted}
               />
@@ -167,14 +167,14 @@ export const ArtForm = ({
           </>
         )}
         <TaxonSelect
-          key={`${row.id}${row.ae_id}ae_id`}
+          key={`${row?.id}${row?.ae_id}ae_id`}
           art={row}
           saveToDb={saveToDb}
           error={errors?.art?.ae_id}
           modelFilter={aeArtsFilter}
         />
         <SelectCreatable
-          key={`${row.id}${row.set}set`}
+          key={`${row?.id}${row?.set}set`}
           row={row}
           showFilter={showFilter}
           table="art"
@@ -186,28 +186,28 @@ export const ArtForm = ({
           formatCreateLabel={(val) => `"${val}" als neues Set aufnehmen`}
         />
         <TextField
-          key={`${row.id}apflora_av`}
+          key={`${row?.id}apflora_av`}
           name="apflora_av"
           label="Artverantwortlich in AP Flora"
-          value={row.apflora_av}
+          value={row?.apflora_av}
           saveToDb={saveToDb}
           error={errors?.art?.apflora_av}
         />
         {showFilter ? (
           <JesNo
-            key={`${row.id}apflora_ap`}
+            key={`${row?.id}apflora_ap`}
             label="Aktionsplan"
             name="apflora_ap"
-            value={row.apflora_ap}
+            value={row?.apflora_ap}
             saveToDb={saveToDb}
             error={errors?.art?.apflora_ap}
           />
         ) : (
           <Checkbox2States
-            key={`${row.id}apflora_ap`}
+            key={`${row?.id}apflora_ap`}
             label="Aktionsplan"
             name="apflora_ap"
-            value={row.apflora_ap}
+            value={row?.apflora_ap}
             saveToDb={saveToDb}
             error={errors?.art?.apflora_ap}
           />

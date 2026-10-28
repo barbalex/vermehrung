@@ -28,11 +28,11 @@ export const Personen = ({ art }: { art: import('../../../../shared/types.ts').W
   const errors = useAtomValue(errorsAtom)
   const personFilter = useAtomValue(filterPersonAtom)
 
-  useEffect(() => unsetError('av'), [art.id])
+  useEffect(() => unsetError('av'), [art?.id])
 
   const [open, setOpen] = useState(false)
   const anim = useAnimation()
-  const onClickToggle = async (e) => {
+  const onClickToggle = async (e: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
     e.stopPropagation()
     if (open) {
       const was = open
@@ -77,8 +77,8 @@ export const Personen = ({ art }: { art: import('../../../../shared/types.ts').W
       .get('person')
       .query(delQuery, aktivQuery)
       .observe()
-    const avsObservable = art.avs
-      ? art.avs.extend(Q.where('_deleted', false)).observe()
+    const avsObservable = art?.avs
+      ? art?.avs.extend(Q.where('_deleted', false)).observe()
       : $of([])
     const combinedObservables = combineLatest([
       personsObservable,
@@ -89,7 +89,7 @@ export const Personen = ({ art }: { art: import('../../../../shared/types.ts').W
         const avsSorted = await avsSortByPerson(avs)
         const avPersonIds = avsSorted.map((v) => v.person_id)
         const personWerte = persons
-          .filter((a) => !avPersonIds.includes(a.id))
+          .filter((a: import('../../../../../dbModel.ts').Art) => !avPersonIds.includes(a.id))
           .sort(personSort)
           .map((el) => ({
             value: el.id,
@@ -100,11 +100,11 @@ export const Personen = ({ art }: { art: import('../../../../shared/types.ts').W
       },
     )
     return () => subscription?.unsubscribe?.()
-  }, [art.avs, db, personFilter])
+  }, [art?.avs, db, personFilter])
   const { avsSorted, personWerte } = dataState
 
-  const saveToDb = (event) =>
-    insertAvRev({ values: { art_id: art.id, person_id: event.target.value } })
+  const saveToDb = (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) =>
+    insertAvRev({ values: { art_id: art?.id, person_id: event.target.value } })
 
   return (
     <ErrorBoundary>

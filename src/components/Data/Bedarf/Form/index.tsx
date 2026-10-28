@@ -39,7 +39,7 @@ export const BedarfForm = ({
 }: {
   showFilter: boolean
   id: string | undefined
-  row: import('../../../shared/types.ts').Bedarf | null | undefined
+  row: import('../../../../dbModel.ts').Bedarf | null | undefined
   rawRow: Record<string, unknown> | null | undefined
   activeConflict: string | null
   setActiveConflict: (val: unknown) => void
@@ -123,7 +123,7 @@ export const BedarfForm = ({
         // need to show a choosen kultur even if inactive but not if deleted
         let kultur
         try {
-          kultur = await row.kultur.fetch()
+          kultur = await row?.kultur.fetch()
         } catch {}
         const kultursIncludingChoosen = uniqBy(
           [...kulturs, ...(kultur && !showFilter ? [kultur] : [])],
@@ -150,7 +150,7 @@ export const BedarfForm = ({
         // need to show a choosen person even if inactive but not if deleted
         let person
         try {
-          person = await row.person.fetch()
+          person = await row?.person.fetch()
         } catch {}
         const personsIncludingChoosen = uniqBy(
           [...persons, ...(person && !showFilter ? [person] : [])],
@@ -188,7 +188,7 @@ export const BedarfForm = ({
   ])
   const { kulturWerte, personWerte } = dataState
 
-  const saveToDb = (event) => {
+  const saveToDb = (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
     const field = event.target.name
     let value = ifIsNumericAsNumber(event.target.value)
     if (event.target.value === undefined) value = null
@@ -201,7 +201,7 @@ export const BedarfForm = ({
     const previousValue = ifIsNumericAsNumber(row?.[field])
     // only update if value has changed
     if (value === previousValue) return
-    row.edit({ field, value })
+    row?.edit({ field, value })
   }
 
   const showDeleted = bedarfFilter._deleted !== false || row?._deleted
@@ -218,19 +218,19 @@ export const BedarfForm = ({
           <>
             {showFilter ? (
               <JesNo
-                key={`${row.id}_deleted`}
+                key={`${row?.id}_deleted`}
                 label="gelöscht"
                 name="_deleted"
-                value={row._deleted}
+                value={row?._deleted}
                 saveToDb={saveToDb}
                 error={errors?.bedarf?._deleted}
               />
             ) : (
               <Checkbox2States
-                key={`${row.id}_deleted`}
+                key={`${row?.id}_deleted`}
                 label="gelöscht"
                 name="_deleted"
-                value={row._deleted}
+                value={row?._deleted}
                 saveToDb={saveToDb}
                 error={errors?.bedarf?._deleted}
               />
@@ -238,9 +238,9 @@ export const BedarfForm = ({
           </>
         )}
         <Select
-          key={`${row.id}${row.kultur_id}kultur_id`}
+          key={`${row?.id}${row?.kultur_id}kultur_id`}
           name="kultur_id"
-          value={row.kultur_id}
+          value={row?.kultur_id}
           field="kultur_id"
           label="Kultur"
           options={kulturWerte}
@@ -248,45 +248,45 @@ export const BedarfForm = ({
           error={errors?.bedarf?.kultur_id}
         />
         <TextField
-          key={`${row.id}jahr`}
+          key={`${row?.id}jahr`}
           name="jahr"
           label="Jahr"
-          value={row.jahr}
+          value={row?.jahr}
           saveToDb={saveToDb}
           error={errors?.bedarf?.jahr}
           type="number"
         />
         <TextField
-          key={`${row.id}beschreibung`}
+          key={`${row?.id}beschreibung`}
           name="beschreibung"
           label="Beschreibung"
-          value={row.beschreibung}
+          value={row?.beschreibung}
           saveToDb={saveToDb}
           error={errors?.bedarf?.beschreibung}
           multiline
         />
         <TextField
-          key={`${row.id}bemerkungen`}
+          key={`${row?.id}bemerkungen`}
           name="bemerkungen"
           label="Bemerkungen"
-          value={row.bemerkungen}
+          value={row?.bemerkungen}
           saveToDb={saveToDb}
           error={errors?.bedarf?.bemerkungen}
           multiline
         />
         <TextField
-          key={`${row.id}neues_material`}
+          key={`${row?.id}neues_material`}
           name="neues_material"
           label="Neues Material"
-          value={row.neues_material}
+          value={row?.neues_material}
           saveToDb={saveToDb}
           error={errors?.bedarf?.neues_material}
           multiline
         />
         <Select
-          key={`${row.id}${row.person_id}person_id`}
+          key={`${row?.id}${row?.person_id}person_id`}
           name="person_id"
-          value={row.person_id}
+          value={row?.person_id}
           field="person_id"
           label="Wer"
           options={personWerte}

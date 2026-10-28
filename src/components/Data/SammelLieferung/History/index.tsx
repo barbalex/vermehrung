@@ -27,7 +27,7 @@ export const SammelLieferungHistory = ({
   rawRow,
   historyTakeoverCallback,
 }: {
-  row: import('../../../shared/types.ts').SammelLieferung | null | undefined
+  row: import('../../../../dbModel.ts').SammelLieferung | null | undefined
   rawRow: Record<string, unknown> | null | undefined
   historyTakeoverCallback: () => void
 }) => {

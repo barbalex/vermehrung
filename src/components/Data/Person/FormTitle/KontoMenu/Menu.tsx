@@ -10,7 +10,7 @@ export const PersonKontoMenu = ({
   setMenuAnchorEl,
   asMenu,
 }: {
-  row: import('../../../../shared/types.ts').Person | null | undefined
+  row: import('../../../../../dbModel.ts').Person | null | undefined
   menuAnchorEl: HTMLElement | null
   setMenuAnchorEl: (val: unknown) => void
   asMenu: boolean

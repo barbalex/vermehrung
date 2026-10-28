@@ -20,7 +20,7 @@ export const deleteDataset = async ({ node }) => {
 
   let me
   try {
-    me = await db.get(table).find(id)
+    me = await db?.get(table).find(id)
   } catch {}
   if (!me?.delete) throw new Error(`Kein Modell für Tabelle ${table} gefunden`)
   me.delete()

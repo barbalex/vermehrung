@@ -27,7 +27,7 @@ export const ArtHistory = ({
   rawRow,
   historyTakeoverCallback,
 }: {
-  row: import('../../../shared/types.ts').Art | null | undefined
+  row: import('../../../../dbModel.ts').Art | null | undefined
   rawRow?: unknown
   historyTakeoverCallback?: () => void
 }) => {

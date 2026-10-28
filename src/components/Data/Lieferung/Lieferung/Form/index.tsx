@@ -35,7 +35,7 @@ export const LierferungForm = ({
 }: {
   showFilter: boolean
   id: string | undefined
-  row: import('../../../../shared/types.ts').Lieferung | null | undefined
+  row: import('../../../../../dbModel.ts').Lieferung | null | undefined
   rawRow: Record<string, unknown> | null | undefined
   activeConflict: string | null
   setActiveConflict: (val: unknown) => void
@@ -61,8 +61,8 @@ export const LierferungForm = ({
           .query(Q.on('person', Q.where('account_id', user.uid)))
           .observeWithColumns(['li_show_sl_felder'])
       : $of({})
-    const sLObservable = row.sammel_lieferung
-      ? row.sammel_lieferung.observe()
+    const sLObservable = row?.sammel_lieferung
+      ? row?.sammel_lieferung.observe()
       : $of({})
     const combinedObservables = combineLatest([
       userPersonOptionsObservable,
@@ -72,11 +72,11 @@ export const LierferungForm = ({
       async ([userPersonOptions, sammelLieferung]) => {
         let vonSammlung
         try {
-          vonSammlung = await row.sammlung.fetch()
+          vonSammlung = await row?.sammlung.fetch()
         } catch {}
         let vonSammlungHerkunft
         try {
-          vonSammlungHerkunft = await vonSammlung.herkunft.fetch()
+          vonSammlungHerkunft = await vonSammlung?.herkunft.fetch()
         } catch {}
 
         if (vonSammlungHerkunft) {
@@ -88,14 +88,14 @@ export const LierferungForm = ({
           })
         }
 
-        if (row.von_kultur_id) {
+        if (row?.von_kultur_id) {
           let vonKultur
           try {
-            vonKultur = await db?.get('kultur').find(row.von_kultur_id as string)
+            vonKultur = await db?.get('kultur').find(row?.von_kultur_id as string)
           } catch {}
           let herkunftByVonKultur
           try {
-            herkunftByVonKultur = await vonKultur.herkunft.fetch()
+            herkunftByVonKultur = await vonKultur?.herkunft.fetch()
           } catch {}
           if (herkunftByVonKultur) {
             return setDataState({
@@ -108,11 +108,11 @@ export const LierferungForm = ({
         }
         let nachKultur
         try {
-          nachKultur = await db?.get('kultur').find(row.nach_kultur_id as string)
+          nachKultur = await db?.get('kultur').find(row?.nach_kultur_id as string)
         } catch {}
         let herkunftByNachKultur
         try {
-          herkunftByNachKultur = await nachKultur.herkunft.fetch()
+          herkunftByNachKultur = await nachKultur?.herkunft.fetch()
         } catch {}
 
         setDataState({
@@ -127,11 +127,11 @@ export const LierferungForm = ({
     return () => subscription?.unsubscribe?.()
   }, [
     db,
-    row.nach_kultur_id,
-    row.sammel_lieferung,
-    row.sammlung,
-    row.von_kultur_id,
-    row.von_sammlung_id,
+    row?.nach_kultur_id,
+    row?.sammel_lieferung,
+    row?.sammlung,
+    row?.von_kultur_id,
+    row?.von_sammlung_id,
     user.uid,
   ])
   const { herkunft, herkunftQuelle, userPersonOption, sammelLieferung } =
@@ -158,7 +158,7 @@ export const LierferungForm = ({
     unsetError('lieferung')
   }, [id])
 
-  const saveToDb = (event) => {
+  const saveToDb = (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
     const field = event.target.name
     let value = ifIsNumericAsNumber(event.target.value)
     if (event.target.value === undefined) value = null
@@ -171,7 +171,7 @@ export const LierferungForm = ({
     // only update if value has changed
     const previousValue = ifIsNumericAsNumber(row[field])
     if (value === previousValue) return
-    row.edit({ field, value })
+    row?.edit({ field, value })
   }
 
   const showDeleted = lieferungFilter._deleted !== false || row?._deleted
@@ -190,19 +190,19 @@ export const LierferungForm = ({
           <>
             {showFilter ? (
               <JesNo
-                key={`${row.id}_deleted`}
+                key={`${row?.id}_deleted`}
                 label="gelöscht"
                 name="_deleted"
-                value={row._deleted}
+                value={row?._deleted}
                 saveToDb={saveToDb}
                 error={errors?.kultur?._deleted}
               />
             ) : (
               <Checkbox2States
-                key={`${row.id}_deleted`}
+                key={`${row?.id}_deleted`}
                 label="gelöscht"
                 name="_deleted"
-                value={row._deleted}
+                value={row?._deleted}
                 saveToDb={saveToDb}
                 error={errors?.kultur?._deleted}
               />

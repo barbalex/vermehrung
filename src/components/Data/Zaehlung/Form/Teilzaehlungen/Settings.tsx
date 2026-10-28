@@ -25,7 +25,7 @@ export const TeilzaehlungenSettings = ({ kulturId }) => {
     const kulturOptionObservable = kulturId
       ? db?.get('kultur_option').findAndObserve(kulturId)
       : $of({})
-    const subscription = kulturOptionObservable.subscribe(
+    const subscription = kulturOptionObservable?.subscribe(
       async (kulturOption) => {
         setDataState({ kulturOption })
       },
@@ -42,10 +42,10 @@ export const TeilzaehlungenSettings = ({ kulturId }) => {
     tz_bemerkungen,
   } = kulturOption ?? {}
 
-  const saveToDb = (event) => {
+  const saveToDb = (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
     const field = event.target.name
     const value = event.target.value === 'false'
-    kulturOption.edit({ field, value })
+    kulturOption?.edit({ field, value })
   }
 
   const openSettingsDocs = () => {
@@ -57,9 +57,9 @@ export const TeilzaehlungenSettings = ({ kulturId }) => {
     window.open(url)
   }
 
-  const [anchorEl, setAnchorEl] = useState(null)
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | undefined | null>(null)
   const onClose = () => setAnchorEl(null)
-  const onClickConfig = (event) => setAnchorEl(event.currentTarget)
+  const onClickConfig = (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => setAnchorEl(event.currentTarget)
 
   return (
     <ErrorBoundary>

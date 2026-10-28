@@ -5,18 +5,18 @@ export const createDataArrayForSammlungRevComparison = ({ row, revRow }: {
   revRow: Record<string, unknown> | null | undefined
 }) => [
   {
-    valueInRow: row.art_id,
-    valueInRev: revRow.art_id,
+    valueInRow: row?.art_id,
+    valueInRev: revRow?.art_id,
     label: 'Art (id)',
   },
   {
-    valueInRow: row.person_id,
-    valueInRev: revRow.person_id,
+    valueInRow: row?.person_id,
+    valueInRev: revRow?.person_id,
     label: 'Person (id)',
   },
   {
-    valueInRow: row.herkunft_id,
-    valueInRev: revRow.herkunft_id,
+    valueInRow: row?.herkunft_id,
+    valueInRev: revRow?.herkunft_id,
     label: 'Herkunft (id)',
   },
   {
@@ -79,8 +79,8 @@ export const createDataArrayForSammlungRevComparison = ({ row, revRow }: {
     label: 'geändert von',
   },
   {
-    valueInRow: row._deleted,
-    valueInRev: revRow._deleted,
+    valueInRow: row?._deleted,
+    valueInRev: revRow?._deleted,
     label: 'gelöscht',
   },
 ]

@@ -19,7 +19,7 @@ export const HerkunftHistoryRow = ({
   revRow,
   historyTakeoverCallback,
 }: {
-  row: import('../../../shared/types.ts').Herkunft | null | undefined
+  row: import('../../../../dbModel.ts').Herkunft | null | undefined
   revRow: import('../../../shared/types.ts').WmRow | null | undefined
   historyTakeoverCallback: () => void
 }) => {
@@ -34,17 +34,17 @@ export const HerkunftHistoryRow = ({
     // otherwise risk to still have lower depth and thus loosing
     const newDepth = ((row?._depth as number) ?? 0) + 1
     const newObject: Record<string, unknown> = {
-      herkunft_id: revRow.herkunft_id,
-      nr: revRow.nr,
-      lokalname: revRow.lokalname,
-      gemeinde: revRow.gemeinde,
-      kanton: revRow.kanton,
-      land: revRow.land,
-      geom_point: revRow.geom_point,
-      bemerkungen: revRow.bemerkungen,
+      herkunft_id: revRow?.herkunft_id,
+      nr: revRow?.nr,
+      lokalname: revRow?.lokalname,
+      gemeinde: revRow?.gemeinde,
+      kanton: revRow?.kanton,
+      land: revRow?.land,
+      geom_point: revRow?.geom_point,
+      bemerkungen: revRow?.bemerkungen,
       _parent_rev: row?._rev,
       _depth: newDepth,
-      _deleted: revRow._deleted,
+      _deleted: revRow?._deleted,
     }
     const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     newObject._rev = rev
@@ -73,11 +73,11 @@ export const HerkunftHistoryRow = ({
     // TODO: is this a good idea?
     newObjectForStore._conflicts = row?._conflicts
     // for store: convert rev to winner
-    newObjectForStore.id = row.id
+    newObjectForStore.id = row?.id
     delete newObjectForStore.herkunft_id
     // optimistically update store
     await db?.write(async () => {
-      await row.update((row: Record<string, unknown>) => {
+      await row?.update((row: Record<string, unknown>) => {
         Object.entries(newObjectForStore).forEach(([key, value]) => {
           if (!isEqual(value, row[key])) {
             row[key] = value
@@ -89,7 +89,7 @@ export const HerkunftHistoryRow = ({
 
   return (
     <History
-      rev={revRow._rev}
+      rev={revRow?._rev}
       dataArray={dataArray}
       onClickWiderspruchUebernehmen={onClickWiderspruchUebernehmen}
     />

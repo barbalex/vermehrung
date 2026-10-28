@@ -24,7 +24,7 @@ export const ZaehlungConflict = ({
 }: {
   id: string | undefined
   rev: string | boolean | null
-  row: import('../../shared/types.ts').Zaehlung | null | undefined
+  row: import('../../../dbModel.ts').Zaehlung | null | undefined
   conflictDisposalCallback: () => void
   conflictSelectionCallback: () => void
   setActiveConflict: (conflict: string | null) => void

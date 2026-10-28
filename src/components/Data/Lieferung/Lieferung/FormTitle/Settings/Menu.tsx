@@ -43,7 +43,7 @@ export const LieferungSettingsMenu = ({ anchorEl, setAnchorEl }) => {
 
   const { li_show_sl_felder, li_show_sl } = userPersonOption ?? {}
 
-  const saveToDb = (event) => {
+  const saveToDb = (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
     const field = event.target.name
     const value = event.target.value === 'false'
     userPersonOption.edit({ field, value })

@@ -24,7 +24,7 @@ export const LieferungNach = ({
   herkunft,
 }: {
   showFilter: boolean
-  row: import('../../../../../shared/types.ts').Lieferung | null | undefined
+  row: import('../../../../../../dbModel.ts').Lieferung | null | undefined
   saveToDb: (event: { target: { name?: string; value: unknown } }) => void
   ifNeeded: boolean
   herkunft: import('../../../../../shared/types.ts').WmRow | null | undefined
@@ -56,14 +56,14 @@ export const LieferungNach = ({
       {ifNeeded('nach_kultur_id') && (
         <div className={styles.selectRow}>
           <Select
-            key={`${row.id}${row.nach_kultur_id}nach_kultur_id`}
+            key={`${row?.id}${row?.nach_kultur_id}nach_kultur_id`}
             name="nach_kultur_id"
-            value={row.nach_kultur_id}
+            value={row?.nach_kultur_id}
             field="nach_kultur_id"
             label={`Kultur${
-              exists(row.art_id)
+              exists(row?.art_id)
                 ? ` (Kulturen derselben Art und Herkunft${
-                    row.von_kultur_id ? ', ohne die von-Kultur' : ''
+                    row?.von_kultur_id ? ', ohne die von-Kultur' : ''
                   })`
                 : ''
             }`}
@@ -72,7 +72,7 @@ export const LieferungNach = ({
             error={errors?.lieferung?.nach_kultur_id}
           />
           <Add
-            disabled={!(row.art_id && herkunft) || !row.von_sammlung_id}
+            disabled={!(row?.art_id && herkunft) || !row?.von_sammlung_id}
             herkunft={herkunft}
             lieferung={row}
           />
@@ -82,19 +82,19 @@ export const LieferungNach = ({
         <>
           {showFilter ? (
             <JesNo
-              key={`${row.id}nach_ausgepflanzt`}
+              key={`${row?.id}nach_ausgepflanzt`}
               label="ausgepflanzt"
               name="nach_ausgepflanzt"
-              value={row.nach_ausgepflanzt}
+              value={row?.nach_ausgepflanzt}
               saveToDb={saveToDb}
               error={errors?.lieferung?.nach_ausgepflanzt}
             />
           ) : (
             <Checkbox2States
-              key={`${row.id}nach_ausgepflanzt`}
+              key={`${row?.id}nach_ausgepflanzt`}
               label="ausgepflanzt"
               name="nach_ausgepflanzt"
-              value={row.nach_ausgepflanzt}
+              value={row?.nach_ausgepflanzt}
               saveToDb={saveToDb}
               error={errors?.lieferung?.nach_ausgepflanzt}
             />

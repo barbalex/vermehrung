@@ -27,7 +27,7 @@ export const BedarfHistory = ({
   rawRow,
   historyTakeoverCallback,
 }: {
-  row: import('../../../shared/types.ts').Bedarf | null | undefined
+  row: import('../../../../dbModel.ts').Bedarf | null | undefined
   rawRow?: unknown
   historyTakeoverCallback?: () => void
 }) => {

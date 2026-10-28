@@ -22,7 +22,7 @@ export const BedarfFormTitle = ({
   filteredCount,
   showHistory,
 }: {
-  row: import('../../../shared/types.ts').Bedarf | null | undefined
+  row: import('../../../../dbModel.ts').Bedarf | null | undefined
   totalCount: number
   filteredCount: number
   showHistory: boolean
@@ -48,7 +48,7 @@ export const BedarfFormTitle = ({
           <Menu white={false}>
             <HistoryButton
               table="bedarf"
-              id={row.id}
+              id={row?.id}
               showHistory={showHistory}
               asMenu
             />
@@ -62,7 +62,7 @@ export const BedarfFormTitle = ({
           <>
             <HistoryButton
               table="bedarf"
-              id={row.id}
+              id={row?.id}
               showHistory={showHistory}
             />
             <FilterNumbers

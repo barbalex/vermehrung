@@ -26,7 +26,7 @@ export const GartenFormTitle = ({
   totalCount,
   filteredCount,
 }: {
-  row: import('../../../shared/types.ts').Garten | null | undefined
+  row: import('../../../../dbModel.ts').Garten | null | undefined
   rawRow: Record<string, unknown> | null | undefined
   showHistory: boolean
   totalCount: number
@@ -61,12 +61,12 @@ export const GartenFormTitle = ({
         </IconButton>
         <AddButton />
         <DeleteButton row={row} rawRow={rawRow} />
-        <Download gartenId={row.id} />
+        <Download gartenId={row?.id} />
         {width < 520 ? (
           <Menu white={false}>
             <HistoryButton
               table="garten"
-              id={row.id}
+              id={row?.id}
               showHistory={showHistory}
               asMenu
             />
@@ -81,7 +81,7 @@ export const GartenFormTitle = ({
           <>
             <HistoryButton
               table="garten"
-              id={row.id}
+              id={row?.id}
               showHistory={showHistory}
             />
             <Settings />

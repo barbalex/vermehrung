@@ -219,7 +219,7 @@ export const buildOptions = async ({ cb, val }) => {
       } catch {}
       let gartenPerson
       try {
-        gartenPerson = await garten.person.fetch()
+        gartenPerson = await garten?.person.fetch()
       } catch {}
       let herkunft
       try {

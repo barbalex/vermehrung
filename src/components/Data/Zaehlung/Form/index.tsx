@@ -38,7 +38,7 @@ export const ZaehlungForm = ({
 }: {
   showFilter: boolean
   id: string | undefined
-  row: import('../../../shared/types.ts').Zaehlung | null | undefined
+  row: import('../../../../dbModel.ts').Zaehlung | null | undefined
   rawRow: Record<string, unknown> | null | undefined
   activeConflict: string | null
   setActiveConflict: (val: unknown) => void
@@ -84,7 +84,7 @@ export const ZaehlungForm = ({
       // need to show a choosen kultur even if inactive but not if deleted
       let kultur
       try {
-        kultur = await row.kultur.fetch()
+        kultur = await row?.kultur.fetch()
       } catch {}
       const kultursIncludingChoosen = uniqBy(
         [...kulturs, ...(kultur && !showFilter ? [kultur] : [])],
@@ -96,7 +96,7 @@ export const ZaehlungForm = ({
       const kulturWerte = await Promise.all(
         kultursSorted
           .filter((k) => {
-            if (row.art_id) return k.art_id === row.art_id
+            if (row?.art_id) return k.art_id === row?.art_id
             return true
           })
           .map(async (el) => {
@@ -115,14 +115,14 @@ export const ZaehlungForm = ({
       )
       let kulturOption
       try {
-        kulturOption = await row.kultur_option.fetch()
+        kulturOption = await row?.kultur_option.fetch()
       } catch {}
 
       setDataState({ kulturWerte, kulturOption })
     })
 
     return () => subscription?.unsubscribe?.()
-  }, [db, kulturFilter, row.art_id, row.kultur, row.kultur_option, showFilter])
+  }, [db, kulturFilter, row?.art_id, row?.kultur, row?.kultur_option, showFilter])
   const { kulturWerte, kulturOption } = dataState
 
   const z_bemerkungen = kulturOption?.z_bemerkungen ?? true
@@ -131,7 +131,7 @@ export const ZaehlungForm = ({
     unsetError('zaehlung')
   }, [id])
 
-  const saveToDb = async (event) => {
+  const saveToDb = async (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
     const field = event.target.name
     let value = ifIsNumericAsNumber(event.target.value)
     if (event.target.value === undefined) value = null
@@ -144,7 +144,7 @@ export const ZaehlungForm = ({
     const previousValue = ifIsNumericAsNumber(row[field])
     // only update if value has changed
     if (value === previousValue) return
-    row.edit({ field, value })
+    row?.edit({ field, value })
   }
 
   const showDeleted = zaehlungFilter._deleted !== false || row?._deleted
@@ -161,19 +161,19 @@ export const ZaehlungForm = ({
           <>
             {showFilter ? (
               <JesNo
-                key={`${row.id}_deleted`}
+                key={`${row?.id}_deleted`}
                 label="gelöscht"
                 name="_deleted"
-                value={row._deleted}
+                value={row?._deleted}
                 saveToDb={saveToDb}
                 error={errors?.zaehlung?._deleted}
               />
             ) : (
               <Checkbox2States
-                key={`${row.id}_deleted`}
+                key={`${row?.id}_deleted`}
                 label="gelöscht"
                 name="_deleted"
-                value={row._deleted}
+                value={row?._deleted}
                 saveToDb={saveToDb}
                 error={errors?.zaehlung?._deleted}
               />
@@ -181,9 +181,9 @@ export const ZaehlungForm = ({
           </>
         )}
         <Select
-          key={`${row.id}${row.kultur_id}kultur_id`}
+          key={`${row?.id}${row?.kultur_id}kultur_id`}
           name="kultur_id"
-          value={row.kultur_id}
+          value={row?.kultur_id}
           field="kultur_id"
           label="Kultur"
           options={kulturWerte}
@@ -192,19 +192,19 @@ export const ZaehlungForm = ({
           error={errors?.zaehlung?.kultur_id}
         />
         <Date
-          key={`${row.id}datum`}
+          key={`${row?.id}datum`}
           name="datum"
           label="Datum"
-          value={row.datum}
+          value={row?.datum}
           saveToDb={saveToDb}
           error={errors?.zaehlung?.datum}
         />
         {(z_bemerkungen || showFilter) && (
           <TextField
-            key={`${row.id}bemerkungen`}
+            key={`${row?.id}bemerkungen`}
             name="bemerkungen"
             label="Bemerkungen"
-            value={row.bemerkungen}
+            value={row?.bemerkungen}
             saveToDb={saveToDb}
             error={errors?.zaehlung?.bemerkungen}
             multiLine

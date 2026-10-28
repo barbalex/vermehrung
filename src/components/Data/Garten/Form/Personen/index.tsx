@@ -22,11 +22,11 @@ export const GartenPersonen = ({ garten }: { garten: import('../../../../shared/
   const personFilter = useAtomValue(filterPersonAtom)
 
   const [errors, setErrors] = useState({})
-  useEffect(() => setErrors({}), [garten.id])
+  useEffect(() => setErrors({}), [garten?.id])
 
   const [open, setOpen] = useState(false)
   const anim = useAnimation()
-  const onClickToggle = async (e) => {
+  const onClickToggle = async (e: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
     e.stopPropagation()
     if (open) {
       const was = open
@@ -83,7 +83,7 @@ export const GartenPersonen = ({ garten }: { garten: import('../../../../shared/
         const gvsSorted = await gvsSortByPerson(gvs)
         const gvPersonIds = gvsSorted.map((v) => v.person_id)
         const personWerte = persons
-          .filter((a) => !gvPersonIds.includes(a.id))
+          .filter((a: import('../../../../../dbModel.ts').Art) => !gvPersonIds.includes(a.id))
           .sort(personSort)
           .map((el) => ({
             value: el.id,
@@ -98,9 +98,9 @@ export const GartenPersonen = ({ garten }: { garten: import('../../../../shared/
   }, [db, personFilter, garten?.gvs])
   const { gvsSorted, personWerte } = dataState
 
-  const saveToDb = (event) => {
+  const saveToDb = (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
     insertGvRev({
-      values: { person_id: event.target.value, garten_id: garten.id },
+      values: { person_id: event.target.value, garten_id: garten?.id },
     })
     setErrors({})
   }

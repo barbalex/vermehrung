@@ -21,55 +21,60 @@ export const buildExceljsWorksheetsForKultur = async ({
   kultur_name,
   workbook,
   calledFromHigherUp,
+}: {
+  kultur_id: string
+  kultur_name: string | undefined
+  workbook: import('exceljs').Workbook
+  calledFromHigherUp: boolean
 }) => {
   const db = store.get(dbAtom)
 
   // 1. Get Kultur
   if (!calledFromHigherUp) {
-    let kultur
+    let kultur: import('../../../../dbModel.ts').Kultur | undefined
     try {
       kultur = await db?.get('kultur').find(kultur_id)
     } catch {}
     let art
     try {
-      art = await kultur.art.fetch()
+      art = await kultur?.art.fetch()
     } catch {}
     let artName
     try {
-      artName = await art.label.pipe(first$()).toPromise()
+      artName = await art?.label.pipe(first$()).toPromise()
     } catch {}
     let herkunft
     try {
-      herkunft = await kultur.herkunft.fetch()
+      herkunft = await kultur?.herkunft.fetch()
     } catch {}
     let garten
     try {
-      garten = await kultur.garten.fetch()
+      garten = await kultur?.garten.fetch()
     } catch {}
 
     const newK = {
-      id: kultur.id,
-      art_id: kultur.art_id,
+      id: kultur?.id,
+      art_id: kultur?.art_id,
       art_name: artName,
-      herkunft_id: kultur.herkunft_id,
+      herkunft_id: kultur?.herkunft_id,
       herkunft_nr: herkunft?.nr,
       herkunft_rohdaten: removeMetadataFromDataset({
         dataset: herkunft?._raw,
         foreignKeys: ['sammlungs'],
       }),
-      garten_id: kultur.garten_id,
+      garten_id: kultur?.garten_id,
       garten_name: garten?.name,
       garten_rohdaten: removeMetadataFromDataset({
         dataset: garten?._raw,
         foreignKeys: ['kulturs', 'person'],
       }),
-      zwischenlager: kultur.zwischenlager,
-      erhaltungskultur: kultur.erhaltungskultur,
-      von_anzahl_individuen: kultur.von_anzahl_individuen,
-      bemerkungen: kultur.bemerkungen,
-      aktiv: kultur.aktiv,
-      changed: kultur.changed,
-      changed_by: kultur.changed_by,
+      zwischenlager: kultur?.zwischenlager,
+      erhaltungskultur: kultur?.erhaltungskultur,
+      von_anzahl_individuen: kultur?.von_anzahl_individuen,
+      bemerkungen: kultur?.bemerkungen,
+      aktiv: kultur?.aktiv,
+      changed: kultur?.changed,
+      changed_by: kultur?.changed_by,
     }
     addWorksheetToExceljsWorkbook({
       workbook,
@@ -206,11 +211,11 @@ export const buildExceljsWorksheetsForKultur = async ({
       } catch {}
       let vonSammlungPerson
       try {
-        vonSammlungPerson = await vonSammlung.person.fetch()
+        vonSammlungPerson = await vonSammlung?.person.fetch()
       } catch {}
       let vonSammlungHerkunft
       try {
-        vonSammlungHerkunft = await vonSammlung.herkunft.fetch()
+        vonSammlungHerkunft = await vonSammlung?.herkunft.fetch()
       } catch {}
       let vonKultur
       try {
@@ -218,11 +223,11 @@ export const buildExceljsWorksheetsForKultur = async ({
       } catch {}
       let vonKulturGarten
       try {
-        vonKulturGarten = await vonKultur.garten.fetch()
+        vonKulturGarten = await vonKultur?.garten.fetch()
       } catch {}
       let vonKulturHerkunft
       try {
-        vonKulturHerkunft = await vonKultur.herkunft.fetch()
+        vonKulturHerkunft = await vonKultur?.herkunft.fetch()
       } catch {}
       let nachKultur
       try {
@@ -230,11 +235,11 @@ export const buildExceljsWorksheetsForKultur = async ({
       } catch {}
       let nachKulturGarten
       try {
-        nachKulturGarten = await nachKultur.garten.fetch()
+        nachKulturGarten = await nachKultur?.garten.fetch()
       } catch {}
       let nachKulturHerkunft
       try {
-        nachKulturHerkunft = await nachKultur.herkunft.fetch()
+        nachKulturHerkunft = await nachKultur?.herkunft.fetch()
       } catch {}
       let sammelLieferung
       try {
@@ -378,11 +383,11 @@ export const buildExceljsWorksheetsForKultur = async ({
       } catch {}
       let vonSammlungPerson
       try {
-        vonSammlungPerson = await vonSammlung.person.fetch()
+        vonSammlungPerson = await vonSammlung?.person.fetch()
       } catch {}
       let vonSammlungHerkunft
       try {
-        vonSammlungHerkunft = await vonSammlung.herkunft.fetch()
+        vonSammlungHerkunft = await vonSammlung?.herkunft.fetch()
       } catch {}
       let vonKultur
       try {
@@ -390,11 +395,11 @@ export const buildExceljsWorksheetsForKultur = async ({
       } catch {}
       let vonKulturGarten
       try {
-        vonKulturGarten = await vonKultur.garten.fetch()
+        vonKulturGarten = await vonKultur?.garten.fetch()
       } catch {}
       let vonKulturHerkunft
       try {
-        vonKulturHerkunft = await vonKultur.herkunft.fetch()
+        vonKulturHerkunft = await vonKultur?.herkunft.fetch()
       } catch {}
       let nachKultur
       try {
@@ -402,11 +407,11 @@ export const buildExceljsWorksheetsForKultur = async ({
       } catch {}
       let nachKulturGarten
       try {
-        nachKulturGarten = await nachKultur.garten.fetch()
+        nachKulturGarten = await nachKultur?.garten.fetch()
       } catch {}
       let nachKulturHerkunft
       try {
-        nachKulturHerkunft = await nachKultur.herkunft.fetch()
+        nachKulturHerkunft = await nachKultur?.herkunft.fetch()
       } catch {}
       let sammelLieferung
       try {

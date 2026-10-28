@@ -17,15 +17,15 @@ import styles from './index.module.css'
 export const Teilzaehlungen = ({ zaehlung }: { zaehlung: import('../../../../shared/types.ts').WmRow | null | undefined }) => {
   const db = useAtomValue(dbAtom)
 
-  const kulturId = zaehlung.kultur_id
+  const kulturId = zaehlung?.kultur_id
 
   const [dataState, setDataState] = useState({
     teilzaehlungs: [],
     kulturOption: undefined,
   })
   useEffect(() => {
-    const teilzaehlungsObservable = zaehlung.teilzaehlungs
-      ? zaehlung.teilzaehlungs.extend(Q.where('_deleted', false))?.observe()
+    const teilzaehlungsObservable = zaehlung?.teilzaehlungs
+      ? zaehlung?.teilzaehlungs.extend(Q.where('_deleted', false))?.observe()
       : $of([])
     const kulturOptionObservable = kulturId
       ? db?.get('kultur_option').find(kulturId)
@@ -45,9 +45,9 @@ export const Teilzaehlungen = ({ zaehlung }: { zaehlung: import('../../../../sha
   }, [
     db,
     kulturId,
-    zaehlung.kultur_option,
-    zaehlung.teilkulturs,
-    zaehlung.teilzaehlungs,
+    zaehlung?.kultur_option,
+    zaehlung?.teilkulturs,
+    zaehlung?.teilzaehlungs,
   ])
   const { teilzaehlungs, kulturOption } = dataState
 

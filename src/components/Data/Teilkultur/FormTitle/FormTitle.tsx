@@ -24,7 +24,7 @@ export const TeilkulturFormTitle = ({
   filteredCount,
   showHistory,
 }: {
-  row: import('../../../shared/types.ts').Teilkultur | null | undefined
+  row: import('../../../../dbModel.ts').Teilkultur | null | undefined
   totalCount: number
   filteredCount: number
   showHistory: boolean
@@ -50,11 +50,11 @@ export const TeilkulturFormTitle = ({
           <Menu white={false}>
             <HistoryButton
               table="teilkultur"
-              id={row.id}
+              id={row?.id}
               showHistory={showHistory}
               asMenu
             />
-            <Settings kulturId={row.kultur_id} asMenu />
+            <Settings kulturId={row?.kultur_id} asMenu />
             <Anleitung asMenu />
             <FilterNumbers
               filteredCount={filteredCount}
@@ -66,10 +66,10 @@ export const TeilkulturFormTitle = ({
           <>
             <HistoryButton
               table="teilkultur"
-              id={row.id}
+              id={row?.id}
               showHistory={showHistory}
             />
-            <Settings kulturId={row.kultur_id} />
+            <Settings kulturId={row?.kultur_id} />
             <Anleitung />
             <FilterNumbers
               filteredCount={filteredCount}

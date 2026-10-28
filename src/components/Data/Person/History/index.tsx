@@ -27,7 +27,7 @@ export const PersonHistory = ({
   rawRow,
   historyTakeoverCallback,
 }: {
-  row: import('../../../shared/types.ts').Person | null | undefined
+  row: import('../../../../dbModel.ts').Person | null | undefined
   rawRow?: unknown
   historyTakeoverCallback?: () => void
 }) => {

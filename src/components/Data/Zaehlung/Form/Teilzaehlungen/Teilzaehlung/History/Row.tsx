@@ -19,7 +19,7 @@ export const TeilzaehlungHistoryRow = ({
   revRow,
   historyTakeoverCallback,
 }: {
-  row: import('../../../../../../shared/types.ts').Zaehlung | null | undefined
+  row: import('../../../../../../../dbModel.ts').Zaehlung | null | undefined
   revRow: import('../../../../../../shared/types.ts').WmRow | null | undefined
   historyTakeoverCallback: () => void
 }) => {
@@ -32,26 +32,26 @@ export const TeilzaehlungHistoryRow = ({
     // otherwise risk to still have lower depth and thus loosing
     const newDepth = row?._depth + 1
     const newObject: Record<string, unknown> = {
-      teilzaehlung_id: revRow.teilzaehlung_id,
-      zaehlung_id: revRow.zaehlung_id,
-      teilkultur_id: revRow.teilkultur_id,
-      anzahl_pflanzen: revRow.anzahl_pflanzen,
-      anzahl_auspflanzbereit: revRow.anzahl_auspflanzbereit,
-      anzahl_mutterpflanzen: revRow.anzahl_mutterpflanzen,
-      andere_menge: revRow.andere_menge,
-      auspflanzbereit_beschreibung: revRow.auspflanzbereit_beschreibung,
-      bemerkungen: revRow.bemerkungen,
-      prognose_von_tz: revRow.prognose_von_tz,
+      teilzaehlung_id: revRow?.teilzaehlung_id,
+      zaehlung_id: revRow?.zaehlung_id,
+      teilkultur_id: revRow?.teilkultur_id,
+      anzahl_pflanzen: revRow?.anzahl_pflanzen,
+      anzahl_auspflanzbereit: revRow?.anzahl_auspflanzbereit,
+      anzahl_mutterpflanzen: revRow?.anzahl_mutterpflanzen,
+      andere_menge: revRow?.andere_menge,
+      auspflanzbereit_beschreibung: revRow?.auspflanzbereit_beschreibung,
+      bemerkungen: revRow?.bemerkungen,
+      prognose_von_tz: revRow?.prognose_von_tz,
       _parent_rev: row?._rev,
       _depth: newDepth,
-      _deleted: revRow._deleted,
+      _deleted: revRow?._deleted,
     }
     const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     newObject._rev = rev
     newObject.id = uuidv7()
     newObject.changed = new Date().toISOString()
     newObject.changed_by = user.email
-    newObject._revisions = toPgArray([rev, ...row._revisions])
+    newObject._revisions = toPgArray([rev, ...row?._revisions])
     const newObjectForStore = { ...newObject }
     try {
     await store
@@ -72,11 +72,11 @@ export const TeilzaehlungHistoryRow = ({
     // TODO: is this a good idea?
     newObjectForStore._conflicts = row?._conflicts
     // for store: convert rev to winner
-    newObjectForStore.id = row.id
+    newObjectForStore.id = row?.id
     delete newObjectForStore.zaehlung_id
     // optimistically update store
     await db?.write(async () => {
-      await row.update((row) => {
+      await row?.update((row) => {
         Object.entries(newObjectForStore).forEach(([key, value]) => {
           if (!isEqual(value, row[key])) {
             row[key] = value
@@ -88,7 +88,7 @@ export const TeilzaehlungHistoryRow = ({
 
   return (
     <History
-      rev={revRow._rev}
+      rev={revRow?._rev}
       dataArray={dataArray}
       onClickWiderspruchUebernehmen={onClickWiderspruchUebernehmen}
     />

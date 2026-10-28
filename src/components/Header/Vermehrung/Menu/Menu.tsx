@@ -37,7 +37,7 @@ export const HeaderHamburgerMenu = ({
   const teilzaehlungFilter = useAtomValue(filterTableAtoms.teilzaehlung)
   const zaehlungFilter = useAtomValue(filterTableAtoms.zaehlung)
 
-  const [userRole, setUserRole] = useState(null)
+  const [userRole, setUserRole] = useState<Model | null>(null)
   useEffect(() => {
     const userRoleObservable = db
       .get('user_role')
@@ -50,7 +50,7 @@ export const HeaderHamburgerMenu = ({
     return () => subscription?.unsubscribe?.()
   }, [db, user.uid])
 
-  const onClickShowDeleted = (event) => {
+  const onClickShowDeleted = (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
     const value = event.target.checked ? false : null
     setFilterValue({ table: 'art', key: '_deleted', value })
     setFilterValue({ table: 'event', key: '_deleted', value })
@@ -66,7 +66,7 @@ export const HeaderHamburgerMenu = ({
     setFilterValue({ table: 'zaehlung', key: '_deleted', value })
   }
 
-  const onClickShowActive = (event) => {
+  const onClickShowActive = (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
     const value = event.target.checked ? true : null
     setFilterValue({ table: 'garten', key: 'aktiv', value })
     setFilterValue({ table: 'kultur', key: 'aktiv', value })

@@ -63,9 +63,9 @@ export const LieferungAddChooseDialog = ({
         const kulturs = await garten.kulturs.fetch()
         if (
           !kulturs.some(
-            (k) =>
-              k.art_id === lieferung.art_id &&
-              k.herkunft_id === herkunft.id &&
+            (k: import('../../../../../../../dbModel.ts').Kultur) =>
+              k.art_id === lieferung?.art_id &&
+              k.herkunft_id === herkunft?.id &&
               k.zwischenlager === (kulturType === 'zwischenlager'),
           )
         ) {
@@ -98,7 +98,7 @@ export const LieferungAddChooseDialog = ({
     gartenFilter.aktiv,
     herkunft?.id,
     kulturType,
-    lieferung.art_id,
+    lieferung?.art_id,
   ])
 
   console.log('ChooseDialog: gartens:', gartens)

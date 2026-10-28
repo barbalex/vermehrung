@@ -52,10 +52,10 @@ const Account = () => {
     return () => subscription?.unsubscribe?.()
   }, [db, user])
 
-  const [anchorEl, setAnchorEl] = useState(null)
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | undefined | null>(null)
   const [resetTitle, setResetTitle] = useState('Passwort zurücksetzen')
 
-  const onClickMenu = (event) => setAnchorEl(event.currentTarget)
+  const onClickMenu = (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => setAnchorEl(event.currentTarget)
 
   const onCloseMenu = () => setAnchorEl(null)
 

@@ -24,7 +24,7 @@ export const ArtConflict = ({
 }: {
   id: string | undefined
   rev: string | boolean | null
-  row: import('../../shared/types.ts').Art | null | undefined
+  row: import('../../../dbModel.ts').Art | null | undefined
   conflictDisposalCallback: () => void
   conflictSelectionCallback: () => void
   setActiveConflict: (conflict: string | null) => void

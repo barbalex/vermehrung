@@ -52,10 +52,10 @@ export const Files = ({ parentTable, parent }) => {
       name: info.name,
     }
     await db?.write(async () => {
-      const collection = db.get(`${parentTable}_file`)
+      const collection = db?.get(`${parentTable}_file`)
       // using batch because can create from raw
       // which enables overriding watermelons own id
-      await db.batch([collection.prepareCreateFromDirtyRaw(newObject)])
+      await db?.batch([collection.prepareCreateFromDirtyRaw(newObject)])
     })
     try {
       await store

@@ -3,19 +3,19 @@ export const createDataArrayForKulturRevComparison = ({ row, revRow }: {
   revRow: Record<string, unknown> | null | undefined
 }) => [
   {
-    valueInRow: row.art_id,
-    valueInRev: revRow.art_id,
+    valueInRow: row?.art_id,
+    valueInRev: revRow?.art_id,
     label: 'Art (id)',
   },
   {
-    valueInRow: row.herkunft_id,
-    valueInRev: revRow.herkunft_id,
+    valueInRow: row?.herkunft_id,
+    valueInRev: revRow?.herkunft_id,
     label: 'Herkunft (id)',
   },
   { valueInRow: row?.strasse, valueInRev: revRow?.strasse, label: 'Strasse' },
   {
-    valueInRow: row.garten_id,
-    valueInRev: revRow.garten_id,
+    valueInRow: row?.garten_id,
+    valueInRev: revRow?.garten_id,
     label: 'Garten (id)',
   },
   {
@@ -54,8 +54,8 @@ export const createDataArrayForKulturRevComparison = ({ row, revRow }: {
     label: 'geändert von',
   },
   {
-    valueInRow: row._deleted,
-    valueInRev: revRow._deleted,
+    valueInRow: row?._deleted,
+    valueInRev: revRow?._deleted,
     label: 'gelöscht',
   },
 ]

@@ -24,7 +24,7 @@ export const LieferungConflict = ({
 }: {
   id: string | undefined
   rev: string | boolean | null
-  row: import('../../../shared/types.ts').Lieferung | null | undefined
+  row: import('../../../../dbModel.ts').Lieferung | null | undefined
   conflictDisposalCallback: () => void
   conflictSelectionCallback: () => void
   setActiveConflict: (conflict: string | null) => void
@@ -41,7 +41,7 @@ export const LieferungConflict = ({
 
   const onClickAktuellUebernehmen = async () => {
     // build new object
-    const newDepth = revRow._depth + 1
+    const newDepth = revRow?._depth + 1
     const newObject: Record<string, unknown> = {
       lieferung_id: revRow.lieferung_id,
       sammel_lieferung_id: revRow.sammel_lieferung_id,

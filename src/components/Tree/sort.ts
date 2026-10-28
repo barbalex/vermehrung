@@ -1,6 +1,6 @@
 const exists = (value) => !!value || value === 0
 
-const sort = (a, b, i) => {
+const sort = (a: import('../../dbModel.ts').Art, b: import('../../dbModel.ts').Bedarf, i: number) => {
   // return if no element at this index
   if (!exists(a[i]) && !exists(b[i])) return 0
   // sort array with no more element at this position first
@@ -19,6 +19,6 @@ const sort = (a, b, i) => {
   if (aI.toLowerCase() > bI.toLowerCase()) return 1
 }
 
-const sortModule = (a, b) => sort(a, b, 0)
+const sortModule = (a: import('../../dbModel.ts').Art, b: import('../../dbModel.ts').Bedarf) => sort(a, b, 0)
 
 export default sortModule

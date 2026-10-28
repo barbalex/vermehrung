@@ -50,7 +50,7 @@ export const KulturForm = ({
 }: {
   showFilter: boolean
   id: string | undefined
-  row: import('../../../shared/types.ts').Kultur | null | undefined
+  row: import('../../../../dbModel.ts').Kultur | null | undefined
   rawRow: Record<string, unknown> | null | undefined
   activeConflict: string | null
   setActiveConflict: (val: unknown) => void
@@ -188,7 +188,7 @@ export const KulturForm = ({
                     Q.where('aktiv', true),
                     Q.where('aktiv', null),
                   )
-          await garten.kulturs
+          await garten?.kulturs
             .extend(
               kulturDelQuery,
               kulturAktivQuery,
@@ -198,7 +198,7 @@ export const KulturForm = ({
             .fetch()
         } catch {}
         const artHerkuenfte = uniqBy(
-          sammlungs.map((a) => ({
+          sammlungs?.map((a: import('../../../../dbModel.ts').Art) => ({
             art_id: a.art_id,
             herkunft_id: a.herkunft_id,
           })),
@@ -219,7 +219,7 @@ export const KulturForm = ({
             )
             .filter((s) => {
               // do not filter if no garten choosen
-              if (!row.garten_id) return true
+              if (!row?.garten_id) return true
               // do not return if exists nicht zl AND zl
               return !(
                 !!artHerkunftInGartenNichtZl.find(
@@ -242,7 +242,7 @@ export const KulturForm = ({
             .filter((s) => (art_id ? s.art_id === art_id : true))
             .filter((s) => {
               // do not filter if no garten choosen
-              if (!row.garten_id) return true
+              if (!row?.garten_id) return true
               // do not return if exists nicht zl AND zl
               return !(
                 !!artHerkunftInGartenNichtZl.find(
@@ -275,7 +275,7 @@ export const KulturForm = ({
     gartenFilter,
     herkunft_id,
     art_id,
-    row.garten_id,
+    row?.garten_id,
     showFilter,
   ])
   const { gartenWerte, userPersonOption, artsToChoose, herkunftsToChoose } =
@@ -336,7 +336,7 @@ export const KulturForm = ({
       async ([arts, herkunfts]) => {
         let art
         try {
-          art = await row.art.fetch()
+          art = await row?.art.fetch()
         } catch {}
         const artsIncludingChoosen = uniqBy(
           [...arts, ...(art && !showFilter ? [art] : [])],
@@ -358,7 +358,7 @@ export const KulturForm = ({
         )
         let herkunft
         try {
-          herkunft = await row.herkunft.fetch()
+          herkunft = await row?.herkunft.fetch()
         } catch {}
         const herkunftsIncludingChoosen = uniqBy(
           [...herkunfts, ...(herkunft && !showFilter ? [herkunft] : [])],
@@ -384,7 +384,7 @@ export const KulturForm = ({
   }, [db, user, artsToChoose.length, herkunftsToChoose.length])
   const { artWerte, herkunftWerte } = dataState2
 
-  const saveToDb = (event) => {
+  const saveToDb = (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
     const field = event.target.name
     let value = ifIsNumericAsNumber(event.target.value)
     if (event.target.value === undefined) value = null
@@ -397,7 +397,7 @@ export const KulturForm = ({
     const previousValue = ifIsNumericAsNumber(row[field])
     // only update if value has changed
     if (value === previousValue) return
-    row.edit({ field, value })
+    row?.edit({ field, value })
   }
 
   const openGenVielfaldDocs = () => {
@@ -438,19 +438,19 @@ export const KulturForm = ({
           <>
             {showFilter ? (
               <JesNo
-                key={`${row.id}_deleted`}
+                key={`${row?.id}_deleted`}
                 label="gelöscht"
                 name="_deleted"
-                value={row._deleted}
+                value={row?._deleted}
                 saveToDb={saveToDb}
                 error={errors.kultur?._deleted}
               />
             ) : (
               <Checkbox2States
-                key={`${row.id}_deleted`}
+                key={`${row?.id}_deleted`}
                 label="gelöscht"
                 name="_deleted"
-                value={row._deleted}
+                value={row?._deleted}
                 saveToDb={saveToDb}
                 error={errors.kultur?._deleted}
               />
@@ -458,7 +458,7 @@ export const KulturForm = ({
           </>
         )}
         <Select
-          key={`${row.id}${art_id}art_id`}
+          key={`${row?.id}${art_id}art_id`}
           name="art_id"
           value={art_id}
           field="art_id"
@@ -468,7 +468,7 @@ export const KulturForm = ({
           error={artError}
         />
         <Select
-          key={`${row.id}${herkunft_id}herkunft_id`}
+          key={`${row?.id}${herkunft_id}herkunft_id`}
           name="herkunft_id"
           value={herkunft_id}
           field="herkunft_id"
@@ -478,9 +478,9 @@ export const KulturForm = ({
           error={herkunftError}
         />
         <Select
-          key={`${row.id}${row.garten_id}garten_id`}
+          key={`${row?.id}${row?.garten_id}garten_id`}
           name="garten_id"
-          value={row.garten_id}
+          value={row?.garten_id}
           field="garten_id"
           label="Garten"
           options={gartenWerte}
@@ -491,19 +491,19 @@ export const KulturForm = ({
           <>
             {showFilter ? (
               <JesNo
-                key={`${row.id}zwischenlager`}
+                key={`${row?.id}zwischenlager`}
                 label="Zwischenlager"
                 name="zwischenlager"
-                value={row.zwischenlager}
+                value={row?.zwischenlager}
                 saveToDb={saveToDb}
                 error={zwischenlagerError}
               />
             ) : (
               <Checkbox2States
-                key={`${row.id}zwischenlager`}
+                key={`${row?.id}zwischenlager`}
                 label="Zwischenlager"
                 name="zwischenlager"
-                value={row.zwischenlager}
+                value={row?.zwischenlager}
                 saveToDb={saveToDb}
                 error={zwischenlagerError}
               />
@@ -514,19 +514,19 @@ export const KulturForm = ({
           <>
             {showFilter ? (
               <JesNo
-                key={`${row.id}erhaltungskultur`}
+                key={`${row?.id}erhaltungskultur`}
                 label="Erhaltungskultur"
                 name="erhaltungskultur"
-                value={row.erhaltungskultur}
+                value={row?.erhaltungskultur}
                 saveToDb={saveToDb}
                 error={errors.kultur?.erhaltungskultur}
               />
             ) : (
               <Checkbox2States
-                key={`${row.id}erhaltungskultur`}
+                key={`${row?.id}erhaltungskultur`}
                 label="Erhaltungskultur"
                 name="erhaltungskultur"
-                value={row.erhaltungskultur}
+                value={row?.erhaltungskultur}
                 saveToDb={saveToDb}
                 error={errors.kultur?.erhaltungskultur}
               />
@@ -535,10 +535,10 @@ export const KulturForm = ({
         )}
         <div className={styles.fieldRow}>
           <TextField
-            key={`${row.id}von_anzahl_individuen`}
+            key={`${row?.id}von_anzahl_individuen`}
             name="von_anzahl_individuen"
             label="von Anzahl Individuen"
-            value={row.von_anzahl_individuen}
+            value={row?.von_anzahl_individuen}
             saveToDb={saveToDb}
             error={errors.kultur?.von_anzahl_individuen}
             type="number"
@@ -556,28 +556,28 @@ export const KulturForm = ({
         </div>
         {showFilter ? (
           <JesNo
-            key={`${row.id}aktiv`}
+            key={`${row?.id}aktiv`}
             label="aktiv"
             name="aktiv"
-            value={row.aktiv}
+            value={row?.aktiv}
             saveToDb={saveToDb}
             error={errors.kultur?.aktiv}
           />
         ) : (
           <Checkbox2States
-            key={`${row.id}aktiv`}
+            key={`${row?.id}aktiv`}
             label="aktiv"
             name="aktiv"
-            value={row.aktiv}
+            value={row?.aktiv}
             saveToDb={saveToDb}
             error={errors.kultur?.aktiv}
           />
         )}
         <TextField
-          key={`${row.id}bemerkungen`}
+          key={`${row?.id}bemerkungen`}
           name="bemerkungen"
           label="Bemerkungen"
-          value={row.bemerkungen}
+          value={row?.bemerkungen}
           saveToDb={saveToDb}
           error={errors.kultur?.bemerkungen}
           multiLine
@@ -589,7 +589,7 @@ export const KulturForm = ({
             setActiveConflict={setActiveConflict}
           />
         )}
-        {!showFilter && row.id && (
+        {!showFilter && row?.id && (
           <>
             <Timeline row={row} rawRow={rawRow} />
             <QK kultur={row} />

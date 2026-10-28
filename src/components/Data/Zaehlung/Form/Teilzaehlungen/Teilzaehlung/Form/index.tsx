@@ -131,14 +131,14 @@ export const TeilzaehlungForm = ({
         kultur_id: kulturId,
       },
     })
-    row.edit({ field: 'teilkultur_id', value: teilkultur_id })
+    row?.edit({ field: 'teilkultur_id', value: teilkultur_id })
   }
 
   useEffect(() => {
     unsetError('teilzaehlung')
   }, [id])
 
-  const saveToDb = (event) => {
+  const saveToDb = (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
     const field = event.target.name
     let value = ifIsNumericAsNumber(event.target.value)
     if (event.target.value === undefined) value = null
@@ -147,10 +147,10 @@ export const TeilzaehlungForm = ({
     // only update if value has changed
     if (value === previousValue) return
 
-    row.edit({ field, value })
+    row?.edit({ field, value })
   }
 
-  const onClickDelete = () => row.delete()
+  const onClickDelete = () => row?.delete()
 
   const showDeleted = row?._deleted || teilzaehlungFilter._deleted !== false
 

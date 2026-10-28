@@ -7,9 +7,9 @@ import { ErrorBoundary } from '../../../../shared/ErrorBoundary.tsx'
 import { KulturDeleteMenu as Menu } from './Menu.tsx'
 
 export const KulturDeleteButton = ({ row, asMenu }) => {
-  const [anchorEl, setAnchorEl] = useState(null)
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | undefined | null>(null)
 
-  const onClickButton = (event) => setAnchorEl(event.currentTarget)
+  const onClickButton = (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => setAnchorEl(event.currentTarget)
 
   if (asMenu) {
     return (

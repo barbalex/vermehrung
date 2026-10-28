@@ -31,7 +31,7 @@ export const LieferungHistory = ({ row, rawRow, historyTakeoverCallback }) => {
     if (error) checkForOnlineError({ error })
 
   const revRowsUnsorted = data ?? []
-  const revRows = revRowsUnsorted.sort((a, b) => b._depth - a._depth)
+  const revRows = revRowsUnsorted.sort((a: import('../../../../../dbModel.ts').Art, b: import('../../../../../dbModel.ts').Bedarf) => b?._depth - a?._depth)
 
   const historyRev = useAtomValue(historyRevAtom)
 
@@ -66,7 +66,7 @@ export const LieferungHistory = ({ row, rawRow, historyTakeoverCallback }) => {
       <Slider
         key={historyRev}
         initialSlide={indexOfRev > -1 ? indexOfRev : 0}
-        afterChange={(index) => {
+        afterChange={(index: number) => {
           const rev = revRows[index]?._rev
           if (rev && rev !== historyRev) navigateToRev(rev)
         }}

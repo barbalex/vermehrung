@@ -14,11 +14,11 @@ import styles from './index.module.css'
 export const HeaderExportMenu = ({
   setParentAnchorEl: setGrandParentAnchorEl,
 }) => {
-  const [anchorEl, setAnchorEl] = useState(null)
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | undefined | null>(null)
 
-  const onClickExporte = (event) => setAnchorEl(event.currentTarget)
+  const onClickExporte = (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => setAnchorEl(event.currentTarget)
 
-  const onClickLieferungenDesJahrs = (event) => {
+  const onClickLieferungenDesJahrs = (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
     const year = event.target.value
     if (year.length === 4) {
       buildExceljsWorksheetsForLieferungenOfYear({ year })

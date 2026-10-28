@@ -31,7 +31,7 @@ export const Teilzaehlung = ({ id, kulturId, index }) => {
     const tzObservable = initialDataQueried
       ? db?.get('teilzaehlung').findAndObserve(id)
       : $of({})
-    const subscription = tzObservable.subscribe((newRow) => {
+    const subscription = tzObservable?.subscribe((newRow) => {
       setDataState({
         row: newRow,
         rawRow: JSON.stringify(newRow?._raw ?? newRow),

@@ -29,7 +29,7 @@ export const SammelLieferungVon = ({
   herkunftQuelle,
 }: {
   showFilter: boolean
-  row: import('../../../shared/types.ts').SammelLieferung | null | undefined
+  row: import('../../../../dbModel.ts').SammelLieferung | null | undefined
   ifNeeded: boolean
   saveToDb: (event: { target: { name?: string; value: unknown } }) => void
   herkunft: import('../../../shared/types.ts').WmRow | null | undefined
@@ -83,17 +83,17 @@ export const SammelLieferungVon = ({
           '(verfügbar, wenn Sammlung oder Kultur gewählt)'
         const kultursFiltered = kulturs
           // show only kulturen of art_id
-          .filter((k) => {
+          .filter((k: import('../../../../dbModel.ts').Kultur) => {
             if (row?.art_id) return k.art_id === row.art_id
             return true
           })
           // show only kulturen with same herkunft
-          .filter((k) => {
+          .filter((k: import('../../../../dbModel.ts').Kultur) => {
             if (herkunft) return k?.herkunft_id === herkunft.id
             return true
           })
           // shall not be delivered to same kultur it came from
-          .filter((k) => {
+          .filter((k: import('../../../../dbModel.ts').Kultur) => {
             if (
               row?.nach_kultur_id &&
               row?.von_kultur_id !== row?.nach_kultur_id
@@ -104,7 +104,7 @@ export const SammelLieferungVon = ({
           })
         let kultur
         try {
-          kultur = await db?.get('kultur').find(row.von_kultur_id as string)
+          kultur = await db?.get('kultur').find(row?.von_kultur_id as string)
         } catch {}
         const kultursIncludingChoosen = uniqBy(
           [...kultursFiltered, ...(kultur && !showFilter ? [kultur] : [])],
@@ -130,7 +130,7 @@ export const SammelLieferungVon = ({
         )
         let sammlung
         try {
-          sammlung = await db?.get('sammlung').find(row.von_sammlung_id as string)
+          sammlung = await db?.get('sammlung').find(row?.von_sammlung_id as string)
         } catch {}
         const sammlungsIncludingChoosen = uniqBy(
           [...sammlungs, ...(sammlung && !showFilter ? [sammlung] : [])],
@@ -188,12 +188,12 @@ export const SammelLieferungVon = ({
       </div>
       {ifNeeded('von_sammlung_id') && (
         <Select
-          key={`${row.id}${row.von_sammlung_id}von_sammlung_id`}
+          key={`${row?.id}${row?.von_sammlung_id}von_sammlung_id`}
           name="von_sammlung_id"
-          value={row.von_sammlung_id}
+          value={row?.von_sammlung_id}
           field="von_sammlung_id"
           label={`Sammlung${
-            exists(row.art_id) ? ' (nur solche derselben Art)' : ''
+            exists(row?.art_id) ? ' (nur solche derselben Art)' : ''
           }`}
           options={sammlungWerte}
           saveToDb={saveToDb}
@@ -202,12 +202,12 @@ export const SammelLieferungVon = ({
       )}
       {ifNeeded('von_kultur_id') && (
         <Select
-          key={`${row.id}${row.von_kultur_id}von_kultur_id`}
+          key={`${row?.id}${row?.von_kultur_id}von_kultur_id`}
           name="von_kultur_id"
-          value={row.von_kultur_id}
+          value={row?.von_kultur_id}
           field="von_kultur_id"
           label={`Kultur${
-            exists(row.art_id) ? ' (nur solche derselben Art)' : ''
+            exists(row?.art_id) ? ' (nur solche derselben Art)' : ''
           }`}
           options={vonKulturWerte}
           saveToDb={saveToDb}

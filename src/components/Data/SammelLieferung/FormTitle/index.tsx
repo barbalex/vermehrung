@@ -23,7 +23,7 @@ export const SammelLieferungFormTitleChooser = ({
 }: {
   lieferung: import('../../../shared/types.ts').WmRow | null | undefined
   printPreview: boolean
-  row: import('../../../shared/types.ts').SammelLieferung | null | undefined
+  row: import('../../../../dbModel.ts').SammelLieferung | null | undefined
   rawRow: Record<string, unknown> | null | undefined
   setPrintPreview: (val: unknown) => void
   showFilter: boolean

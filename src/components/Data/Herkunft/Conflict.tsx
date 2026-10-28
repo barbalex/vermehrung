@@ -22,7 +22,7 @@ export const HerkunftConflict = ({
   setActiveConflict,
 }: {
   rev: string | boolean | null
-  row: import('../../shared/types.ts').Herkunft | null | undefined
+  row: import('../../../dbModel.ts').Herkunft | null | undefined
   conflictDisposalCallback: () => void
   conflictSelectionCallback: () => void
   setActiveConflict: (conflict: string | null) => void

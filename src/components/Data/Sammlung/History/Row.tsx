@@ -19,7 +19,7 @@ export const SammlungHistoryRow = ({
   revRow,
   historyTakeoverCallback,
 }: {
-  row: import('../../../shared/types.ts').Sammlung | null | undefined
+  row: import('../../../../dbModel.ts').Sammlung | null | undefined
   revRow: import('../../../shared/types.ts').WmRow | null | undefined
   historyTakeoverCallback: () => void
 }) => {
@@ -30,22 +30,22 @@ export const SammlungHistoryRow = ({
     // otherwise risk to still have lower depth and thus loosing
     const newDepth = ((row?._depth as number) ?? 0) + 1
     const newObject: Record<string, unknown> = {
-      sammlung_id: revRow.sammlung_id,
-      art_id: revRow.art_id,
-      person_id: revRow.person_id,
-      herkunft_id: revRow.herkunft_id,
-      nr: revRow.nr,
-      datum: revRow.datum,
-      von_anzahl_individuen: revRow.von_anzahl_individuen,
-      anzahl_pflanzen: revRow.anzahl_pflanzen,
-      gramm_samen: revRow.gramm_samen,
-      andere_menge: revRow.andere_menge,
-      geom_point: revRow.geom_point,
-      geplant: revRow.geplant,
-      bemerkungen: revRow.bemerkungen,
+      sammlung_id: revRow?.sammlung_id,
+      art_id: revRow?.art_id,
+      person_id: revRow?.person_id,
+      herkunft_id: revRow?.herkunft_id,
+      nr: revRow?.nr,
+      datum: revRow?.datum,
+      von_anzahl_individuen: revRow?.von_anzahl_individuen,
+      anzahl_pflanzen: revRow?.anzahl_pflanzen,
+      gramm_samen: revRow?.gramm_samen,
+      andere_menge: revRow?.andere_menge,
+      geom_point: revRow?.geom_point,
+      geplant: revRow?.geplant,
+      bemerkungen: revRow?.bemerkungen,
       _parent_rev: row?._rev,
       _depth: newDepth,
-      _deleted: revRow._deleted,
+      _deleted: revRow?._deleted,
     }
     const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     newObject._rev = rev
@@ -73,11 +73,11 @@ export const SammlungHistoryRow = ({
     // TODO: is this a good idea?
     newObjectForStore._conflicts = row?._conflicts
     // for store: convert rev to winner
-    newObjectForStore.id = row.id
+    newObjectForStore.id = row?.id
     delete newObjectForStore.sammlung_id
     // optimistically update store
     await store.get(dbAtom).write(async () => {
-      await row.update((row: Record<string, unknown>) => {
+      await row?.update((row: Record<string, unknown>) => {
         Object.entries(newObjectForStore).forEach(([key, value]) => {
           if (!isEqual(value, row[key])) {
             row[key] = value
@@ -89,7 +89,7 @@ export const SammlungHistoryRow = ({
 
   return (
     <History
-      rev={revRow._rev}
+      rev={revRow?._rev}
       dataArray={dataArray}
       onClickWiderspruchUebernehmen={onClickWiderspruchUebernehmen}
     />

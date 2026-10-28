@@ -59,10 +59,10 @@ export const GartenSettingsMenu = ({ anchorEl, setAnchorEl }) => {
     ga_bemerkungen,
   } = userPersonOption ?? {}
 
-  const saveToDb = (event) => {
+  const saveToDb = (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
     const field = event.target.name
     const value = event.target.value === 'false'
-    userPersonOption.edit({ field, value })
+    userPersonOption?.edit({ field, value })
   }
 
   const openSettingsDocs = () => {

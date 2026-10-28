@@ -3,8 +3,8 @@ export const createDataArrayForTeilkulturRevComparison = ({ row, revRow }: {
   revRow: Record<string, unknown> | null | undefined
 }) => [
   {
-    valueInRow: row.kultur_id,
-    valueInRev: revRow.kultur_id,
+    valueInRow: row?.kultur_id,
+    valueInRev: revRow?.kultur_id,
     label: 'Kultur (id)',
   },
   {
@@ -35,8 +35,8 @@ export const createDataArrayForTeilkulturRevComparison = ({ row, revRow }: {
     label: 'geändert von',
   },
   {
-    valueInRow: row._deleted,
-    valueInRev: revRow._deleted,
+    valueInRow: row?._deleted,
+    valueInRev: revRow?._deleted,
     label: 'gelöscht',
   },
 ]

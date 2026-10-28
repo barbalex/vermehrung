@@ -52,13 +52,13 @@ export const KulturSettingsMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
   const { ku_zwischenlager, ku_erhaltungskultur } = userPersonOption ?? {}
   const { tk } = kulturOption ?? {}
 
-  const saveToDbKulturOption = async (event) => {
+  const saveToDbKulturOption = async (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
     const field = event.target.name
     const value = event.target.value === 'false'
-    kulturOption.edit({ field, value })
+    kulturOption?.edit({ field, value })
   }
 
-  const saveToDbPersonOption = async (event) => {
+  const saveToDbPersonOption = async (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
     const field = event.target.name
     const value = event.target.value === 'false'
     userPersonOption.edit({ field, value })

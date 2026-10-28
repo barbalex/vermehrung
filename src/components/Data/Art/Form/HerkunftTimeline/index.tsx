@@ -55,7 +55,7 @@ export const HerkunftTimeline = ({
 
   const [open, setOpen] = useState(false)
   const anim = useAnimation()
-  const onClickToggle = async (e) => {
+  const onClickToggle = async (e: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
     e.stopPropagation()
     if (open) {
       const was = open

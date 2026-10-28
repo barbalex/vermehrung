@@ -20,7 +20,7 @@ export const SammlungFormTitleChooser = ({
   showFilter,
   showHistory,
 }: {
-  row: import('../../../shared/types.ts').Sammlung | null | undefined
+  row: import('../../../../dbModel.ts').Sammlung | null | undefined
   rawRow: Record<string, unknown> | null | undefined
   showFilter: boolean
   showHistory: boolean

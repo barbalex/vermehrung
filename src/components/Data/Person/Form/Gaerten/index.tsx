@@ -22,11 +22,11 @@ export const PersonGaerten = ({ person }: { person: import('../../../../shared/t
   const gartenFilter = useAtomValue(filterGartenAtom)
 
   const [errors, setErrors] = useState({})
-  useEffect(() => setErrors({}), [person.id])
+  useEffect(() => setErrors({}), [person?.id])
 
   const [open, setOpen] = useState(false)
   const anim = useAnimation()
-  const onClickToggle = async (e) => {
+  const onClickToggle = async (e: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
     e.stopPropagation()
     if (open) {
       const was = open
@@ -46,7 +46,7 @@ export const PersonGaerten = ({ person }: { person: import('../../../../shared/t
   const { gvs, gartenWerte } = dataState
   const gvGartenIds = gvs.map((v) => v.garten_id)
   useEffect(() => {
-    const gvsObservable = person.gvs
+    const gvsObservable = person?.gvs
       .extend(Q.where('_deleted', false))
       .observe()
     const gartenDelQuery =
@@ -106,11 +106,11 @@ export const PersonGaerten = ({ person }: { person: import('../../../../shared/t
 
     return () => subscription?.unsubscribe?.()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [person.gvs, gvGartenIds.length, db, gartenFilter])
+  }, [person?.gvs, gvGartenIds.length, db, gartenFilter])
 
-  const saveToDb = (event) => {
+  const saveToDb = (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
     insertGvRev({
-      values: { garten_id: event.target.value, person_id: person.id },
+      values: { garten_id: event.target.value, person_id: person?.id },
     })
     setErrors({})
   }

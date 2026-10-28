@@ -24,7 +24,7 @@ export const KulturConflict = ({
 }: {
   id: string | undefined
   rev: string | boolean | null
-  row: import('../../shared/types.ts').Kultur | null | undefined
+  row: import('../../../dbModel.ts').Kultur | null | undefined
   conflictDisposalCallback: () => void
   conflictSelectionCallback: () => void
   setActiveConflict: (conflict: string | null) => void

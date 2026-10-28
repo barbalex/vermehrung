@@ -88,7 +88,7 @@ export const LieferungWer = ({
         // need to show a choosen kultur even if inactive but not if deleted
         let person
         try {
-          person = await row.person.fetch()
+          person = await row?.person.fetch()
         } catch {}
         const personsIncludingChoosen = uniqBy(
           [...persons, ...(person && !showFilter ? [person] : [])],

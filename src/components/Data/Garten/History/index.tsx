@@ -26,7 +26,7 @@ export const GartenHistory = ({
   rawRow,
   historyTakeoverCallback,
 }: {
-  row: import('../../../shared/types.ts').Garten | null | undefined
+  row: import('../../../../dbModel.ts').Garten | null | undefined
   rawRow?: unknown
   historyTakeoverCallback?: () => void
 }) => {

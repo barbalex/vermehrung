@@ -1,4 +1,4 @@
-const compareLabel = (a, b) => {
+const compareLabel = (a: import('../../../dbModel.ts').Art, b: import('../../../dbModel.ts').Bedarf) => {
   // catch if label is null
   if (!b.label && !a.label) return 0
   if (!b.label) return -1

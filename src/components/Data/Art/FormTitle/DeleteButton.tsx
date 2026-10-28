@@ -16,12 +16,12 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import styles from './DeleteButton.module.css'
 
 export const DeleteButton = ({ row }: { row: import('../../../shared/types.ts').WmRow | null | undefined }) => {
-  const [anchorEl, setAnchorEl] = useState(null)
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | undefined | null>(null)
   const closeMenu = () => setAnchorEl(null)
-  const onClickButton = (event) => setAnchorEl(event.currentTarget)
+  const onClickButton = (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => setAnchorEl(event.currentTarget)
 
   const remove = () => {
-    row.delete()
+    row?.delete()
     setAnchorEl(null)
     const artFilter = store.get(filterArtAtom)
     if (artFilter._deleted === false) {
@@ -40,7 +40,7 @@ export const DeleteButton = ({ row }: { row: import('../../../shared/types.ts').
         aria-label="Art löschen"
         title="Art löschen"
         onClick={onClickButton}
-        disabled={!!row._deleted}
+        disabled={!!row?._deleted}
         size="large"
       >
         <FaMinus />

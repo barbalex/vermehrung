@@ -28,18 +28,18 @@ export const Lieferschein = ({ row }: { row: import('../../../shared/types.ts').
     person: undefined,
   })
   useEffect(() => {
-    const lieferungsObservable = row.lieferungs.observe()
-    const vonKulturGartenObservable = row.von_kultur_id
+    const lieferungsObservable = row?.lieferungs.observe()
+    const vonKulturGartenObservable = row?.von_kultur_id
       ? db
           .get('garten')
           .query(
             Q.where('_deleted', false),
             Q.experimentalJoinTables(['kultur']),
-            Q.on('kultur', 'id', row.von_kultur_id),
+            Q.on('kultur', 'id', row?.von_kultur_id),
           )
           .observe()
       : $of({})
-    const personObservable = row.person.observe()
+    const personObservable = row?.person.observe()
     const combinedObservables = combineLatest([
       lieferungsObservable,
       vonKulturGartenObservable,
@@ -55,23 +55,23 @@ export const Lieferschein = ({ row }: { row: import('../../../shared/types.ts').
     )
 
     return () => subscription?.unsubscribe?.()
-  }, [db, row.lieferungs, row.person, row.von_kultur_id])
+  }, [db, row?.lieferungs, row?.person, row?.von_kultur_id])
   const { lieferungs, vonKulturGarten, person } = dataState
 
-  const von = row.von_kultur_id
+  const von = row?.von_kultur_id
     ? `${vonKulturGarten?.name ?? '(kein Name)'} (${
         vonKulturGarten?.ort ?? 'kein Ort'
       })`
     : '(keine von-Kultur erfasst)'
 
-  const an = row.person_id
+  const an = row?.person_id
     ? `${personFullname(person) ?? '(kein Name)'} (${
         person?.ort ?? 'kein Ort'
       })`
     : '(keine Person erfasst)'
 
-  const am = row.datum
-    ? DateTime.fromSQL(row.datum).toFormat('dd.LL.yyyy')
+  const am = row?.datum
+    ? DateTime.fromSQL(row?.datum).toFormat('dd.LL.yyyy')
     : '(Kein Datum erfasst)'
 
   return (

@@ -24,7 +24,7 @@ export const BedarfConflict = ({
 }: {
   id: string | undefined
   rev: string | boolean | null
-  row: import('../../shared/types.ts').Bedarf | null | undefined
+  row: import('../../../dbModel.ts').Bedarf | null | undefined
   conflictDisposalCallback: () => void
   conflictSelectionCallback: () => void
   setActiveConflict: (conflict: string | null) => void

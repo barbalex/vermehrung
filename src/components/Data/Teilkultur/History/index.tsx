@@ -27,7 +27,7 @@ export const TeilkulturHistory = ({
   rawRow,
   historyTakeoverCallback,
 }: {
-  row: import('../../../shared/types.ts').Teilkultur | null | undefined
+  row: import('../../../../dbModel.ts').Teilkultur | null | undefined
   rawRow?: unknown
   historyTakeoverCallback?: () => void
 }) => {

@@ -48,7 +48,7 @@ export const EventForm = ({
 }: {
   showFilter: boolean
   id: string | undefined
-  row: import('../../../shared/types.ts').Event | null | undefined
+  row: import('../../../../dbModel.ts').Event | null | undefined
   rawRow: Record<string, unknown> | null | undefined
   activeConflict: string | null
   setActiveConflict: (val: unknown) => void
@@ -161,7 +161,7 @@ export const EventForm = ({
         // need to show a choosen kultur even if inactive but not if deleted
         let kultur
         try {
-          kultur = await row.kultur.fetch()
+          kultur = await row?.kultur.fetch()
         } catch {}
         const kultursIncludingChoosen = uniqBy(
           [...kulturs, ...(kultur && !showFilter ? [kultur] : [])],
@@ -187,7 +187,7 @@ export const EventForm = ({
         )
         let teilkultur
         try {
-          teilkultur = await row.teilkultur.fetch()
+          teilkultur = await row?.teilkultur.fetch()
         } catch {}
         const teilkultursIncludingChoosen = uniqBy(
           [...teilkulturs, ...(teilkultur && !showFilter ? [teilkultur] : [])],
@@ -203,7 +203,7 @@ export const EventForm = ({
         // need to show a choosen person even if inactive but not if deleted
         let person
         try {
-          person = await row.person.fetch()
+          person = await row?.person.fetch()
         } catch {}
         const personsIncludingChoosen = uniqBy(
           [...persons, ...(person && !showFilter ? [person] : [])],
@@ -247,7 +247,7 @@ export const EventForm = ({
 
   const { tk, ev_datum, ev_geplant, ev_person_id } = kulturOption ?? {}
 
-  const saveToDb = (event) => {
+  const saveToDb = (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
     const field = event.target.name
     let value = ifIsNumericAsNumber(event.target.value)
     if (event.target.value === undefined) value = null
@@ -260,7 +260,7 @@ export const EventForm = ({
     const previousValue = ifIsNumericAsNumber(row?.[field])
     // only update if value has changed
     if (value === previousValue) return
-    row.edit({ field, value })
+    row?.edit({ field, value })
   }
   const openPlanenDocs = () => {
     const url = `${constants?.getAppUri()}/Dokumentation/planen`
@@ -275,10 +275,10 @@ export const EventForm = ({
       noNavigateInTree: true,
       values: {
         name,
-        kultur_id: row.kultur_id,
+        kultur_id: row?.kultur_id,
       },
     })
-    row.edit({ field: 'teilkultur_id', value: teilkultur_id })
+    row?.edit({ field: 'teilkultur_id', value: teilkultur_id })
   }
 
   const showDeleted = eventFilter._deleted !== false || row?._deleted
@@ -295,19 +295,19 @@ export const EventForm = ({
           <>
             {showFilter ? (
               <JesNo
-                key={`${row.id}_deleted`}
+                key={`${row?.id}_deleted`}
                 label="gelöscht"
                 name="_deleted"
-                value={row._deleted}
+                value={row?._deleted}
                 saveToDb={saveToDb}
                 error={errors?.event?._deleted}
               />
             ) : (
               <Checkbox2States
-                key={`${row.id}_deleted`}
+                key={`${row?.id}_deleted`}
                 label="gelöscht"
                 name="_deleted"
-                value={row._deleted}
+                value={row?._deleted}
                 saveToDb={saveToDb}
                 error={errors?.event?._deleted}
               />
@@ -315,9 +315,9 @@ export const EventForm = ({
           </>
         )}
         <Select
-          key={`${row.id}${row.kultur_id}kultur_id`}
+          key={`${row?.id}${row?.kultur_id}kultur_id`}
           name="kultur_id"
-          value={row.kultur_id}
+          value={row?.kultur_id}
           field="kultur_id"
           label="Kultur"
           options={kulturWerte}
@@ -326,7 +326,7 @@ export const EventForm = ({
         />
         {(tk || showFilter) && (
           <SelectCreatable
-            key={`${row.id}${row.teilkultur_id}teilkultur_id`}
+            key={`${row?.id}${row?.teilkultur_id}teilkultur_id`}
             row={row}
             showFilter={showFilter}
             table="event"
@@ -338,19 +338,19 @@ export const EventForm = ({
           />
         )}
         <TextField
-          key={`${row.id}beschreibung`}
+          key={`${row?.id}beschreibung`}
           name="beschreibung"
           label="Beschreibung"
-          value={row.beschreibung}
+          value={row?.beschreibung}
           saveToDb={saveToDb}
           error={errors?.event?.beschreibung}
           multiline
         />
         {(ev_person_id || showFilter) && (
           <Select
-            key={`${row.id}${row.person_id}person_id`}
+            key={`${row?.id}${row?.person_id}person_id`}
             name="person_id"
-            value={row.person_id}
+            value={row?.person_id}
             field="person_id"
             label="Wer"
             options={personWerte}
@@ -360,10 +360,10 @@ export const EventForm = ({
         )}
         {(ev_datum || showFilter) && (
           <Date
-            key={`${row.id}datum`}
+            key={`${row?.id}datum`}
             name="datum"
             label="Datum"
-            value={row.datum}
+            value={row?.datum}
             saveToDb={saveToDb}
             error={errors?.event?.datum}
           />
@@ -372,19 +372,19 @@ export const EventForm = ({
           <div className={styles.fieldRow}>
             {showFilter ? (
               <JesNo
-                key={`${row.id}geplant`}
+                key={`${row?.id}geplant`}
                 label="geplant"
                 name="geplant"
-                value={row.geplant}
+                value={row?.geplant}
                 saveToDb={saveToDb}
                 error={errors?.event?.geplant}
               />
             ) : (
               <Checkbox2States
-                key={`${row.id}geplant`}
+                key={`${row?.id}geplant`}
                 label="geplant"
                 name="geplant"
-                value={row.geplant}
+                value={row?.geplant}
                 saveToDb={saveToDb}
                 error={errors?.event?.geplant}
               />

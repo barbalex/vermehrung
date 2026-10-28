@@ -27,7 +27,7 @@ export const EventHistory = ({
   rawRow,
   historyTakeoverCallback,
 }: {
-  row: import('../../../shared/types.ts').Event | null | undefined
+  row: import('../../../../dbModel.ts').Event | null | undefined
   rawRow?: unknown
   historyTakeoverCallback?: () => void
 }) => {

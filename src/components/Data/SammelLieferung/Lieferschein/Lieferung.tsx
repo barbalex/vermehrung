@@ -45,7 +45,7 @@ export const LieferungForLieferschein = ({ lieferung: row }) => {
       async ([art, [vonKulturHerkunft], [vonSammlungHerkunft]]) => {
         let artLabel
         try {
-          artLabel = await art.label.pipe(first$()).toPromise()
+          artLabel = await art?.label.pipe(first$()).toPromise()
         } catch {}
         const herkunftLabel = vonKulturHerkunft
           ? herkunftLabelFromHerkunft({

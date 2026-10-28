@@ -18,7 +18,7 @@ export const ZaehlungFormTitleChooser = ({
   showFilter,
   showHistory,
 }: {
-  row: import('../../../shared/types.ts').Zaehlung | null | undefined
+  row: import('../../../../dbModel.ts').Zaehlung | null | undefined
   rawRow: Record<string, unknown> | null | undefined
   showFilter: boolean
   showHistory: boolean

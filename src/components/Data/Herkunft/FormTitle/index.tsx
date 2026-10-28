@@ -19,7 +19,7 @@ export const HerkunftFormTitleChooser = ({
   showHistory,
   activeConflict,
 }: {
-  row: import('../../../shared/types.ts').Herkunft | null | undefined
+  row: import('../../../../dbModel.ts').Herkunft | null | undefined
   rawRow: Record<string, unknown> | null | undefined
   showFilter: boolean
   showHistory: boolean

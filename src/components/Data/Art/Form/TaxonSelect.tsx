@@ -78,16 +78,16 @@ export const TaxonSelect = ({
   const db = useAtomValue(dbAtom)
 
   const [stateValue, setStateValue] = useState({
-    value: art.ae_id || '',
+    value: art?.ae_id || '',
     label: '',
   })
   useEffect(() => {
-    const observable = art.ae_id
-      ? db?.get('ae_art').findAndObserve(art.ae_id)
+    const observable = art?.ae_id
+      ? db?.get('ae_art').findAndObserve(art?.ae_id)
       : $of({})
-    const subscription = observable.subscribe((record) =>
+    const subscription = observable?.subscribe((record) =>
       setStateValue({
-        value: art.ae_id || '',
+        value: art?.ae_id || '',
         label: taxonLabelFromAeArt(record),
       }),
     )

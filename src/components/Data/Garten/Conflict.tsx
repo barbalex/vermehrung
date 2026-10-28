@@ -24,7 +24,7 @@ export const GartenConflict = ({
 }: {
   id: string | undefined
   rev: string | boolean | null
-  row: import('../../shared/types.ts').Garten | null | undefined
+  row: import('../../../dbModel.ts').Garten | null | undefined
   conflictDisposalCallback: () => void
   conflictSelectionCallback: () => void
   setActiveConflict: (conflict: string | null) => void

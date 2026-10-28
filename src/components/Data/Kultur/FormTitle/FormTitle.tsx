@@ -18,7 +18,7 @@ export const KulturFormTitle = ({
   filteredCount,
   showHistory,
 }: {
-  row: import('../../../shared/types.ts').Kultur | null | undefined
+  row: import('../../../../dbModel.ts').Kultur | null | undefined
   totalCount: number
   filteredCount: number
   showHistory: boolean
@@ -37,12 +37,12 @@ export const KulturFormTitle = ({
             <Download row={row} asMenu />
             <HistoryButton
               table="kultur"
-              id={row.id}
+              id={row?.id}
               showHistory={showHistory}
               asMenu
             />
             <Anleitung asMenu />
-            <Settings kulturId={row.id} asMenu />
+            <Settings kulturId={row?.id} asMenu />
             <FilterNumbers
               filteredCount={filteredCount}
               totalCount={totalCount}
@@ -57,12 +57,12 @@ export const KulturFormTitle = ({
               <Download row={row} asMenu />
               <HistoryButton
                 table="kultur"
-                id={row.id}
+                id={row?.id}
                 showHistory={showHistory}
                 asMenu
               />
               <Anleitung asMenu />
-              <Settings kulturId={row.id} asMenu />
+              <Settings kulturId={row?.id} asMenu />
               <FilterNumbers
                 filteredCount={filteredCount}
                 totalCount={totalCount}
@@ -74,12 +74,12 @@ export const KulturFormTitle = ({
           <>
             <Add />
             <Delete row={row} />
-            <Settings kulturId={row.id} />
+            <Settings kulturId={row?.id} />
             <Menu white={false}>
               <Download row={row} asMenu />
               <HistoryButton
                 table="kultur"
-                id={row.id}
+                id={row?.id}
                 showHistory={showHistory}
                 asMenu
               />
@@ -95,7 +95,7 @@ export const KulturFormTitle = ({
           <>
             <Add />
             <Delete row={row} />
-            <Settings kulturId={row.id} />
+            <Settings kulturId={row?.id} />
             <FilterNumbers
               filteredCount={filteredCount}
               totalCount={totalCount}
@@ -104,7 +104,7 @@ export const KulturFormTitle = ({
               <Download row={row} asMenu />
               <HistoryButton
                 table="kultur"
-                id={row.id}
+                id={row?.id}
                 showHistory={showHistory}
                 asMenu
               />
@@ -116,7 +116,7 @@ export const KulturFormTitle = ({
             <Add />
             <Delete row={row} />
             <Download row={row} />
-            <Settings kulturId={row.id} />
+            <Settings kulturId={row?.id} />
             <FilterNumbers
               filteredCount={filteredCount}
               totalCount={totalCount}
@@ -124,7 +124,7 @@ export const KulturFormTitle = ({
             <Menu white={false}>
               <HistoryButton
                 table="kultur"
-                id={row.id}
+                id={row?.id}
                 showHistory={showHistory}
                 asMenu
               />
@@ -138,11 +138,11 @@ export const KulturFormTitle = ({
             <Download row={row} />
             <HistoryButton
               table="kultur"
-              id={row.id}
+              id={row?.id}
               showHistory={showHistory}
             />
             <Anleitung />
-            <Settings kulturId={row.id} />
+            <Settings kulturId={row?.id} />
             <FilterNumbers
               filteredCount={filteredCount}
               totalCount={totalCount}

@@ -18,7 +18,7 @@ export const ZaehlungSettingsMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
   const [kulturOption, setKulturOption] = useState()
   useEffect(() => {
     const kOObservable = db?.get('kultur_option').findAndObserve(kulturId)
-    const subscription = kOObservable.subscribe((kulturOption) =>
+    const subscription = kOObservable?.subscribe((kulturOption) =>
       setKulturOption(kulturOption),
     )
 
@@ -26,10 +26,10 @@ export const ZaehlungSettingsMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
   }, [db, kulturId])
   const { z_bemerkungen } = kulturOption ?? {}
 
-  const saveToDb = async (event) => {
+  const saveToDb = async (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
     const field = event.target.name
     const value = event.target.value === 'false'
-    kulturOption.edit({ field, value })
+    kulturOption?.edit({ field, value })
   }
 
   const openSettingsDocs = () => {

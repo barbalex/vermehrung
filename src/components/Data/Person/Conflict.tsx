@@ -24,7 +24,7 @@ export const PersonConflict = ({
 }: {
   id: string | undefined
   rev: string | boolean | null
-  row: import('../../shared/types.ts').Person | null | undefined
+  row: import('../../../dbModel.ts').Person | null | undefined
   conflictDisposalCallback: () => void
   conflictSelectionCallback: () => void
   setActiveConflict: (conflict: string | null) => void

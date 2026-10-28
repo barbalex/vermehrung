@@ -15,8 +15,8 @@ export const CustomTooltip = ({ payload, label, active }) => {
         {payload
           // Zählung and Bedarf are only used for the optics,
           // do not want them in the tooltip
-          ?.filter((p) => !['Zählung', 'Bedarf'].includes(p.dataKey))
-          ?.map((o, i) => {
+          ?.filter((p: import('../../../../../../dbModel.ts').Person) => !['Zählung', 'Bedarf'].includes(p.dataKey))
+          ?.map((o, i: number) => {
             const label = o.dataKey
             const value =
               label === 'Auspflanzung' && Math.abs(o.value) ?

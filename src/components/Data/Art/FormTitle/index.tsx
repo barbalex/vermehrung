@@ -28,7 +28,7 @@ export const ArtFormTitle = ({ row, rawRow, showFilter, showHistory }) => {
               Q.where('_deleted', true),
               Q.where('_deleted', null),
             )
-    const totalCountObservable = collection.query(delQuery).observeCount()
+    const totalCountObservable = collection?.query(delQuery).observeCount()
     const filteredCountObservable = collection
       .query(...tableFilter({ table: 'art' }))
       .observeCount()

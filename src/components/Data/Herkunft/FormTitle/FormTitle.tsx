@@ -26,7 +26,7 @@ export const HerkunftFormTitle = ({
   showHistory,
   activeConflict,
 }: {
-  row: import('../../../shared/types.ts').Herkunft | null | undefined
+  row: import('../../../../dbModel.ts').Herkunft | null | undefined
   totalCount: number
   filteredCount: number
   showHistory: boolean
@@ -77,7 +77,7 @@ export const HerkunftFormTitle = ({
           <Menu white={false}>
             <HistoryButton
               table="herkunft"
-              id={row.id}
+              id={row?.id}
               showHistory={showHistory}
               asMenu
             />
@@ -93,7 +93,7 @@ export const HerkunftFormTitle = ({
           <>
             <HistoryButton
               table="herkunft"
-              id={row.id}
+              id={row?.id}
               showHistory={showHistory}
             />
             <Anleitung />

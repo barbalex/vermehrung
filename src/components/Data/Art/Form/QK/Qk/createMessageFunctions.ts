@@ -244,7 +244,7 @@ export const createMessageFunctions = async ({ artId, db }) => {
   return {
     personsWithNonUniqueNr: async () => {
       const pGroupedByNr = groupBy(
-        personsSorted.filter((p) => exists(p.nr)),
+        personsSorted.filter((p: import('../../../../../../dbModel.ts').Person) => exists(p.nr)),
         (h) => h.nr,
       )
       return Object.values(pGroupedByNr)
@@ -280,8 +280,8 @@ export const createMessageFunctions = async ({ artId, db }) => {
           .filter(
             (a) =>
               !avs
-                .filter((av) => av.art_id === a.id)
-                .filter((av) => !av._deleted).length,
+                .filter((av: import('../../../../../../dbModel.ts').Av) => av.art_id === a.id)
+                .filter((av: import('../../../../../../dbModel.ts').Av) => !av._deleted).length,
           )
           .map(async (a) => {
             let text
@@ -300,7 +300,7 @@ export const createMessageFunctions = async ({ artId, db }) => {
         sammlungsOfArtSorted
           .filter((s) => s.art_id === artId)
           .filter(
-            (s) => !lieferungsSorted.find((l) => l.von_sammlung_id === s.id),
+            (s) => !lieferungsSorted.find((l: import('../../../../../../dbModel.ts').Lieferung) => l.von_sammlung_id === s.id),
           )
           .map(async (s) => {
             let text
@@ -449,8 +449,8 @@ export const createMessageFunctions = async ({ artId, db }) => {
       } catch {}
 
       const gartenIds = kulturs
-        .filter((s) => !!s.garten_id)
-        .map((k) => k.garten_id)
+        .filter((s: import('../../../../../../dbModel.ts').Sammlung) => !!s.garten_id)
+        .map((k: import('../../../../../../dbModel.ts').Kultur) => k.garten_id)
       const uniqueGartenIds = [...new Set(gartenIds)]
 
       let gartens = []
@@ -544,10 +544,10 @@ export const createMessageFunctions = async ({ artId, db }) => {
           .filter(
             (k) =>
               zaehlungsOfArt
-                .filter((z) => z.id === k.zaehlung_id)
-                .filter((z) => !z._deleted)
+                .filter((z: import('../../../../../../dbModel.ts').Zaehlung) => z.id === k.zaehlung_id)
+                .filter((z: import('../../../../../../dbModel.ts').Zaehlung) => !z._deleted)
                 .filter(
-                  (z) =>
+                  (z: import('../../../../../../dbModel.ts').Zaehlung) =>
                     z.datum && z.datum > startYear && z.datum < startNextYear,
                 ).length === 0,
           )
@@ -566,8 +566,8 @@ export const createMessageFunctions = async ({ artId, db }) => {
     teilkultursWithoutName: async () =>
       await Promise.all(
         teilkultursOfArtSorted
-          .filter((tk) => !tk.name)
-          .map(async (tk) => {
+          .filter((tk: import('../../../../../../dbModel.ts').Teilkultur) => !tk.name)
+          .map(async (tk: import('../../../../../../dbModel.ts').Teilkultur) => {
             let kultur
             try {
               kultur = await tk.kultur?.fetch()
@@ -616,7 +616,7 @@ export const createMessageFunctions = async ({ artId, db }) => {
         .fetch()
 
       return await Promise.all(
-        zaehlungs.map(async (z) => {
+        zaehlungs.map(async (z: import('../../../../../../dbModel.ts').Zaehlung) => {
           let kultur
           try {
             kultur = await z.kultur?.fetch()
@@ -659,7 +659,7 @@ export const createMessageFunctions = async ({ artId, db }) => {
       } catch {}
 
       return await Promise.all(
-        zaehlungs.map(async (z) => {
+        zaehlungs.map(async (z: import('../../../../../../dbModel.ts').Zaehlung) => {
           let kultur
           try {
             kultur = await z.kultur?.fetch()
@@ -681,34 +681,34 @@ export const createMessageFunctions = async ({ artId, db }) => {
       await Promise.all(
         zaehlungsOfArtSorted
           .filter(
-            (z) =>
+            (z: import('../../../../../../dbModel.ts').Zaehlung) =>
               teilzaehlungsOfArt
-                .filter((tz) => tz.zaehlung_id === z.id)
-                .filter((tz) => !tz._deleted)
-                .filter((tz) => !exists(tz.anzahl_pflanzen)).length,
+                .filter((tz: import('../../../../../../dbModel.ts').Teilzaehlung) => tz.zaehlung_id === z.id)
+                .filter((tz: import('../../../../../../dbModel.ts').Teilzaehlung) => !tz._deleted)
+                .filter((tz: import('../../../../../../dbModel.ts').Teilzaehlung) => !exists(tz.anzahl_pflanzen)).length,
           )
-          .map(async (z) => {
+          .map(async (z: import('../../../../../../dbModel.ts').Zaehlung) => {
             let kultur
             try {
               kultur = await z.kultur?.fetch()
             } catch {}
             let kulturLabel
             try {
-              kulturLabel = await kultur.label.pipe(first$()).toPromise()
+              kulturLabel = await kultur?.label.pipe(first$()).toPromise()
             } catch {}
             const zaehlung = z.datum
               ? `Zählung vom ${format(new Date(z.datum), 'yyyy.MM.dd')}`
               : `Zählung-ID: ${z.id}`
             const anzTz = teilzaehlungsOfArt
-              .filter((tz) => tz.zaehlung_id === z.id)
-              .filter((tz) => !tz._deleted).length
+              .filter((tz: import('../../../../../../dbModel.ts').Teilzaehlung) => tz.zaehlung_id === z.id)
+              .filter((tz: import('../../../../../../dbModel.ts').Teilzaehlung) => !tz._deleted).length
             const teilzaehlung = anzTz > 1 ? ` (${anzTz} Teilzählungen)` : ''
             const text = `${
               kulturLabel ?? '(keine Kultur)'
             }, ${zaehlung}${teilzaehlung}`
 
             return {
-              url: ['Arten', artId, 'Kulturen', kultur.id, 'Zaehlungen', z.id],
+              url: ['Arten', artId, 'Kulturen', kultur?.id, 'Zaehlungen', z.id],
               text,
             }
           }),
@@ -717,13 +717,13 @@ export const createMessageFunctions = async ({ artId, db }) => {
       await Promise.all(
         zaehlungsOfArtSorted
           .filter(
-            (z) =>
+            (z: import('../../../../../../dbModel.ts').Zaehlung) =>
               teilzaehlungsOfArt
-                .filter((tz) => tz.zaehlung_id === z.id)
-                .filter((tz) => !tz._deleted)
-                .filter((tz) => !exists(tz.anzahl_auspflanzbereit)).length,
+                .filter((tz: import('../../../../../../dbModel.ts').Teilzaehlung) => tz.zaehlung_id === z.id)
+                .filter((tz: import('../../../../../../dbModel.ts').Teilzaehlung) => !tz._deleted)
+                .filter((tz: import('../../../../../../dbModel.ts').Teilzaehlung) => !exists(tz.anzahl_auspflanzbereit)).length,
           )
-          .map(async (z) => {
+          .map(async (z: import('../../../../../../dbModel.ts').Zaehlung) => {
             let kultur
             try {
               kultur = await z.kultur.fetch()
@@ -736,15 +736,15 @@ export const createMessageFunctions = async ({ artId, db }) => {
               ? `Zählung vom ${format(new Date(z.datum), 'yyyy.MM.dd')}`
               : `Zählung-ID: ${z.id}`
             const anzTz = teilzaehlungsOfArt
-              .filter((tz) => tz.zaehlung_id === z.id)
-              .filter((tz) => !tz._deleted).length
+              .filter((tz: import('../../../../../../dbModel.ts').Teilzaehlung) => tz.zaehlung_id === z.id)
+              .filter((tz: import('../../../../../../dbModel.ts').Teilzaehlung) => !tz._deleted).length
             const teilzaehlung = anzTz > 1 ? ` (${anzTz} Teilzählungen)` : ''
             const text = `${
               kulturLabel ?? '(keine Kultur)'
             }, ${zaehlung}${teilzaehlung}`
 
             return {
-              url: ['Arten', artId, 'Kulturen', kultur.id, 'Zaehlungen', z.id],
+              url: ['Arten', artId, 'Kulturen', kultur?.id, 'Zaehlungen', z.id],
               text,
             }
           }),
@@ -753,13 +753,13 @@ export const createMessageFunctions = async ({ artId, db }) => {
       await Promise.all(
         zaehlungsOfArtSorted
           .filter(
-            (z) =>
+            (z: import('../../../../../../dbModel.ts').Zaehlung) =>
               teilzaehlungsOfArt
-                .filter((tz) => tz.zaehlung_id === z.id)
-                .filter((tz) => !tz._deleted)
-                .filter((tz) => !exists(tz.anzahl_mutterpflanzen)).length,
+                .filter((tz: import('../../../../../../dbModel.ts').Teilzaehlung) => tz.zaehlung_id === z.id)
+                .filter((tz: import('../../../../../../dbModel.ts').Teilzaehlung) => !tz._deleted)
+                .filter((tz: import('../../../../../../dbModel.ts').Teilzaehlung) => !exists(tz.anzahl_mutterpflanzen)).length,
           )
-          .map(async (z) => {
+          .map(async (z: import('../../../../../../dbModel.ts').Zaehlung) => {
             let kultur
             try {
               kultur = await z.kultur?.fetch()
@@ -772,8 +772,8 @@ export const createMessageFunctions = async ({ artId, db }) => {
               ? `Zählung vom ${format(new Date(z.datum), 'yyyy.MM.dd')}`
               : `Zählung-ID: ${z.id}`
             const anzTz = teilzaehlungsOfArt
-              .filter((tz) => tz.zaehlung_id === z.id)
-              .filter((tz) => !tz._deleted).length
+              .filter((tz: import('../../../../../../dbModel.ts').Teilzaehlung) => tz.zaehlung_id === z.id)
+              .filter((tz: import('../../../../../../dbModel.ts').Teilzaehlung) => !tz._deleted).length
             const teilzaehlung = anzTz > 1 ? ` (${anzTz} Teilzählungen)` : ''
             const text = `${
               kulturLabel ?? '(keine Kultur)'
@@ -813,13 +813,13 @@ export const createMessageFunctions = async ({ artId, db }) => {
         const zaehlungsOfArtSorted = zaehlungsOfArt.sort(zaehlungSort)
         return await Promise.all(
           zaehlungsOfArtSorted
-            .filter((z) => {
+            .filter((z: import('../../../../../../dbModel.ts').Zaehlung) => {
               const tz = teilzaehlungsOfArt
-                .filter((tz) => tz.zaehlung_id === z.id)
-                .filter((tz) => !tz._deleted)
-              return tz.length && tz.filter((tz) => !tz.teilkultur_id).length
+                .filter((tz: import('../../../../../../dbModel.ts').Teilzaehlung) => tz.zaehlung_id === z.id)
+                .filter((tz: import('../../../../../../dbModel.ts').Teilzaehlung) => !tz._deleted)
+              return tz.length && tz.filter((tz: import('../../../../../../dbModel.ts').Teilzaehlung) => !tz.teilkultur_id).length
             })
-            .map(async (z) => {
+            .map(async (z: import('../../../../../../dbModel.ts').Zaehlung) => {
               let kultur
               try {
                 kultur = await z.kultur?.fetch()
@@ -832,8 +832,8 @@ export const createMessageFunctions = async ({ artId, db }) => {
                 ? `Zählung vom ${format(new Date(z.datum), 'yyyy.MM.dd')}`
                 : `Zählung-ID: ${z.id}`
               const anzTz = teilzaehlungsOfArt
-                .filter((tz) => tz.zaehlung_id === z.id)
-                .filter((tz) => !tz._deleted).length
+                .filter((tz: import('../../../../../../dbModel.ts').Teilzaehlung) => tz.zaehlung_id === z.id)
+                .filter((tz: import('../../../../../../dbModel.ts').Teilzaehlung) => !tz._deleted).length
               const teilzaehlung = anzTz > 1 ? ` (${anzTz} Teilzählungen)` : ''
               const text = `${
                 kulturLabel ?? '(keine Kultur)'
@@ -855,10 +855,10 @@ export const createMessageFunctions = async ({ artId, db }) => {
       },
     lieferungsWithMultipleVon: async () =>
       lieferungsSorted
-        .filter((l) => l.art_id === artId)
-        .filter((l) => !!l.von_sammlung_id)
-        .filter((l) => !!l.von_kultur_id)
-        .map((l) => {
+        .filter((l: import('../../../../../../dbModel.ts').Lieferung) => l.art_id === artId)
+        .filter((l: import('../../../../../../dbModel.ts').Lieferung) => !!l.von_sammlung_id)
+        .filter((l: import('../../../../../../dbModel.ts').Lieferung) => !!l.von_kultur_id)
+        .map((l: import('../../../../../../dbModel.ts').Lieferung) => {
           const datum = l.datum
             ? format(new Date(l.datum), 'yyyy.MM.dd')
             : `kein Datum`
@@ -872,10 +872,10 @@ export const createMessageFunctions = async ({ artId, db }) => {
         }),
     lieferungsWithMultipleNach: async () =>
       lieferungsSorted
-        .filter((l) => l.art_id === artId)
-        .filter((l) => l.nach_ausgepflanzt)
-        .filter((l) => !!l.nach_kultur_id)
-        .map((l) => {
+        .filter((l: import('../../../../../../dbModel.ts').Lieferung) => l.art_id === artId)
+        .filter((l: import('../../../../../../dbModel.ts').Lieferung) => l.nach_ausgepflanzt)
+        .filter((l: import('../../../../../../dbModel.ts').Lieferung) => !!l.nach_kultur_id)
+        .map((l: import('../../../../../../dbModel.ts').Lieferung) => {
           const datum = l.datum
             ? format(new Date(l.datum), 'yyyy.MM.dd')
             : `kein Datum`
@@ -889,9 +889,9 @@ export const createMessageFunctions = async ({ artId, db }) => {
         }),
     lieferungsWithoutAnzahlPflanzen: async () =>
       lieferungsSorted
-        .filter((l) => l.art_id === artId)
-        .filter((l) => !exists(l.anzahl_pflanzen))
-        .map((l) => {
+        .filter((l: import('../../../../../../dbModel.ts').Lieferung) => l.art_id === artId)
+        .filter((l: import('../../../../../../dbModel.ts').Lieferung) => !exists(l.anzahl_pflanzen))
+        .map((l: import('../../../../../../dbModel.ts').Lieferung) => {
           const datum = l.datum
             ? format(new Date(l.datum), 'yyyy.MM.dd')
             : `kein Datum`
@@ -905,9 +905,9 @@ export const createMessageFunctions = async ({ artId, db }) => {
         }),
     lieferungsWithoutAnzahlAuspflanzbereit: async () =>
       lieferungsSorted
-        .filter((l) => l.art_id === artId)
-        .filter((l) => !exists(l.anzahl_auspflanzbereit))
-        .map((l) => {
+        .filter((l: import('../../../../../../dbModel.ts').Lieferung) => l.art_id === artId)
+        .filter((l: import('../../../../../../dbModel.ts').Lieferung) => !exists(l.anzahl_auspflanzbereit))
+        .map((l: import('../../../../../../dbModel.ts').Lieferung) => {
           const datum = l.datum
             ? format(new Date(l.datum), 'yyyy.MM.dd')
             : `kein Datum`
@@ -921,9 +921,9 @@ export const createMessageFunctions = async ({ artId, db }) => {
         }),
     lieferungsWithoutVonAnzahlIndividuen: async () =>
       lieferungsSorted
-        .filter((l) => l.art_id === artId)
-        .filter((l) => !exists(l.von_anzahl_individuen))
-        .map((l) => {
+        .filter((l: import('../../../../../../dbModel.ts').Lieferung) => l.art_id === artId)
+        .filter((l: import('../../../../../../dbModel.ts').Lieferung) => !exists(l.von_anzahl_individuen))
+        .map((l: import('../../../../../../dbModel.ts').Lieferung) => {
           const datum = l.datum
             ? format(new Date(l.datum), 'yyyy.MM.dd')
             : `kein Datum`
@@ -937,10 +937,10 @@ export const createMessageFunctions = async ({ artId, db }) => {
         }),
     lieferungsWithoutVon: async () =>
       lieferungsSorted
-        .filter((l) => l.art_id === artId)
-        .filter((l) => !l.von_kultur_id)
-        .filter((l) => !l.von_sammlung_id)
-        .map((l) => {
+        .filter((l: import('../../../../../../dbModel.ts').Lieferung) => l.art_id === artId)
+        .filter((l: import('../../../../../../dbModel.ts').Lieferung) => !l.von_kultur_id)
+        .filter((l: import('../../../../../../dbModel.ts').Lieferung) => !l.von_sammlung_id)
+        .map((l: import('../../../../../../dbModel.ts').Lieferung) => {
           const datum = l.datum
             ? format(new Date(l.datum), 'yyyy.MM.dd')
             : `kein Datum`
@@ -954,11 +954,11 @@ export const createMessageFunctions = async ({ artId, db }) => {
         }),
     lieferungsWithoutNach: async () =>
       lieferungsSorted
-        .filter((l) => l.art_id === artId)
-        .filter((l) => !!l.von_kultur_id || !!l.von_sammlung_id)
-        .filter((l) => !l.nach_kultur_id)
-        .filter((l) => !l.nach_ausgepflanzt)
-        .map((l) => {
+        .filter((l: import('../../../../../../dbModel.ts').Lieferung) => l.art_id === artId)
+        .filter((l: import('../../../../../../dbModel.ts').Lieferung) => !!l.von_kultur_id || !!l.von_sammlung_id)
+        .filter((l: import('../../../../../../dbModel.ts').Lieferung) => !l.nach_kultur_id)
+        .filter((l: import('../../../../../../dbModel.ts').Lieferung) => !l.nach_ausgepflanzt)
+        .map((l: import('../../../../../../dbModel.ts').Lieferung) => {
           const datum = l.datum
             ? format(new Date(l.datum), 'yyyy.MM.dd')
             : `kein Datum`
@@ -972,9 +972,9 @@ export const createMessageFunctions = async ({ artId, db }) => {
         }),
     lieferungsWithoutDatum: async () =>
       lieferungsSorted
-        .filter((l) => l.art_id === artId)
-        .filter((l) => !l.datum)
-        .map((l) => {
+        .filter((l: import('../../../../../../dbModel.ts').Lieferung) => l.art_id === artId)
+        .filter((l: import('../../../../../../dbModel.ts').Lieferung) => !l.datum)
+        .map((l: import('../../../../../../dbModel.ts').Lieferung) => {
           const datum = l.datum
             ? format(new Date(l.datum), 'yyyy.MM.dd')
             : `kein Datum`
@@ -988,9 +988,9 @@ export const createMessageFunctions = async ({ artId, db }) => {
         }),
     lieferungsWithoutPerson: async () =>
       lieferungsSorted
-        .filter((l) => l.art_id === artId)
-        .filter((l) => !l.person_id)
-        .map((l) => {
+        .filter((l: import('../../../../../../dbModel.ts').Lieferung) => l.art_id === artId)
+        .filter((l: import('../../../../../../dbModel.ts').Lieferung) => !l.person_id)
+        .map((l: import('../../../../../../dbModel.ts').Lieferung) => {
           const datum = l.datum
             ? format(new Date(l.datum), 'yyyy.MM.dd')
             : `kein Datum`
@@ -1005,8 +1005,8 @@ export const createMessageFunctions = async ({ artId, db }) => {
     eventsWithoutBeschreibung: async () =>
       await Promise.all(
         eventsOfArtSorted
-          .filter((e) => !e.beschreibung)
-          .map(async (e) => {
+          .filter((e: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => !e.beschreibung)
+          .map(async (e: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
             let kultur
             try {
               kultur = await e.kultur?.fetch()
@@ -1026,8 +1026,8 @@ export const createMessageFunctions = async ({ artId, db }) => {
     eventsWithoutDatum: async () =>
       await Promise.all(
         eventsOfArtSorted
-          .filter((e) => !e.datum)
-          .map(async (e) => {
+          .filter((e: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => !e.datum)
+          .map(async (e: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
             let kultur
             try {
               kultur = await e.kultur?.fetch()

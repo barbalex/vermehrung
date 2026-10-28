@@ -16,12 +16,12 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import artStyles from '../../Art/FormTitle/DeleteButton.module.css'
 
 export const PersonDeleteButton = ({ row }: { row: import('../../../shared/types.ts').WmRow | null | undefined }) => {
-  const [anchorEl, setAnchorEl] = useState(null)
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | undefined | null>(null)
   const closeMenu = () => setAnchorEl(null)
-  const onClickDelete = (event) => setAnchorEl(event.currentTarget)
+  const onClickDelete = (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => setAnchorEl(event.currentTarget)
 
   const remove = () => {
-    row.delete()
+    row?.delete()
     setAnchorEl(null)
     if (store.get(filterPersonAtom)._deleted === false) {
       // need to remove openNode from openNodes

@@ -35,7 +35,7 @@ export const HerkunftForm = ({
 }: {
   showFilter: boolean
   id: string | undefined
-  row: import('../../../shared/types.ts').Herkunft | null | undefined
+  row: import('../../../../dbModel.ts').Herkunft | null | undefined
   rawRow: Record<string, unknown> | null | undefined
   activeConflict: string | null
   setActiveConflict: (val: unknown) => void
@@ -98,7 +98,7 @@ export const HerkunftForm = ({
     )
 
     return () => subscription?.unsubscribe?.()
-  }, [db, herkunftFilter, row.nr, showFilter, user])
+  }, [db, herkunftFilter, row?.nr, showFilter, user])
   const { userPersonOption } = dataState
 
   const { hk_kanton, hk_land, hk_bemerkungen, hk_geom_point } =
@@ -108,7 +108,7 @@ export const HerkunftForm = ({
     unsetError('herkunft')
   }, [id])
 
-  const saveToDb = async (event) => {
+  const saveToDb = async (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
     const field = event.target.name
     let value = ifIsNumericAsNumber(event.target.value)
     if (event.target.value === undefined) value = null
@@ -118,10 +118,10 @@ export const HerkunftForm = ({
       return setFilterValue({ table: 'herkunft', key: field, value })
     }
 
-    const previousValue = ifIsNumericAsNumber(row._raw[field])
+    const previousValue = ifIsNumericAsNumber(row?._raw[field])
     // only update if value has changed
     if (value === previousValue) return
-    await row.edit({ field, value })
+    await row?.edit({ field, value })
   }
 
   const showDeleted = herkunftFilter._deleted !== false || row?._deleted
@@ -137,19 +137,19 @@ export const HerkunftForm = ({
         <>
           {showFilter ? (
             <JesNo
-              key={`${row.id}_deleted`}
+              key={`${row?.id}_deleted`}
               label="gelöscht"
               name="_deleted"
-              value={row._deleted}
+              value={row?._deleted}
               saveToDb={saveToDb}
               error={errors?.herkunft?._deleted}
             />
           ) : (
             <Checkbox2States
-              key={`${row.id}_deleted`}
+              key={`${row?.id}_deleted`}
               label="gelöscht"
               name="_deleted"
-              value={row._deleted}
+              value={row?._deleted}
               saveToDb={saveToDb}
               error={errors?.herkunft?._deleted}
             />
@@ -157,45 +157,45 @@ export const HerkunftForm = ({
         </>
       )}
       <TextField
-        key={`${row.id}nr`}
+        key={`${row?.id}nr`}
         name="nr"
         label="Nr"
-        value={row.nr}
+        value={row?.nr}
         saveToDb={saveToDb}
         error={errors?.herkunft?.nr}
       />
       <TextField
-        key={`${row.id}lokalname`}
+        key={`${row?.id}lokalname`}
         name="lokalname"
         label="Lokalname"
-        value={row.lokalname}
+        value={row?.lokalname}
         saveToDb={saveToDb}
         error={errors?.herkunft?.lokalname}
       />
       <TextField
-        key={`${row.id}gemeinde`}
+        key={`${row?.id}gemeinde`}
         name="gemeinde"
         label="Gemeinde"
-        value={row.gemeinde}
+        value={row?.gemeinde}
         saveToDb={saveToDb}
         error={errors?.herkunft?.gemeinde}
       />
       {hk_kanton && (
         <TextField
-          key={`${row.id}kanton`}
+          key={`${row?.id}kanton`}
           name="kanton"
           label="Kanton"
-          value={row.kanton}
+          value={row?.kanton}
           saveToDb={saveToDb}
           error={errors?.herkunft?.kanton}
         />
       )}
       {hk_land && (
         <TextField
-          key={`${row.id}land`}
+          key={`${row?.id}land`}
           name="land"
           label="Land"
-          value={row.land}
+          value={row?.land}
           saveToDb={saveToDb}
           error={errors?.herkunft?.land}
         />
@@ -205,10 +205,10 @@ export const HerkunftForm = ({
       )}
       {hk_bemerkungen && (
         <TextField
-          key={`${row.id}bemerkungen`}
+          key={`${row?.id}bemerkungen`}
           name="bemerkungen"
           label="Bemerkungen"
-          value={row.bemerkungen}
+          value={row?.bemerkungen}
           saveToDb={saveToDb}
           error={errors?.herkunft?.bemerkungen}
           multiLine
@@ -221,7 +221,7 @@ export const HerkunftForm = ({
           setActiveConflict={setActiveConflict}
         />
       )}
-      {!showFilter && row.id && <Files parentTable="herkunft" parent={row} />}
+      {!showFilter && row?.id && <Files parentTable="herkunft" parent={row} />}
     </div>
   )
 }

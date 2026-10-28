@@ -22,7 +22,7 @@ export const KulturQkRouter = ({ kultur }: { kultur: import('../../../../shared/
   const user = useAtomValue(userAtom)
 
   const [tab, setTab] = useState('qk')
-  const onChangeTab = (event, value) => setTab(value)
+  const onChangeTab = (event: import('../../../../../dbModel.ts').Event, value) => setTab(value)
 
   const [dataState, setDataState] = useState({
     qks: [],
@@ -54,13 +54,13 @@ export const KulturQkRouter = ({ kultur }: { kultur: import('../../../../shared/
     return () => subscription?.unsubscribe?.()
   }, [db, user.uid])
   const qkChoosens = qks.filter((qk) =>
-    userPersonOption.kultur_qk_choosen.includes(qk.id),
+    userPersonOption?.kultur_qk_choosen.includes(qk.id),
   )
 
   const qkCount = qks.length
   const qkChoosenCount = qkChoosens.length
 
-  const openDocs = (e) => {
+  const openDocs = (e: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
     e.stopPropagation()
     const url = `${constants?.getAppUri()}/Dokumentation/qualitaets-kontrollen`
     if (window.matchMedia('(display-mode: standalone)').matches) {
@@ -71,7 +71,7 @@ export const KulturQkRouter = ({ kultur }: { kultur: import('../../../../shared/
 
   const [open, setOpen] = useState(false)
   const anim = useAnimation()
-  const onClickToggle = async (e) => {
+  const onClickToggle = async (e: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
     e.stopPropagation()
     if (open) {
       const was = open

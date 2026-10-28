@@ -27,7 +27,7 @@ export const SammelLieferungNach = ({
   herkunft,
 }: {
   showFilter: boolean
-  row: import('../../../shared/types.ts').SammelLieferung | null | undefined
+  row: import('../../../../dbModel.ts').SammelLieferung | null | undefined
   ifNeeded: boolean
   saveToDb: (event: { target: { name?: string; value: unknown } }) => void
   herkunft: import('../../../shared/types.ts').WmRow | null | undefined
@@ -74,17 +74,17 @@ export const SammelLieferungNach = ({
     const subscription = combinedObservables.subscribe(async ([kulturs]) => {
       const kultursFiltered = kulturs
         // show only kulturen of art_id
-        .filter((k) => {
+        .filter((k: import('../../../../dbModel.ts').Kultur) => {
           if (row?.art_id) return k.art_id === row.art_id
           return true
         })
         // show only kulturen with same herkunft
-        .filter((k) => {
+        .filter((k: import('../../../../dbModel.ts').Kultur) => {
           if (herkunft?.id) return k.herkunft_id === herkunft.id
           return true
         })
         // shall not be delivered to same kultur it came from
-        .filter((k) => {
+        .filter((k: import('../../../../dbModel.ts').Kultur) => {
           if (
             row?.von_kultur_id &&
             row?.von_kultur_id !== row?.nach_kultur_id
@@ -95,7 +95,7 @@ export const SammelLieferungNach = ({
         })
       let kultur
       try {
-        kultur = await db?.get('kultur').find(row.von_kultur_id as string)
+        kultur = await db?.get('kultur').find(row?.von_kultur_id as string)
       } catch {}
       const kultursIncludingChoosen = uniqBy(
         [...kultursFiltered, ...(kultur && !showFilter ? [kultur] : [])],
@@ -150,14 +150,14 @@ export const SammelLieferungNach = ({
       </div>
       {ifNeeded('nach_kultur_id') && (
         <Select
-          key={`${row.id}${row.nach_kultur_id}nach_kultur_id`}
+          key={`${row?.id}${row?.nach_kultur_id}nach_kultur_id`}
           name="nach_kultur_id"
-          value={row.nach_kultur_id}
+          value={row?.nach_kultur_id}
           field="nach_kultur_id"
           label={`Kultur${
-            exists(row.art_id)
+            exists(row?.art_id)
               ? ` (Kulturen derselben Art und Herkunft${
-                  row.von_kultur_id ? ', ohne die von-Kultur' : ''
+                  row?.von_kultur_id ? ', ohne die von-Kultur' : ''
                 })`
               : ''
           }`}
@@ -170,19 +170,19 @@ export const SammelLieferungNach = ({
         <>
           {showFilter ? (
             <JesNo
-              key={`${row.id}nach_ausgepflanzt`}
+              key={`${row?.id}nach_ausgepflanzt`}
               label="Ausgepflanzt"
               name="nach_ausgepflanzt"
-              value={row.nach_ausgepflanzt}
+              value={row?.nach_ausgepflanzt}
               saveToDb={saveToDb}
               error={errors?.sammel_lieferung?.nach_ausgepflanzt}
             />
           ) : (
             <Checkbox2States
-              key={`${row.id}nach_ausgepflanzt`}
+              key={`${row?.id}nach_ausgepflanzt`}
               label="Ausgepflanzt"
               name="nach_ausgepflanzt"
-              value={row.nach_ausgepflanzt}
+              value={row?.nach_ausgepflanzt}
               saveToDb={saveToDb}
               error={errors?.sammel_lieferung?.nach_ausgepflanzt}
             />

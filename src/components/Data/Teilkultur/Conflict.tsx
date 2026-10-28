@@ -24,7 +24,7 @@ export const TeilkulturConflict = ({
 }: {
   id: string | undefined
   rev: string | boolean | null
-  row: import('../../shared/types.ts').Teilkultur | null | undefined
+  row: import('../../../dbModel.ts').Teilkultur | null | undefined
   conflictDisposalCallback: () => void
   conflictSelectionCallback: () => void
   setActiveConflict: (conflict: string | null) => void

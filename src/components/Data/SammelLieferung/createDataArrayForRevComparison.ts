@@ -5,8 +5,8 @@ export const createDataArrayForSammellieferungRevComparison = ({ row, revRow }: 
   revRow: Record<string, unknown> | null | undefined
 }) => [
   {
-    valueInRow: row.art_id,
-    valueInRev: revRow.art_id,
+    valueInRow: row?.art_id,
+    valueInRev: revRow?.art_id,
     label: 'Art (id)',
   },
   {
@@ -35,18 +35,18 @@ export const createDataArrayForSammellieferungRevComparison = ({ row, revRow }: 
     label: 'Andere Menge',
   },
   {
-    valueInRow: row.person_id,
-    valueInRev: revRow.person_id,
+    valueInRow: row?.person_id,
+    valueInRev: revRow?.person_id,
     label: 'Person (id)',
   },
   {
-    valueInRow: row.von_sammlung_id,
-    valueInRev: revRow.von_sammlung_id,
+    valueInRow: row?.von_sammlung_id,
+    valueInRev: revRow?.von_sammlung_id,
     label: 'Von Sammlung (id)',
   },
   {
-    valueInRow: row.von_kultur_id,
-    valueInRev: revRow.von_kultur_id,
+    valueInRow: row?.von_kultur_id,
+    valueInRev: revRow?.von_kultur_id,
     label: 'Von Kultur (id)',
   },
   {
@@ -59,8 +59,8 @@ export const createDataArrayForSammellieferungRevComparison = ({ row, revRow }: 
     label: 'Datum',
   },
   {
-    valueInRow: row.nach_kultur_id,
-    valueInRev: revRow.nach_kultur_id,
+    valueInRow: row?.nach_kultur_id,
+    valueInRev: revRow?.nach_kultur_id,
     label: 'Nach Kultur (id)',
   },
   {
@@ -89,8 +89,8 @@ export const createDataArrayForSammellieferungRevComparison = ({ row, revRow }: 
     label: 'geändert von',
   },
   {
-    valueInRow: row._deleted,
-    valueInRev: revRow._deleted,
+    valueInRow: row?._deleted,
+    valueInRev: revRow?._deleted,
     label: 'gelöscht',
   },
 ]

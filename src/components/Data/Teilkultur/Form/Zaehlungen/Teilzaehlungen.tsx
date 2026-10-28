@@ -10,7 +10,7 @@ export const TeilkulturTeilzaehlung = ({ tz }) => {
 
   useEffect(() => {
     const zaehlungObservable = tz.zaehlung.observe()
-    const subscription = zaehlungObservable.subscribe((zaehlung) =>
+    const subscription = zaehlungObservable.subscribe((zaehlung: import('../../../../../dbModel.ts').Zaehlung) =>
       setZaehlung(zaehlung),
     )
 

@@ -49,7 +49,7 @@ export const HerkunftSettingsMenu = ({ anchorEl, setAnchorEl }) => {
   const { hk_kanton, hk_land, hk_bemerkungen, hk_geom_point } =
     userPersonOption ?? {}
 
-  const saveToDb = async (event) => {
+  const saveToDb = async (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
     const field = event.target.name
     const value = event.target.value === 'false'
     userPersonOption.edit({ field, value })

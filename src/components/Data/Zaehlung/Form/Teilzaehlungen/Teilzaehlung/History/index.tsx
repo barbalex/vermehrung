@@ -18,7 +18,7 @@ export const TeilzaehlungHistory = ({
   rawRow,
   historyTakeoverCallback,
 }: {
-  row: import('../../../../../../shared/types.ts').Zaehlung | null | undefined
+  row: import('../../../../../../../dbModel.ts').Zaehlung | null | undefined
   rawRow: Record<string, unknown> | null | undefined
   historyTakeoverCallback: () => void
 }) => {
@@ -30,7 +30,7 @@ export const TeilzaehlungHistory = ({
     if (error) checkForOnlineError({ error })
 
   const revRowsUnsorted = data ?? []
-  const revRows = revRowsUnsorted.sort((a, b) => b._depth - a._depth)
+  const revRows = revRowsUnsorted.sort((a: import('../../../../../../../dbModel.ts').Art, b: import('../../../../../../../dbModel.ts').Bedarf) => b?._depth - a?._depth)
 
   if (fetching) {
     return <Spinner message="lade Versionen" />

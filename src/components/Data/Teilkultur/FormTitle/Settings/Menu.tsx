@@ -24,17 +24,17 @@ export const TeilkulturSettingsMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
     const kOObservable = kulturId
       ? db?.get('kultur_option').findAndObserve(kulturId)
       : $of({})
-    const subscription = kOObservable.subscribe((kulturOption) =>
+    const subscription = kOObservable?.subscribe((kulturOption) =>
       setDataState({ kulturOption }),
     )
 
     return () => subscription?.unsubscribe?.()
   }, [db, kulturId])
 
-  const saveToDb = async (event) => {
+  const saveToDb = async (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
     const field = event.target.name
     const value = event.target.value === 'false'
-    kulturOption.edit({ field, value })
+    kulturOption?.edit({ field, value })
   }
 
   const openSettingsDocs = () => {

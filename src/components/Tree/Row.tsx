@@ -81,7 +81,7 @@ export const TreeRow = ({ style: _style, node, nodes, userRole }) => {
         ? db?.get('person').findAndObserve(node.url.at(-1))
         : $of({})
 
-    const subscription = personObservable.subscribe((person) =>
+    const subscription = personObservable?.subscribe((person) =>
       setPerson(person),
     )
 
@@ -200,7 +200,7 @@ export const TreeRow = ({ style: _style, node, nodes, userRole }) => {
     }
     holdToDisplayStart.current = null
   }
-  const onPointerDownNode = (e) => {
+  const onPointerDownNode = (e: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
     if (e.button !== 0) return
     const start = { x: e.clientX, y: e.clientY }
     holdToDisplayStart.current = start
@@ -208,14 +208,14 @@ export const TreeRow = ({ style: _style, node, nodes, userRole }) => {
       openMenu(start.x, start.y)
     }, holdToDisplayMs)
   }
-  const onPointerMoveNode = (e) => {
+  const onPointerMoveNode = (e: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
     const start = holdToDisplayStart.current
     // moving away means dragging or scrolling, not holding still
     if (start && Math.hypot(e.clientX - start.x, e.clientY - start.y) > 9) {
       clearHoldToDisplay()
     }
   }
-  const onContextMenuNode = (e) => {
+  const onContextMenuNode = (e: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
     e.preventDefault()
     // keep the menu's own contextmenu listener from closing the new menu
     e.stopPropagation()

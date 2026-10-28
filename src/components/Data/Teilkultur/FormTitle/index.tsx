@@ -18,7 +18,7 @@ export const TeilkulturFormTitleChooser = ({
   showFilter,
   showHistory,
 }: {
-  row: import('../../../shared/types.ts').Teilkultur | null | undefined
+  row: import('../../../../dbModel.ts').Teilkultur | null | undefined
   rawRow: Record<string, unknown> | null | undefined
   showFilter: boolean
   showHistory: boolean

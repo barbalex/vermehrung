@@ -15,7 +15,7 @@ export const KulturTooltip = ({
 }) => {
   // filter out zählung information if ereignis is not zählung
   const payload = [
-    ...payloadPassed.filter((p) => {
+    ...payloadPassed.filter((p: import('../../../../../dbModel.ts').Person) => {
       if (
         p.payload.ereignis !== 'Zählung' &&
         p.dataKey.includes('Zählung Pflanzen')

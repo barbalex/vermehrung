@@ -19,7 +19,7 @@ export const PersonHistoryRow = ({
   revRow,
   historyTakeoverCallback,
 }: {
-  row: import('../../../shared/types.ts').Person | null | undefined
+  row: import('../../../../dbModel.ts').Person | null | undefined
   revRow: import('../../../shared/types.ts').RevRow | null | undefined
   historyTakeoverCallback?: () => void
 }) => {
@@ -31,28 +31,28 @@ export const PersonHistoryRow = ({
     // otherwise risk to still have lower depth and thus loosing
     const newDepth = ((row?._depth as number) ?? 0) + 1
     const newObject: Record<string, unknown> = {
-      person_id: revRow.person_id,
-      nr: revRow.nr,
-      vorname: revRow.vorname,
-      name: revRow.name,
-      adresszusatz: revRow.adresszusatz,
-      strasse: revRow.strasse,
-      plz: revRow.plz,
-      ort: revRow.ort,
-      telefon_privat: revRow.telefon_privat,
-      telefon_geschaeft: revRow.telefon_geschaeft,
-      telefon_mobile: revRow.telefon_mobile,
-      email: revRow.email,
-      kein_email: revRow.kein_email,
-      bemerkungen: revRow.bemerkungen,
-      account_id: revRow.account_id,
-      user_role_id: revRow.user_role_id,
-      kommerziell: revRow.kommerziell,
-      info: revRow.info,
-      aktiv: revRow.aktiv,
+      person_id: revRow?.person_id,
+      nr: revRow?.nr,
+      vorname: revRow?.vorname,
+      name: revRow?.name,
+      adresszusatz: revRow?.adresszusatz,
+      strasse: revRow?.strasse,
+      plz: revRow?.plz,
+      ort: revRow?.ort,
+      telefon_privat: revRow?.telefon_privat,
+      telefon_geschaeft: revRow?.telefon_geschaeft,
+      telefon_mobile: revRow?.telefon_mobile,
+      email: revRow?.email,
+      kein_email: revRow?.kein_email,
+      bemerkungen: revRow?.bemerkungen,
+      account_id: revRow?.account_id,
+      user_role_id: revRow?.user_role_id,
+      kommerziell: revRow?.kommerziell,
+      info: revRow?.info,
+      aktiv: revRow?.aktiv,
       _parent_rev: row?._rev,
       _depth: newDepth,
-      _deleted: revRow._deleted,
+      _deleted: revRow?._deleted,
     }
     const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     newObject._rev = rev
@@ -80,11 +80,11 @@ export const PersonHistoryRow = ({
     // TODO: is this a good idea?
     newObjectForStore._conflicts = row?._conflicts
     // for store: convert rev to winner
-    newObjectForStore.id = row.id
+    newObjectForStore.id = row?.id
     delete newObjectForStore.person_id
     // optimistically update store
     await store.get(dbAtom).write(async () => {
-      await row.update((row: Record<string, unknown>) => {
+      await row?.update((row: Record<string, unknown>) => {
         Object.entries(newObjectForStore).forEach(([key, value]) => {
           if (!isEqual(value, row[key])) {
             row[key] = value
@@ -96,7 +96,7 @@ export const PersonHistoryRow = ({
 
   return (
     <History
-      rev={revRow._rev}
+      rev={revRow?._rev}
       dataArray={dataArray}
       onClickWiderspruchUebernehmen={onClickWiderspruchUebernehmen}
     />

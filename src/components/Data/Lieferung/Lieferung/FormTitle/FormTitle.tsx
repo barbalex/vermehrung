@@ -25,7 +25,7 @@ export const LieferungFormTitle = ({
   filteredCount,
   showHistory,
 }: {
-  row: import('../../../../shared/types.ts').Lieferung | null | undefined
+  row: import('../../../../../dbModel.ts').Lieferung | null | undefined
   totalCount: number
   filteredCount: number
   showHistory: boolean
@@ -68,7 +68,7 @@ export const LieferungFormTitle = ({
           <Menu white={false}>
             <HistoryButton
               table="lieferung"
-              id={row.id}
+              id={row?.id}
               showHistory={showHistory}
               asMenu
             />
@@ -84,7 +84,7 @@ export const LieferungFormTitle = ({
           <>
             <HistoryButton
               table="lieferung"
-              id={row.id}
+              id={row?.id}
               showHistory={showHistory}
             />
             <Settings />

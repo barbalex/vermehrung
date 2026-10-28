@@ -35,14 +35,14 @@ export const ChooseKulturQkRow = ({ qk }: { qk: import('../../../../../shared/ty
     return () => subscription?.unsubscribe?.()
   }, [db, user])
 
-  const checked = kulturQkChoosen.includes(qk.id)
+  const checked = kulturQkChoosen.includes(qk?.id)
 
   const onChange = () => {
-    const newValue = event.target.checked
-      ? [...kulturQkChoosen, qk.id]
-      : kulturQkChoosen.filter((id) => id !== qk.id)
+    const newValue = event?.target.checked
+      ? [...kulturQkChoosen, qk?.id]
+      : kulturQkChoosen.filter((id) => id !== qk?.id)
 
-    userPersonOption.edit({
+    userPersonOption?.edit({
       field: 'kultur_qk_choosen',
       value: newValue,
     })
@@ -55,8 +55,8 @@ export const ChooseKulturQkRow = ({ qk }: { qk: import('../../../../../shared/ty
       <div className={styles.check}>
         <Checkbox checked={checked} onChange={onChange} color="primary" />
       </div>
-      <div className={styles.titel}>{qk.titel}</div>
-      <div className={styles.beschreibung}>{qk.beschreibung}</div>
+      <div className={styles.titel}>{qk?.titel}</div>
+      <div className={styles.beschreibung}>{qk?.beschreibung}</div>
     </div>
   )
 }

@@ -24,7 +24,7 @@ export const ZaehlungFormTitle = ({
   filteredCount,
   showHistory,
 }: {
-  row: import('../../../shared/types.ts').Zaehlung | null | undefined
+  row: import('../../../../dbModel.ts').Zaehlung | null | undefined
   totalCount: number
   filteredCount: number
   showHistory: boolean
@@ -50,11 +50,11 @@ export const ZaehlungFormTitle = ({
           <Menu white={false}>
             <HistoryButton
               table="zaehlung"
-              id={row.id}
+              id={row?.id}
               showHistory={showHistory}
               asMenu
             />
-            {row.kultur_id && <Settings kulturId={row.kultur_id} asMenu />}
+            {row?.kultur_id && <Settings kulturId={row?.kultur_id} asMenu />}
             <Anleitung asMenu />
             <FilterNumbers
               filteredCount={filteredCount}
@@ -66,10 +66,10 @@ export const ZaehlungFormTitle = ({
           <>
             <HistoryButton
               table="zaehlung"
-              id={row.id}
+              id={row?.id}
               showHistory={showHistory}
             />
-            {row.kultur_id && <Settings kulturId={row.kultur_id} />}
+            {row?.kultur_id && <Settings kulturId={row?.kultur_id} />}
             <Anleitung />
             <FilterNumbers
               filteredCount={filteredCount}

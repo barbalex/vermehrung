@@ -8,8 +8,8 @@ export const createDataArrayForGartenRevComparison = ({ row, revRow }: {
     label: 'Name',
   },
   {
-    valueInRow: row.person_id,
-    valueInRev: revRow.person_id,
+    valueInRow: row?.person_id,
+    valueInRev: revRow?.person_id,
     label: 'Person (id)',
   },
   { valueInRow: row?.strasse, valueInRev: revRow?.strasse, label: 'Strasse' },
@@ -45,8 +45,8 @@ export const createDataArrayForGartenRevComparison = ({ row, revRow }: {
     label: 'geändert von',
   },
   {
-    valueInRow: row._deleted,
-    valueInRev: revRow._deleted,
+    valueInRow: row?._deleted,
+    valueInRev: revRow?._deleted,
     label: 'gelöscht',
   },
 ]

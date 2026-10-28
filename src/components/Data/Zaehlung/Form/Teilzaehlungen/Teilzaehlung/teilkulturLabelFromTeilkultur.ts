@@ -1,4 +1,4 @@
-const teilkulturLabelFromTeilkultur = (tk) => {
+const teilkulturLabelFromTeilkultur = (tk: import('../../../../../../dbModel.ts').Teilkultur) => {
   if (tk?.name) return tk?.name
   if (tk?.ort1) {
     return `${tk?.ort1}${

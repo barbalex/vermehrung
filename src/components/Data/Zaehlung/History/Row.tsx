@@ -19,7 +19,7 @@ export const ZaehlungHistoryRow = ({
   revRow,
   historyTakeoverCallback,
 }: {
-  row: import('../../../shared/types.ts').Zaehlung | null | undefined
+  row: import('../../../../dbModel.ts').Zaehlung | null | undefined
   revRow: import('../../../shared/types.ts').WmRow | null | undefined
   historyTakeoverCallback: () => void
 }) => {
@@ -32,14 +32,14 @@ export const ZaehlungHistoryRow = ({
     // otherwise risk to still have lower depth and thus loosing
     const newDepth = ((row?._depth as number) ?? 0) + 1
     const newObject: Record<string, unknown> = {
-      zaehlung_id: revRow.zaehlung_id,
-      kultur_id: revRow.kultur_id,
-      datum: revRow.datum,
-      prognose: revRow.prognose,
-      bemerkungen: revRow.bemerkungen,
+      zaehlung_id: revRow?.zaehlung_id,
+      kultur_id: revRow?.kultur_id,
+      datum: revRow?.datum,
+      prognose: revRow?.prognose,
+      bemerkungen: revRow?.bemerkungen,
       _parent_rev: row?._rev,
       _depth: newDepth,
-      _deleted: revRow._deleted,
+      _deleted: revRow?._deleted,
     }
     const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     newObject._rev = rev
@@ -67,11 +67,11 @@ export const ZaehlungHistoryRow = ({
     // TODO: is this a good idea?
     newObjectForStore._conflicts = row?._conflicts
     // for store: convert rev to winner
-    newObjectForStore.id = row.id
+    newObjectForStore.id = row?.id
     delete newObjectForStore.zaehlung_id
     // optimistically update store
     await db?.write(async () => {
-      await row.update((row: Record<string, unknown>) => {
+      await row?.update((row: Record<string, unknown>) => {
         Object.entries(newObjectForStore).forEach(([key, value]) => {
           if (!isEqual(value, row[key])) {
             row[key] = value
@@ -83,7 +83,7 @@ export const ZaehlungHistoryRow = ({
 
   return (
     <History
-      rev={revRow._rev}
+      rev={revRow?._rev}
       dataArray={dataArray}
       onClickWiderspruchUebernehmen={onClickWiderspruchUebernehmen}
     />

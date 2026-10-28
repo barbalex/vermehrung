@@ -27,7 +27,7 @@ export const SammlungHistory = ({
   rawRow,
   historyTakeoverCallback,
 }: {
-  row: import('../../../shared/types.ts').Sammlung | null | undefined
+  row: import('../../../../dbModel.ts').Sammlung | null | undefined
   rawRow?: unknown
   historyTakeoverCallback?: () => void
 }) => {

@@ -20,7 +20,7 @@ export const PersonFormTitle = ({
   filteredCount,
   showHistory,
 }: {
-  row: import('../../../shared/types.ts').Person | null | undefined
+  row: import('../../../../dbModel.ts').Person | null | undefined
   totalCount: number
   filteredCount: number
   showHistory: boolean
@@ -60,7 +60,7 @@ export const PersonFormTitle = ({
           <Menu white={false}>
             <HistoryButton
               table="person"
-              id={row.id}
+              id={row?.id}
               showHistory={showHistory}
               asMenu
             />
@@ -75,7 +75,7 @@ export const PersonFormTitle = ({
           <>
             <HistoryButton
               table="person"
-              id={row.id}
+              id={row?.id}
               showHistory={showHistory}
             />
             <KontoMenu row={row} />

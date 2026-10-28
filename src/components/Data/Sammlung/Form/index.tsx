@@ -51,7 +51,7 @@ export const SammlungForm = ({
 }: {
   showFilter: boolean
   id: string | undefined
-  row: import('../../../shared/types.ts').Sammlung | null | undefined
+  row: import('../../../../dbModel.ts').Sammlung | null | undefined
   rawRow: Record<string, unknown> | null | undefined
   activeConflict: string | null
   setActiveConflict: (val: unknown) => void
@@ -156,7 +156,7 @@ export const SammlungForm = ({
         }
         let person
         try {
-          person = await row.person.fetch()
+          person = await row?.person.fetch()
         } catch {}
         const personsIncludingChoosen = uniqBy(
           [...persons, ...(person && !showFilter ? [person] : [])],
@@ -172,7 +172,7 @@ export const SammlungForm = ({
           }))
         let herkunft
         try {
-          herkunft = await row.herkunft.fetch()
+          herkunft = await row?.herkunft.fetch()
         } catch {}
         const herkunftsIncludingChoosen = uniqBy(
           [...herkunfts, ...(herkunft && !showFilter ? [herkunft] : [])],
@@ -187,7 +187,7 @@ export const SammlungForm = ({
           }))
         let art
         try {
-          art = await row.art.fetch()
+          art = await row?.art.fetch()
         } catch {}
         const artsIncludingChoosen = uniqBy(
           [...arts, ...(art && !showFilter ? [art] : [])],
@@ -224,10 +224,10 @@ export const SammlungForm = ({
     herkunftFilter,
     personFilter,
     sammlungFilter,
-    row.art,
-    row.herkunft,
-    row.nr,
-    row.person,
+    row?.art,
+    row?.herkunft,
+    row?.nr,
+    row?.person,
     showFilter,
   ])
   const { personWerte, herkunftWerte, artWerte } = dataState
@@ -236,7 +236,7 @@ export const SammlungForm = ({
     unsetError('sammlung')
   }, [id])
 
-  const saveToDb = (event) => {
+  const saveToDb = (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
     const field = event.target.name
     let value = ifIsNumericAsNumber(event.target.value)
     if (event.target.value === undefined) value = null
@@ -249,7 +249,7 @@ export const SammlungForm = ({
     // only update if value has changed
     const previousValue = ifIsNumericAsNumber(row[field])
     if (value === previousValue) return
-    row.edit({ field, value })
+    row?.edit({ field, value })
   }
 
   const openPlanenDocs = () => {
@@ -282,19 +282,19 @@ export const SammlungForm = ({
           <>
             {showFilter ? (
               <JesNo
-                key={`${row.id}_deleted`}
+                key={`${row?.id}_deleted`}
                 label="gelöscht"
                 name="_deleted"
-                value={row._deleted}
+                value={row?._deleted}
                 saveToDb={saveToDb}
                 error={errors?.sammlung?._deleted}
               />
             ) : (
               <Checkbox2States
-                key={`${row.id}_deleted`}
+                key={`${row?.id}_deleted`}
                 label="gelöscht"
                 name="_deleted"
-                value={row._deleted}
+                value={row?._deleted}
                 saveToDb={saveToDb}
                 error={errors?.sammlung?._deleted}
               />
@@ -302,18 +302,18 @@ export const SammlungForm = ({
           </>
         )}
         <TextField
-          key={`${row.id}nr`}
+          key={`${row?.id}nr`}
           name="nr"
           label="Nr."
-          value={row.nr}
+          value={row?.nr}
           saveToDb={saveToDb}
           error={errors?.sammlung?.nr}
           type="text"
         />
         <Select
-          key={`${row.id}${row.art_id}art_id`}
+          key={`${row?.id}${row?.art_id}art_id`}
           name="art_id"
-          value={row.art_id}
+          value={row?.art_id}
           field="art_id"
           label="Art"
           options={artWerte}
@@ -321,9 +321,9 @@ export const SammlungForm = ({
           error={errors?.sammlung?.art_id}
         />
         <Select
-          key={`${row.id}${row.herkunft_id}herkunft_id`}
+          key={`${row?.id}${row?.herkunft_id}herkunft_id`}
           name="herkunft_id"
-          value={row.herkunft_id}
+          value={row?.herkunft_id}
           field="herkunft_id"
           label="Herkunft"
           options={herkunftWerte}
@@ -331,9 +331,9 @@ export const SammlungForm = ({
           error={errors?.sammlung?.herkunft_id}
         />
         <Select
-          key={`${row.id}${row.person_id}person_id`}
+          key={`${row?.id}${row?.person_id}person_id`}
           name="person_id"
-          value={row.person_id}
+          value={row?.person_id}
           field="person_id"
           label="Person"
           options={personWerte}
@@ -341,37 +341,37 @@ export const SammlungForm = ({
           error={errors?.sammlung?.person_id}
         />
         <Date
-          key={`${row.id}datum`}
+          key={`${row?.id}datum`}
           name="datum"
           label="Datum"
-          value={row.datum}
+          value={row?.datum}
           saveToDb={saveToDb}
           error={errors?.sammlung?.datum}
         />
         <TextField
-          key={`${row.id}anzahl_pflanzen`}
+          key={`${row?.id}anzahl_pflanzen`}
           name="anzahl_pflanzen"
           label="Anzahl Pflanzen"
-          value={row.anzahl_pflanzen}
+          value={row?.anzahl_pflanzen}
           saveToDb={saveToDb}
           error={errors?.sammlung?.anzahl_pflanzen}
           type="number"
         />
         <div className={styles.fieldRow}>
           <TextField
-            key={`${row.id}gramm_samen`}
+            key={`${row?.id}gramm_samen`}
             name="gramm_samen"
             label="Gramm Samen"
-            value={row.gramm_samen}
+            value={row?.gramm_samen}
             saveToDb={saveToDb}
             error={errors?.sammlung?.gramm_samen}
             type="number"
           />
           <TextField
-            key={`${row.id}andere_menge`}
+            key={`${row?.id}andere_menge`}
             name="andere_menge"
             label={`Andere Menge (z.B. "3 Zwiebeln")`}
-            value={row.andere_menge}
+            value={row?.andere_menge}
             saveToDb={saveToDb}
             error={errors?.sammlung?.andere_menge}
             type="text"
@@ -379,10 +379,10 @@ export const SammlungForm = ({
         </div>
         <div className={styles.fieldRow}>
           <TextField
-            key={`${row.id}von_anzahl_individuen`}
+            key={`${row?.id}von_anzahl_individuen`}
             name="von_anzahl_individuen"
             label="von Anzahl Individuen"
-            value={row.von_anzahl_individuen}
+            value={row?.von_anzahl_individuen}
             saveToDb={saveToDb}
             error={errors?.sammlung?.von_anzahl_individuen}
             type="number"
@@ -404,19 +404,19 @@ export const SammlungForm = ({
         <div className={styles.fieldRow}>
           {showFilter ? (
             <JesNo
-              key={`${row.id}geplant`}
+              key={`${row?.id}geplant`}
               label="Geplant"
               name="geplant"
-              value={row.geplant}
+              value={row?.geplant}
               saveToDb={saveToDb}
               error={errors?.sammlung?.geplant}
             />
           ) : (
             <Checkbox2States
-              key={`${row.id}geplant`}
+              key={`${row?.id}geplant`}
               label="Geplant"
               name="geplant"
-              value={row.geplant}
+              value={row?.geplant}
               saveToDb={saveToDb}
               error={errors?.sammlung?.geplant}
             />
@@ -433,10 +433,10 @@ export const SammlungForm = ({
           </div>
         </div>
         <TextField
-          key={`${row.id}bemerkungen`}
+          key={`${row?.id}bemerkungen`}
           name="bemerkungen"
           label="Bemerkungen"
-          value={row.bemerkungen}
+          value={row?.bemerkungen}
           saveToDb={saveToDb}
           error={errors?.sammlung?.bemerkungen}
           multiLine

@@ -27,7 +27,7 @@ export const KulturHistory = ({
   rawRow,
   historyTakeoverCallback,
 }: {
-  row: import('../../../shared/types.ts').Kultur | null | undefined
+  row: import('../../../../dbModel.ts').Kultur | null | undefined
   rawRow?: unknown
   historyTakeoverCallback?: () => void
 }) => {

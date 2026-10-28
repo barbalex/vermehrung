@@ -22,8 +22,8 @@ function delay(time) {
 export const HeaderAdminMenu = ({
   setParentAnchorEl: setGrandParentAnchorEl,
 }) => {
-  const [anchorEl, setAnchorEl] = useState(null)
-  const onClickExporte = (event) => setAnchorEl(event.currentTarget)
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | undefined | null>(null)
+  const onClickExporte = (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => setAnchorEl(event.currentTarget)
 
   const [progress, setProgress] = useState(0)
   const onClickImportApData = async () => {
@@ -34,7 +34,7 @@ export const HeaderAdminMenu = ({
     const apfloraAps = await store
       .get(apiClientAtom)
       ?.get('/apflora_ap?select=id,ae_id,ap,av')
-    for (const [index, art] of arts.entries()) {
+    for (const [index, art] of arts?.entries()) {
       // find corresponding apflora_ap using ae_id
       const apfloraAp = apfloraAps.find(
         (apfloraAp) => apfloraAp.ae_id === art.ae_id,
@@ -54,7 +54,7 @@ export const HeaderAdminMenu = ({
       if (art.apflora_av !== apfloraAp.av) {
         await art.edit({ field: 'apflora_av', value: apfloraAp.av })
       }
-      setProgress(((index + 1) / arts.length) * 100)
+      setProgress(((index + 1) / arts?.length) * 100)
       // ensure edits don't happen too fast
       await delay(50)
     }

@@ -10,8 +10,8 @@ import { HeaderHamburgerMenu as Menu } from './Menu.tsx'
 import styles from './index.module.css'
 
 export const HeaderHamburgerMenu = ({ asMenu }) => {
-  const [anchorEl, setAnchorEl] = useState(null)
-  const onClickMenu = (event) => setAnchorEl(event.currentTarget)
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | undefined | null>(null)
+  const onClickMenu = (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => setAnchorEl(event.currentTarget)
 
   if (asMenu) {
     return (

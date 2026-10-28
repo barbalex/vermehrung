@@ -15,7 +15,7 @@ export const PersonFormTitleChooser = ({
   showHistory,
 }: {
   showFilter: boolean
-  row: import('../../../shared/types.ts').Person | null | undefined
+  row: import('../../../../dbModel.ts').Person | null | undefined
   rawRow: Record<string, unknown> | null | undefined
   showHistory: boolean
 }) => {

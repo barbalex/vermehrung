@@ -16,14 +16,14 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import artStyles from '../../Art/FormTitle/DeleteButton.module.css'
 
 export const ZaehlungDeleteButton = ({ row }: { row: import('../../../shared/types.ts').WmRow | null | undefined }) => {
-  const [anchorEl, setAnchorEl] = useState(null)
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | undefined | null>(null)
 
   const closeMenu = () => setAnchorEl(null)
 
-  const onClickButton = (event) => setAnchorEl(event.currentTarget)
+  const onClickButton = (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => setAnchorEl(event.currentTarget)
 
   const remove = () => {
-    row.delete()
+    row?.delete()
     setAnchorEl(null)
     if (store.get(filterZaehlungAtom)._deleted === false) {
       // need to remove openNode from openNodes
@@ -41,7 +41,7 @@ export const ZaehlungDeleteButton = ({ row }: { row: import('../../../shared/typ
         aria-label="Zählung löschen"
         title="Zählung löschen"
         onClick={onClickButton}
-        disabled={!!row._deleted}
+        disabled={!!row?._deleted}
         size="large"
       >
         <FaMinus />

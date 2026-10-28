@@ -31,10 +31,10 @@ export const EventSettingsMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
 
   const { ev_datum, tk, ev_geplant, ev_person_id } = kulturOption ?? {}
 
-  const saveToDb = (event) => {
+  const saveToDb = (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
     const field = event.target.name
     const value = event.target.value === 'false'
-    kulturOption.edit({ field, value })
+    kulturOption?.edit({ field, value })
   }
 
   const openSettingsDocs = () => {

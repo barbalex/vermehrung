@@ -34,7 +34,7 @@ export const SammelLieferungFormTitle = ({
   showHistory,
 }: {
   showFilter: boolean
-  row: import('../../../shared/types.ts').SammelLieferung | null | undefined
+  row: import('../../../../dbModel.ts').SammelLieferung | null | undefined
   totalCount: number
   filteredCount: number
   lieferung: import('../../../shared/types.ts').WmRow | null | undefined

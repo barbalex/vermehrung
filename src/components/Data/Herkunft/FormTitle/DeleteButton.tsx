@@ -16,12 +16,12 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import artStyles from '../../Art/FormTitle/DeleteButton.module.css'
 
 export const HerkunftDeleteButton = ({ row }: { row: import('../../../shared/types.ts').WmRow | null | undefined }) => {
-  const [anchorEl, setAnchorEl] = useState(null)
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | undefined | null>(null)
   const closeMenu = () => setAnchorEl(null)
-  const onClickButton = (event) => setAnchorEl(event.currentTarget)
+  const onClickButton = (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => setAnchorEl(event.currentTarget)
 
   const remove = async () => {
-    await row.delete()
+    await row?.delete()
     setAnchorEl(null)
     const herkunftFilter = store.get(filterHerkunftAtom)
     if (herkunftFilter._deleted === false) {
@@ -40,7 +40,7 @@ export const HerkunftDeleteButton = ({ row }: { row: import('../../../shared/typ
         aria-label="Herkunft löschen"
         title="Herkunft löschen"
         onClick={onClickButton}
-        disabled={!!row._deleted}
+        disabled={!!row?._deleted}
         size="large"
       >
         <FaMinus />

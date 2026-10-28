@@ -25,7 +25,7 @@ export const SammlungFormTitle = ({
   filteredCount,
   showHistory,
 }: {
-  row: import('../../../shared/types.ts').Sammlung | null | undefined
+  row: import('../../../../dbModel.ts').Sammlung | null | undefined
   totalCount: number
   filteredCount: number
   showHistory: boolean
@@ -83,7 +83,7 @@ export const SammlungFormTitle = ({
           <Menu white={false}>
             <HistoryButton
               table="sammlung"
-              id={row.id}
+              id={row?.id}
               showHistory={showHistory}
               asMenu
             />
@@ -98,7 +98,7 @@ export const SammlungFormTitle = ({
           <>
             <HistoryButton
               table="sammlung"
-              id={row.id}
+              id={row?.id}
               showHistory={showHistory}
             />
             <Anleitung />

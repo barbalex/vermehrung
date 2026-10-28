@@ -17,7 +17,7 @@ export const SammelLieferungWann = ({
   saveToDb,
 }: {
   showFilter: boolean
-  row: import('../../../shared/types.ts').SammelLieferung | null | undefined
+  row: import('../../../../dbModel.ts').SammelLieferung | null | undefined
   ifNeeded: boolean
   saveToDb: (event: { target: { name?: string; value: unknown } }) => void
 }) => {
@@ -43,10 +43,10 @@ export const SammelLieferungWann = ({
       </div>
       {ifNeeded('datum') && (
         <Date
-          key={`${row.id}datum`}
+          key={`${row?.id}datum`}
           name="datum"
           label="Datum"
-          value={row.datum}
+          value={row?.datum}
           saveToDb={saveToDb}
           error={errors?.sammel_lieferung?.datum}
         />
@@ -55,19 +55,19 @@ export const SammelLieferungWann = ({
         <div className={wannStyles.fieldRow}>
           {showFilter ? (
             <JesNo
-              key={`${row.id}geplant`}
+              key={`${row?.id}geplant`}
               label="Geplant"
               name="geplant"
-              value={row.geplant}
+              value={row?.geplant}
               saveToDb={saveToDb}
               error={errors?.sammel_lieferung?.geplant}
             />
           ) : (
             <Checkbox2States
-              key={`${row.id}geplant`}
+              key={`${row?.id}geplant`}
               label="Geplant"
               name="geplant"
-              value={row.geplant}
+              value={row?.geplant}
               saveToDb={saveToDb}
               error={errors?.sammel_lieferung?.geplant}
             />

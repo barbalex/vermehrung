@@ -25,7 +25,7 @@ export const PersonArten = ({ person }: { person: import('../../../../shared/typ
 
   const [open, setOpen] = useState(false)
   const anim = useAnimation()
-  const onClickToggle = async (e) => {
+  const onClickToggle = async (e: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
     e.stopPropagation()
     if (open) {
       const was = open
@@ -45,7 +45,7 @@ export const PersonArten = ({ person }: { person: import('../../../../shared/typ
   const { avs, artWerte } = dataState
   const avArtIds = avs.map((v) => v.art_id)
   useEffect(() => {
-    const avsObservable = person.avs
+    const avsObservable = person?.avs
       .extend(Q.where('_deleted', false))
       .observe()
     const artFilter = store.get(filterArtAtom)
@@ -86,11 +86,11 @@ export const PersonArten = ({ person }: { person: import('../../../../shared/typ
 
     return () => subscription?.unsubscribe?.()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [person.avs, avArtIds.length, db])
+  }, [person?.avs, avArtIds.length, db])
 
-  const saveToDb = (event) => {
+  const saveToDb = (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
     insertAvRev({
-      values: { person_id: person.id, art_id: event.target.value },
+      values: { person_id: person?.id, art_id: event.target.value },
     })
     setErrors({})
   }

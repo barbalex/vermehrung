@@ -39,7 +39,7 @@ export const SammelLieferungForm = ({
 }: {
   showFilter: boolean
   id: string | undefined
-  row: import('../../../shared/types.ts').SammelLieferung | null | undefined
+  row: import('../../../../dbModel.ts').SammelLieferung | null | undefined
   rawRow: Record<string, unknown> | null | undefined
   activeConflict: string | null
   setActiveConflict: (val: unknown) => void
@@ -69,11 +69,11 @@ export const SammelLieferungForm = ({
       async ([userPersonOptions]) => {
         let vonSammlung
         try {
-          vonSammlung = await row.sammlung.fetch()
+          vonSammlung = await row?.sammlung.fetch()
         } catch {}
         let vonSammlungHerkunft
         try {
-          vonSammlungHerkunft = await vonSammlung.herkunft.fetch()
+          vonSammlungHerkunft = await vonSammlung?.herkunft.fetch()
         } catch {}
 
         if (vonSammlungHerkunft) {
@@ -84,14 +84,14 @@ export const SammelLieferungForm = ({
           })
         }
 
-        if (row.von_kultur_id) {
+        if (row?.von_kultur_id) {
           let vonKultur
           try {
-            vonKultur = await db?.get('kultur').find(row.von_kultur_id as string)
+            vonKultur = await db?.get('kultur').find(row?.von_kultur_id as string)
           } catch {}
           let herkunftByVonKultur
           try {
-            herkunftByVonKultur = await vonKultur.herkunft.fetch()
+            herkunftByVonKultur = await vonKultur?.herkunft.fetch()
           } catch {}
           if (herkunftByVonKultur) {
             return setDataState({
@@ -103,11 +103,11 @@ export const SammelLieferungForm = ({
         }
         let nachKultur
         try {
-          nachKultur = await db?.get('kultur').find(row.nach_kultur_id as string)
+          nachKultur = await db?.get('kultur').find(row?.nach_kultur_id as string)
         } catch {}
         let herkunftByNachKultur
         try {
-          herkunftByNachKultur = await nachKultur.herkunft.fetch()
+          herkunftByNachKultur = await nachKultur?.herkunft.fetch()
         } catch {}
 
         setDataState({
@@ -121,11 +121,11 @@ export const SammelLieferungForm = ({
     return () => subscription?.unsubscribe?.()
   }, [
     db,
-    row.nach_kultur_id,
-    row.sammel_lieferung,
-    row.sammlung,
-    row.von_kultur_id,
-    row.von_sammlung_id,
+    row?.nach_kultur_id,
+    row?.sammel_lieferung,
+    row?.sammlung,
+    row?.von_kultur_id,
+    row?.von_sammlung_id,
     user.uid,
   ])
   const { herkunft, herkunftQuelle, userPersonOption } = dataState
@@ -142,7 +142,7 @@ export const SammelLieferungForm = ({
     }
   }, [id])
 
-  const saveToDb = (event) => {
+  const saveToDb = (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
     const field = event.target.name
     let value = ifIsNumericAsNumber(event.target.value)
     if (event.target.value === undefined) value = null
@@ -159,7 +159,7 @@ export const SammelLieferungForm = ({
 
     // only update if value has changed
     if (value === previousValue) return
-    row.edit({ field, value })
+    row?.edit({ field, value })
   }
 
   const shownAsSammelLieferung =
@@ -193,19 +193,19 @@ export const SammelLieferungForm = ({
           <>
             {showFilter ? (
               <JesNo
-                key={`${row.id}_deleted`}
+                key={`${row?.id}_deleted`}
                 label="gelöscht"
                 name="_deleted"
-                value={row._deleted}
+                value={row?._deleted}
                 saveToDb={saveToDb}
                 error={errors?.sammel_lieferung?._deleted}
               />
             ) : (
               <Checkbox2States
-                key={`${row.id}_deleted`}
+                key={`${row?.id}_deleted`}
                 label="gelöscht"
                 name="_deleted"
-                value={row._deleted}
+                value={row?._deleted}
                 saveToDb={saveToDb}
                 error={errors?.sammel_lieferung?._deleted}
               />

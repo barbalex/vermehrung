@@ -44,7 +44,7 @@ const OpenContextMenu = ({ menuState, closeMenu }) => {
     menu.style.opacity = '1'
   }, [menuState, selectableEntries.length])
 
-  const activateEntry = (index) => {
+  const activateEntry = (index: number) => {
     const entry = selectableEntries[index]
     closeMenu()
     // entries without onClick (explainer text) only closed the menu before
@@ -55,15 +55,15 @@ const OpenContextMenu = ({ menuState, closeMenu }) => {
   // elsewhere; keyboard navigation
   useEffect(() => {
     const menu = menuRef.current
-    const onPointerDown = (e) => {
+    const onPointerDown = (e: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
       if (!menu?.contains(e.target)) closeMenu()
     }
     // rows stopPropagation on their contextmenu events, so this only
     // fires for context menus opened elsewhere on the page
-    const onContextMenu = (e) => {
+    const onContextMenu = (e: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
       if (!menu?.contains(e.target)) closeMenu()
     }
-    const onKeyDown = (e) => {
+    const onKeyDown = (e: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
       if (e.key === 'Escape') {
         e.preventDefault()
         closeMenu()
@@ -123,7 +123,7 @@ const OpenContextMenu = ({ menuState, closeMenu }) => {
       }}
     >
       <div className={styles.title}>{menuState.title}</div>
-      {menuState.entries.map((entry, index) => {
+      {menuState.entries.map((entry, index: number) => {
         if (entry.type === 'subtitle') {
           return (
             <div

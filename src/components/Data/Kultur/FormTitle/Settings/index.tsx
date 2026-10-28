@@ -8,8 +8,8 @@ import { ErrorBoundary } from '../../../../shared/ErrorBoundary.tsx'
 import { KulturSettingsMenu as Menu } from './Menu.tsx'
 
 export const KulturSettings = ({ asMenu, kulturId }) => {
-  const [anchorEl, setAnchorEl] = useState(null)
-  const onClickConfig = (event) => setAnchorEl(event.currentTarget)
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | undefined | null>(null)
+  const onClickConfig = (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => setAnchorEl(event.currentTarget)
 
   if (asMenu) {
     return (

@@ -18,7 +18,7 @@ export const TeilkulturZaehlungen = ({ teilkultur }: { teilkultur: import('../..
       .get('teilzaehlung')
       .query(
         Q.where('_deleted', false),
-        Q.on('zaehlung', Q.where('kultur_id', teilkultur.kultur_id)),
+        Q.on('zaehlung', Q.where('kultur_id', teilkultur?.kultur_id)),
       )
       .observeWithColumns(['datum', 'beschreibung', 'geplant'])
     const subscription = teilzaehlungsObservable.subscribe(
@@ -30,7 +30,7 @@ export const TeilkulturZaehlungen = ({ teilkultur }: { teilkultur: import('../..
     )
 
     return () => subscription?.unsubscribe?.()
-  }, [db, teilkultur.kultur_id, teilkultur.zaehlung])
+  }, [db, teilkultur?.kultur_id, teilkultur?.zaehlung])
 
   return (
     <ErrorBoundary>

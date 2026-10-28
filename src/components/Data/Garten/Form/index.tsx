@@ -41,7 +41,7 @@ export const GartenForm = ({
 }: {
   showFilter: boolean
   id: string | undefined
-  row: import('../../../shared/types.ts').Garten | null | undefined
+  row: import('../../../../dbModel.ts').Garten | null | undefined
   rawRow: Record<string, unknown> | null | undefined
   activeConflict: string | null
   setActiveConflict: (val: unknown) => void
@@ -101,9 +101,9 @@ export const GartenForm = ({
       .get('person')
       .query(delQuery, aktivQuery)
       .observeWithColumns(['vorname', 'name'])
-    const personObservable = row.person ? row.person.observe() : $of({})
-    const gvsObservable = row.gvs
-      ? row.gvs.extend(Q.where('_deleted', false)).observe()
+    const personObservable = row?.person ? row?.person.observe() : $of({})
+    const gvsObservable = row?.gvs
+      ? row?.gvs.extend(Q.where('_deleted', false)).observe()
       : $of([])
     const combinedObservables = combineLatest([
       userPersonOptionsObservable,
@@ -140,8 +140,8 @@ export const GartenForm = ({
     db,
     personFilter._deleted,
     personFilter.aktiv,
-    row.gvs,
-    row.person,
+    row?.gvs,
+    row?.person,
     showFilter,
     user,
   ])
@@ -159,7 +159,7 @@ export const GartenForm = ({
 
   // console.log('Garten, render, Form', { ga_aktiv })
 
-  const saveToDb = async (event) => {
+  const saveToDb = async (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
     const field = event.target.name
     let value = ifIsNumericAsNumber(event.target.value)
     if (event.target.value === undefined) value = null
@@ -172,7 +172,7 @@ export const GartenForm = ({
     // only update if value has changed
     if (value === previousValue) return
     //console.log('Garten, will edit row:', { field, value })
-    row.edit({ field, value })
+    row?.edit({ field, value })
     if (field === 'person_id') {
       // only if not yet exists
       // do this in garten.edit?
@@ -182,7 +182,7 @@ export const GartenForm = ({
         //   person_id: value,
         //   gvPersonIds,
         // })
-        insertGvRev({ values: { garten_id: row.id, person_id: value } })
+        insertGvRev({ values: { garten_id: row?.id, person_id: value } })
       }
     }
   }
@@ -200,19 +200,19 @@ export const GartenForm = ({
         <>
           {showFilter ? (
             <JesNo
-              key={`${row.id}_deleted`}
+              key={`${row?.id}_deleted`}
               label="gelöscht"
               name="_deleted"
-              value={row._deleted}
+              value={row?._deleted}
               saveToDb={saveToDb}
               error={errors?.garten?._deleted}
             />
           ) : (
             <Checkbox2States
-              key={`${row.id}_deleted`}
+              key={`${row?.id}_deleted`}
               label="gelöscht"
               name="_deleted"
-              value={row._deleted}
+              value={row?._deleted}
               saveToDb={saveToDb}
               error={errors?.garten?._deleted}
             />
@@ -220,17 +220,17 @@ export const GartenForm = ({
         </>
       )}
       <TextField
-        key={`${row.id}name`}
+        key={`${row?.id}name`}
         name="name"
         label="Name"
-        value={row.name}
+        value={row?.name}
         saveToDb={saveToDb}
         error={errors?.garten?.name}
       />
       <Select
-        key={`${row.id}${row.person_id}person_id`}
+        key={`${row?.id}${row?.person_id}person_id`}
         name="person_id"
-        value={row.person_id}
+        value={row?.person_id}
         field="person_id"
         label="Person"
         options={personWerte}
@@ -239,20 +239,20 @@ export const GartenForm = ({
       />
       {ga_strasse && (
         <TextField
-          key={`${row.id}strasse`}
+          key={`${row?.id}strasse`}
           name="strasse"
           label="Strasse"
-          value={row.strasse}
+          value={row?.strasse}
           saveToDb={saveToDb}
           error={errors?.garten?.strasse}
         />
       )}
       {ga_plz && (
         <TextField
-          key={`${row.id}plz`}
+          key={`${row?.id}plz`}
           name="plz"
           label="PLZ"
-          value={row.plz}
+          value={row?.plz}
           saveToDb={saveToDb}
           error={errors?.garten?.plz}
           type="number"
@@ -260,10 +260,10 @@ export const GartenForm = ({
       )}
       {ga_ort && (
         <TextField
-          key={`${row.id}ort`}
+          key={`${row?.id}ort`}
           name="ort"
           label="Ort"
-          value={row.ort}
+          value={row?.ort}
           saveToDb={saveToDb}
           error={errors?.garten?.ort}
         />
@@ -275,19 +275,19 @@ export const GartenForm = ({
         <>
           {showFilter ? (
             <JesNo
-              key={`${row.id}aktiv`}
+              key={`${row?.id}aktiv`}
               label="aktiv"
               name="aktiv"
-              value={row.aktiv}
+              value={row?.aktiv}
               saveToDb={saveToDb}
               error={errors?.garten?.aktiv}
             />
           ) : (
             <Checkbox2States
-              key={`${row.id}aktiv`}
+              key={`${row?.id}aktiv`}
               label="aktiv"
               name="aktiv"
-              value={row.aktiv}
+              value={row?.aktiv}
               saveToDb={saveToDb}
               error={errors?.garten?.aktiv}
             />
@@ -296,10 +296,10 @@ export const GartenForm = ({
       )}
       {ga_bemerkungen && (
         <TextField
-          key={`${row.id}bemerkungen`}
+          key={`${row?.id}bemerkungen`}
           name="bemerkungen"
           label="Bemerkungen"
-          value={row.bemerkungen}
+          value={row?.bemerkungen}
           saveToDb={saveToDb}
           error={errors?.garten?.bemerkungen}
           multiLine
@@ -314,7 +314,7 @@ export const GartenForm = ({
       )}
       {!showFilter && (
         <>
-          <Personen gartenId={row.id} garten={row} />{' '}
+          <Personen gartenId={row?.id} garten={row} />{' '}
           <Files parentTable="garten" parent={row} />
         </>
       )}

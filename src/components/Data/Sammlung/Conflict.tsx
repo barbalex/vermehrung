@@ -24,7 +24,7 @@ export const SammlungConflict = ({
 }: {
   id: string | undefined
   rev: string | boolean | null
-  row: import('../../shared/types.ts').Sammlung | null | undefined
+  row: import('../../../dbModel.ts').Sammlung | null | undefined
   conflictDisposalCallback: () => void
   conflictSelectionCallback: () => void
   setActiveConflict: (conflict: string | null) => void

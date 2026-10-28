@@ -24,7 +24,7 @@ export const EventConflict = ({
 }: {
   id: string | undefined
   rev: string | boolean | null
-  row: import('../../shared/types.ts').Event | null | undefined
+  row: import('../../../dbModel.ts').Event | null | undefined
   conflictDisposalCallback: () => void
   conflictSelectionCallback: () => void
   setActiveConflict: (conflict: string | null) => void

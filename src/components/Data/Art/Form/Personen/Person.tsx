@@ -10,23 +10,23 @@ import { personLabelFromPerson } from '../../../../../utils/personLabelFromPerso
 import styles from './Person.module.css'
 
 export const Person = ({ av }: { av: import('../../../../shared/types.ts').WmRow | null | undefined }) => {
-  const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
+  const [delMenuAnchorEl, setDelMenuAnchorEl] = useState<HTMLElement | undefined | null>(null)
   const delMenuOpen = Boolean(delMenuAnchorEl)
 
   const onClose = () => setDelMenuAnchorEl(null)
-  const onClickDeleteIcon = (event) => setDelMenuAnchorEl(event.currentTarget)
+  const onClickDeleteIcon = (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => setDelMenuAnchorEl(event.currentTarget)
   const onClickDelete = () => {
-    av.delete()
+    av?.delete()
     setDelMenuAnchorEl(null)
   }
 
-  const [personLabel, setPersonLabel] = useState(null)
+  const [personLabel, setPersonLabel] = useState<string | null>(null)
   useEffect(() => {
-    const subscription = av.person.observe().subscribe((person) => {
+    const subscription = av?.person.observe().subscribe((person: import('../../../../../dbModel.ts').Person) => {
       setPersonLabel(personLabelFromPerson({ person }))
     })
     return () => subscription?.unsubscribe?.()
-  }, [av.person])
+  }, [av?.person])
 
   if (!av) return null
   if (!personLabel) return null

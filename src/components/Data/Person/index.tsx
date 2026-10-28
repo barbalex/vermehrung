@@ -46,7 +46,7 @@ export const Person = ({
       : (initialDataQueried || !online)
         ? db?.get('person').findAndObserve(id)
         : $of({})
-    const subscription = personObservable.subscribe((newRow) => {
+    const subscription = personObservable?.subscribe((newRow) => {
       setDataState({
         row: newRow,
         rawRow: JSON.stringify(newRow?._raw ?? newRow),

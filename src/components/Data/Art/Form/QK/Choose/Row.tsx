@@ -36,14 +36,14 @@ export const Row = ({ qk }: { qk: import('../../../../../shared/types.ts').WmRow
     return () => subscription?.unsubscribe?.()
   }, [db, user.uid])
 
-  const checked = artQkChoosen.includes(qk.id)
+  const checked = artQkChoosen.includes(qk?.id)
 
-  const onChange = (event) => {
+  const onChange = (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
     const newValue = event.target.checked
-      ? [...artQkChoosen, qk.id]
-      : artQkChoosen.filter((id) => id !== qk.id)
+      ? [...artQkChoosen, qk?.id]
+      : artQkChoosen.filter((id) => id !== qk?.id)
 
-    userPersonOption.edit({
+    userPersonOption?.edit({
       field: 'art_qk_choosen',
       value: newValue,
     })

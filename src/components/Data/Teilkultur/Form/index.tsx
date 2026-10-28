@@ -36,7 +36,7 @@ export const TeilkulturForm = ({
 }: {
   showFilter: boolean
   id: string | undefined
-  row: import('../../../shared/types.ts').Teilkultur | null | undefined
+  row: import('../../../../dbModel.ts').Teilkultur | null | undefined
   activeConflict: string | null
   setActiveConflict: (val: unknown) => void
   showHistory: boolean
@@ -80,9 +80,9 @@ export const TeilkulturForm = ({
       .get('kultur')
       .query(kulturDelQuery, kulturAktivQuery)
       .observe()
-    const kulturObservable = row.kultur ? row.kultur.observe() : $of({})
-    const kulturOptionObservable = row.kultur_id
-      ? db?.get('kultur_option').findAndObserve(row.kultur_id)
+    const kulturObservable = row?.kultur ? row?.kultur.observe() : $of({})
+    const kulturOptionObservable = row?.kultur_id
+      ? db?.get('kultur_option').findAndObserve(row?.kultur_id)
       : $of(null)
     const combinedObservables = combineLatest([
       kultursObservable,
@@ -120,12 +120,12 @@ export const TeilkulturForm = ({
     )
 
     return () => subscription?.unsubscribe?.()
-  }, [db, kulturFilter, row.kultur, row.kultur_id, showFilter])
+  }, [db, kulturFilter, row?.kultur, row?.kultur_id, showFilter])
   const { kulturWerte, kulturOption } = dataState
 
   const { tk_bemerkungen } = kulturOption ?? {}
 
-  const saveToDb = async (event) => {
+  const saveToDb = async (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
     const field = event.target.name
     let value = ifIsNumericAsNumber(event.target.value)
     if (event.target.value === undefined) value = null
@@ -138,7 +138,7 @@ export const TeilkulturForm = ({
     const previousValue = ifIsNumericAsNumber(row[field])
     // only update if value has changed
     if (value === previousValue) return
-    row.edit({ field, value })
+    row?.edit({ field, value })
   }
 
   const showDeleted = teilkulturFilter._deleted !== false || row?._deleted
@@ -155,19 +155,19 @@ export const TeilkulturForm = ({
           <>
             {showFilter ? (
               <JesNo
-                key={`${row.id}_deleted`}
+                key={`${row?.id}_deleted`}
                 label="gelöscht"
                 name="_deleted"
-                value={row._deleted}
+                value={row?._deleted}
                 saveToDb={saveToDb}
                 error={errors?.teilkultur?._deleted}
               />
             ) : (
               <Checkbox2States
-                key={`${row.id}_deleted`}
+                key={`${row?.id}_deleted`}
                 label="gelöscht"
                 name="_deleted"
-                value={row._deleted}
+                value={row?._deleted}
                 saveToDb={saveToDb}
                 error={errors?.teilkultur?._deleted}
               />
@@ -175,9 +175,9 @@ export const TeilkulturForm = ({
           </>
         )}
         <Select
-          key={`${row.id}${row.kultur_id}kultur_id`}
+          key={`${row?.id}${row?.kultur_id}kultur_id`}
           name="kultur_id"
-          value={row.kultur_id}
+          value={row?.kultur_id}
           field="kultur_id"
           label="Kultur"
           options={kulturWerte}
@@ -185,43 +185,43 @@ export const TeilkulturForm = ({
           error={errors?.teilkultur?.kultur_id}
         />
         <TextField
-          key={`${row.id}name`}
+          key={`${row?.id}name`}
           name="name"
           label="Name"
-          value={row.name}
+          value={row?.name}
           saveToDb={saveToDb}
           error={errors?.teilkultur?.name}
         />
         <TextField
-          key={`${row.id}ort1`}
+          key={`${row?.id}ort1`}
           name="ort1"
           label="Ort 1"
-          value={row.ort1}
+          value={row?.ort1}
           saveToDb={saveToDb}
           error={errors?.teilkultur?.ort1}
         />
         <TextField
-          key={`${row.id}ort2`}
+          key={`${row?.id}ort2`}
           name="ort2"
           label="Ort 2"
-          value={row.ort2}
+          value={row?.ort2}
           saveToDb={saveToDb}
           error={errors?.teilkultur?.ort2}
         />
         <TextField
-          key={`${row.id}ort3`}
+          key={`${row?.id}ort3`}
           name="ort3"
           label="Ort 3"
-          value={row.ort3}
+          value={row?.ort3}
           saveToDb={saveToDb}
           error={errors?.teilkultur?.ort3}
         />
         {(tk_bemerkungen || showFilter) && (
           <TextField
-            key={`${row.id}bemerkungen`}
+            key={`${row?.id}bemerkungen`}
             name="bemerkungen"
             label="Bemerkungen"
-            value={row.bemerkungen}
+            value={row?.bemerkungen}
             saveToDb={saveToDb}
             error={errors?.teilkultur?.bemerkungen}
             multiline
@@ -234,7 +234,7 @@ export const TeilkulturForm = ({
             setActiveConflict={setActiveConflict}
           />
         )}
-        {!showFilter && row.kultur_id && <Zaehlungen teilkultur={row} />}
+        {!showFilter && row?.kultur_id && <Zaehlungen teilkultur={row} />}
       </div>
     </ErrorBoundary>
   )

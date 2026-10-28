@@ -41,15 +41,15 @@ export const KulturNavButtons = ({ row }: { row: import('../../../shared/types.t
   const { kulturOption } = dataState
 
   useEffect(() => {
-    const kOObservable = row.kultur_option
-      ? row.kultur_option.observe()
+    const kOObservable = row?.kultur_option
+      ? row?.kultur_option.observe()
       : $of({})
     const subscription = kOObservable.subscribe((kulturOption) =>
       setDataState({ kulturOption }),
     )
 
     return () => subscription?.unsubscribe?.()
-  }, [row.kultur_option])
+  }, [row?.kultur_option])
 
   return (
     <>

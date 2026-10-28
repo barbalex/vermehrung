@@ -46,7 +46,7 @@ export const Arten = ({ filter: showFilter }) => {
               Q.where('_deleted', true),
               Q.where('_deleted', null),
             )
-    const totalCountObservable = collection.query(delQuery).observeCount()
+    const totalCountObservable = collection?.query(delQuery).observeCount()
     const artsObservable = collection
       .query(...tableFilter({ table: 'art', apFilter }))
       .observeWithColumns(['ae_id', 'set', 'apflora_ap', 'apflora_av'])

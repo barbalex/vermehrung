@@ -3,23 +3,23 @@ export const createDataArrayForRevComparison = ({ row, revRow }: {
   revRow: Record<string, unknown> | null | undefined
 }) => [
   {
-    valueInRow: row.ae_id,
-    valueInRev: revRow.ae_id,
+    valueInRow: row?.ae_id,
+    valueInRev: revRow?.ae_id,
     label: 'Art (id)',
   },
   {
-    valueInRow: row.set,
-    valueInRev: revRow.set,
+    valueInRow: row?.set,
+    valueInRev: revRow?.set,
     label: 'Set',
   },
   {
-    valueInRow: row.apflora_av,
-    valueInRev: revRow.apflora_av,
+    valueInRow: row?.apflora_av,
+    valueInRev: revRow?.apflora_av,
     label: 'Apflora Artverantwortlich',
   },
   {
-    valueInRow: row.ap,
-    valueInRev: revRow.ap,
+    valueInRow: row?.ap,
+    valueInRev: revRow?.ap,
     label: 'AP',
   },
   {
@@ -33,8 +33,8 @@ export const createDataArrayForRevComparison = ({ row, revRow }: {
     label: 'geändert von',
   },
   {
-    valueInRow: row._deleted,
-    valueInRev: revRow._deleted,
+    valueInRow: row?._deleted,
+    valueInRev: revRow?._deleted,
     label: 'gelöscht',
   },
 ]

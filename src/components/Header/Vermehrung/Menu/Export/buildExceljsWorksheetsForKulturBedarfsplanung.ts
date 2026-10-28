@@ -42,11 +42,11 @@ export const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
       } catch {}
       let artname
       try {
-        artname = await art.label.pipe(first$()).toPromise()
+        artname = await art?.label.pipe(first$()).toPromise()
       } catch {}
       let avs
       try {
-        avs = await art.avs.extend(Q.where('_deleted', false)).fetch()
+        avs = await art?.avs.extend(Q.where('_deleted', false)).fetch()
       } catch {}
       const avsLabels = []
       try {
@@ -65,7 +65,7 @@ export const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
       } catch {}
       let garten_label
       try {
-        garten_label = await garten.label.pipe(first$()).toPromise()
+        garten_label = await garten?.label.pipe(first$()).toPromise()
       } catch {}
 
       let ownZaehlungen = []
@@ -128,13 +128,13 @@ export const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
       } catch {}
 
       // danger: sumBy returns 0 when field was undefined!
-      const tzsToSumAnzahlPflanzen = lZTeilzaehlungs.filter((l) =>
+      const tzsToSumAnzahlPflanzen = lZTeilzaehlungs.filter((l: import('../../../../../dbModel.ts').Lieferung) =>
         exists(l.anzahl_pflanzen),
       )
       const anzahl_pflanzen = tzsToSumAnzahlPflanzen.length
         ? sumBy(tzsToSumAnzahlPflanzen, (e) => e.anzahl_pflanzen)
         : ''
-      const tzsToSumAnzahlAuspflanzungsbereit = lZTeilzaehlungs.filter((l) =>
+      const tzsToSumAnzahlAuspflanzungsbereit = lZTeilzaehlungs.filter((l: import('../../../../../dbModel.ts').Lieferung) =>
         exists(l.anzahl_auspflanzbereit),
       )
       const anzahl_auspflanzbereit = tzsToSumAnzahlAuspflanzungsbereit.length
@@ -143,7 +143,7 @@ export const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
             (e) => e.anzahl_auspflanzbereit,
           )
         : ''
-      const tzsToSumAnzahlMutterpflanzen = lZTeilzaehlungs.filter((l) =>
+      const tzsToSumAnzahlMutterpflanzen = lZTeilzaehlungs.filter((l: import('../../../../../dbModel.ts').Lieferung) =>
         exists(l.anzahl_mutterpflanzen),
       )
       const anzahl_mutterpflanzen = tzsToSumAnzahlMutterpflanzen.length
@@ -157,7 +157,7 @@ export const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
             (anzahl_mutterpflanzen ?? 0)
           : ''
       const andere_mengen = lZTeilzaehlungs
-        .map((l) => l.andere_menge)
+        .map((l: import('../../../../../dbModel.ts').Lieferung) => l.andere_menge)
         .join(', ')
 
       let lieferungs = []
@@ -236,7 +236,7 @@ export const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
               (e) => e.anzahl_auspflanzbereit,
             )
           : ''
-      const auslSinceWithAnzahlMutterpflanzen = lZTeilzaehlungs.filter((l) =>
+      const auslSinceWithAnzahlMutterpflanzen = lZTeilzaehlungs.filter((l: import('../../../../../dbModel.ts').Lieferung) =>
         exists(l.anzahl_mutterpflanzen),
       )
       const auslSinceAnzahlMutterpflanzen =
@@ -277,7 +277,7 @@ export const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
               (e) => e.anzahl_auspflanzbereit,
             )
           : ''
-      const anlSinceWithAnzahlMutterpflanzen = lZTeilzaehlungs.filter((l) =>
+      const anlSinceWithAnzahlMutterpflanzen = lZTeilzaehlungs.filter((l: import('../../../../../dbModel.ts').Lieferung) =>
         exists(l.anzahl_mutterpflanzen),
       )
       const anlSinceAnzahlMutterpflanzen =

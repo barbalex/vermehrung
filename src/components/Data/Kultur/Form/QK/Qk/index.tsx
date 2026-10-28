@@ -15,9 +15,9 @@ export const KulturQk = ({ kultur, qkChoosens }) => {
   const db = useAtomValue(dbAtom)
 
   const [filter, setFilter] = useState('')
-  const onChangeFilter = (event) => setFilter(event.target.value)
+  const onChangeFilter = (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => setFilter(event.target.value)
 
-  const [messageGroups, setMessageGroups] = useState(null)
+  const [messageGroups, setMessageGroups] = useState<any[] | null>(null)
   useEffect(() => {
     let isActive = true
     createKulturMessageFunctions({
@@ -77,7 +77,7 @@ export const KulturQk = ({ kultur, qkChoosens }) => {
           <div
             className={styles.title}
           >{`${messageGroup.title} (${messageGroup.messages.length})`}</div>
-          {messageGroup.messages.map((m, i) => (
+          {messageGroup.messages.map((m, i: number) => (
             <div className={styles.row} key={`${m.text}Index${i}`}>
               <p
                 onClick={() =>

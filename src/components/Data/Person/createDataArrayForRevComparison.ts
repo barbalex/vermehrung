@@ -6,12 +6,12 @@ export const createDataArrayForPersonRevComparison = ({
   revRow: import('../../shared/types.ts').WmRow | null | undefined
 }) => {
   // need to use raw values here
-  const row = rowPassed._raw
+  const row = rowPassed?._raw
 
   return [
     {
       valueInRow: row.user_role_id,
-      valueInRev: revRow.user_role_id,
+      valueInRev: revRow?.user_role_id,
       label: 'Rolle (id)',
     },
     {
@@ -98,7 +98,7 @@ export const createDataArrayForPersonRevComparison = ({
     },
     {
       valueInRow: row._deleted,
-      valueInRev: revRow._deleted,
+      valueInRev: revRow?._deleted,
       label: 'gelöscht',
     },
   ]

@@ -25,7 +25,7 @@ export const TeilzaehlungConflict = ({
 }: {
   id: string | undefined
   rev: string | boolean | null
-  row: import('../../../../../shared/types.ts').Zaehlung | null | undefined
+  row: import('../../../../../../dbModel.ts').Zaehlung | null | undefined
   conflictDisposalCallback: () => void
   conflictSelectionCallback: () => void
   setActiveConflict: (val: unknown) => void
@@ -86,7 +86,7 @@ export const TeilzaehlungConflict = ({
     // update model: remove this conflict
     try {
       const model = await db?.get('teilzaehlung').find(revRow.teilzaehlung_id as string)
-      await model.removeConflict(revRow._rev)
+      await model?.removeConflict(revRow._rev)
     } catch {}
     conflictDisposalCallback()
     window.location.reload()

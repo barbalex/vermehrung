@@ -14,7 +14,7 @@ export const useLieferungNachData = ({
   filter,
 }: {
   showFilter: boolean
-  row: import('../../../../../shared/types.ts').Lieferung | null | undefined
+  row: import('../../../../../../dbModel.ts').Lieferung | null | undefined
   herkunft: import('../../../../../shared/types.ts').WmRow | null | undefined
   db: import('@nozbe/watermelondb').Database | null
   filter: boolean
@@ -51,17 +51,17 @@ export const useLieferungNachData = ({
     const subscription = combinedObservables.subscribe(async ([kulturs]) => {
       const kultursFiltered = kulturs
         // show only kulturen of art_id
-        .filter((k) => {
+        .filter((k: import('../../../../../../dbModel.ts').Kultur) => {
           if (row?.art_id) return k.art_id === row.art_id
           return true
         })
         // show only kulturen with same herkunft
-        .filter((k) => {
+        .filter((k: import('../../../../../../dbModel.ts').Kultur) => {
           if (herkunft?.id) return k.herkunft_id === herkunft.id
           return true
         })
         // shall not be delivered to same kultur it came from
-        .filter((k) => {
+        .filter((k: import('../../../../../../dbModel.ts').Kultur) => {
           if (
             row?.von_kultur_id &&
             row?.von_kultur_id !== row?.nach_kultur_id
@@ -72,7 +72,7 @@ export const useLieferungNachData = ({
         })
       let kultur
       try {
-        kultur = await db?.get('kultur').find(row.von_kultur_id as string)
+        kultur = await db?.get('kultur').find(row?.von_kultur_id as string)
       } catch {}
       const kultursIncludingChoosen = uniqBy(
         [...kultursFiltered, ...(kultur && !showFilter ? [kultur] : [])],
