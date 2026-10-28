@@ -1,0 +1,2 @@
+export interface kultur_qk_choosen_rev_set_winning_revision_params {
+}

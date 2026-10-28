@@ -20,12 +20,10 @@ import {
   dbAtom,
   queuedQueriesAtom,
   queueSizeAtom,
-  activeNodeArrayAtom,
   setActiveNodeArray,
 } from '../store/index.js'
 import { Herkunft } from '../dbModel.ts'
 import {
-  flushAllDirtyRevs,
   flushRow,
   getUnflushedRevs,
   initRevAggregation,
@@ -46,7 +44,7 @@ beforeEach(() => {
   store.set(queuedQueriesAtom, [])
   store.set(queueSizeAtom, 0)
   store.set(dbAtom, {
-    get: () => ({ find: () => ({ fetch: async () => {} }) }),
+    get: () => ({ find: () => ({ fetch: async () => undefined }) }),
   })
   storageMap.clear()
   __resetRevAggregationForTests()

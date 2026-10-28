@@ -1,0 +1,6 @@
+export interface is_valid_coordinates_params {
+  $1: unknown;
+}
+
+/** Return type for is_valid_coordinates */
+export type is_valid_coordinates_return_type = boolean;

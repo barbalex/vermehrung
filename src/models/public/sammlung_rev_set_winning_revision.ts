@@ -1,0 +1,2 @@
+export interface sammlung_rev_set_winning_revision_params {
+}

@@ -331,9 +331,9 @@ export const buildKulturTimelineData = async ({ row }) => {
         'Lieferung Gramm Samen': l.gramm_samen,
         'Lieferung von Anzahl Individuen': l.von_anzahl_individuen,
         'Lieferung Bemerkungen': l.bemerkungen,
-        'Zählung Pflanzen': sumAnzahlPflanzen + l.anzahl_pflanzen ?? undefined,
+        'Zählung Pflanzen': sumAnzahlPflanzen + l.anzahl_pflanzen,
         'Zählung Pflanzen auspflanzbereit':
-          sumAnzahlAuspflanzbereit + l.anzahl_auspflanzbereit ?? undefined,
+          sumAnzahlAuspflanzbereit + l.anzahl_auspflanzbereit,
         ereignis: 'Lieferung',
       }
     }),
@@ -394,9 +394,9 @@ export const buildKulturTimelineData = async ({ row }) => {
         'Lieferung Gramm Samen': l.gramm_samen,
         'Lieferung von Anzahl Individuen': l.von_anzahl_individuen,
         'Lieferung Bemerkungen': l.bemerkungen,
-        'Zählung Pflanzen': sumAnzahlPflanzen - l.anzahl_pflanzen ?? undefined,
+        'Zählung Pflanzen': sumAnzahlPflanzen - l.anzahl_pflanzen,
         'Zählung Pflanzen auspflanzbereit':
-          sumAnzahlAuspflanzbereit - l.anzahl_auspflanzbereit ?? undefined,
+          sumAnzahlAuspflanzbereit - l.anzahl_auspflanzbereit,
         ereignis: 'Lieferung',
       }
     }),
@@ -463,14 +463,14 @@ export const buildKulturTimelineData = async ({ row }) => {
       }
       if (data.datum < new Date(lastZaehlungDone.datum).getTime()) {
         data['Zählung Pflanzen'] =
-          sumAnzahlPflanzen + l.anzahl_pflanzen ?? undefined
+          sumAnzahlPflanzen + l.anzahl_pflanzen
         data['Zählung Pflanzen auspflanzbereit'] =
-          sumAnzahlAuspflanzbereit + l.anzahl_auspflanzbereit ?? undefined
+          sumAnzahlAuspflanzbereit + l.anzahl_auspflanzbereit
       } else {
         data['Pflanzen Bedarf'] =
-          sumAnzahlPflanzen + l.anzahl_pflanzen ?? undefined
+          sumAnzahlPflanzen + l.anzahl_pflanzen
         data['Pflanzen auspflanzbereit Bedarf'] =
-          sumAnzahlAuspflanzbereit + l.anzahl_auspflanzbereit ?? undefined
+          sumAnzahlAuspflanzbereit + l.anzahl_auspflanzbereit
       }
       return data
     }),
@@ -550,14 +550,14 @@ export const buildKulturTimelineData = async ({ row }) => {
       }
       if (data.datum < new Date(lastZaehlungDone.datum).getTime()) {
         data['Zählung Pflanzen'] =
-          sumAnzahlPflanzen - l.anzahl_pflanzen ?? undefined
+          sumAnzahlPflanzen - l.anzahl_pflanzen
         data['Zählung Pflanzen auspflanzbereit'] =
-          sumAnzahlAuspflanzbereit - l.anzahl_auspflanzbereit ?? undefined
+          sumAnzahlAuspflanzbereit - l.anzahl_auspflanzbereit
       } else {
         data['Pflanzen Bedarf'] =
-          sumAnzahlPflanzen - l.anzahl_pflanzen ?? undefined
+          sumAnzahlPflanzen - l.anzahl_pflanzen
         data['Pflanzen auspflanzbereit Bedarf'] =
-          sumAnzahlAuspflanzbereit - l.anzahl_auspflanzbereit ?? undefined
+          sumAnzahlAuspflanzbereit - l.anzahl_auspflanzbereit
       }
       return data
     }),

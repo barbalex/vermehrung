@@ -1,4 +1,3 @@
-import { camelCase } from 'es-toolkit'
 import { isId } from '../../utils/isId.js'
 
 import tableFromTitleHash from '../../utils/tableFromTitleHash.json'
@@ -12,12 +11,12 @@ export const createNew = async ({ node }) => {
   const db = store.get(dbAtom)
 
   // get table and id from url
-  let parentTableTitle = null
+  let parentTableTitle
   let parentTable = null
   let parentId = null
   let tableTitle = null
   let table = null
-  let fkExists = null
+  let fkExists
   let fkName = null
   const additionalValuesToSet = {}
 
@@ -84,8 +83,7 @@ export const createNew = async ({ node }) => {
     if (!sammelLieferung) return console.log('no sammelLieferung found!')
     const entries = Object.entries(sammelLieferung)
       .filter(
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        ([key, value]) =>
+        ([key]) =>
           !key.startsWith('_') &&
           ![
             'lieferungs',
@@ -95,8 +93,7 @@ export const createNew = async ({ node }) => {
             'sammlung',
           ].includes(key),
       )
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      .filter(([key, value]) => exists(value))
+      .filter(([, value]) => exists(value))
     for (const [key, value] of entries) {
       const keyToUse = key === 'id' ? 'sammel_lieferung_id' : key
       additionalValuesToSet[keyToUse] = value

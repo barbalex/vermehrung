@@ -6,7 +6,6 @@ import {
   json,
   lazy,
   relation,
-  immutableRelation,
 } from '@nozbe/watermelondb/decorators'
 import { Q } from '@nozbe/watermelondb'
 import {
@@ -36,11 +35,9 @@ import {
   store,
   userAtom,
   apiClientAtom,
-  dbAtom,
   addNotification,
   unsetError,
 } from './store/index.js'
-import { updateAllSammelLieferungen } from './components/Data/SammelLieferung/FormTitle/Copy/updateAllLieferungen.js'
 
 const dontSanitize = (val) => val
 /*const sanitizeArrayOfStrings = (val) =>

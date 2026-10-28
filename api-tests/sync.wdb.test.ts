@@ -1,9 +1,8 @@
 import { readFileSync } from 'node:fs'
 import path from 'node:path'
-import { Q } from '@nozbe/watermelondb'
 import LokiJSAdapter from '@nozbe/watermelondb/adapters/lokijs'
-import { Database } from '@nozbe/watermelondb'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { Database, Model, Q } from '@nozbe/watermelondb'
+import { beforeEach, describe, expect, it } from 'vitest'
 
 import { store, dbAtom, lastUpdatedAtom, initiallyQueriedAtom } from '../src/store/index.js'
 import { processSubscriptionResult } from '../src/utils/processSubscriptionResult.js'
@@ -16,7 +15,6 @@ import { schema } from '../src/dbSchema/schema.js'
 // then run the exact association query the Tree component runs.
 
 const USER_UID = 'ogA6AUQKd5byQkU2BXetDxvSLZi1'
-const PERSON_ID = '15218c0e-b957-11ea-bfd4-4f97a2ba4da0'
 
 const payload = JSON.parse(
   readFileSync(path.join(__dirname, 'fixtures', 'prod-sync-person-personoption.json'), 'utf8'),
@@ -36,10 +34,12 @@ describe('tree option query against real watermelondb', () => {
     })
     db = new Database({
       adapter,
-      // @ts-expect-error test setup
-      modelClasses: Object.values(models).filter((m: any) => m?.prototype),
+      modelClasses: Object.values(models).filter(
+        (m): m is typeof Model =>
+          typeof m === 'function' && Boolean((m as unknown as { prototype?: unknown }).prototype),
+      ),
     })
-    store.set(dbAtom, db as any)
+    store.set(dbAtom, db)
     store.set(lastUpdatedAtom, { person: 0, person_option: 0 })
     store.set(initiallyQueriedAtom, { person: false, person_option: false })
   })
@@ -64,7 +64,12 @@ describe('tree option query against real watermelondb', () => {
       .fetch()
 
     expect(optionRows.length, 'association query must find the option row').toBeGreaterThan(0)
-    const option = optionRows[0] as any
+    const option = optionRows[0] as unknown as {
+      tree_kultur: boolean
+      tree_teilkultur: boolean
+      tree_zaehlung: boolean
+      tree_lieferung: boolean
+    }
     expect(option.tree_kultur).toBe(true)
     expect(option.tree_teilkultur).toBe(true)
     expect(option.tree_zaehlung).toBe(true)

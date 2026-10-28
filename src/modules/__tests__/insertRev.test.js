@@ -16,8 +16,6 @@ import { insertRev } from '../insertRev.js'
 // from different app versions create revision conflicts instead of
 // bouncing off the server's unique constraint.
 
-const tail = ['changed', 'changed_by', '_depth', '_parent_rev', '_deleted']
-
 // fields as declared in insertRev's configs, id field first -
 // this is the order the original per-table MST actions used
 const expectedFields = {

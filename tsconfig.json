@@ -14,7 +14,10 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "allowImportingTsExtensions": true,
+    "jsx": "react-jsx",
+    "jsxImportSource": "@emotion/react",
+    "experimentalDecorators": true
   },
   "include": ["src/**/*"],
   "references": [{ "path": "./tsconfig.node.json" }]

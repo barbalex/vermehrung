@@ -80,7 +80,7 @@ export const updateSammelLieferung = async ({
       .filter(
         // only accept lieferung's fields
 
-        ([key, value]) => lieferungRevFields.includes(key),
+        ([key]) => lieferungRevFields.includes(key),
       )
       // only update with existing values
 
@@ -95,7 +95,7 @@ export const updateSammelLieferung = async ({
     Object.entries(lfLastVersion).filter(
       // only accept lieferung's fields
 
-      ([key, value]) => lieferungFields.includes(key),
+      ([key]) => lieferungFields.includes(key),
     ),
   )
   const newObject = {

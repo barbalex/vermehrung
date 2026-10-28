@@ -98,7 +98,7 @@ test('local-first: login, sync, offline boot, re-login resets cursors', async ({
   }
 
   const personUrls: string[] = []
-  const syncBodies: Array<Record<string, any>> = []
+  const syncBodies: { p_since?: Record<string, number> }[] = []
 
   // the rows a fresh login's initial sync delivers - enough for the
   // Arten list to show one row with its label

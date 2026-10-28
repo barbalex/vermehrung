@@ -1,0 +1,2 @@
+export interface zwischenvermehrung_exists_for_herkunft_in_gaw_params {
+}

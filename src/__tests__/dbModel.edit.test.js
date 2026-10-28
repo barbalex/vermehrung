@@ -64,7 +64,7 @@ const buildFakeRow = (db) => {
 }
 
 const buildDb = () => ({
-  get: () => ({ find: () => ({ fetch: async () => {} }) }),
+  get: () => ({ find: () => ({ fetch: async () => undefined }) }),
 })
 
 beforeEach(() => {

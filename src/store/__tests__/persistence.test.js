@@ -15,7 +15,6 @@ vi.mock('localforage', () => ({
   },
 }))
 
-import { getAuthToken } from '../../utils/getAuthToken.js'
 vi.mock('../../utils/getAuthToken.js', () => ({
   getAuthToken: vi.fn(async () => true),
 }))

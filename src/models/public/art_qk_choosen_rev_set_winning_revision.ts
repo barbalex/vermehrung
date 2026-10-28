@@ -1,0 +1,2 @@
+export interface art_qk_choosen_rev_set_winning_revision_params {
+}

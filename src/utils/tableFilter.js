@@ -14,7 +14,7 @@ export const tableFilter = ({ table, apFilter }) => {
   const filter = store.get(filterTableAtoms[table])
   if (!filter) throw `no filter found for table ${table}`
 
-  const filterEntries = Object.entries(filter).filter(([key, value]) =>
+  const filterEntries = Object.entries(filter).filter(([, value]) =>
     exists(value),
   )
 

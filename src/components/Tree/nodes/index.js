@@ -37,6 +37,7 @@ import { buildArtKulturBedarf } from './art/kultur/bedarf/index.js'
 import { buildArtFolder } from './art/folder.js'
 import { buildArt } from './art/index.js'
 import {
+  store,
   dbAtom,
   apFilterAtom,
   openNodesAtom,

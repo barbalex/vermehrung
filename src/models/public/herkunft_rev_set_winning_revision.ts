@@ -1,0 +1,2 @@
+export interface herkunft_rev_set_winning_revision_params {
+}
