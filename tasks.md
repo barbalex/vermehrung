@@ -1,18 +1,11 @@
 typescript migration (started 2026-10-28): all src files are now .ts/.tsx.
 
-state 2026-10-28 late: tsc 1850 errors, all in components/Data
-(Kultur 369, Art 251, Zaehlung 151, Lieferung 146, SammelLieferung 145,
-Garten 119, Person 117, Event 71, rest smaller). Everything else at 0:
-store, modules, utils, dbModel, dbSchema, shared, Tree, Header (minus
-~50), routes, entry. type-coverage 94.7%, lint 0.
-Biggest files: Kultur/Form/Timeline/buildData.ts (76, complex - read
-fully before typing), Kultur/FormTitle/buildExceljsWorksheets.ts (68),
-Zaehlung Teilzaehlung Form (58), Person/Form (53).
-Workflow that works: type row props as the entity model class, db.get<
-Model>('table') on query chains, Werte option arrays as Select option
-shape, cast errors-atom reads to string | undefined, ?? null on model
-field reads into control value props. /tmp/nullsafe.py inserts
-optional chains at tsc-reported positions (run to fixpoint).
+state 2026-10-28 night: tsc 1373, all in components/Data long tail
+(forms mostly done: Art, Kultur, SammelLieferung, Lieferung, Teilzaehlung,
+Bedarf, Event, Garten, Person... zero; remaining: Kultur Timeline
+buildData 76, buildExceljsWorksheets 32, Header export 32, QK files ~45,
+scattered forms <20 each). Fixers in tools/: nullsafe.py, jsxfix.py,
+formfix.py - run all three, they are position-driven and idempotent-ish.
 Phase E after Data: noUnusedLocals/noUnusedParameters, drop
 allowJs/checkJs, wire lint+typecheck+test into npm run deploy, update
 CLAUDE.md.(0 problems, --max-warnings 0)
