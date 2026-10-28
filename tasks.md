@@ -1,19 +1,21 @@
 typescript migration (started 2026-10-28): all src files are now .ts/.tsx.
 
-state 2026-10-28 evening: tsc 2022 errors remaining, all in
-components/Data (~1950, the per-entity forms/exports/qk files) and
-components/Header (~50). Zero errors in: store, modules, utils,
-dbModel, dbSchema, components/shared, components/Tree, routes, entry.
-type-coverage ~82.5%. Working order for the rest: type one entity
-completely (Herkunft is smallest), then replicate - Form/index.tsx,
-FormTitle files, QK dirs, lists (Arten/index etc), Lieferschein.
-Proven fixers in /tmp/nullsafe.py (position-driven optional chains).
-Phase E after: noUnusedLocals/noUnusedParameters, drop allowJs/checkJs,
-wire lint+typecheck+test into npm run deploy, update CLAUDE.md.
-
-state after the rename commit:
-
-- eslint clean: `npm run lint` (0 problems, --max-warnings 0)
+state 2026-10-28 late: tsc 1850 errors, all in components/Data
+(Kultur 369, Art 251, Zaehlung 151, Lieferung 146, SammelLieferung 145,
+Garten 119, Person 117, Event 71, rest smaller). Everything else at 0:
+store, modules, utils, dbModel, dbSchema, shared, Tree, Header (minus
+~50), routes, entry. type-coverage 94.7%, lint 0.
+Biggest files: Kultur/Form/Timeline/buildData.ts (76, complex - read
+fully before typing), Kultur/FormTitle/buildExceljsWorksheets.ts (68),
+Zaehlung Teilzaehlung Form (58), Person/Form (53).
+Workflow that works: type row props as the entity model class, db.get<
+Model>('table') on query chains, Werte option arrays as Select option
+shape, cast errors-atom reads to string | undefined, ?? null on model
+field reads into control value props. /tmp/nullsafe.py inserts
+optional chains at tsc-reported positions (run to fixpoint).
+Phase E after Data: noUnusedLocals/noUnusedParameters, drop
+allowJs/checkJs, wire lint+typecheck+test into npm run deploy, update
+CLAUDE.md.(0 problems, --max-warnings 0)
 - `npm run typecheck` (tsc --noEmit): 6281 errors to burn down, bottom-up:
   utils -> dbSchema/dbModel -> store/modules -> components/shared,Header,Documentation
   -> components/Data -> components/Tree -> routes/Router/App/main
