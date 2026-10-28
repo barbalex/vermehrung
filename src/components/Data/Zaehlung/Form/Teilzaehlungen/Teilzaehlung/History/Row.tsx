@@ -51,7 +51,7 @@ export const TeilzaehlungHistoryRow = ({
     newObject.id = uuidv7()
     newObject.changed = new Date().toISOString()
     newObject.changed_by = user.email
-    newObject._revisions = toPgArray([rev, ...row?._revisions])
+    newObject._revisions = toPgArray([rev, ...(row?._revisions ?? [])])
     const newObjectForStore = { ...newObject }
     try {
     await store

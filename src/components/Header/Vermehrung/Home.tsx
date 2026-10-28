@@ -9,7 +9,7 @@ import { singleColumnViewAtom } from '../../../store/index.ts'
 
 import styles from './Home.module.css'
 
-export const HeaderHome = ({ asMenu }) => {
+export const HeaderHome = ({ asMenu }: { asMenu?: boolean }) => {
   const singleColumnView = useAtomValue(singleColumnViewAtom)
 
   if (asMenu) {

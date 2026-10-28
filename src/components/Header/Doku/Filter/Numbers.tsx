@@ -1,6 +1,12 @@
 import styles from './Numbers.module.css'
 
-export const FilterNumbers = ({ filteredCount, totalCount }) => (
+export const FilterNumbers = ({
+  filteredCount,
+  totalCount,
+}: {
+  filteredCount: number | null
+  totalCount: number | null
+}) => (
   <div className={styles.container}>
     <div className={styles.innerContainer}>
       <div

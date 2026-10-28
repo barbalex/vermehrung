@@ -1,5 +1,16 @@
 typescript migration (started 2026-10-28): all src files are now .ts/.tsx.
 
+state 2026-10-28 evening: tsc 2022 errors remaining, all in
+components/Data (~1950, the per-entity forms/exports/qk files) and
+components/Header (~50). Zero errors in: store, modules, utils,
+dbModel, dbSchema, components/shared, components/Tree, routes, entry.
+type-coverage ~82.5%. Working order for the rest: type one entity
+completely (Herkunft is smallest), then replicate - Form/index.tsx,
+FormTitle files, QK dirs, lists (Arten/index etc), Lieferschein.
+Proven fixers in /tmp/nullsafe.py (position-driven optional chains).
+Phase E after: noUnusedLocals/noUnusedParameters, drop allowJs/checkJs,
+wire lint+typecheck+test into npm run deploy, update CLAUDE.md.
+
 state after the rename commit:
 
 - eslint clean: `npm run lint` (0 problems, --max-warnings 0)

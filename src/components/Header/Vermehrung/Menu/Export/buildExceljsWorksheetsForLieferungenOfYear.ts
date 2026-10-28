@@ -9,24 +9,29 @@ import { personLabelFromPerson } from '../../../../../utils/personLabelFromPerso
 import { downloadExceljsWorkbook } from '../../../../../utils/downloadExceljsWorkbook.ts'
 import { lieferungSort } from '../../../../../utils/lieferungSort.ts'
 
-export const buildExceljsWorksheetsForLieferungenOfYear = async ({ year }) => {
+export const buildExceljsWorksheetsForLieferungenOfYear = async ({
+  year,
+}: {
+  year: number
+}) => {
   const db = store.get(dbAtom)
   const { Workbook } = await import('exceljs/dist/exceljs.min.js')
   const workbook = new Workbook()
 
-  let lieferungs = []
+  let lieferungs: import('../../../../../dbModel.ts').Lieferung[] = []
   try {
-    lieferungs = await db
-      .get('lieferung')
+    lieferungs = (await db
+      ?.get<import('../../../../../dbModel.ts').Lieferung>('lieferung')
       .query(Q.where('_deleted', false), Q.where('datum', Q.notEq(null)))
-      .fetch()
+      .fetch()) ?? []
   } catch {}
   const lieferungsSorted = lieferungs.sort(lieferungSort)
 
   const lieferungsdata = await Promise.all(
     lieferungsSorted
       .filter((l) => {
-        const lYear = DateTime.fromSQL(l.datum).toFormat('yyyy')
+        const lYear =
+          l.datum ? DateTime.fromSQL(l.datum).toFormat('yyyy') : ''
         return lYear == year
       })
       .map(async (l) => {
@@ -127,7 +132,12 @@ export const buildExceljsWorksheetsForLieferungenOfYear = async ({ year }) => {
           von_kultur_garten_label,
           von_kultur_herkunft_id: vonKultur?.herkunft_id ?? '',
           von_kultur_herkunft_label: herkunftLabelFromHerkunft({
-            herkunft: vonKulturHerkunft,
+            herkunft: vonKulturHerkunft as unknown as {
+              id?: string | null
+              nr?: string | null
+              lokalname?: string | null
+              gemeinde?: string | null
+            },
           }),
           von_kultur_herkunft_nr: vonKulturHerkunft?.nr ?? '',
           datum: l.datum,

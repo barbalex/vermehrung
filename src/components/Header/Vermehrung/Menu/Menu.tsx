@@ -21,6 +21,9 @@ import styles from './Menu.module.css'
 export const HeaderHamburgerMenu = ({
   anchorEl: parentAnchorEl,
   setAnchorEl: setParentAnchorEl,
+}: {
+  anchorEl: HTMLElement | null
+  setAnchorEl: (el: HTMLElement | null) => void
 }) => {
   const db = useAtomValue(dbAtom)
   const user = useAtomValue(userAtom)
@@ -37,10 +40,10 @@ export const HeaderHamburgerMenu = ({
   const teilzaehlungFilter = useAtomValue(filterTableAtoms.teilzaehlung)
   const zaehlungFilter = useAtomValue(filterTableAtoms.zaehlung)
 
-  const [userRole, setUserRole] = useState<Model | null>(null)
+  const [userRole, setUserRole] = useState<import('../../../../dbModel.ts').UserRole | null>(null)
   useEffect(() => {
     const userRoleObservable = db
-      .get('user_role')
+      ?.get<import('../../../../dbModel.ts').UserRole>('user_role')
       .query(Q.on('person', Q.where('account_id', user.uid ?? 'none')))
       .observeWithColumns(['name'])
     const subscription = userRoleObservable.subscribe(([userRole]) => {
@@ -50,7 +53,7 @@ export const HeaderHamburgerMenu = ({
     return () => subscription?.unsubscribe?.()
   }, [db, user.uid])
 
-  const onClickShowDeleted = (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
+  const onClickShowDeleted = (event: { target: { name?: string; value?: unknown; checked?: boolean } }) => {
     const value = event.target.checked ? false : null
     setFilterValue({ table: 'art', key: '_deleted', value })
     setFilterValue({ table: 'event', key: '_deleted', value })
@@ -66,7 +69,7 @@ export const HeaderHamburgerMenu = ({
     setFilterValue({ table: 'zaehlung', key: '_deleted', value })
   }
 
-  const onClickShowActive = (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
+  const onClickShowActive = (event: { target: { name?: string; value?: unknown; checked?: boolean } }) => {
     const value = event.target.checked ? true : null
     setFilterValue({ table: 'garten', key: 'aktiv', value })
     setFilterValue({ table: 'kultur', key: 'aktiv', value })

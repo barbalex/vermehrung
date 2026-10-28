@@ -15,29 +15,39 @@ const StyledOtherMenuItem = styled(MenuItem)`
   }
 `
 
-function delay(time) {
+function delay(time: number) {
   return new Promise((resolve) => setTimeout(resolve, time))
 }
 
 export const HeaderAdminMenu = ({
   setParentAnchorEl: setGrandParentAnchorEl,
+}: {
+  setParentAnchorEl: (el: HTMLElement | null) => void
 }) => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | undefined | null>(null)
-  const onClickExporte = (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => setAnchorEl(event.currentTarget)
+  const onClickExporte = (event: { currentTarget: HTMLElement }) =>
+    setAnchorEl(event.currentTarget)
 
   const [progress, setProgress] = useState(0)
   const onClickImportApData = async () => {
     const db = store.get(dbAtom)
 
     // fetch all art and apflora_ap
-    const arts = await db?.get('art').query().fetch()
-    const apfloraAps = await store
+    const arts = await db
+      ?.get<import('../../../../../dbModel.ts').Art>('art')
+      .query()
+      .fetch()
+    const apfloraAps = ((await store
       .get(apiClientAtom)
-      ?.get('/apflora_ap?select=id,ae_id,ap,av')
-    for (const [index, art] of arts?.entries()) {
+      ?.get('/apflora_ap?select=id,ae_id,ap,av')) ?? []) as {
+      ae_id?: string | null
+      ap?: boolean | null
+      av?: string | null
+    }[]
+    for (const [index, art] of (arts ?? []).entries()) {
       // find corresponding apflora_ap using ae_id
       const apfloraAp = apfloraAps.find(
-        (apfloraAp) => apfloraAp.ae_id === art.ae_id,
+        (apfloraAp: { ae_id?: string | null }) => apfloraAp.ae_id === art.ae_id,
       )
       if (!apfloraAp) {
         if (art.apflora_ap) {
@@ -54,7 +64,7 @@ export const HeaderAdminMenu = ({
       if (art.apflora_av !== apfloraAp.av) {
         await art.edit({ field: 'apflora_av', value: apfloraAp.av })
       }
-      setProgress(((index + 1) / arts?.length) * 100)
+      setProgress(((index + 1) / (arts?.length ?? 1)) * 100)
       // ensure edits don't happen too fast
       await delay(50)
     }
@@ -63,7 +73,9 @@ export const HeaderAdminMenu = ({
     setAnchorEl(null)
     setGrandParentAnchorEl(null)
     // ensure full numbers are shown
-    setTimeout(window.location.reload(), 500)
+    // was setTimeout(window.location.reload(), 500) - which reloaded
+    // immediately instead of after the delay
+    setTimeout(() => window.location.reload(), 500)
   }
 
   const onClose = () => setAnchorEl(null)
@@ -71,7 +83,7 @@ export const HeaderAdminMenu = ({
   return (
     <>
       <MenuItem
-        aria-owns={anchorEl ? 'menu' : null}
+        aria-owns={anchorEl ? 'menu' : undefined}
         aria-haspopup="true"
         onClick={onClickExporte}
         className={styles.menuItem}

@@ -8,7 +8,7 @@ import { Link } from 'react-router'
 import { singleColumnViewAtom } from '../../../store/index.ts'
 import styles from './Docu.module.css'
 
-export const HeaderDocu = ({ asMenu }) => {
+export const HeaderDocu = ({ asMenu }: { asMenu?: boolean }) => {
   const singleColumnView = useAtomValue(singleColumnViewAtom)
 
   if (singleColumnView) {

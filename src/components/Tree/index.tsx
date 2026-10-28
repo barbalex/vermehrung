@@ -193,7 +193,7 @@ export const Tree = () => {
     const subscription = (
       combinedObservables as unknown as import('rxjs').Observable<Observed>
     ).subscribe(
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+       
       ([[userPersonOption], [userRole]]) => {
         //console.log('Tree data-useEffect ordering rebuild')
         setDataState({ userPersonOption, userRole })

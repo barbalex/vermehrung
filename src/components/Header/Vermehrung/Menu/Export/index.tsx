@@ -13,12 +13,17 @@ import styles from './index.module.css'
 
 export const HeaderExportMenu = ({
   setParentAnchorEl: setGrandParentAnchorEl,
+}: {
+  setParentAnchorEl: (el: HTMLElement | null) => void
 }) => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | undefined | null>(null)
 
-  const onClickExporte = (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => setAnchorEl(event.currentTarget)
+  const onClickExporte = (event: { currentTarget: HTMLElement }) =>
+    setAnchorEl(event.currentTarget)
 
-  const onClickLieferungenDesJahrs = (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
+  const onClickLieferungenDesJahrs = (event: {
+    target: { value: string }
+  }) => {
     const year = event.target.value
     if (year.length === 4) {
       buildExceljsWorksheetsForLieferungenOfYear({ year })
@@ -46,7 +51,7 @@ export const HeaderExportMenu = ({
   return (
     <>
       <MenuItem
-        aria-owns={anchorEl ? 'menu' : null}
+        aria-owns={anchorEl ? 'menu' : undefined}
         aria-haspopup="true"
         onClick={onClickExporte}
         className={menuStyles.menuItem}

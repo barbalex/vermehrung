@@ -1,4 +1,4 @@
-import format from 'date-fns/format'
+import { format } from 'date-fns/format'
 import { store, dbAtom } from '../../../../../store/index.ts'
 import { sumBy } from 'es-toolkit'
 import { Q } from '@nozbe/watermelondb'
@@ -13,14 +13,16 @@ import { lieferungSort } from '../../../../../utils/lieferungSort.ts'
 
 export const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
   workbook,
+}: {
+  workbook: import('exceljs').Workbook
 }) => {
   const db = store.get(dbAtom)
 
-  let kulturs = []
+  let kulturs: import('../../../../../dbModel.ts').Kultur[] = []
   try {
     kulturs =
       (await db
-        .get('kultur')
+        ?.get('kultur')
         .query(
           Q.where('_deleted', false),
           Q.where('aktiv', true),
@@ -72,7 +74,7 @@ export const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
       try {
         ownZaehlungen =
           (await db
-            .get('zaehlung')
+            ?.get('zaehlung')
             .query(
               Q.where('_deleted', false),
               Q.where('kultur_id', kultur.id),
@@ -86,7 +88,7 @@ export const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
       try {
         bedarfe =
           (await db
-            .get('bedarf')
+            ?.get('bedarf')
             .query(
               Q.where('_deleted', false),
               Q.where('kultur_id', kultur.id),
@@ -164,7 +166,7 @@ export const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
       try {
         lieferungs =
           (await db
-            .get('lieferung')
+            ?.get('lieferung')
             .query(
               Q.where('_deleted', false),
               Q.where('geplant', false),
@@ -179,7 +181,7 @@ export const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
       try {
         lieferungsGeplant =
           (await db
-            .get('lieferung')
+            ?.get('lieferung')
             .query(
               Q.where('_deleted', false),
               Q.where('geplant', true),

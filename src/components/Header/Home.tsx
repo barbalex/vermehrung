@@ -12,7 +12,11 @@ import { constants } from '../../utils/constants.ts'
 
 import styles from './Home.module.css'
 
-export const HeaderHome = ({ location }) => {
+export const HeaderHome = ({
+  location,
+}: {
+  location: { pathname: string }
+}) => {
   const { width, ref } = useResizeDetector()
   const mobile = width && width < constants?.tree?.minimalWindowWidth
   const { pathname } = location

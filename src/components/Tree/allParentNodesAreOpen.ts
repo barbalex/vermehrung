@@ -1,5 +1,3 @@
-import type { TreeNode } from './nodes/index.ts'
-
 import { isNodeOpen } from './isNodeOpen.ts'
 
 const allParentNodesAreOpen = ({ url: urlPassed }: { url: string[] }) => {

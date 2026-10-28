@@ -17,7 +17,9 @@ export const Qk = ({ artId, qkChoosens }) => {
   const [filter, setFilter] = useState('')
   const onChangeFilter = (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => setFilter(event.target.value)
 
-  const [messageGroups, setMessageGroups] = useState<any[] | null>(null)
+  const [messageGroups, setMessageGroups] = useState<
+    { messages: { message: string }[] }[] | null
+  >(null)
   useEffect(() => {
     let isActive = true
     createMessageFunctions({

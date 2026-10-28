@@ -21,90 +21,96 @@ import { store, dbAtom } from '../../../../store/index.ts'
 const threshold = 0.2
 const distance = 1000 // ensure text in long labels is found
 
-const formatDateForSearch = (datum) =>
+const formatDateForSearch = (datum: string | null | undefined) =>
   datum ? DateTime.fromSQL(datum).toFormat('yyyy.LL.dd') : ''
 
-export const buildOptions = async ({ cb, val }) => {
+export const buildOptions = async ({
+  cb,
+  val,
+}: {
+  cb: (options: unknown[]) => void
+  val: string
+}) => {
   const db = store.get(dbAtom)
 
-  let arts = []
+  let arts: import('../../../../dbModel.ts').Art[] = []
   try {
-    arts = await db
-      .get('art')
+    arts = (await db
+      ?.get<import('../../../../dbModel.ts').Art>('art')
       .query(...tableFilter({ table: 'art' }))
-      .fetch()
+      .fetch()) ?? []
   } catch {}
   const artsSorted = await artsSortedFromArts(arts)
 
-  let events = []
+  let events: import('../../../../dbModel.ts').Event[] = []
   try {
-    events = await db
-      .get('event')
+    events = (await db
+      ?.get<import('../../../../dbModel.ts').Event>('event')
       .query(...tableFilter({ table: 'event' }))
-      .fetch()
+      .fetch()) ?? []
   } catch {}
   const eventsSorted = events.sort(eventSort)
 
-  let gartens = []
+  let gartens: import('../../../../dbModel.ts').Garten[] = []
   try {
-    gartens = await db
-      .get('garten')
+    gartens = (await db
+      ?.get<import('../../../../dbModel.ts').Garten>('garten')
       .query(...tableFilter({ table: 'garten' }))
-      .fetch()
+      .fetch()) ?? []
   } catch {}
   const gartensSorted = await gartensSortedFromGartens(gartens)
 
-  let herkunfts = []
+  let herkunfts: import('../../../../dbModel.ts').Herkunft[] = []
   try {
-    herkunfts = await db
-      .get('herkunft')
+    herkunfts = (await db
+      ?.get<import('../../../../dbModel.ts').Herkunft>('herkunft')
       .query(...tableFilter({ table: 'herkunft' }))
-      .fetch()
+      .fetch()) ?? []
   } catch {}
   const herkunftsSorted = herkunfts.sort(herkunftSort)
 
-  let kulturs = []
+  let kulturs: import('../../../../dbModel.ts').Kultur[] = []
   try {
-    kulturs = await db
-      .get('kultur')
+    kulturs = (await db
+      ?.get<import('../../../../dbModel.ts').Kultur>('kultur')
       .query(...tableFilter({ table: 'kultur' }))
-      .fetch()
+      .fetch()) ?? []
   } catch {}
   const kultursSorted = await kultursSortedFromKulturs(kulturs)
 
-  let lieferungs = []
+  let lieferungs: import('../../../../dbModel.ts').Lieferung[] = []
   try {
-    lieferungs = await db
-      .get('lieferung')
+    lieferungs = (await db
+      ?.get<import('../../../../dbModel.ts').Lieferung>('lieferung')
       .query(...tableFilter({ table: 'lieferung' }))
-      .fetch()
+      .fetch()) ?? []
   } catch {}
   const lieferungsSorted = lieferungs.sort(lieferungSort)
 
-  let persons = []
+  let persons: import('../../../../dbModel.ts').Person[] = []
   try {
-    persons = await db
-      .get('person')
+    persons = (await db
+      ?.get<import('../../../../dbModel.ts').Person>('person')
       .query(...tableFilter({ table: 'person' }))
-      .fetch()
+      .fetch()) ?? []
   } catch {}
   const personsSorted = persons.sort(personSort)
 
-  let sammlungs = []
+  let sammlungs: import('../../../../dbModel.ts').Sammlung[] = []
   try {
-    sammlungs = await db
-      .get('sammlung')
+    sammlungs = (await db
+      ?.get<import('../../../../dbModel.ts').Sammlung>('sammlung')
       .query(...tableFilter({ table: 'sammlung' }))
-      .fetch()
+      .fetch()) ?? []
   } catch {}
   const sammlungsSorted = await sammlungsSortedFromSammlungs(sammlungs)
 
-  let zaehlungs = []
+  let zaehlungs: import('../../../../dbModel.ts').Zaehlung[] = []
   try {
-    zaehlungs = await db
-      .get('zaehlung')
+    zaehlungs = (await db
+      ?.get<import('../../../../dbModel.ts').Zaehlung>('zaehlung')
       .query(...tableFilter({ table: 'zaehlung' }))
-      .fetch()
+      .fetch()) ?? []
   } catch {}
   const zaehlungsSorted = zaehlungs.sort(zaehlungSort)
 
@@ -113,7 +119,7 @@ export const buildOptions = async ({ cb, val }) => {
     artsSorted.map(async (a) => {
       let label = ''
       try {
-        label = await a.label.pipe(first$()).toPromise()
+        label = (await a.label.pipe(first$()).toPromise()) ?? ''
       } catch {}
 
       return {
@@ -139,7 +145,7 @@ export const buildOptions = async ({ cb, val }) => {
     gartensSorted.map(async (g) => {
       let label
       try {
-        label = await g.label.pipe(first$()).toPromise()
+        label = (await g.label.pipe(first$()).toPromise()) ?? ''
       } catch {}
       let person
       try {
@@ -211,7 +217,7 @@ export const buildOptions = async ({ cb, val }) => {
     kultursSorted.map(async (k) => {
       let label
       try {
-        label = await k.label.pipe(first$()).toPromise()
+        label = (await k.label.pipe(first$()).toPromise()) ?? ''
       } catch {}
       let garten
       try {
@@ -258,7 +264,7 @@ export const buildOptions = async ({ cb, val }) => {
   const searchEventSuggestions = eventsSorted.map(async (e) => {
     let label
     try {
-      label = await e.label.pipe(first$()).toPromise()
+      label = (await e.label.pipe(first$()).toPromise()) ?? ''
     } catch {}
     let kultur
     try {
@@ -270,7 +276,7 @@ export const buildOptions = async ({ cb, val }) => {
     } catch {}
     let artname = ''
     try {
-      artname = await art?.label?.pipe(first$()).toPromise()
+      artname = (await art?.label?.pipe(first$()).toPromise()) ?? ''
     } catch {}
     let garten
     try {
@@ -445,7 +451,7 @@ export const buildOptions = async ({ cb, val }) => {
     sammlungsSorted.map(async (s) => {
       let label
       try {
-        label = await s.label.pipe(first$()).toPromise()
+        label = (await s.label.pipe(first$()).toPromise()) ?? ''
       } catch {}
       let herkunft
       try {
