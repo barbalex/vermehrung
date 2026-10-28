@@ -5,7 +5,9 @@ import { exists } from '../../utils/exists.ts'
 import { store, dbAtom, setActiveNodeArray } from '../../store/index.ts'
 import { insertRev } from '../../modules/insertRev.ts'
 
-export const createNew = async ({ node }) => {
+import type { TreeNode } from './nodes/index.ts'
+
+export const createNew = async ({ node }: { node: TreeNode }) => {
   // get parent table, parent table id and table from url
   const { nodeType, url } = node
   const db = store.get(dbAtom)
@@ -18,26 +20,26 @@ export const createNew = async ({ node }) => {
   let table = null
   let fkExists
   let fkName = null
-  const additionalValuesToSet = {}
+  const additionalValuesToSet: Record<string, unknown> = {}
 
   if (nodeType === 'table') {
     tableTitle = url.slice(-2)[0]
-    table = tableFromTitleHash[tableTitle]
+    table = tableFromTitleHash[tableTitle as keyof typeof tableFromTitleHash]
     // need to check for top level tables
     if (url.length > 2) {
       parentId = url.slice(-3)[0]
       // need to check for Werte-Listen
-      if (isNaN(parentId)) parentId = null
+      if (isNaN(Number(parentId))) parentId = null
     }
     if (parentId && url.length > 3) {
       parentTableTitle = url.slice(-4)[0]
       parentTable = parentTableTitle
-        ? tableFromTitleHash[parentTableTitle]
+        ? tableFromTitleHash[parentTableTitle as keyof typeof tableFromTitleHash]
         : null
     }
   } else if (nodeType === 'folder') {
     tableTitle = url.slice(-1)[0]
-    table = tableFromTitleHash[tableTitle]
+    table = tableFromTitleHash[tableTitle as keyof typeof tableFromTitleHash]
     // need to check for Werte-Listen and top level tables
     if (url.length > 1 && isId(url[1])) {
       parentId = url.slice(-2)[0]
@@ -45,7 +47,7 @@ export const createNew = async ({ node }) => {
     if (parentId && url.length > 2) {
       parentTableTitle = url.slice(-3)[0]
       parentTable = parentTableTitle
-        ? tableFromTitleHash[parentTableTitle]
+        ? tableFromTitleHash[parentTableTitle as keyof typeof tableFromTitleHash]
         : null
     }
   }
@@ -61,9 +63,11 @@ export const createNew = async ({ node }) => {
     // need to get art_id from kultur and set it
     let kultur
     try {
-      kultur = await db?.get('kultur').find(parentId)
+      kultur = await db?.get('kultur').find(parentId ?? '')
     } catch {}
-    additionalValuesToSet.art_id = kultur?.art_id
+    additionalValuesToSet.art_id = (
+      kultur as unknown as { art_id?: string } | undefined
+    )?.art_id
   }
   if (table === 'lieferung' && parentTable === 'sammlung') {
     // need to choose von_kultur_id or nach_kultur_id
@@ -71,17 +75,21 @@ export const createNew = async ({ node }) => {
     // need to get art_id from sammlung and set itconst kultur = parentId
     let sammlung
     try {
-      sammlung = await db?.get('sammlung').find(parentId)
+      sammlung = await db?.get('sammlung').find(parentId ?? '')
     } catch {}
-    additionalValuesToSet.art_id = sammlung?.art_id
+    additionalValuesToSet.art_id = (
+      sammlung as unknown as { art_id?: string } | undefined
+    )?.art_id
   }
   if (table === 'lieferung' && parentTable === 'sammel_lieferung') {
     let sammelLieferung
     try {
-      sammelLieferung = await db?.get('sammel_lieferung').find(parentId)
+      sammelLieferung = await db?.get('sammel_lieferung').find(parentId ?? '')
     } catch {}
     if (!sammelLieferung) return console.log('no sammelLieferung found!')
-    const entries = Object.entries(sammelLieferung)
+    const entries = Object.entries(
+      sammelLieferung as unknown as Record<string, unknown>,
+    )
       .filter(
         ([key]) =>
           !key.startsWith('_') &&
@@ -99,7 +107,7 @@ export const createNew = async ({ node }) => {
       additionalValuesToSet[keyToUse] = value
     }
   }
-  if (fkExists) additionalValuesToSet[fkName] = parentId
+  if (fkExists && fkName) additionalValuesToSet[fkName] = parentId
 
   console.log('tree createNew', {
     additionalValuesToSet,

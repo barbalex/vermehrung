@@ -11,7 +11,11 @@ import {
 import { isNodeOpen } from './isNodeOpen.ts'
 import { isNodeInActiveNodePath } from './isNodeInActiveNodePath.ts'
 
-export const toggleNodeSymbol = ({ node }) => {
+export const toggleNodeSymbol = ({
+  node,
+}: {
+  node: import('./nodes/index.ts').TreeNode
+}) => {
   if (!node.url) {
     console.log('passsed node has no url:', node)
     return addNotification({

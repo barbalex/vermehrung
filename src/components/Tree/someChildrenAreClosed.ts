@@ -1,14 +1,22 @@
 import { isEqual } from 'es-toolkit'
 
+import type { TreeNode } from './nodes/index.ts'
+
 import { isNodeOpen } from './isNodeOpen.ts'
 
-export const someChildrenAreClosed = ({ nodes, url }) => {
+export const someChildrenAreClosed = ({
+  nodes,
+  url,
+}: {
+  nodes: TreeNode[]
+  url: string[] | undefined
+}) => {
   if (!url) return false
 
   // return false if node itself is closed
   if (!isNodeOpen({ url })) return true
 
-  const childNodes = nodes.filter((n) => {
+  const childNodes = nodes.filter((n: TreeNode) => {
     if (!n.url) {
       //TODO: this happens!
       //console.log('someChildrenAreClosed:', { n, nodes })
@@ -19,5 +27,5 @@ export const someChildrenAreClosed = ({ nodes, url }) => {
       isEqual(urlPartWithEqualLength, url) && n.url.length === url.length + 1
     )
   })
-  return childNodes.some((n) => !isNodeOpen({ url: n.url }))
+  return childNodes.some((n: TreeNode) => !isNodeOpen({ url: n.url }))
 }

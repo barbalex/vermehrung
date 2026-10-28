@@ -8,8 +8,16 @@ import styles from './TreeContextMenu.module.css'
 
 // mounted fresh for every menu opened (key={menuState.id}), so selection
 // state resets automatically
-const OpenContextMenu = ({ menuState, closeMenu }) => {
-  const menuRef = useRef(null)
+import type { ContextMenuState } from './treeContextMenuAtom.ts'
+
+const OpenContextMenu = ({
+  menuState,
+  closeMenu,
+}: {
+  menuState: ContextMenuState
+  closeMenu: () => void
+}) => {
+  const menuRef = useRef<HTMLDivElement | null>(null)
   const [selectedIndex, setSelectedIndex] = useState(-1)
 
   const selectableEntries = menuState.entries.filter(
@@ -55,15 +63,17 @@ const OpenContextMenu = ({ menuState, closeMenu }) => {
   // elsewhere; keyboard navigation
   useEffect(() => {
     const menu = menuRef.current
-    const onPointerDown = (e: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
-      if (!menu?.contains(e.target)) closeMenu()
+    const onPointerDown = (e: PointerEvent) => {
+      if (!menu?.contains(e.target as Node | null)) closeMenu()
     }
     // rows stopPropagation on their contextmenu events, so this only
     // fires for context menus opened elsewhere on the page
-    const onContextMenu = (e: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
-      if (!menu?.contains(e.target)) closeMenu()
+    const onContextMenu = (e: MouseEvent) => {
+      if (!menu?.contains(e.target as Node | null)) closeMenu()
     }
-    const onKeyDown = (e: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
+    const onScroll = () => closeMenu()
+    const onResize = () => closeMenu()
+    const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         e.preventDefault()
         closeMenu()
@@ -93,14 +103,14 @@ const OpenContextMenu = ({ menuState, closeMenu }) => {
     }
     document.addEventListener('pointerdown', onPointerDown)
     // capture: also catch scrolls of elements like the tree container
-    document.addEventListener('scroll', closeMenu, { capture: true })
-    window.addEventListener('resize', closeMenu)
+    document.addEventListener('scroll', onScroll, { capture: true })
+    window.addEventListener('resize', onResize)
     document.addEventListener('contextmenu', onContextMenu)
     document.addEventListener('keydown', onKeyDown)
     return () => {
       document.removeEventListener('pointerdown', onPointerDown)
-      document.removeEventListener('scroll', closeMenu, { capture: true })
-      window.removeEventListener('resize', closeMenu)
+      document.removeEventListener('scroll', onScroll, { capture: true })
+      window.removeEventListener('resize', onResize)
       document.removeEventListener('contextmenu', onContextMenu)
       document.removeEventListener('keydown', onKeyDown)
     }

@@ -1,4 +1,4 @@
-export const buildTeilkulturFolder = ({ count }) => [
+export const buildTeilkulturFolder = ({ count }: { count: number }) => [
   {
     nodeType: 'folder',
     menuTitle: 'Teilkulturen',

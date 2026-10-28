@@ -14,6 +14,8 @@ import {
 } from '../../store/index.ts'
 import { TreeRow } from './Row.tsx'
 
+import type { TreeNode } from './nodes/index.ts'
+
 export const TreeList = ({
   _scrollableNodeRef,
   _contentNodeRef,
@@ -21,11 +23,20 @@ export const TreeList = ({
   height,
   nodes,
   userRole,
+}: {
+  _scrollableNodeRef?: unknown
+  _contentNodeRef?: unknown
+  width?: number
+  height?: number
+  nodes: TreeNode[]
+  userRole?: string | null
 }) => {
   const aNA = useAtomValue(activeNodeArrayAtom)
   const lastActiveNodeArray = useAtomValue(lastActiveNodeArrayAtom)
 
-  const listRef = useRef(null)
+  const listRef = useRef<import('react-window').ListImperativeAPI | null>(
+    null,
+  )
   // when loading on url, lastActiveNodeArray may not be set
   const urlToFocus = lastActiveNodeArray.length ? lastActiveNodeArray : aNA
   const nodeIndex = nodes.findIndex((node) => isEqual(node.url, urlToFocus))

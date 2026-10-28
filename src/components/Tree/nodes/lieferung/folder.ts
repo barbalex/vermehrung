@@ -1,4 +1,4 @@
-export const buildLieferungFolder = ({ count }) => [
+export const buildLieferungFolder = ({ count }: { count: number }) => [
   {
     nodeType: 'folder',
     menuTitle: 'Lieferungen',

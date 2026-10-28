@@ -1,4 +1,4 @@
-export const buildZaehlungFolder = ({ count }) => [
+export const buildZaehlungFolder = ({ count }: { count: number }) => [
   {
     nodeType: 'folder',
     menuTitle: 'Zählungen',

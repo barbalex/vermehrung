@@ -1,4 +1,4 @@
-export const buildArtFolder = ({ count }) => [
+export const buildArtFolder = ({ count }: { count: number }) => [
   {
     nodeType: 'folder',
     menuTitle: 'Arten',

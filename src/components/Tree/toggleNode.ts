@@ -1,3 +1,5 @@
+import type { TreeNode } from './nodes/index.ts'
+
 import { isEqual } from 'es-toolkit'
 
 import {
@@ -11,7 +13,7 @@ import {
 } from '../../store/index.ts'
 import { isNodeOpen } from './isNodeOpen.ts'
 
-export const toggleNode = ({ node, nodes }) => {
+export const toggleNode = ({ node, nodes }: { node: TreeNode; nodes: TreeNode[] }) => {
   if (!node.url) {
     console.log('passsed node has no url:', node)
     return addNotification({
@@ -19,7 +21,7 @@ export const toggleNode = ({ node, nodes }) => {
     })
   }
   const aNA = store.get(activeNodeArrayAtom)
-  const activeNode = nodes.find((n) => isEqual(n.url, aNA))
+  const activeNode = nodes.find((n: TreeNode) => isEqual(n.url, aNA))
 
   const nodeIsOpen = isNodeOpen({ url: node.url })
   if (!nodeIsOpen) {

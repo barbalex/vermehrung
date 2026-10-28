@@ -1,4 +1,4 @@
-export const buildArtKulturFolder = ({ count, artIndex, artId }) => ({
+export const buildArtKulturFolder = ({ count, artIndex, artId }: { count: number; artIndex: number; artId: string }) => ({
   nodeType: 'folder',
   menuTitle: 'Kulturen',
   id: `${artId}KulturFolder`,

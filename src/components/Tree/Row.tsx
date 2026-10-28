@@ -35,7 +35,19 @@ import {
 
 import styles from './Row.module.css'
 
-export const TreeRow = ({ style: _style, node, nodes, userRole }) => {
+import type { TreeNode } from './nodes/index.ts'
+
+export const TreeRow = ({
+  style: _style,
+  node,
+  nodes,
+  userRole,
+}: {
+  style?: Record<string, unknown>
+  node: TreeNode | undefined | null
+  nodes: TreeNode[]
+  userRole: string | null | undefined
+}) => {
   const db = useAtomValue(dbAtom)
   const activeNodeArray = useAtomValue(activeNodeArrayAtom)
   const showTreeInSingleColumnView = useAtomValue(
@@ -73,16 +85,20 @@ export const TreeRow = ({ style: _style, node, nodes, userRole }) => {
     useSymbolIcon = false
   }
 
-  const [person, setPerson] = useState()
+  const [person, setPerson] = useState<import('../../dbModel.ts').Person | null>(null)
   useEffect(() => {
     if (!node) return
     const personObservable =
       node?.nodeType === 'table' && node.table === 'person' && node.url
-        ? db?.get('person').findAndObserve(node.url.at(-1))
-        : $of({})
+        ? db
+            ?.get('person')
+            .findAndObserve(node.url.at(-1) ?? '')
+        : $of<import('../../dbModel.ts').Person | null>(null)
 
-    const subscription = personObservable?.subscribe((person) =>
-      setPerson(person),
+    const subscription = (
+      personObservable as unknown as import('rxjs').Observable<import('../../dbModel.ts').Person | null> | undefined
+    )?.subscribe(
+      (person) => setPerson(person),
     )
 
     return () => subscription?.unsubscribe?.()
@@ -91,22 +107,35 @@ export const TreeRow = ({ style: _style, node, nodes, userRole }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [db, node?.nodeType, node?.table, node?.url])
 
+  const existingNode = node as TreeNode | undefined
   const accountId = person?.account_id ?? null
 
-  const onClickNode = () =>
-    toggleNode({
-      nodes,
-      node,
-    })
+  const onClickNode = () => {
+    if (existingNode)
+      toggleNode({
+        nodes,
+        node: existingNode,
+      })
+  }
 
-  const onClickNodeSymbol = () => toggleNodeSymbol({ node })
-  const onClickNeu = () => createNew({ node })
-  const onClickDelete = () => deleteDataset({ node })
+  const onClickNodeSymbol = () => {
+    if (existingNode) toggleNodeSymbol({ node: existingNode })
+  }
+  const onClickNeu = () => {
+    if (existingNode) void createNew({ node: existingNode })
+  }
+  const onClickDelete = () => {
+    if (existingNode) void deleteDataset({ node: existingNode })
+  }
   const onClickSetPassword = () => setPassword({ person })
   const onClickDeleteAccout = () => deleteAccount({ person })
   const onClickSignup = () => signup({ person })
-  const onClickOpenAllChildren = () => openAllChildren({ node, nodes })
-  const onClickCloseAllChildren = () => closeAllChildren({ node })
+  const onClickOpenAllChildren = () => {
+    if (existingNode) openAllChildren({ node: existingNode, nodes })
+  }
+  const onClickCloseAllChildren = () => {
+    if (existingNode) closeAllChildren({ node: existingNode })
+  }
 
   // open the context menu; suppress the browser menu like the former
   // trigger did, also for node types without a menu
@@ -148,7 +177,7 @@ export const TreeRow = ({ style: _style, node, nodes, userRole }) => {
       if (
         node?.nodeType === 'table' &&
         node?.menuTitle === 'Person' &&
-        userRole?.name === 'manager'
+        userRole === 'manager'
       ) {
         if (!accountId) {
           entries.push({
@@ -179,20 +208,20 @@ export const TreeRow = ({ style: _style, node, nodes, userRole }) => {
     }
     return entries
   }
-  const openMenu = (x, y) => {
+  const openMenu = (x: number, y: number) => {
     if (!['table', 'folder'].includes(node?.nodeType)) return
     openTreeContextMenu({
       id: nextMenuOpenId(),
       x,
       y,
-      title: node?.menuTitle,
-      entries: buildMenuEntries(),
+      title: node?.menuTitle ?? '',
+      entries: buildMenuEntries() as import('./treeContextMenuAtom.ts').ContextMenuEntry[],
     })
   }
 
   // holding the left mouse button (or touch) opens the menu, as before
-  const holdToDisplayTimer = useRef(null)
-  const holdToDisplayStart = useRef(null)
+  const holdToDisplayTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const holdToDisplayStart = useRef<{ x: number; y: number } | null>(null)
   const clearHoldToDisplay = () => {
     if (holdToDisplayTimer.current) {
       clearTimeout(holdToDisplayTimer.current)
@@ -200,7 +229,12 @@ export const TreeRow = ({ style: _style, node, nodes, userRole }) => {
     }
     holdToDisplayStart.current = null
   }
-  const onPointerDownNode = (e: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
+  const onPointerDownNode = (e: {
+    button: number
+    clientX: number
+    clientY: number
+    preventDefault: () => void
+  }) => {
     if (e.button !== 0) return
     const start = { x: e.clientX, y: e.clientY }
     holdToDisplayStart.current = start
@@ -208,14 +242,19 @@ export const TreeRow = ({ style: _style, node, nodes, userRole }) => {
       openMenu(start.x, start.y)
     }, holdToDisplayMs)
   }
-  const onPointerMoveNode = (e: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
+  const onPointerMoveNode = (e: { clientX: number; clientY: number }) => {
     const start = holdToDisplayStart.current
     // moving away means dragging or scrolling, not holding still
     if (start && Math.hypot(e.clientX - start.x, e.clientY - start.y) > 9) {
       clearHoldToDisplay()
     }
   }
-  const onContextMenuNode = (e: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
+  const onContextMenuNode = (e: {
+    clientX: number
+    clientY: number
+    preventDefault: () => void
+    stopPropagation: () => void
+  }) => {
     e.preventDefault()
     // keep the menu's own contextmenu listener from closing the new menu
     e.stopPropagation()

@@ -52,7 +52,7 @@ export const Tree = () => {
   const eventFilter = useAtomValue(filterEventAtom)
   const personFilter = useAtomValue(filterPersonAtom)
 
-  const [nodes, setNodes] = useState([])
+  const [nodes, setNodes] = useState<import('./nodes/index.ts').TreeNode[]>([])
   const [dataState, setDataState] = useState({
     userPersonOption: undefined,
     userRole: undefined,
@@ -80,7 +80,7 @@ export const Tree = () => {
   useEffect(() => {
     // need to rebuild nodes when options change
     const userPersonOptionsObservable = db
-      .get('person_option')
+      ?.get('person_option')
       .query(Q.on('person', Q.where('account_id', user.uid ?? 'none')))
       .observeWithColumns([
         'tree_kultur',
@@ -89,20 +89,20 @@ export const Tree = () => {
         'tree_lieferung',
       ])
     const userRoleObservable = db
-      .get('user_role')
+      ?.get('user_role')
       .query(Q.on('person', Q.where('account_id', user.uid ?? 'none')))
       .observeWithColumns(['name'])
     // need subscription to all tables that provokes treeBuild on next
     const artsObservable = db
-      .get('art')
+      ?.get('art')
       .query(...tableFilter({ table: 'art' }))
       .observeWithColumns(['ae_id'])
     const herkunftsObservable = db
-      .get('herkunft')
+      ?.get('herkunft')
       .query(...tableFilter({ table: 'herkunft' }))
       .observeWithColumns(['gemeinde', 'lokalname', 'nr'])
     const sammlungsObservable = db
-      .get('sammlung')
+      ?.get('sammlung')
       .query(...tableFilter({ table: 'sammlung' }))
       .observeWithColumns([
         'art_id',
@@ -112,11 +112,11 @@ export const Tree = () => {
         'geplant',
       ])
     const gartensObservable = db
-      .get('garten')
+      ?.get('garten')
       .query(...tableFilter({ table: 'garten' }))
       .observeWithColumns(['name', 'person_id'])
     const kultursObservable = db
-      .get('kultur')
+      ?.get('kultur')
       .query(...tableFilter({ table: 'kultur' }))
       .observeWithColumns([
         'art_id',
@@ -125,15 +125,15 @@ export const Tree = () => {
         'zwischenlager',
       ])
     const teilkultursObservable = db
-      .get('teilkultur')
+      ?.get('teilkultur')
       .query(...tableFilter({ table: 'teilkultur' }))
       .observeWithColumns(['name', 'ort1', 'ort2', 'ort3'])
     const zaehlungsObservable = db
-      .get('zaehlung')
+      ?.get('zaehlung')
       .query(...tableFilter({ table: 'zaehlung' }))
       .observeWithColumns(['datum', 'prognose'])
     const lieferungsObservable = db
-      .get('lieferung')
+      ?.get('lieferung')
       .query(...tableFilter({ table: 'lieferung' }))
       .observeWithColumns([
         'datum',
@@ -145,15 +145,15 @@ export const Tree = () => {
     //   .query(...tableFilter({ table: 'sammel_lieferung' }))
     //   .observeWithColumns(['datum', 'anzahl_pflanzen'])
     const eventsObservable = db
-      .get('event')
+      ?.get('event')
       .query(...tableFilter({ table: 'event' }))
       .observeWithColumns(['datum', 'beschreibung'])
     const personsObservable = db
-      .get('person')
+      ?.get('person')
       .query(...tableFilter({ table: 'person' }))
       .observeWithColumns(['vorname', 'name'])
     const kulturOptionsObservable = db
-      .get('kultur_option')
+      ?.get('kultur_option')
       .query(notDeletedQuery)
       .observeWithColumns(['tk'])
     const combinedObservables = combineLatest([

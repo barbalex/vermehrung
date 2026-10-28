@@ -1,4 +1,4 @@
-export const buildGartenFolder = ({ count }) => [
+export const buildGartenFolder = ({ count }: { count: number }) => [
   {
     nodeType: 'folder',
     menuTitle: 'Gärten',

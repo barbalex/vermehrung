@@ -1,3 +1,5 @@
+import type { TreeNode } from './nodes/index.ts'
+
 import tableFromTitleHash from '../../utils/tableFromTitleHash.json'
 
 import {
@@ -8,7 +10,7 @@ import {
   removeOpenNodeWithChildren,
 } from '../../store/index.ts'
 
-export const deleteDataset = async ({ node }) => {
+export const deleteDataset = async ({ node }: { node: TreeNode }) => {
   const db = store.get(dbAtom)
   const activeNodeArray = store.get(activeNodeArrayAtom)
 

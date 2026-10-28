@@ -1,4 +1,4 @@
-export const buildPersonFolder = ({ count }) => [
+export const buildPersonFolder = ({ count }: { count: number }) => [
   {
     nodeType: 'folder',
     menuTitle: 'Personen',

@@ -1,4 +1,4 @@
-export const buildHerkunftFolder = ({ count }) => [
+export const buildHerkunftFolder = ({ count }: { count: number }) => [
   {
     nodeType: 'folder',
     menuTitle: 'Herkünfte',

@@ -20,7 +20,9 @@ export const TreeSettings = () => {
   const user = useAtomValue(userAtom)
   const db = useAtomValue(dbAtom)
 
-  const [dataState, setDataState] = useState({
+  const [dataState, setDataState] = useState<{
+    userPersonOption: import('../../dbModel.ts').PersonOption | undefined
+  }>({
     userPersonOption: undefined,
   })
   useEffect(() => {
@@ -34,12 +36,15 @@ export const TreeSettings = () => {
             'tree_zaehlung',
             'tree_lieferung',
           ])
-      : $of({})
-    const subscription = userPersonOptionsObservable?.subscribe(
-      async (userPersonOptions) =>
-        setDataState({
-          userPersonOption: userPersonOptions?.[0],
-        }),
+      : $of<import('../../dbModel.ts').PersonOption[]>([])
+    const subscription = (
+      userPersonOptionsObservable as unknown as import('rxjs').Observable<
+        import('../../dbModel.ts').PersonOption[]
+      >
+    )?.subscribe(async (userPersonOptions) =>
+      setDataState({
+        userPersonOption: userPersonOptions?.[0],
+      }),
     )
 
     return () => subscription?.unsubscribe?.()
@@ -52,7 +57,11 @@ export const TreeSettings = () => {
     tree_lieferung,
   } = userPersonOption ?? {}
 
-  const saveToDb = (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
+  const saveToDb = (event: {
+    target: { name?: string; value: unknown }
+    preventDefault?: () => void
+    currentTarget?: HTMLElement
+  }) => {
     const field = event.target.name
     const value = event.target.value === 'false'
     userPersonOption?.edit({ field, value })
@@ -68,7 +77,8 @@ export const TreeSettings = () => {
 
   const [anchorEl, setAnchorEl] = useState<HTMLElement | undefined | null>(null)
   const onClose = () => setAnchorEl(null)
-  const onClickConfig = (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => setAnchorEl(event.currentTarget)
+  const onClickConfig = (event: { currentTarget: HTMLElement }) =>
+    setAnchorEl(event.currentTarget)
 
   return (
     <ErrorBoundary>
@@ -108,7 +118,7 @@ export const TreeSettings = () => {
               control={
                 <Checkbox
                   color="primary"
-                  checked={tree_kultur}
+                  checked={tree_kultur ?? undefined}
                   onClick={saveToDb}
                   name="tree_kultur"
                 />
@@ -123,7 +133,7 @@ export const TreeSettings = () => {
               control={
                 <Checkbox
                   color="primary"
-                  checked={tree_teilkultur}
+                  checked={tree_teilkultur ?? undefined}
                   onClick={saveToDb}
                   name="tree_teilkultur"
                 />
@@ -138,7 +148,7 @@ export const TreeSettings = () => {
               control={
                 <Checkbox
                   color="primary"
-                  checked={tree_zaehlung}
+                  checked={tree_zaehlung ?? undefined}
                   onClick={saveToDb}
                   name="tree_zaehlung"
                 />
@@ -153,7 +163,7 @@ export const TreeSettings = () => {
               control={
                 <Checkbox
                   color="primary"
-                  checked={tree_lieferung}
+                  checked={tree_lieferung ?? undefined}
                   onClick={saveToDb}
                   name="tree_lieferung"
                 />

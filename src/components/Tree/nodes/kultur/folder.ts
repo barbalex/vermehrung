@@ -1,4 +1,4 @@
-export const buildKulturFolder = ({ count }) => [
+export const buildKulturFolder = ({ count }: { count: number }) => [
   {
     nodeType: 'folder',
     menuTitle: 'Kulturen',
