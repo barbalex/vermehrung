@@ -13,5 +13,5 @@ export const logout = async () => {
   resetSyncState()
   if (db) await db.write(async () => db.unsafeResetDatabase())
   window.localStorage.removeItem('token')
-  window.location.reload(true)
+  window.location.reload()
 }

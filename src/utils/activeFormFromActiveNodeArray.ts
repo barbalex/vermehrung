@@ -1,4 +1,4 @@
-export const activeFormFromActiveNodeArray = (url) => {
+export const activeFormFromActiveNodeArray = (url: string[]) => {
   //console.log('acitveFormFromActiveNodeArray, url:', url.slice())
   if (url.length === 0) {
     return 'root'

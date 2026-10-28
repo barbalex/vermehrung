@@ -7,8 +7,13 @@ import {
   setOnline,
 } from '../store/index.ts'
 import { constants } from './constants.ts'
+import type { Person } from '../dbModel.ts'
 
-export const signup = async ({ person }) => {
+export const signup = async ({
+  person,
+}: {
+  person: Person | null
+}) => {
   const online = store.get(onlineAtom)
 
   // fetch email of this person
@@ -33,7 +38,9 @@ export const signup = async ({ person }) => {
       setOnline(false)
     }
     return addNotification({
-      message: error?.response?.data ?? 'Oh je. Da ging was schief',
+      message:
+        (error as { response?: { data?: string } })?.response?.data ??
+        'Oh je. Da ging was schief',
     })
   }
   if (!online) {
@@ -45,7 +52,7 @@ export const signup = async ({ person }) => {
   })
   if (!person) {
     return addNotification({
-      message: `Keine Person mit id ${person.id} gefunden`,
+      message: 'Keine Person gefunden',
     })
   }
   person.edit({ field: 'account_id', value: res.data })

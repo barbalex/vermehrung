@@ -1,4 +1,4 @@
-import { observe } from 'jotai-effect'
+import { observe, type Effect } from 'jotai-effect'
 
 import {
   store,
@@ -17,16 +17,14 @@ import {
 import { getAuthToken } from '../utils/getAuthToken.ts'
 import { executeQueuedQuery } from './executeQueuedQuery.ts'
 import { requestSyncSoon } from '../utils/syncPoller.ts'
+import type { TableName } from '../store/index.ts'
 
 // Guard: if a network send is already in-flight, skip this trigger.
 // Without this, rapid queue changes cause the same oldest query
 // to be sent multiple times before it is removed.
 let isProcessing = false
 
-// returns unobserve function
-// https://jotai.org/docs/extensions/effect
-export const observeQueuedQueries = () =>
-  observe(async (get) => {
+const drainQueue = async (get: Parameters<Effect>[0]): Promise<void> => {
     if (isProcessing) return
 
     // always tracked so the periodic tick re-runs this effect
@@ -42,7 +40,13 @@ export const observeQueuedQueries = () =>
     if (!query) return
 
     const { revertTable, revertField, revertId, revertValue, revertValues } =
-      query
+      query as unknown as {
+        revertTable: TableName
+        revertField: string
+        revertId: string
+        revertValue: unknown
+        revertValues?: Record<string, unknown>
+      }
 
     isProcessing = true
     let response
@@ -64,7 +68,8 @@ export const observeQueuedQueries = () =>
       if (status === 401) {
         // stale api token: fetch a fresh one, the query stays queued
         console.log('getting auth token due to jwt error')
-        return getAuthToken()
+        await getAuthToken()
+        return
       } else if (code === '23505' && lcMessage.includes('_rev_id__rev_key')) {
         // In case a conflict was caused by two EXACT SAME changes,
         // this will bounce because of the same rev. We want to ignore this:
@@ -99,7 +104,7 @@ export const observeQueuedQueries = () =>
           path: `${revertTable}.${revertField}`,
           value: message,
         })
-        return addNotification({
+        addNotification({
           title:
             'Eine Operation kann nicht in die Datenbank geschrieben werden',
           message,
@@ -108,6 +113,7 @@ export const observeQueuedQueries = () =>
           actionName: 'removeQueuedQueryById',
           actionArgument: query.id,
         })
+        return
       }
       // revert change: aggregated flushes carry the full pre-flush
       // state, single edits (insertRev deletes) the one field
@@ -131,4 +137,14 @@ export const observeQueuedQueries = () =>
     // the rev triggers recomputed winning revisions and conflicts
     // server-side - fetch them promptly
     requestSyncSoon()
-  }, store)
+  }
+
+// returns unobserve function
+// https://jotai.org/docs/extensions/effect
+export const observeQueuedQueries = () =>
+  observe(
+    ((get) => {
+      void drainQueue(get)
+    }) satisfies Effect,
+    store,
+  )

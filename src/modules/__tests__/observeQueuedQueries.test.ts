@@ -22,10 +22,10 @@ import { observeQueuedQueries } from '../observeQueuedQueries.ts'
 // minimal WatermelonDB stand-in: finds no rows, so reverts are no-ops
 const dbMock = {
   get: () => ({ find: () => Promise.resolve(null) }),
-  write: async (fn) => fn(),
+  write: async (fn: () => unknown) => fn(),
 }
 
-const buildQuery = (overrides = {}) => ({
+const buildQuery = (overrides: Record<string, unknown> = {}) => ({
   name: 'mutateInsert_art_rev_one',
   variables: JSON.stringify({
     object: { art_id: '1', _rev: '1-abc' },
@@ -39,9 +39,9 @@ const buildQuery = (overrides = {}) => ({
 })
 
 describe('observeQueuedQueries', () => {
-  let unobserve
-  let postMock
-  let nextResponse
+  let unobserve: () => void
+  let postMock: ReturnType<typeof vi.fn>
+  let nextResponse: unknown
 
   beforeEach(() => {
     vi.clearAllMocks()
@@ -50,7 +50,10 @@ describe('observeQueuedQueries', () => {
     store.set(notificationsAtom, [])
     store.set(errorsAtom, { art: {} })
     store.set(shortTermOnlineAtom, true)
-    store.set(dbAtom, dbMock)
+    store.set(
+      dbAtom,
+      dbMock as unknown as import('@nozbe/watermelondb').Database,
+    )
 
     // executeQueuedQuery awaits apiClient.post and normalizes thrown
     // errors into { error: { message, status, code, isNetwork } }
@@ -60,7 +63,10 @@ describe('observeQueuedQueries', () => {
       if (typeof nextResponse === 'function') return nextResponse()
       throw nextResponse
     })
-    store.set(apiClientAtom, { post: postMock })
+    store.set(
+      apiClientAtom,
+      { post: postMock } as unknown as import('../../utils/apiTypes.ts').ApiClient,
+    )
 
     unobserve?.()
     unobserve = observeQueuedQueries()
@@ -98,7 +104,7 @@ describe('observeQueuedQueries', () => {
 
   it('keeps the query and refreshes the auth token on 401', async () => {
     const jwtError = new Error('Could not verify JWT: JWT expired')
-    jwtError.status = 401
+    ;(jwtError as import('../../utils/apiTypes.ts').ApiError).status = 401
     nextResponse = jwtError
     addQueuedQuery(buildQuery({ id: 'a', time: 100 }))
 
@@ -112,7 +118,7 @@ describe('observeQueuedQueries', () => {
     const uniqueRevError = new Error(
       'duplicate key value violates unique constraint "_rev_id__rev_key"',
     )
-    uniqueRevError.code = '23505'
+    ;(uniqueRevError as import('../../utils/apiTypes.ts').ApiError).code = '23505'
     nextResponse = uniqueRevError
     addQueuedQuery(buildQuery({ id: 'a', time: 100 }))
 
@@ -125,7 +131,7 @@ describe('observeQueuedQueries', () => {
     const cardinalityError = new Error(
       'more than one row returned by a subquery used as an expression',
     )
-    cardinalityError.code = '21000'
+    ;(cardinalityError as import('../../utils/apiTypes.ts').ApiError).code = '21000'
     nextResponse = cardinalityError
     addQueuedQuery(buildQuery({ id: 'a', time: 100 }))
 
@@ -138,7 +144,7 @@ describe('observeQueuedQueries', () => {
     const uniqueError = new Error(
       'duplicate key value violates unique constraint "art_pkey"',
     )
-    uniqueError.code = '23505'
+    ;(uniqueError as import('../../utils/apiTypes.ts').ApiError).code = '23505'
     nextResponse = uniqueError
     addQueuedQuery(buildQuery({ id: 'a', time: 100 }))
 
@@ -165,7 +171,7 @@ describe('observeQueuedQueries', () => {
 
   it('defers unknown errors to the end of the queue and notifies', async () => {
     const serverError = new Error('Unexpected server error')
-    serverError.status = 500
+    ;(serverError as import('../../utils/apiTypes.ts').ApiError).status = 500
     nextResponse = serverError
     addQueuedQuery(buildQuery({ id: 'a', time: 100 }))
 
@@ -182,7 +188,7 @@ describe('observeQueuedQueries', () => {
   })
 
   it('does not double-send while a query is in-flight', async () => {
-    let resolveFirst
+    let resolveFirst: ((value?: unknown) => void) | undefined
     nextResponse = () =>
       new Promise((resolve) => {
         resolveFirst = resolve
@@ -198,7 +204,7 @@ describe('observeQueuedQueries', () => {
     await new Promise((resolve) => setTimeout(resolve, 20))
     expect(postMock).toHaveBeenCalledTimes(1)
 
-    resolveFirst()
+    resolveFirst?.()
     await vi.waitFor(() => {
       expect(store.get(queuedQueriesAtom)).toHaveLength(0)
     })

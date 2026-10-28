@@ -1,2 +1,2 @@
-export const toPgArray = (array) =>
+export const toPgArray = (array: string[]) =>
   array.length ? `{${array.join(`,`)}}` : null

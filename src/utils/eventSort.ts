@@ -1,11 +1,16 @@
-export const eventSort = (a, b) => {
-  const datumA = a?.datum ? new Date(a.datum) : new Date('1000-01-01')
-  const datumB = b?.datum ? new Date(b.datum) : new Date('1000-01-01')
+export const eventSort = <T extends object>(
+  a: T | null | undefined,
+  b: T | null | undefined,
+) => {
+  const ra = a as Record<string, unknown> | undefined
+  const rb = b as Record<string, unknown> | undefined
+  const datumA = ra?.datum ? new Date(ra.datum as string) : new Date('1000-01-01')
+  const datumB = rb?.datum ? new Date(rb.datum as string) : new Date('1000-01-01')
   if (datumA > datumB) return -1
   if (datumA < datumB) return 1
 
-  const beschreibungA = a?.beschreibung?.toString()?.toLowerCase() ?? ''
-  const beschreibungB = b?.beschreibung?.toString()?.toLowerCase() ?? ''
+  const beschreibungA = String(ra?.beschreibung ?? '').toLowerCase()
+  const beschreibungB = String(rb?.beschreibung ?? '').toLowerCase()
   if (beschreibungA < beschreibungB) return -1
   if (beschreibungA > beschreibungB) return 1
 

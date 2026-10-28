@@ -42,6 +42,10 @@ export interface Notification {
   id: string
   message: string
   title?: string
+  info?: string
+  actionLabel?: string
+  actionName?: string
+  actionArgument?: string
   time: number
   /** ms until auto-removal */
   duration: number

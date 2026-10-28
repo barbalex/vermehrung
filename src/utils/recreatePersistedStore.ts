@@ -28,7 +28,7 @@ const firebaseConfig = {
 }
 
 export const recreatePersistedStore = async () => {
-  window.store = store
+  ;(window as unknown as Record<string, unknown>).store = store
   // hydration runs in parallel to app boot: persisted state appears
   // shortly after boot, a slow/blocked storage must not block booting
   hydratePersistedAtoms()
@@ -46,7 +46,7 @@ export const recreatePersistedStore = async () => {
     // BEWARE: this is called at least twice
     // https://stackoverflow.com/questions/37673616/firebase-android-onauthstatechanged-called-twice
     if (store.get(userAtom)?.uid) return
-    setUser(user)
+    setUser(user as unknown as import('../store/index.ts').User)
     // set last activeNodeArray
     // only if top domain was visited
     // TODO:

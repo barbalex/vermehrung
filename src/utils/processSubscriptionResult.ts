@@ -89,7 +89,10 @@ export const processSubscriptionResult = async ({
           await db.batch([
             ...objectsToUpdate.map((object) => {
               const thisObjectsData =
-                dataToCheck.find((d) => d.id === object.id) ?? {}
+                (dataToCheck.find((d) => d.id === object.id) ?? {}) as Record<
+                  string,
+                  unknown
+                >
 
               return object.prepareUpdate((ob: Model) => {
                 Object.keys(thisObjectsData)

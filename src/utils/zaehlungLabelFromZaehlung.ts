@@ -8,7 +8,7 @@ export const zaehlungLabelFromZaehlung = ({
   teilzaehlungs,
 }: {
   zaehlung: ZaehlungRow
-  teilzaehlungs: TeilzaehlungRow[]
+  teilzaehlungs?: TeilzaehlungRow[]
 }) => {
   const datumLabel =
     zaehlung.datum ?

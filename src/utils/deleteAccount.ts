@@ -9,8 +9,13 @@ import {
   setShortTermOnline,
 } from '../store/index.ts'
 import { constants } from './constants.ts'
+import type { Person } from '../dbModel.ts'
 
-export const deleteAccount = async ({ person }) => {
+export const deleteAccount = async ({
+  person,
+}: {
+  person: Person | null
+}) => {
   const online = store.get(onlineAtom)
   const shortTermOnline = store.get(shortTermOnlineAtom)
   // delete firebase user
@@ -26,7 +31,10 @@ export const deleteAccount = async ({ person }) => {
         setShortTermOnline(false)
       }
       return addNotification({
-        message: error.response.data,
+        message: String(
+          (error as { response?: { data?: unknown } })?.response?.data ??
+            'Fehler',
+        ),
       })
     }
     if (!online) {
@@ -38,7 +46,7 @@ export const deleteAccount = async ({ person }) => {
   }
   if (!person) {
     return addNotification({
-      message: `Keine Person mit id ${person.id} gefunden`,
+      message: 'Keine Person gefunden',
     })
   }
   // remove users account_id

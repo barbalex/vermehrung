@@ -1,10 +1,12 @@
-const stripTypename = (object) => {
+const stripTypename = (object: Record<string, unknown>) => {
    
   const { __typename, ...rest } = object
   return rest
 }
 
-export const parseComplexFieldsForWm = (object) =>
+export const parseComplexFieldsForWm = (
+  object: Record<string, unknown>,
+) =>
   stripTypename({
     ...object,
     ...(object.geom_point ?

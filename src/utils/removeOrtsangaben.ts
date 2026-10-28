@@ -1,9 +1,11 @@
 import { Q } from '@nozbe/watermelondb'
 
-export const removeOrtsangaben = async ({ db }) => {
+import type { Database, Model } from '@nozbe/watermelondb'
+
+export const removeOrtsangaben = async ({ db }: { db: Database }) => {
   // need to remove some data for gaertner in case they had synced them earlier
   // TODO: remove: lokalname, geom_point, lv95_x, lv95_y, wgs84_lat, wgs84_long
-  let herkunftsWithOrtsangaben = []
+  let herkunftsWithOrtsangaben: Model[] = []
   try {
     herkunftsWithOrtsangaben = await db
       .get('herkunft')
@@ -27,13 +29,14 @@ export const removeOrtsangaben = async ({ db }) => {
     await db.write(async () => {
       await db.batch(
         ...herkunftsWithOrtsangaben.map((object) =>
-          object.prepareUpdate((ob) => {
-            ob.lokalname = null
-            ob.geom_point = null
-            ob.lv95_x = null
-            ob.lv95_y = null
-            ob.wgs84_lat = null
-            ob.wgs84_long = null
+          object.prepareUpdate((ob: Model) => {
+            const record = ob as unknown as Record<string, unknown>
+            record.lokalname = null
+            record.geom_point = null
+            record.lv95_x = null
+            record.lv95_y = null
+            record.wgs84_lat = null
+            record.wgs84_long = null
           }),
         ),
       )

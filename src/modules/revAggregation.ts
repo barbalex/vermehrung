@@ -8,6 +8,7 @@ import {
   addQueuedQuery,
   activeNodeArrayAtom,
 } from '../store/index.ts'
+import type { Model } from '@nozbe/watermelondb'
 import { toPgArray } from '../utils/toPgArray.ts'
 import { revTableFields } from './revTableFields.ts'
 
@@ -29,9 +30,15 @@ const STORAGE_KEY = 'vermehrung:unflushed-revs'
 // how long after the last field change a row is flushed
 const FLUSH_DELAY_MS = 5000
 
-let registry = {}
-const timers = {}
-const flushing = new Set()
+interface RegistryEntry {
+  lastField?: string
+  original: Record<string, unknown>
+}
+type Registry = Record<string, Record<string, RegistryEntry>>
+
+let registry: Registry = {}
+const timers: Record<string, ReturnType<typeof setTimeout>> = {}
+const flushing = new Set<string>()
 
 const persist = () => {
   try {
@@ -43,24 +50,32 @@ const persist = () => {
 }
 
 // exposed for tests
-export const getUnflushedRevs = () => JSON.parse(JSON.stringify(registry))
+export const getUnflushedRevs = (): Registry =>
+  JSON.parse(JSON.stringify(registry)) as Registry
 
 // rows with unflushed local edits: server state must not overwrite
 // them - the edits reach the server with the next flush and the sync
 // after it reconciles the row (conflict semantics apply, as with any
 // parallel edit)
-export const isUnflushedRev = (table, id) => Boolean(registry[table]?.[id])
+export const isUnflushedRev = (table: string, id: string) =>
+  Boolean(registry[table]?.[id])
 
-export const registerDirtyRev = (table, id, lastField, row) => {
+export const registerDirtyRev = (
+  table: string,
+  id: string,
+  lastField: string | undefined,
+  row: Model | undefined,
+) => {
   const existing = registry[table]?.[id]
   if (!existing) {
     // snapshot the pre-session state: it is the revert target if the
     // flushed revision is rejected by the server
-    const original = {}
+    const original: Record<string, unknown> = {}
     if (row) {
+      const rowRecord = row as unknown as Record<string, unknown>
       for (const field of revTableFields[table].fields) {
         if (field !== revTableFields[table].idField)
-          original[field] = row[field]
+          original[field] = rowRecord[field]
       }
     }
     registry[table] = {
@@ -78,7 +93,7 @@ export const registerDirtyRev = (table, id, lastField, row) => {
   }, FLUSH_DELAY_MS)
 }
 
-const clearDirty = (table, id) => {
+const clearDirty = (table: string, id: string) => {
   clearTimeout(timers[`${table}/${id}`])
   delete timers[`${table}/${id}`]
   if (registry[table]) {
@@ -90,7 +105,7 @@ const clearDirty = (table, id) => {
 
 // builds ONE revision from the row's current state and queues it -
 // the aggregated equivalent of the former per-field edit writer
-export const flushRow = async (table, id) => {
+export const flushRow = async (table: string, id: string) => {
   const config = revTableFields[table]
   if (!config) return
   const key = `${table}/${id}`
@@ -98,6 +113,7 @@ export const flushRow = async (table, id) => {
   flushing.add(key)
   try {
     const db = store.get(dbAtom)
+    if (!db) return
     let row
     try {
       row = await db.get(table).find(id)
@@ -108,14 +124,15 @@ export const flushRow = async (table, id) => {
     }
 
     const { idField, fields } = config
-    const newObject = { [idField]: row.id }
+    const rowRecord = row as unknown as Record<string, unknown>
+    const newObject: Record<string, unknown> = { [idField]: row.id }
     for (const field of fields) {
       if (field === idField) continue
-      newObject[field] = row[field]
+      newObject[field] = rowRecord[field]
     }
-    newObject._parent_rev = row._rev
-    newObject._depth = row._depth + 1
-    newObject._deleted = row._deleted
+    newObject._parent_rev = rowRecord._rev
+    newObject._deleted = rowRecord._deleted
+    newObject._depth = (rowRecord._depth as number) + 1
 
     const rev = `${newObject._depth}-${md5(JSON.stringify(newObject))}`
     // DO NOT include id in rev - or revs with same data will conflict
@@ -125,8 +142,9 @@ export const flushRow = async (table, id) => {
     newObject.changed = new Date().toISOString()
     newObject.changed_by = store.get(userAtom)?.email
     // convert to string as the api does not support arrays here
-    newObject._revisions = row._revisions
-      ? toPgArray([rev, ...row._revisions])
+    const existingRevisions = rowRecord._revisions as string[] | null
+    newObject._revisions = existingRevisions
+      ? toPgArray([rev, ...existingRevisions])
       : toPgArray([rev])
 
     // on a server rejection the row is reverted to its pre-session
@@ -150,15 +168,18 @@ export const flushRow = async (table, id) => {
     })
 
     // optimistically update the row's chain
-    const newRevisions = row._revisions ? [rev, ...row._revisions] : [rev]
+    const newRevisions = existingRevisions
+      ? [rev, ...existingRevisions]
+      : [rev]
     await db.write(async () => {
       await row.update((r) => {
-        r._depth = newObject._depth
-        r._rev = newObject._rev
-        r._parent_rev = newObject._parent_rev
-        r.changed = newObject.changed
-        r.changed_by = newObject.changed_by
-        r._revisions = newRevisions
+        const record = r as unknown as Record<string, unknown>
+        record._depth = newObject._depth
+        record._rev = newObject._rev
+        record._parent_rev = newObject._parent_rev
+        record.changed = newObject.changed
+        record.changed_by = newObject.changed_by
+        record._revisions = newRevisions
       })
     })
     clearDirty(table, id)
@@ -177,7 +198,7 @@ export const flushAllDirtyRevs = async () => {
 }
 
 let initialized = false
-let unsubscribeNavigation = null
+let unsubscribeNavigation: (() => void) | null = null
 
 // reset the module state between tests
 export const __resetRevAggregationForTests = () => {
@@ -197,7 +218,9 @@ export const initRevAggregation = () => {
   if (initialized) return
   initialized = true
   try {
-    registry = JSON.parse(window.localStorage.getItem(STORAGE_KEY) ?? '{}')
+    registry = JSON.parse(
+      window.localStorage.getItem(STORAGE_KEY) ?? '{}',
+    ) as Registry
   } catch {
     registry = {}
   }

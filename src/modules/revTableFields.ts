@@ -2,7 +2,10 @@
 // edit writers in dbModel.ts. The rev hash (md5) is computed over
 // exactly these fields, in this order - order must stay stable.
 // idField is the fk column of the rev table referencing the base row.
-export const revTableFields = {
+export const revTableFields: Record<
+  string,
+  { idField: string; fields: string[] }
+> = {
   herkunft: {
     idField: 'herkunft_id',
     fields: [

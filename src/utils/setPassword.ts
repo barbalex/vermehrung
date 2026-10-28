@@ -13,7 +13,8 @@ export const setPassword = async ({
   const email = person?.email
   try {
     if (!firebaseAuth) return
-    await sendPasswordResetEmail(firebaseAuth, email ?? undefined, {
+    if (!email) return
+    await sendPasswordResetEmail(firebaseAuth, email, {
       url: `${constants?.getAppUri()}/Vermehrung`,
       handleCodeInApp: true,
     })

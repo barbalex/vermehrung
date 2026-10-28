@@ -2,8 +2,9 @@ import { sortBy } from 'es-toolkit'
 import { first as first$ } from 'rxjs/operators'
 
 import { gartenLabelFromGarten } from './gartenLabelFromGarten.ts'
+import type { Kultur } from '../dbModel.ts'
 
-export const kultursSortedFromKulturs = async (kulturs) => {
+export const kultursSortedFromKulturs = async (kulturs: Kultur[]) => {
   const kulturSorters = await Promise.all(
     kulturs.map(async (kultur) => {
       let art
@@ -35,18 +36,18 @@ export const kultursSortedFromKulturs = async (kulturs) => {
         kein: 'kein Garten',
       })
       const sort = [
-        artLabel?.toString()?.toLowerCase(),
-        herkunftNr?.toString()?.toLowerCase(),
-        herkunftGemeinde?.toString()?.toLowerCase(),
-        herkunftLokalname?.toString()?.toLowerCase(),
-        gartenLabel?.toString()?.toLowerCase(),
+        String(artLabel ?? '').toLowerCase(),
+        String(herkunftNr ?? '').toLowerCase(),
+        String(herkunftGemeinde ?? '').toLowerCase(),
+        String(herkunftLokalname ?? '').toLowerCase(),
+        String(gartenLabel ?? '').toLowerCase(),
       ]
 
       return { id: kultur.id, sort }
     }),
   )
   const kultursSorted = sortBy(kulturs, [
-    (kultur) => kulturSorters.find((s) => s.id === kultur.id).sort,
+    (kultur) => kulturSorters.find((s) => s.id === kultur.id)?.sort,
   ])
   return kultursSorted
 }

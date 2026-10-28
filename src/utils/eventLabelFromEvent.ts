@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 
-export const eventLabelFromEvent = ({ event }) => {
+export const eventLabelFromEvent = ({ event }: { event: { id?: string; datum?: string | null; geplant?: boolean | null; beschreibung?: string | null } | null }) => {
   if (!event?.id) return 'kein Event'
   const datumLabel =
     event.datum ?

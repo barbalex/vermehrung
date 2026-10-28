@@ -172,14 +172,17 @@ const idFields = Object.fromEntries(
 )
 
 const createDbMock = () => {
-  const batched = []
+  const batched: { table: string; raw: Record<string, unknown> }[] = []
   return {
     batched,
-    write: async (fn) => fn(),
-    get: (table) => ({
-      prepareCreateFromDirtyRaw: (raw) => ({ table, raw }),
+    write: async (fn: () => unknown) => fn(),
+    get: (table: string) => ({
+      prepareCreateFromDirtyRaw: (raw: Record<string, unknown>) => ({
+        table,
+        raw,
+      }),
     }),
-    batch: async (creates) => {
+    batch: async (creates: { table: string; raw: Record<string, unknown> }[]) => {
       batched.push(...creates)
     },
   }
@@ -187,11 +190,11 @@ const createDbMock = () => {
 
 const flushTimers = () => new Promise((resolve) => setTimeout(resolve, 0))
 
-let dbMock
+let dbMock: ReturnType<typeof createDbMock>
 
 beforeEach(() => {
   dbMock = createDbMock()
-  store.set(dbAtom, dbMock)
+  store.set(dbAtom, dbMock as unknown as import('@nozbe/watermelondb').Database)
   store.set(userAtom, { uid: 'test-uid', email: 'test@example.com' })
   store.set(queuedQueriesAtom, [])
   store.set(queueSizeAtom, 0)
@@ -215,7 +218,9 @@ describe('insertRev', () => {
       // matches the former MST actions: sammlung never set isInsert
       expect(query.isInsert).toBe(table === 'sammlung' ? false : true)
 
-      const { object, on_conflict } = JSON.parse(query.variables)
+      const { object, on_conflict } = JSON.parse(
+        query.variables as string,
+      ) as { object: Record<string, unknown>; on_conflict: Record<string, unknown> }
       expect(on_conflict.constraint).toBe(`${table}_rev_pkey`)
       expect(on_conflict.update_columns).toEqual(['id'])
 
@@ -230,7 +235,7 @@ describe('insertRev', () => {
       }
       expect(Object.keys(object)).toEqual([
         idField,
-        ...(fixedDefaults[table] ?? []),
+        ...(fixedDefaults[table as 'garten' | 'kultur' | 'person'] ?? []),
         'changed',
         'changed_by',
         '_depth',
@@ -252,7 +257,9 @@ describe('insertRev', () => {
       // the local store object: id moved from <table>_id, real revisions array
       // kultur and person additionally create their option row
       const extraRows = { kultur: 1, person: 1 }
-      expect(dbMock.batched).toHaveLength(1 + (extraRows[table] ?? 0))
+      expect(dbMock.batched).toHaveLength(
+      1 + (extraRows[table as 'kultur' | 'person'] ?? 0),
+    )
       const { table: createdTable, raw } = dbMock.batched[0]
       expect(createdTable).toBe(table)
       expect(raw.id).toBe(query.revertId)
@@ -294,7 +301,11 @@ describe('insertRev', () => {
 
   it('passed values override defaults but keep their field position', async () => {
     await insertRev('garten', { values: { name: 'Testgarten' } })
-    const object = JSON.parse(store.get(queuedQueriesAtom)[0].variables).object
+    const object = (
+      JSON.parse(store.get(queuedQueriesAtom)[0].variables as string) as {
+        object: Record<string, unknown>
+      }
+    ).object
     expect(object.name).toBe('Testgarten')
     // name keeps its declared position (second field)
     expect(Object.keys(object)[1]).toBe('name')
@@ -311,7 +322,11 @@ describe('insertRev', () => {
         apflora_ap: true,
       },
     })
-    const object = JSON.parse(store.get(queuedQueriesAtom)[0].variables).object
+    const object = (
+      JSON.parse(store.get(queuedQueriesAtom)[0].variables as string) as {
+        object: Record<string, unknown>
+      }
+    ).object
     expect(Object.keys(object)).toEqual([
       'art_id',
       'ae_id',

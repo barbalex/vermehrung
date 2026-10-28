@@ -7,7 +7,7 @@ export const reloadData = async () => {
 
   await localForage.clear()
   resetSyncState()
-    await db.write(async () => db.unsafeResetDatabase())
+  if (db) await db.write(async () => db.unsafeResetDatabase())
   window.localStorage.removeItem('token')
-  window.location.reload(true)
+  window.location.reload()
 }

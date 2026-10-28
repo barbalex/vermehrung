@@ -1,7 +1,8 @@
 import { first as first$ } from 'rxjs/operators'
 import { sortBy } from 'es-toolkit'
+import type { Teilzaehlung } from '../dbModel.ts'
 
-export const teilzaehlungsSortByZaehlungTk = async (tzs) => {
+export const teilzaehlungsSortByZaehlungTk = async (tzs: Teilzaehlung[]) => {
   const tzsIdLabel = await Promise.all(
     tzs.map(async (tz) => {
       let zaehlung
@@ -20,5 +21,5 @@ export const teilzaehlungsSortByZaehlungTk = async (tzs) => {
       }
     }),
   )
-  return sortBy(tzs, [(tz) => tzsIdLabel.find((o) => o.id === tz.id).sort])
+  return sortBy(tzs, [(tz) => tzsIdLabel.find((o) => o.id === tz.id)?.sort])
 }

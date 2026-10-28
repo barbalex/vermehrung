@@ -3,7 +3,7 @@
 // - the rev of the revision to show, if the url contains one
 // 'histories' can not be part of a regular url:
 // it is no table name and ids are uuids
-export const splitHistoriesFromActiveNodeArray = (url) => {
+export const splitHistoriesFromActiveNodeArray = (url: string[]) => {
   const indexOfHistories = url.indexOf('histories')
   if (indexOfHistories === -1) {
     return { activeNodeArray: url, historyRev: undefined }

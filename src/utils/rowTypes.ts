@@ -7,30 +7,31 @@ export type PersonRow = {
   name?: string | null
   ort?: string | null
   email?: string | null
-} | null
+} | null | undefined
 
-export type AeArtRow = { name?: string | null } | null
+export type AeArtRow = { name?: string | null } | null | undefined
 
 export type HerkunftRow = {
   id?: string | null
   nr?: string | null
-} | null
+} | null | undefined
 
 export type GartenRow = {
+  id?: string | null
   name?: string | null
   person_id?: string | null
-} | null
+} | null | undefined
 
 export type KulturRow = {
   garten_id?: string | null
   herkunft_id?: string | null
   zwischenlager?: boolean | null
-} | null
+} | null | undefined
 
 export type SammlungRow = {
   datum?: string | null
   geplant?: boolean | null
-} | null
+} | null | undefined
 
 export interface ZaehlungRow {
   id?: string
@@ -44,3 +45,6 @@ export interface TeilzaehlungRow {
   anzahl_auspflanzbereit?: number | null
   anzahl_mutterpflanzen?: number | null
 }
+
+/** rows compared by label fields in the sort helpers */
+export type SortRow = Record<string, unknown> | null | undefined

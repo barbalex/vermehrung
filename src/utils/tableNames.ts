@@ -29,4 +29,5 @@ const dictionary = {
   zaehlung: 'Zählungen',
 }
 
-export const tableNames = (table) => dictionary[table] ?? table
+export const tableNames = (table: string) =>
+  dictionary[table as keyof typeof dictionary] ?? table

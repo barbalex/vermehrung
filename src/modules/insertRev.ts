@@ -12,6 +12,15 @@ import {
   xxxIdInActiveNodeArrayAtoms as idAtoms,
 } from '../store/index.ts'
 
+interface InsertRevConfig {
+  idField: string
+  fields: (string | null | boolean)[][]
+  navigate?: boolean
+  isInsert?: boolean
+  extraCollections?: string[]
+  noNavigateArg?: string
+}
+
 /**
  * Creates a new revision for a new row in table <table>_rev,
  * queues the mutation for the server and optimistically
@@ -21,7 +30,7 @@ import {
  * Field order matters: the revision hash (md5) is computed from
  * the JSON of the object, so order must stay stable.
  */
-const configs = {
+const configs: Record<string, InsertRevConfig> = {
   art: {
     idField: 'art_id',
     fields: [['art_id'], ['ae_id'], ['set'], ['apflora_av'], ['apflora_ap']],
@@ -230,22 +239,29 @@ const configs = {
   },
 }
 
-export const insertRev = async (table, args = {}) => {
+export const insertRev = async (
+  table: string,
+  args: Record<string, unknown> = {},
+) => {
   const config = configs[table]
   if (!config) throw new Error(`insertRev: unknown table ${table}`)
 
   const { idField, fields, extraCollections = [], isInsert = true } = config
-  const valuesPassed = args?.values ?? {}
+  const valuesPassed =
+    (args?.values as Record<string, unknown> | undefined) ?? {}
   const email = store.get(userAtom)?.email
 
   const id = uuidv7()
   const _depth = 1
-  const newObject = {}
+  const newObject: Record<string, unknown> = {}
   for (const [field, idAtomKey, fixedValue] of fields) {
     if (idAtomKey) {
-      newObject[field] = store.get(idAtoms[idAtomKey])
+      newObject[field as string] = store.get(
+        idAtoms[idAtomKey as string],
+      )
     } else {
-      newObject[field] = field === idField ? id : (fixedValue ?? undefined)
+      newObject[field as string] =
+        field === idField ? id : (fixedValue ?? undefined)
     }
   }
   newObject.changed = new Date().toISOString()
@@ -283,6 +299,7 @@ export const insertRev = async (table, args = {}) => {
 
   // optimistically update store
   const db = store.get(dbAtom)
+  if (!db) return
   await db.write(async () => {
     const collection = db.get(table)
     // using batch because can create from raw
@@ -313,19 +330,19 @@ export const insertRev = async (table, args = {}) => {
   return id
 }
 
-export const insertArtRev = (args) => insertRev('art', args)
-export const insertAvRev = (args) => insertRev('av', args)
-export const insertBedarfRev = (args) => insertRev('bedarf', args)
-export const insertEventRev = (args) => insertRev('event', args)
-export const insertGartenRev = (args) => insertRev('garten', args)
-export const insertGvRev = (args) => insertRev('gv', args)
-export const insertHerkunftRev = (args) => insertRev('herkunft', args)
-export const insertKulturRev = (args) => insertRev('kultur', args)
-export const insertLieferungRev = (args) => insertRev('lieferung', args)
-export const insertPersonRev = (args) => insertRev('person', args)
-export const insertSammelLieferungRev = (args) =>
+export const insertArtRev = (args: Record<string, unknown>) => insertRev('art', args)
+export const insertAvRev = (args: Record<string, unknown>) => insertRev('av', args)
+export const insertBedarfRev = (args: Record<string, unknown>) => insertRev('bedarf', args)
+export const insertEventRev = (args: Record<string, unknown>) => insertRev('event', args)
+export const insertGartenRev = (args: Record<string, unknown>) => insertRev('garten', args)
+export const insertGvRev = (args: Record<string, unknown>) => insertRev('gv', args)
+export const insertHerkunftRev = (args: Record<string, unknown>) => insertRev('herkunft', args)
+export const insertKulturRev = (args: Record<string, unknown>) => insertRev('kultur', args)
+export const insertLieferungRev = (args: Record<string, unknown>) => insertRev('lieferung', args)
+export const insertPersonRev = (args: Record<string, unknown>) => insertRev('person', args)
+export const insertSammelLieferungRev = (args: Record<string, unknown>) =>
   insertRev('sammel_lieferung', args)
-export const insertSammlungRev = (args) => insertRev('sammlung', args)
-export const insertTeilkulturRev = (args) => insertRev('teilkultur', args)
-export const insertTeilzaehlungRev = (args) => insertRev('teilzaehlung', args)
-export const insertZaehlungRev = (args) => insertRev('zaehlung', args)
+export const insertSammlungRev = (args: Record<string, unknown>) => insertRev('sammlung', args)
+export const insertTeilkulturRev = (args: Record<string, unknown>) => insertRev('teilkultur', args)
+export const insertTeilzaehlungRev = (args: Record<string, unknown>) => insertRev('teilzaehlung', args)
+export const insertZaehlungRev = (args: Record<string, unknown>) => insertRev('zaehlung', args)

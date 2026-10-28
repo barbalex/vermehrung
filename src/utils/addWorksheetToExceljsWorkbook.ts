@@ -1,9 +1,15 @@
+import type { AddWorksheetOptions, Workbook } from 'exceljs'
+
 import { getDataArrayFromExportObjects } from './getDataArrayFromExportObjects.ts'
 
 export const addWorksheetToExceljsWorkbook = ({
   workbook,
   title,
   data: dataPassed,
+}: {
+  workbook: Workbook
+  title?: string
+  data: Record<string, unknown>[]
 }) => {
   let data = dataPassed
   if (data.length === 0) {
@@ -12,7 +18,8 @@ export const addWorksheetToExceljsWorkbook = ({
   const dataArray = getDataArrayFromExportObjects(data)
   const numberOfColumns =
     dataArray && dataArray[0] && dataArray[0].length ? dataArray[0].length : 0
-  const worksheet = workbook.addWorksheet(title || 'Daten', {
+  // autoFilter is valid at runtime but missing from exceljs' option types
+  const worksheetOptions = {
     views: [
       {
         state: 'frozen',
@@ -30,7 +37,11 @@ export const addWorksheetToExceljsWorkbook = ({
         column: numberOfColumns,
       },
     },
-  })
+  }
+  const worksheet = workbook.addWorksheet(
+    title || 'Daten',
+    worksheetOptions as Partial<AddWorksheetOptions>,
+  )
   worksheet.addRows(dataArray)
   worksheet.getRow(1).fill = {
     type: 'gradient',

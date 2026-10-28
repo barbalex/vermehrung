@@ -1,8 +1,9 @@
 import { first as first$ } from 'rxjs/operators'
 
 import { personFullname } from './personFullname.ts'
+import type { Sammlung } from '../dbModel.ts'
 
-export const sammlungIdsSortedFromSammlungs = async (sammlungs) => {
+export const sammlungIdsSortedFromSammlungs = async (sammlungs: Sammlung[]) => {
   const sammlungSorters = await Promise.all(
     sammlungs.map(async (sammlung) => {
       const datum = sammlung?.datum ?? '1000-01-01'
@@ -22,7 +23,7 @@ export const sammlungIdsSortedFromSammlungs = async (sammlungs) => {
       try {
         art = await sammlung?.art?.fetch()
       } catch {}
-      let artLabel = ''
+      let artLabel: unknown = ''
       try {
         artLabel = await art?.label?.pipe(first$()).toPromise()
       } catch {}
