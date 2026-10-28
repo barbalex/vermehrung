@@ -15,7 +15,7 @@ export const PersonKonto = ({ row, asMenu }: { row?: Record<string, unknown> | n
     setMenuAnchorEl(null)
   }
 
-  if (!row.account_id) {
+  if (!row?.account_id) {
     if (asMenu) {
       return <MenuItem onClick={createNewAccount}>Neues Konto</MenuItem>
     }

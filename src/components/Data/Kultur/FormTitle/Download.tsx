@@ -10,10 +10,10 @@ export const KulturDownload = ({ row, asMenu }: { row?: Record<string, unknown> 
     const { Workbook } = await import('exceljs/dist/exceljs.min.js')
     const workbook = new Workbook()
     await buildExceljsWorksheetsForKultur({
-      kultur_id: row.id,
+      kultur_id: row?.id,
       workbook,
     })
-    downloadExceljsWorkbook({ fileName: `Kultur_${row.id}`, workbook })
+    downloadExceljsWorkbook({ fileName: `Kultur_${row?.id}`, workbook })
   }
 
   if (asMenu) {

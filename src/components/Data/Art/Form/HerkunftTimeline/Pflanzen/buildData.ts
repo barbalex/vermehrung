@@ -1,16 +1,22 @@
 import { uniq, sum } from 'es-toolkit'
 import { Q } from '@nozbe/watermelondb'
 
-export const buildData = async ({ artId, herkunftId, db }) => {
-  let zaehlungsDone = []
+export const buildData = async ({
+  artId, herkunftId, db,
+}: {
+  artId: string | undefined
+  herkunftId: string | undefined
+  db: import('@nozbe/watermelondb').Database | null
+}) => {
+  let zaehlungsDone: import('../../../../../../dbModel.ts').Zaehlung[] = []
   try {
-    zaehlungsDone = await db
-      .get('zaehlung')
+    zaehlungsDone = (await db
+      ?.get<import('../../../../../../dbModel.ts').Zaehlung>('zaehlung')
       .query(
         Q.experimentalJoinTables(['kultur']),
         Q.on('kultur', [
-          Q.where('art_id', artId),
-          Q.where('herkunft_id', herkunftId),
+          Q.where('art_id', artId ?? ''),
+          Q.where('herkunft_id', herkunftId ?? ''),
         ]),
         Q.where('prognose', false),
         Q.where('datum', Q.notEq(null)),
@@ -18,97 +24,97 @@ export const buildData = async ({ artId, herkunftId, db }) => {
         Q.on('teilzaehlung', 'anzahl_pflanzen', Q.notEq(null)),
         Q.where('_deleted', false),
       )
-      .fetch()
+      .fetch()) ?? []
   } catch {}
-  let zaehlungsPlannedAll = []
+  let zaehlungsPlannedAll: import('../../../../../../dbModel.ts').Zaehlung[] = []
   try {
-    zaehlungsPlannedAll = await db
-      .get('zaehlung')
+    zaehlungsPlannedAll = (await db
+      ?.get<import('../../../../../../dbModel.ts').Zaehlung>('zaehlung')
       .query(
         Q.experimentalJoinTables(['kultur']),
         Q.where('prognose', true),
         Q.where('datum', Q.notEq(null)),
         Q.on('kultur', [
-          Q.where('art_id', artId),
-          Q.where('herkunft_id', herkunftId),
+          Q.where('art_id', artId ?? ''),
+          Q.where('herkunft_id', herkunftId ?? ''),
         ]),
         Q.experimentalJoinTables(['teilzaehlung']),
         Q.on('teilzaehlung', 'anzahl_pflanzen', Q.notEq(null)),
         Q.where('_deleted', false),
       )
-      .fetch()
+      .fetch()) ?? []
   } catch {}
   const zaehlungsPlannedIgnored = zaehlungsPlannedAll.filter(
-    (zg: import('../../../../../../dbModel.ts').Zaehlung) =>
+    (zg) =>
       // check if more recent zaehlungsDone exists
       zaehlungsDone.some(
-        (z: import('../../../../../../dbModel.ts').Zaehlung) =>
+        (z) =>
           (z.datum ?? '') >= (zg.datum ?? ''),
       ),
   )
   const zaehlungsPlanned = zaehlungsPlannedAll.filter(
     (lg) =>
       !zaehlungsPlannedIgnored
-        .map((l: import('../../../../../../dbModel.ts').Lieferung) => l.id)
+        .map((l) => l.id)
         .includes(lg.id),
   )
 
-  let sammlungsDone = []
+  let sammlungsDone: import('../../../../../../dbModel.ts').Sammlung[] = []
   try {
-    sammlungsDone = await db
-      .get('sammlung')
+    sammlungsDone = (await db
+      ?.get<import('../../../../../../dbModel.ts').Sammlung>('sammlung')
       .query(
-        Q.where('art_id', artId),
-        Q.where('herkunft_id', herkunftId),
+        Q.where('art_id', artId ?? ''),
+        Q.where('herkunft_id', herkunftId ?? ''),
         Q.where('geplant', false),
         Q.where('datum', Q.notEq(null)),
         Q.where('anzahl_pflanzen', Q.notEq(null)),
         Q.where('_deleted', false),
       )
-      .fetch()
+      .fetch()) ?? []
   } catch {}
-  let sammlungsPlannedAll = []
+  let sammlungsPlannedAll: import('../../../../../../dbModel.ts').Sammlung[] = []
   try {
-    sammlungsPlannedAll = await db
-      .get('sammlung')
+    sammlungsPlannedAll = (await db
+      ?.get<import('../../../../../../dbModel.ts').Sammlung>('sammlung')
       .query(
-        Q.where('art_id', artId),
-        Q.where('herkunft_id', herkunftId),
+        Q.where('art_id', artId ?? ''),
+        Q.where('herkunft_id', herkunftId ?? ''),
         Q.where('geplant', true),
         Q.where('datum', Q.notEq(null)),
         Q.where('anzahl_pflanzen', Q.notEq(null)),
         Q.where('_deleted', false),
       )
-      .fetch()
+      .fetch()) ?? []
   } catch {}
   const sammlungsPlannedIgnored = sammlungsPlannedAll.filter(
-    (zg: import('../../../../../../dbModel.ts').Zaehlung) =>
+    (zg) =>
       // check if more recent zaehlungsDone exists
       sammlungsDone.some(
-        (z: import('../../../../../../dbModel.ts').Zaehlung) =>
+        (z) =>
           (z.datum ?? '') >= (zg.datum ?? ''),
       ),
   )
   const sammlungsPlanned = sammlungsPlannedAll.filter(
     (lg) =>
       !sammlungsPlannedIgnored
-        .map((l: import('../../../../../../dbModel.ts').Lieferung) => l.id)
+        .map((l) => l.id)
         .includes(lg.id),
   )
 
-  let allLieferungsDone = []
+  let allLieferungsDone: import('../../../../../../dbModel.ts').Lieferung[] = []
   try {
-    allLieferungsDone = await db
-      .get('lieferung')
+    allLieferungsDone = (await db
+      ?.get<import('../../../../../../dbModel.ts').Lieferung>('lieferung')
       .query(
-        Q.where('art_id', artId),
+        Q.where('art_id', artId ?? ''),
         Q.where('nach_ausgepflanzt', true),
         Q.where('geplant', false),
         Q.where('datum', Q.notEq(null)),
         Q.where('anzahl_pflanzen', Q.notEq(null)),
         Q.where('_deleted', false),
       )
-      .fetch()
+      .fetch()) ?? []
   } catch {}
   // can't use Q.on here because there are two associations to kultur
   const allLieferungsDonePromises = await Promise.all(
@@ -116,31 +122,33 @@ export const buildData = async ({ artId, herkunftId, db }) => {
       async (l: import('../../../../../../dbModel.ts').Lieferung) => {
         let vonKultur
         try {
-          vonKultur = await db?.get('kultur').find(l.von_kultur_id)
+          vonKultur = await db?.get('kultur').find(l.von_kultur_id ?? '')
         } catch {}
 
-        return vonKultur?.herkunft_id === herkunftId
+        return (
+          vonKultur as unknown as { herkunft_id?: string | null } | undefined
+        )?.herkunft_id === herkunftId
       },
     ),
   )
   const lieferungsDoneOfThisHerkunft = allLieferungsDone.filter(
-    (p: import('../../../../../../dbModel.ts').Person, i: number) =>
+    (p, i) =>
       allLieferungsDonePromises[i],
   )
 
-  let allLieferungsPlanned = []
+  let allLieferungsPlanned: import('../../../../../../dbModel.ts').Lieferung[] = []
   try {
-    allLieferungsPlanned = await db
-      .get('lieferung')
+    allLieferungsPlanned = (await db
+      ?.get<import('../../../../../../dbModel.ts').Lieferung>('lieferung')
       .query(
-        Q.where('art_id', artId),
+        Q.where('art_id', artId ?? ''),
         Q.where('nach_ausgepflanzt', true),
         Q.where('geplant', true),
         Q.where('datum', Q.notEq(null)),
         Q.where('anzahl_pflanzen', Q.notEq(null)),
         Q.where('_deleted', false),
       )
-      .fetch()
+      .fetch()) ?? []
   } catch {}
   // can't use Q.on here because there are two associations to kultur
   const allLieferungsPlannedPromises = await Promise.all(
@@ -148,10 +156,12 @@ export const buildData = async ({ artId, herkunftId, db }) => {
       async (l: import('../../../../../../dbModel.ts').Lieferung) => {
         let vonKultur
         try {
-          vonKultur = await db?.get('kultur').find(l?.von_kultur_id)
+          vonKultur = await db?.get('kultur').find(l?.von_kultur_id ?? '')
         } catch {}
 
-        return vonKultur?.herkunft_id === herkunftId
+        return (
+          vonKultur as unknown as { herkunft_id?: string | null } | undefined
+        )?.herkunft_id === herkunftId
       },
     ),
   )
@@ -160,17 +170,17 @@ export const buildData = async ({ artId, herkunftId, db }) => {
       allLieferungsPlannedPromises[i],
   )
   const lieferungsPlannedIgnored = lieferungsPlannedOfThisHerkunft.filter(
-    (zg: import('../../../../../../dbModel.ts').Zaehlung) =>
+    (zg) =>
       // check if more recent zaehlungsDone exists
       lieferungsDoneOfThisHerkunft.some(
-        (z: import('../../../../../../dbModel.ts').Zaehlung) =>
+        (z) =>
           (z.datum ?? '') >= (zg.datum ?? ''),
       ),
   )
   const lieferungsPlanned = lieferungsPlannedOfThisHerkunft.filter(
     (lg) =>
       !lieferungsPlannedIgnored
-        .map((l: import('../../../../../../dbModel.ts').Lieferung) => l.id)
+        .map((l) => l.id)
         .includes(lg.id),
   )
 
@@ -183,22 +193,22 @@ export const buildData = async ({ artId, herkunftId, db }) => {
       ...sammlungsPlanned,
       ...lieferungsDoneOfThisHerkunft,
       ...lieferungsPlanned,
-    ].map((z) => z.datum),
+    ].map((z) => z.datum ?? ''),
   ).sort()
   // 2. get list of all non deleted kulturs
   //    these are the basis for counting:
   //    at every date the last count is used
-  let kultursOfArt = []
+  let kultursOfArt: import('../../../../../../dbModel.ts').Kultur[] = []
   try {
-    kultursOfArt = await db
-      .get('kultur')
+    kultursOfArt = (await db
+      ?.get<import('../../../../../../dbModel.ts').Kultur>('kultur')
       .query(
         Q.where('_deleted', false),
         Q.where('aktiv', true),
-        Q.where('herkunft_id', herkunftId),
-        Q.where('art_id', artId),
+        Q.where('herkunft_id', herkunftId ?? ''),
+        Q.where('art_id', artId ?? ''),
       )
-      .fetch()
+      .fetch()) ?? []
   } catch {}
   // 3. for every date get:
   //    - sum of last zaehlung
@@ -208,46 +218,46 @@ export const buildData = async ({ artId, herkunftId, db }) => {
       const sammlungNow = sum(
         sammlungsDone
           .filter(
-            (s: import('../../../../../../dbModel.ts').Sammlung) =>
+            (s) =>
               s.datum === date,
           )
           .map(
-            (s: import('../../../../../../dbModel.ts').Sammlung) =>
-              s.anzahl_pflanzen,
+            (s) =>
+              s.anzahl_pflanzen ?? 0,
           ),
       )
       const sammlungPlannedNow = sum(
         sammlungsPlanned
           .filter(
-            (s: import('../../../../../../dbModel.ts').Sammlung) =>
+            (s) =>
               s.datum === date,
           )
           .map(
-            (s: import('../../../../../../dbModel.ts').Sammlung) =>
-              s.anzahl_pflanzen,
+            (s) =>
+              s.anzahl_pflanzen ?? 0,
           ),
       )
 
       const lieferungNow = -sum(
         lieferungsDoneOfThisHerkunft
           .filter(
-            (s: import('../../../../../../dbModel.ts').Sammlung) =>
+            (s) =>
               s.datum === date,
           )
           .map(
-            (s: import('../../../../../../dbModel.ts').Sammlung) =>
-              s.anzahl_pflanzen,
+            (s) =>
+              s.anzahl_pflanzen ?? 0,
           ),
       )
       const lieferungPlannedNow = -sum(
         lieferungsPlanned
           .filter(
-            (s: import('../../../../../../dbModel.ts').Sammlung) =>
+            (s) =>
               s.datum === date,
           )
           .map(
-            (s: import('../../../../../../dbModel.ts').Sammlung) =>
-              s.anzahl_pflanzen,
+            (s) =>
+              s.anzahl_pflanzen ?? 0,
           ),
       )
 
@@ -256,28 +266,26 @@ export const buildData = async ({ artId, herkunftId, db }) => {
           async (k: import('../../../../../../dbModel.ts').Kultur) => {
             // for every kultur return
             // last zaehlung and whether it is prognose
-            const zaehlungs = await k.zaehlungs.fetch(
-              Q.experimentalJoinTables(['teilzaehlung']),
-              Q.where('_deleted', false),
-              Q.where('datum', Q.notEq(null)),
-              Q.on('teilzaehlung', Q.where('anzahl_pflanzen', Q.notEq(null))),
-            )
+            const zaehlungs = await k.zaehlungs
+              .extend(
+                Q.experimentalJoinTables(['teilzaehlung']),
+                Q.where('_deleted', false),
+                Q.where('datum', Q.notEq(null)),
+                Q.on('teilzaehlung', Q.where('anzahl_pflanzen', Q.notEq(null))),
+              )
+              .fetch()
             const lastZaehlungDatum = Math.max(
               ...zaehlungs
-                .map(
-                  (z: import('../../../../../../dbModel.ts').Zaehlung) =>
-                    z.datum,
-                )
-                .filter((d) => d <= date),
+                .map((z) => (z.datum ?? '') as string)
+                .filter((d) => d <= (date ?? '')) as unknown as number[],
             )
             const lastZaehlungsOfKultur = zaehlungs.filter(
-              (z: import('../../../../../../dbModel.ts').Zaehlung) =>
-                z.datum === lastZaehlungDatum,
+              (z) => z.datum === (lastZaehlungDatum as unknown as string),
             )
             const lastTzAnzahls = await Promise.all(
               lastZaehlungsOfKultur.map(
                 async (z: import('../../../../../../dbModel.ts').Zaehlung) => {
-                  let tzs = []
+                  let tzs: import('../../../../../../dbModel.ts').Teilzaehlung[] = []
                   try {
                     tzs = await z.teilzaehlungs?.fetch()
                   } catch {}
@@ -286,7 +294,7 @@ export const buildData = async ({ artId, herkunftId, db }) => {
                     tzs.map(
                       (
                         tz: import('../../../../../../dbModel.ts').Teilzaehlung,
-                      ) => tz.anzahl_pflanzen,
+                      ) => tz.anzahl_pflanzen ?? 0,
                     ),
                   )
                 },
@@ -313,36 +321,36 @@ export const buildData = async ({ artId, herkunftId, db }) => {
       // need to return old date in case no zaehlung exists
       const lastZaehlungDatum =
         Math.max(
-          ...[...zaehlungsDone, ...zaehlungsPlanned]
-            .map((z) => z.datum)
+          ...([...zaehlungsDone, ...zaehlungsPlanned]
+            .map((z) => z.datum ?? '')
             .filter((d) => !!d)
-            .filter((d) => d <= date),
+            .filter((d) => d <= (date ?? '')) as unknown as number[]),
         ) || '1900-01-01'
       const sammlungsSinceLastZaehlung = [
         ...sammlungsDone,
         ...sammlungsPlanned,
-      ].filter((l) => l.datum > lastZaehlungDatum && l.datum <= date)
+      ].filter((l) => (l.datum ?? '') > lastZaehlungDatum && (l.datum ?? '') <= date)
       const sammlungsSince = {
         anzahl_pflanzen: sum(
-          sammlungsSinceLastZaehlung.map((s) => s.anzahl_pflanzen),
+          sammlungsSinceLastZaehlung.map((s) => s.anzahl_pflanzen ?? 0),
         ),
         geplant: !!sammlungsPlanned.filter(
-          (l: import('../../../../../../dbModel.ts').Lieferung) =>
-            l?.datum > lastZaehlungDatum && l?.datum <= date,
+          (l) =>
+            (l?.datum ?? '') > lastZaehlungDatum && (l?.datum ?? '') <= (date ?? ''),
         ).length,
       }
 
       const lieferungsSinceLastZaehlung = [
         ...lieferungsDoneOfThisHerkunft,
         ...lieferungsPlanned,
-      ].filter((l) => l.datum > lastZaehlungDatum && l.datum <= date)
+      ].filter((l) => (l.datum ?? '') > lastZaehlungDatum && (l.datum ?? '') <= date)
       const lieferungsSince = {
         anzahl_pflanzen: sum(
-          lieferungsSinceLastZaehlung.map((s) => s.anzahl_pflanzen),
+          lieferungsSinceLastZaehlung.map((s) => s.anzahl_pflanzen ?? 0),
         ),
         geplant: !!lieferungsPlanned.filter(
-          (l: import('../../../../../../dbModel.ts').Lieferung) =>
-            l?.datum > lastZaehlungDatum && l?.datum <= date,
+          (l) =>
+            (l?.datum ?? '') > lastZaehlungDatum && (l?.datum ?? '') <= (date ?? ''),
         ).length,
       }
 
