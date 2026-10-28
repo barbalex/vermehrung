@@ -94,7 +94,7 @@ export const SelectCreatable = ({
   showFilter?: boolean
   table: string
   error?: string | boolean | null
-  options: { value: string; label: string }[]
+  options: { value: string; label: string | undefined }[]
   loading?: boolean
   maxHeight?: number | null
   noCaret?: boolean

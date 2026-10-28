@@ -52,7 +52,11 @@ export const TeilzaehlungForm = ({
   const teilzaehlungFilter = useAtomValue(filterTeilzaehlungAtom)
   const initialDataQueried = useAtomValue(initialDataQueriedAtom)
 
-  const [dataState, setDataState] = useState({
+  const [dataState, setDataState] = useState<{
+    teilkulturWerte: { value: string; label: string | undefined; link?: string[] }[]
+    kulturOption: import('../../../../../../../dbModel.ts').KulturOption | undefined
+    row: import('../../../../../../../dbModel.ts').Teilzaehlung | undefined
+  }>({
     teilkulturWerte: [],
     kulturOption: undefined,
     row: undefined,
@@ -72,25 +76,26 @@ export const TeilzaehlungForm = ({
             )
     const teilkultursObservable = db
       ?.get<import('../../../../../../../dbModel.ts').Teilkultur>('teilkultur')
-      .query(teilkulturDelQuery, Q.where('kultur_id', kulturId))
+      .query(teilkulturDelQuery, Q.where('kultur_id', kulturId ?? ''))
       .observeWithColumns(['name'])
     const kulturOptionObservable = kulturId
-      ? db?.get('kultur_option').findAndObserve(kulturId)
+      ? db?.get<import('../../../../../../../dbModel.ts').KulturOption>('kultur_option').findAndObserve(kulturId)
       : $of(null)
     const tzObservable = initialDataQueried
-      ? db?.get('teilzaehlung').findAndObserve(id)
+      ? db?.get<import('../../../../../../../dbModel.ts').Teilzaehlung>('teilzaehlung').findAndObserve(id ?? '')
       : $of({})
     const combinedObservables = combineLatest([
       teilkultursObservable,
       kulturOptionObservable,
       tzObservable,
     ])
-    const subscription = combinedObservables.subscribe(
-      async ([teilkulturs, kulturOption, teilzaehlung]: [
-          import('../../../../../../../dbModel.ts').Teilkultur | undefined,
+    const subscription = (combinedObservables as unknown as import('rxjs').Observable<
+        [
+          import('../../../../../../../dbModel.ts').Teilkultur[],
           import('../../../../../../../dbModel.ts').KulturOption | undefined,
           import('../../../../../../../dbModel.ts').Teilzaehlung | undefined,
-        ]) => {
+        ]
+      >).subscribe(async ([teilkulturs, kulturOption, teilzaehlung]) => {
         // use the emitted teilzaehlung, not row from the closure:
         // row is undefined until the first emission and reading it here
         // makes the react compiler evaluate row.teilkultur during render
@@ -119,15 +124,20 @@ export const TeilzaehlungForm = ({
     return () => subscription?.unsubscribe?.()
   }, [db, teilkulturFilter, id, kulturId, initialDataQueried])
 
+  const kulturOptionRecord = kulturOption as unknown as Record<string, unknown>
   const {
     tk,
     tz_teilkultur_id,
     tz_andere_menge,
     tz_auspflanzbereit_beschreibung,
     tz_bemerkungen,
-  } = kulturOption ?? {}
+  } = kulturOptionRecord ?? {}
 
-  const onCreateNewTeilkultur = async ({ name }) => {
+  const onCreateNewTeilkultur = async ({
+    name,
+  }: {
+    name: string
+  }) => {
     const teilkultur_id = await insertTeilkulturRev({
       noNavigateInTree: true,
       values: {
@@ -202,11 +212,11 @@ export const TeilzaehlungForm = ({
             />
           </div>
         )}
-        {tk && tz_teilkultur_id && (
+        {!!tk && !!tz_teilkultur_id && (
           <div className={styles.teilkulturClass}>
             <SelectCreatable
               key={`${row.id}${row.teilkultur_id}teilkultur_id`}
-              row={row}
+              row={row as unknown as Record<string, unknown>}
               field="teilkultur_id"
               label="Teilkultur"
               options={teilkulturWerte}
@@ -258,12 +268,12 @@ export const TeilzaehlungForm = ({
             key={`${row.id}anzahl_jungpflanzen`}
             label="Anzahl Jungpflanzen"
             schrinkLabel={true}
-            value={anzahl_jungpflanzen}
+            value={anzahl_jungpflanzen as number | null}
             type="number"
             message="Wird berechnet aus: Anzahl Pflanzen - auspflanzbereit - Mutterpflanzen"
           />
         </div>
-        {tz_andere_menge && (
+        {!!tz_andere_menge && (
           <div className={styles.other}>
             <TextField
               key={`${row.id}andere_menge`}
@@ -277,7 +287,7 @@ export const TeilzaehlungForm = ({
             />
           </div>
         )}
-        {tz_auspflanzbereit_beschreibung && (
+        {!!tz_auspflanzbereit_beschreibung && (
           <div className={styles.auspflanzbereit}>
             <TextField
               key={`${row.id}auspflanzbereit_beschreibung`}
@@ -294,7 +304,7 @@ export const TeilzaehlungForm = ({
             />
           </div>
         )}
-        {tz_bemerkungen && (
+        {!!tz_bemerkungen && (
           <div className={styles.last}>
             <TextField
               key={`${row.id}bemerkungen`}

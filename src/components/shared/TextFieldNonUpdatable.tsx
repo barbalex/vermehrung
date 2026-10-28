@@ -18,6 +18,7 @@ export const TextFieldNonUpdatable = ({
   value?: string | number | null
   message?: string | null
   schrinkLabel?: boolean
+  type?: string
 }) => {
   const [error, setError] = useState<string | null>(null)
   const onChange = () => {
