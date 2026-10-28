@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import md5 from 'blueimp-md5'
 import { FileUploaderRegular, defineLocale } from '@uploadcare/react-uploader'
 import '@uploadcare/react-uploader/core.css'
@@ -57,10 +57,24 @@ const useEmptyFileGuard = () => {
 // the brand purple comes from the --uc-primary overrides in index.css
 export const Uploader = ({ onFileUploadSuccess, onFileUploadFailed }) => {
   useEmptyFileGuard()
+  const apiRef = useRef(null)
+
+  // the summary modal ("1 Datei hochgeladen") expects the user to click
+  // 'Abgeschlossen', and the finished upload stays in the list - so the
+  // next upload starts from that list instead of the drop zone. close
+  // the modal after a beat and clear the list, like the old widget did
+  const onCommonUploadSuccess = () => {
+    setTimeout(() => {
+      const api = apiRef.current?.getAPI?.()
+      api?.doneFlow?.()
+      api?.removeAllFiles?.()
+    }, 3000)
+  }
 
   return (
     <FileUploaderRegular
       className="uploader"
+      apiRef={apiRef}
       pubkey={import.meta.env.VITE_UPLOADCARE_PUBLIC_KEY}
       ctxName="vermehrung"
       multiple={false}
@@ -71,6 +85,7 @@ export const Uploader = ({ onFileUploadSuccess, onFileUploadFailed }) => {
       secureUploadsSignatureResolver={secureUploadsSignatureResolver}
       onFileUploadSuccess={onFileUploadSuccess}
       onFileUploadFailed={onFileUploadFailed}
+      onCommonUploadSuccess={onCommonUploadSuccess}
     />
   )
 }

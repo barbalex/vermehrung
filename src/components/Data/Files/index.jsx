@@ -32,7 +32,8 @@ export const Files = ({ parentTable, parent }) => {
     [parent.files],
   )
   const files = useObservable(observable) ?? []
-  files?.sort?.(fileSort)
+  // sort a copy, not the observed array in place
+  const sortedFiles = [...(files ?? [])].sort(fileSort)
 
   // the uploader fires the success event repeatedly for the same file
   const uploadedUuids = useRef([])
@@ -78,7 +79,7 @@ export const Files = ({ parentTable, parent }) => {
     })
   }
 
-  const images = files.filter((f) => isImageFile(f))
+  const images = sortedFiles.filter((f) => isImageFile(f))
   const imageObjects = images.map((f) => ({
     original: `https://ucarecdn.com/${f.file_id}/-/resize/1200x/-/quality/lightest/${f.name}`,
     thumbnail: `https://ucarecdn.com/${f.file_id}/-/resize/250x/-/quality/lightest/${f.name}`,
@@ -135,10 +136,10 @@ export const Files = ({ parentTable, parent }) => {
           <ImageGallery items={imageObjects} showPlayButton={false} />
         </>
       )}
-      {!!files.length && (
+      {!!sortedFiles.length && (
         <>
           <div className={styles.spacer} />
-          {files.map((file) => (
+          {sortedFiles.map((file) => (
             <File key={file.file_id} file={file} parent={parent} />
           ))}
         </>
