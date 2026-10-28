@@ -1,16 +1,17 @@
 export const createDataArrayForPersonRevComparison = ({
   row: rowPassed,
-  revRow,
+  revRow: revRowPassed,
 }: {
-  row: import('../../shared/types.ts').WmRow | null | undefined
-  revRow: import('../../shared/types.ts').WmRow | null | undefined
+  row: { _raw?: Record<string, unknown> } | null | undefined
+  revRow: { _raw?: Record<string, unknown> } | null | undefined
 }) => {
   // need to use raw values here
   const row = rowPassed?._raw
+  const revRow = revRowPassed?._raw
 
   return [
     {
-      valueInRow: row.user_role_id,
+      valueInRow: row?.user_role_id,
       valueInRev: revRow?.user_role_id,
       label: 'Rolle (id)',
     },
@@ -97,7 +98,7 @@ export const createDataArrayForPersonRevComparison = ({
       label: 'geändert von',
     },
     {
-      valueInRow: row._deleted,
+      valueInRow: row?._deleted,
       valueInRev: revRow?._deleted,
       label: 'gelöscht',
     },

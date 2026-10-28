@@ -29,10 +29,10 @@ export const createDataArrayForSammlungRevComparison = ({
   },
   {
     valueInRow: row?.datum
-      ? DateTime.fromSQL(row.datum).toFormat('dd.LL.yyyy')
+      ? DateTime.fromSQL(row?.datum as string).toFormat('dd.LL.yyyy')
       : '',
     valueInRev: revRow?.datum
-      ? DateTime.fromSQL(revRow.datum).toFormat('dd.LL.yyyy')
+      ? DateTime.fromSQL(revRow?.datum as string).toFormat('dd.LL.yyyy')
       : '',
     label: 'Datum',
   },

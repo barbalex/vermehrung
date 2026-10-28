@@ -54,10 +54,10 @@ export const createDataArrayForSammellieferungRevComparison = ({
   },
   {
     valueInRow: row?.datum
-      ? DateTime.fromSQL(row.datum).toFormat('dd.LL.yyyy')
+      ? DateTime.fromSQL(row?.datum as string).toFormat('dd.LL.yyyy')
       : null,
     valueInRev: revRow?.datum
-      ? DateTime.fromSQL(revRow.datum).toFormat('dd.LL.yyyy')
+      ? DateTime.fromSQL(revRow?.datum as string).toFormat('dd.LL.yyyy')
       : null,
     label: 'Datum',
   },

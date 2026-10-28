@@ -1,6 +1,9 @@
 export const createDataArrayForTeilzaehlungRevComparison = ({
   row,
   revRow,
+}: {
+  row: Record<string, unknown> | null | undefined
+  revRow: Record<string, unknown> | null | undefined
 }) => [
   {
     valueInRow: row?.zaehlung_id,
@@ -8,8 +11,8 @@ export const createDataArrayForTeilzaehlungRevComparison = ({
     label: 'Zaehlung ID',
   },
   {
-    valueInRow: row.teilkultur_id,
-    valueInRev: revRow.teilkultur_id,
+    valueInRow: row?.teilkultur_id,
+    valueInRev: revRow?.teilkultur_id,
     label: 'Teilkultur (id)',
   },
   {
@@ -53,8 +56,8 @@ export const createDataArrayForTeilzaehlungRevComparison = ({
     label: 'geändert von',
   },
   {
-    valueInRow: row._deleted,
-    valueInRev: revRow._deleted,
+    valueInRow: row?._deleted,
+    valueInRev: revRow?._deleted,
     label: 'gelöscht',
   },
 ]
