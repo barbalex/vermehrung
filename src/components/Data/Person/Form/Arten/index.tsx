@@ -17,7 +17,11 @@ import { avsSortByArt } from '../../../../../utils/avsSortByArt.ts'
 
 import styles from './index.module.css'
 
-export const PersonArten = ({ person }: { person: import('../../../../shared/types.ts').WmRow | null | undefined }) => {
+export const PersonArten = ({
+  person,
+}: {
+  person: import('../../../../shared/types.ts').WmRow | null | undefined
+}) => {
   const db = useAtomValue(dbAtom)
 
   const [errors, setErrors] = useState({})
@@ -25,7 +29,13 @@ export const PersonArten = ({ person }: { person: import('../../../../shared/typ
 
   const [open, setOpen] = useState(false)
   const anim = useAnimation()
-  const onClickToggle = async (e: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
+  const onClickToggle = async (e: {
+    target: { name?: string; value: unknown }
+    currentTarget?: HTMLElement
+    preventDefault?: () => void
+    stopPropagation?: () => void
+    key?: string
+  }) => {
     e.stopPropagation()
     if (open) {
       const was = open
@@ -60,7 +70,7 @@ export const PersonArten = ({ person }: { person: import('../../../../shared/typ
               Q.where('_deleted', null),
             )
     const artsObservable = db
-      .get('art')
+      ?.get<import('../../../../../dbModel.ts').Art>('art')
       .query(artDelQuery, Q.where('id', Q.notIn(avArtIds)))
       .observe()
     const combinedObservables = combineLatest([avsObservable, artsObservable])
@@ -88,7 +98,13 @@ export const PersonArten = ({ person }: { person: import('../../../../shared/typ
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [person?.avs, avArtIds.length, db])
 
-  const saveToDb = (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
+  const saveToDb = (event: {
+    target: { name?: string; value: unknown }
+    currentTarget?: HTMLElement
+    preventDefault?: () => void
+    stopPropagation?: () => void
+    key?: string
+  }) => {
     insertAvRev({
       values: { person_id: person?.id, art_id: event.target.value },
     })

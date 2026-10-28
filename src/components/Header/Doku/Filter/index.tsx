@@ -17,7 +17,13 @@ export const DokuFilter = () => {
   const docFilter = useAtomValue(docFilterAtom)
   const docsCount = useAtomValue(docsCountAtom)
   const docsFilteredCount = useAtomValue(docsFilteredCountAtom)
-  const onChange = (e: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => setDocFilter(e.target.value)
+  const onChange = (e: {
+    target: { name?: string; value: unknown }
+    currentTarget?: HTMLElement
+    preventDefault?: () => void
+    stopPropagation?: () => void
+    key?: string
+  }) => setDocFilter(e.target.value)
   const onClickEmptyFilter = () => setDocFilter('')
 
   return (

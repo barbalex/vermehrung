@@ -33,8 +33,9 @@ export const NavigationSyncController = () => {
   useEffect(() => {
     window.onpopstate = () => {
       const urlWithHistory = getActiveNodeArrayFromPathname(pathname)
-      const { activeNodeArray } =
-        splitHistoriesFromActiveNodeArray(urlWithHistory as string[])
+      const { activeNodeArray } = splitHistoriesFromActiveNodeArray(
+        urlWithHistory as string[],
+      )
       setLastActiveNodeArray(activeNodeArray)
     }
     // do not need to remove, see: https://stackoverflow.com/a/47997544/712005

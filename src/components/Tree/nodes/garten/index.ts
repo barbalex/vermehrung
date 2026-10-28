@@ -1,6 +1,12 @@
 import { first as first$ } from 'rxjs/operators'
 
-export const buildGarten = async ({ garten, index }: { garten: import('../../../../dbModel.ts').Garten; index: number }) => {
+export const buildGarten = async ({
+  garten,
+  index,
+}: {
+  garten: import('../../../../dbModel.ts').Garten
+  index: number
+}) => {
   let label = ''
   try {
     label = (await garten.label.pipe(first$()).toPromise()) ?? ''

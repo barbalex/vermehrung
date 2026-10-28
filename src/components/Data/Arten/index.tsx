@@ -35,7 +35,7 @@ export const Arten = ({ filter: showFilter }) => {
 
   const [dataState, setDataState] = useState({ arts: [], totalCount: 0 })
   useEffect(() => {
-    const collection = db?.get('art')
+    const collection = db?.get<import('../../../dbModel.ts').Art>('art')
     const delQuery =
       artFilter._deleted === false
         ? Q.where('_deleted', false)
@@ -63,7 +63,6 @@ export const Arten = ({ filter: showFilter }) => {
 
     return () => subscription?.unsubscribe?.()
     // need to rerender if any of the values of herkunftFilter changes
-     
   }, [db, artFilter, apFilter])
 
   const { arts, totalCount } = dataState

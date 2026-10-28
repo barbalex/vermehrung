@@ -42,7 +42,13 @@ export const GartenDownload = ({ gartenId }) => {
 
   const [anchorEl, setAnchorEl] = useState<HTMLElement | undefined | null>(null)
   const onClose = () => setAnchorEl(null)
-  const onClickOpenMenu = (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => setAnchorEl(event.currentTarget)
+  const onClickOpenMenu = (event: {
+    target: { name?: string; value: unknown }
+    currentTarget?: HTMLElement
+    preventDefault?: () => void
+    stopPropagation?: () => void
+    key?: string
+  }) => setAnchorEl(event.currentTarget)
 
   return (
     <ErrorBoundary>

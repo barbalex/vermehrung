@@ -11,14 +11,15 @@ export const Conflict = ({
 }) => {
   const onClick = () =>
     setActiveConflict(
-      !activeConflict ? conflict
-      : activeConflict !== conflict ? conflict
-      : null,
+      !activeConflict
+        ? conflict
+        : activeConflict !== conflict
+          ? conflict
+          : null,
     )
 
-  const title =
-    activeConflict ?
-      'Klicken um den Konflikt zu schliessen'
+  const title = activeConflict
+    ? 'Klicken um den Konflikt zu schliessen'
     : 'Klicken um den Konflikt zu lösen'
   const isActive = activeConflict === conflict
   const style = { fontWeight: isActive ? 500 : 400 }

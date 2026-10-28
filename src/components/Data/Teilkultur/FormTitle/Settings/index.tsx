@@ -8,7 +8,13 @@ import { TeilkulturSettingsMenu as Menu } from './Menu.tsx'
 
 export const TeilkulturSettings = ({ asMenu, kulturId }) => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | undefined | null>(null)
-  const onClickConfig = (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => setAnchorEl(event.currentTarget)
+  const onClickConfig = (event: {
+    target: { name?: string; value: unknown }
+    currentTarget?: HTMLElement
+    preventDefault?: () => void
+    stopPropagation?: () => void
+    key?: string
+  }) => setAnchorEl(event.currentTarget)
 
   if (asMenu) {
     return (
@@ -41,11 +47,7 @@ export const TeilkulturSettings = ({ asMenu, kulturId }) => {
       >
         <FaCog />
       </IconButton>
-      <Menu
-        anchorEl={anchorEl}
-        setAnchorEl={setAnchorEl}
-        kulturId={kulturId}
-      />
+      <Menu anchorEl={anchorEl} setAnchorEl={setAnchorEl} kulturId={kulturId} />
     </ErrorBoundary>
   )
 }

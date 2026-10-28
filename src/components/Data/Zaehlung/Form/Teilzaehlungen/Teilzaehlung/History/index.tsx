@@ -27,17 +27,24 @@ export const TeilzaehlungHistory = ({
     ? `/teilzaehlung_rev?_rev=in.(${priorRevisions.join(',')})&select=id,teilzaehlung_id,zaehlung_id,teilkultur_id,anzahl_pflanzen,anzahl_auspflanzbereit,anzahl_mutterpflanzen,andere_menge,auspflanzbereit_beschreibung,bemerkungen,prognose_von_tz,changed,changed_by,_rev,_parent_rev,_revisions,_depth,_deleted`
     : null
   const { error, data, fetching } = useApiQuery(revPath)
-    if (error) checkForOnlineError({ error })
+  if (error) checkForOnlineError({ error })
 
   const revRowsUnsorted = data ?? []
-  const revRows = revRowsUnsorted.sort((a: import('../../../../../../../dbModel.ts').Art, b: import('../../../../../../../dbModel.ts').Bedarf) => b?._depth - a?._depth)
+  const revRows = revRowsUnsorted.sort(
+    (
+      a: import('../../../../../../../dbModel.ts').Art,
+      b: import('../../../../../../../dbModel.ts').Bedarf,
+    ) => b?._depth - a?._depth,
+  )
 
   if (fetching) {
     return <Spinner message="lade Versionen" />
   }
 
   if (error) {
-    return <div className={styles.errorContainer}>{(error as Error).message}</div>
+    return (
+      <div className={styles.errorContainer}>{(error as Error).message}</div>
+    )
   }
 
   return (

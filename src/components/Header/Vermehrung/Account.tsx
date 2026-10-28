@@ -40,7 +40,7 @@ const Account = () => {
   useEffect(() => {
     const userPersonObservable = user.uid
       ? db
-          .get('person')
+          ?.get<import('../../../dbModel.ts').Person>('person')
           .query(Q.where('account_id', user.uid))
           .observeWithColumns(['vorname', 'name'])
       : $of({})
@@ -55,7 +55,13 @@ const Account = () => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | undefined | null>(null)
   const [resetTitle, setResetTitle] = useState('Passwort zurücksetzen')
 
-  const onClickMenu = (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => setAnchorEl(event.currentTarget)
+  const onClickMenu = (event: {
+    target: { name?: string; value: unknown }
+    currentTarget?: HTMLElement
+    preventDefault?: () => void
+    stopPropagation?: () => void
+    key?: string
+  }) => setAnchorEl(event.currentTarget)
 
   const onCloseMenu = () => setAnchorEl(null)
 

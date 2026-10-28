@@ -50,13 +50,13 @@ export const LieferungContainer = ({
   useEffect(() => {
     const userPersonOptionsObservable = user.uid
       ? db
-          .get('person_option')
+          ?.get<import('../../../dbModel.ts').PersonOption>('person_option')
           .query(Q.on('person', Q.where('account_id', user.uid)))
           .observeWithColumns(['li_show_sl'])
       : $of({})
     const lieferungObservable = showFilter
       ? $of(lieferungFilter)
-      : (initialDataQueried || !online)
+      : initialDataQueried || !online
         ? db?.get('lieferung').findAndObserve(id)
         : $of({})
     const combinedObservables = combineLatest([

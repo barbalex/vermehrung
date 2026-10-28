@@ -36,9 +36,7 @@ const Herkuenfte = lazy(async () => ({
 }))
 const TechnischeVoraussetzungen = lazy(async () => ({
   default: (
-    await import(
-      './components/Documentation/docs/TechnischeVoraussetzungen.tsx'
-    )
+    await import('./components/Documentation/docs/TechnischeVoraussetzungen.tsx')
   ).TechnischeVoraussetzungen,
 }))
 const ZeitachseFuerArten = lazy(async () => ({
@@ -166,10 +164,7 @@ export const Router = () => {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route element={<Layout />}>
-        <Route
-          path="/"
-          element={<Home />}
-        />
+        <Route path="/" element={<Home />} />
         <Route
           path="/Vermehrung/*"
           element={<VermehrungIndex />}
@@ -192,136 +187,49 @@ export const Router = () => {
           errorElement={<RouterErrorBoundary />}
         >
           <Route path="ziele">
-            <Route
-              index
-              element={<Ziele />}
-            />
-            <Route
-              path="herkuenfte"
-              element={<ZieleHerkuenfte />}
-            />
+            <Route index element={<Ziele />} />
+            <Route path="herkuenfte" element={<ZieleHerkuenfte />} />
           </Route>
           <Route
             path="technische-voraussetzungen"
             element={<TechnischeVoraussetzungen />}
           />
-          <Route
-            path="zeitachse-art"
-            element={<ZeitachseFuerArten />}
-          />
-          <Route
-            path="zeitachse-kultur"
-            element={<ZeitachseFuerKulturen />}
-          />
-          <Route
-            path="herkuenfte"
-            element={<Herkuenfte />}
-          />
-          <Route
-            path="sammlungen"
-            element={<Sammlungen />}
-          />
-          <Route
-            path="kulturen"
-            element={<Kulturen />}
-          />
-          <Route
-            path="zaehlungen"
-            element={<Zaehlungen />}
-          />
-          <Route
-            path="teilkulturen"
-            element={<Teilkulturen />}
-          />
-          <Route
-            path="lieferungen"
-            element={<Lieferungen />}
-          />
-          <Route
-            path="sammel-lieferungen"
-            element={<SammelLieferungen />}
-          />
+          <Route path="zeitachse-art" element={<ZeitachseFuerArten />} />
+          <Route path="zeitachse-kultur" element={<ZeitachseFuerKulturen />} />
+          <Route path="herkuenfte" element={<Herkuenfte />} />
+          <Route path="sammlungen" element={<Sammlungen />} />
+          <Route path="kulturen" element={<Kulturen />} />
+          <Route path="zaehlungen" element={<Zaehlungen />} />
+          <Route path="teilkulturen" element={<Teilkulturen />} />
+          <Route path="lieferungen" element={<Lieferungen />} />
+          <Route path="sammel-lieferungen" element={<SammelLieferungen />} />
           <Route
             path="events"
             element={<Navigate to="/Dokumentation/bedarf" replace />}
           />
-          <Route
-            path="bedarf"
-            element={<Bedarf />}
-          />
-          <Route
-            path="felder-blenden"
-            element={<FelderBlenden />}
-          />
-          <Route
-            path="ordner-blenden"
-            element={<OrdnerBlenden />}
-          />
-          <Route
-            path="planen"
-            element={<Planen />}
-          />
-          <Route
-            path="genetische-vielfalt"
-            element={<GenetischeVielfalt />}
-          />
+          <Route path="bedarf" element={<Bedarf />} />
+          <Route path="felder-blenden" element={<FelderBlenden />} />
+          <Route path="ordner-blenden" element={<OrdnerBlenden />} />
+          <Route path="planen" element={<Planen />} />
+          <Route path="genetische-vielfalt" element={<GenetischeVielfalt />} />
           <Route
             path="qualitaets-kontrollen"
             element={<QualitaetsKontrollen />}
           />
-          <Route
-            path="gedaechtnis"
-            element={<VermehrungErinnertSich />}
-          />
-          <Route
-            path="open-source"
-            element={<OpenSource />}
-          />
-          <Route
-            path="fehler-ideen"
-            element={<FehlerMelden />}
-          />
-          <Route
-            path="pwa"
-            element={<Pwa />}
-          />
-          <Route
-            path="offline"
-            element={<Offline />}
-          />
-          <Route
-            path="offline-wie"
-            element={<OfflineWie />}
-          />
-          <Route
-            path="historisierung"
-            element={<History />}
-          />
-          <Route
-            path="technologien"
-            element={<Technologien />}
-          />
-          <Route
-            path="struktur"
-            element={<Struktur />}
-          />
-          <Route
-            path="roadmap"
-            element={<Roadmap />}
-          />
-          <Route
-            path="konten"
-            element={<Konten />}
-          />
-          <Route
-            path="datenschutz"
-            element={<Datenschutz />}
-          />
+          <Route path="gedaechtnis" element={<VermehrungErinnertSich />} />
+          <Route path="open-source" element={<OpenSource />} />
+          <Route path="fehler-ideen" element={<FehlerMelden />} />
+          <Route path="pwa" element={<Pwa />} />
+          <Route path="offline" element={<Offline />} />
+          <Route path="offline-wie" element={<OfflineWie />} />
+          <Route path="historisierung" element={<History />} />
+          <Route path="technologien" element={<Technologien />} />
+          <Route path="struktur" element={<Struktur />} />
+          <Route path="roadmap" element={<Roadmap />} />
+          <Route path="konten" element={<Konten />} />
+          <Route path="datenschutz" element={<Datenschutz />} />
         </Route>
-        <Route
-          path="*"
-          element={<FourOhFour />}
-        />
+        <Route path="*" element={<FourOhFour />} />
       </Route>,
     ),
   )

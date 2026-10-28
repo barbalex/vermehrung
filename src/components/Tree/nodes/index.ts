@@ -171,7 +171,8 @@ export const buildNodes = async ({
   userPersonOption,
   userRole,
 }: {
-  userPersonOption: import('../../../dbModel.ts').PersonOption | null | undefined
+  userPersonOption:
+    import('../../../dbModel.ts').PersonOption | null | undefined
   userRole: string | null | undefined
 }) => {
   const db = store.get(dbAtom)
@@ -415,9 +416,11 @@ export const buildNodes = async ({
             )
 
             if (artHerkunftSammlungFolderIsOpen) {
-              let artHerkunftSammlungs: import('../../../dbModel.ts').Sammlung[] = []
+              let artHerkunftSammlungs: import('../../../dbModel.ts').Sammlung[] =
+                []
               try {
-                artHerkunftSammlungs = (await artHerkunftsSammlungsQuery?.fetch()) ?? []
+                artHerkunftSammlungs =
+                  (await artHerkunftsSammlungsQuery?.fetch()) ?? []
               } catch {}
               const artHerkunftSammlungsSorted =
                 await sammlungsSortedFromSammlungs(artHerkunftSammlungs)
@@ -485,7 +488,8 @@ export const buildNodes = async ({
                       n[6] === 'Aus-Lieferungen',
                   )
                 if (artHerkunftSammlungAuslieferungFolderIsOpen) {
-                  let artHerkunftSammlungAuslieferungs: import('../../../dbModel.ts').Lieferung[] = []
+                  let artHerkunftSammlungAuslieferungs: import('../../../dbModel.ts').Lieferung[] =
+                    []
                   try {
                     artHerkunftSammlungAuslieferungs =
                       await artHerkunftsSammlungAuslieferungsQuery?.fetch()
@@ -548,9 +552,11 @@ export const buildNodes = async ({
             )
 
             if (artHerkunftKulturFolderIsOpen) {
-              let artHerkunftKulturs: import('../../../dbModel.ts').Kultur[] = []
+              let artHerkunftKulturs: import('../../../dbModel.ts').Kultur[] =
+                []
               try {
-                artHerkunftKulturs = (await artHerkunftsKultursQuery?.fetch()) ?? []
+                artHerkunftKulturs =
+                  (await artHerkunftsKultursQuery?.fetch()) ?? []
               } catch {}
               const artHerkunftKultursSorted =
                 await kultursSortedFromKulturs(artHerkunftKulturs)
@@ -593,7 +599,8 @@ export const buildNodes = async ({
                   kulturOption = await kultur.kultur_option.fetch()
                 } catch {}
                 if (kulturOption?.tk) {
-                  let teilkulturs: import('../../../dbModel.ts').Teilkultur[] = []
+                  let teilkulturs: import('../../../dbModel.ts').Teilkultur[] =
+                    []
                   try {
                     teilkulturs = await kultur.teilkulturs
                       .extend(...tableFilter({ table: 'teilkultur' }))
@@ -623,7 +630,9 @@ export const buildNodes = async ({
                         n[6] === 'Teilkulturen',
                     )
                   if (artHerkunftKulturTeilkulturFolderIsOpen) {
-                    const teilkultursSorted = (teilkulturs ?? []).sort(teilkulturSort)
+                    const teilkultursSorted = (teilkulturs ?? []).sort(
+                      teilkulturSort,
+                    )
                     const newArtKulturTeilkulturNodes = teilkultursSorted.map(
                       (teilkultur, teilkulturIndex) =>
                         buildArtHerkunftKulturTeilkultur({
@@ -674,7 +683,8 @@ export const buildNodes = async ({
                 if (artHerkunftKulturZaehlungFolderIsOpen) {
                   let zaehlungs: import('../../../dbModel.ts').Zaehlung[] = []
                   try {
-                    zaehlungs = (await artHerkunftKulturZaehlungQuery?.fetch()) ?? []
+                    zaehlungs =
+                      (await artHerkunftKulturZaehlungQuery?.fetch()) ?? []
                   } catch {}
                   const zaehlungsSorted = (zaehlungs ?? []).sort(zaehlungSort)
                   const newArtHerkunftKulturZaehlungNodes = await Promise.all(
@@ -747,7 +757,8 @@ export const buildNodes = async ({
                 }
 
                 // auslieferung nodes
-                let auslieferungs: import('../../../dbModel.ts').Lieferung[] = []
+                let auslieferungs: import('../../../dbModel.ts').Lieferung[] =
+                  []
                 try {
                   auslieferungs = await kultur.auslieferungs
                     .extend(
@@ -1031,7 +1042,9 @@ export const buildNodes = async ({
                   n[4] === 'Teilkulturen',
               )
               if (artKulturTeilkulturFolderIsOpen) {
-                const teilkultursSorted = (teilkulturs ?? []).sort(teilkulturSort)
+                const teilkultursSorted = (teilkulturs ?? []).sort(
+                  teilkulturSort,
+                )
                 const newArtKulturTeilkulturNodes = teilkultursSorted.map(
                   (teilkultur, teilkulturIndex) =>
                     buildArtKulturTeilkultur({
@@ -1051,7 +1064,8 @@ export const buildNodes = async ({
             const artKulturZaehlungQuery = kultur.zaehlungs.extend(
               ...tableFilter({ table: 'zaehlung' }),
             )
-            const zaehlungsCount = (await artKulturZaehlungQuery?.fetchCount()) ?? 0
+            const zaehlungsCount =
+              (await artKulturZaehlungQuery?.fetchCount()) ?? 0
             artKulturZaehlungFolderNodes.push(
               buildArtKulturZaehlungFolder({
                 kulturId,
@@ -1421,7 +1435,8 @@ export const buildNodes = async ({
         const sammlungLieferungQuery = sammlung.lieferungs.extend(
           ...tableFilter({ table: 'lieferung' }),
         )
-        const sammlungLieferungCount = (await sammlungLieferungQuery?.fetchCount()) ?? 0
+        const sammlungLieferungCount =
+          (await sammlungLieferungQuery?.fetchCount()) ?? 0
         sammlungAuslieferungFolderNodes.push(
           buildSammlungAuslieferungFolder({
             count: sammlungLieferungCount,
@@ -1572,7 +1587,9 @@ export const buildNodes = async ({
                   n[4] === 'Teilkulturen',
               )
               if (gartenKulturTeilkulturFolderIsOpen) {
-                const teilkultursSorted = (teilkulturs ?? []).sort(teilkulturSort)
+                const teilkultursSorted = (teilkulturs ?? []).sort(
+                  teilkulturSort,
+                )
                 const newGartenKulturTeilkulturNodes = teilkultursSorted.map(
                   (teilkultur, teilkulturIndex) =>
                     buildGartenKulturTeilkultur({
@@ -1810,7 +1827,8 @@ export const buildNodes = async ({
           const kulturTeilkulturQuery = kultur.teilkulturs.extend(
             ...tableFilter({ table: 'teilkultur' }),
           )
-          const kulturTeilkulturCount = (await kulturTeilkulturQuery?.fetchCount()) ?? 0
+          const kulturTeilkulturCount =
+            (await kulturTeilkulturQuery?.fetchCount()) ?? 0
           kulturTeilkulturFolderNodes.push(
             buildKulturTeilkulturFolder({
               count: kulturTeilkulturCount,
@@ -1849,7 +1867,8 @@ export const buildNodes = async ({
         const kulturZaehlungQuery = kultur.zaehlungs.extend(
           ...tableFilter({ table: 'zaehlung' }),
         )
-        const kulturZaehlungCount = (await kulturZaehlungQuery?.fetchCount()) ?? 0
+        const kulturZaehlungCount =
+          (await kulturZaehlungQuery?.fetchCount()) ?? 0
         kulturZaehlungFolderNodes.push(
           buildKulturZaehlungFolder({
             count: kulturZaehlungCount,
@@ -1889,7 +1908,8 @@ export const buildNodes = async ({
         const kulturAnlieferungQuery = kultur.anlieferungs.extend(
           ...tableFilter({ table: 'lieferung' }),
         )
-        const kulturAnlieferungCount = (await kulturAnlieferungQuery?.fetchCount()) ?? 0
+        const kulturAnlieferungCount =
+          (await kulturAnlieferungQuery?.fetchCount()) ?? 0
         kulturAnlieferungFolderNodes.push(
           buildKulturAnlieferungFolder({
             count: kulturAnlieferungCount,
@@ -1985,13 +2005,14 @@ export const buildNodes = async ({
             bedarfe = (await kulturBedarfQuery?.fetch()) ?? []
           } catch {}
           const bedarfeSorted = bedarfe.sort(bedarfSort)
-          const newKulturBedarfNodes = bedarfeSorted.map((bedarf, bedarfIndex) =>
-            buildKulturBedarf({
-              bedarf,
-              bedarfIndex,
-              kulturId,
-              kulturIndex,
-            }),
+          const newKulturBedarfNodes = bedarfeSorted.map(
+            (bedarf, bedarfIndex) =>
+              buildKulturBedarf({
+                bedarf,
+                bedarfIndex,
+                kulturId,
+                kulturIndex,
+              }),
           )
           kulturBedarfNodes.push(...newKulturBedarfNodes)
         }
@@ -2170,7 +2191,8 @@ export const buildNodes = async ({
         const personSammlungQuery = person.sammlungs.extend(
           ...tableFilter({ table: 'sammlung' }),
         )
-        const personSammlungCount = (await personSammlungQuery?.fetchCount()) ?? 0
+        const personSammlungCount =
+          (await personSammlungQuery?.fetchCount()) ?? 0
         personSammlungFolderNodes.push(
           buildPersonSammlungFolder({
             count: personSammlungCount,
@@ -2263,7 +2285,8 @@ export const buildNodes = async ({
             const gartenKulturQuery = garten.kulturs.extend(
               ...tableFilter({ table: 'kultur' }),
             )
-            const gartenKulturCount = (await gartenKulturQuery?.fetchCount()) ?? 0
+            const gartenKulturCount =
+              (await gartenKulturQuery?.fetchCount()) ?? 0
             personGartenKulturFolderNodes.push(
               buildPersonGartenKulturFolder({
                 gartenId,
@@ -2329,7 +2352,8 @@ export const buildNodes = async ({
                   const teilkulturQuery = kultur.teilkulturs.extend(
                     ...tableFilter({ table: 'teilkultur' }),
                   )
-                  const teilkulturCount = (await teilkulturQuery?.fetchCount()) ?? 0
+                  const teilkulturCount =
+                    (await teilkulturQuery?.fetchCount()) ?? 0
                   personGartenKulturTeilkulturFolderNodes.push(
                     buildPersonGartenKulturTeilkulturFolder({
                       kulturId,
@@ -2355,11 +2379,14 @@ export const buildNodes = async ({
                     )
 
                   if (personGartenKulturTeilkulturFolderIsOpen) {
-                    let teilkulturs: import('../../../dbModel.ts').Teilkultur[] = []
+                    let teilkulturs: import('../../../dbModel.ts').Teilkultur[] =
+                      []
                     try {
                       teilkulturs = (await teilkulturQuery?.fetch()) ?? []
                     } catch {}
-                    const teilkultursSorted = (teilkulturs ?? []).sort(teilkulturSort)
+                    const teilkultursSorted = (teilkulturs ?? []).sort(
+                      teilkulturSort,
+                    )
                     const newPersonGartenKulturTeilkulturNodes =
                       teilkultursSorted.map((teilkultur, teilkulturIndex) =>
                         buildPersonGartenKulturTeilkultur({
@@ -2437,7 +2464,8 @@ export const buildNodes = async ({
                 const anlieferungQuery = kultur.anlieferungs.extend(
                   ...tableFilter({ table: 'lieferung' }),
                 )
-                const anlieferungCount = (await anlieferungQuery?.fetchCount()) ?? 0
+                const anlieferungCount =
+                  (await anlieferungQuery?.fetchCount()) ?? 0
                 personGartenKulturAnlieferungFolderNodes.push(
                   buildPersonGartenKulturAnlieferungFolder({
                     kulturId,
@@ -2463,7 +2491,8 @@ export const buildNodes = async ({
                   )
 
                 if (personGartenKulturAnlieferungFolderIsOpen) {
-                  let anlieferungs: import('../../../dbModel.ts').Lieferung[] = []
+                  let anlieferungs: import('../../../dbModel.ts').Lieferung[] =
+                    []
                   try {
                     anlieferungs = (await anlieferungQuery?.fetch()) ?? []
                   } catch {}
@@ -2490,7 +2519,8 @@ export const buildNodes = async ({
                 const auslieferungQuery = kultur.auslieferungs.extend(
                   ...tableFilter({ table: 'lieferung' }),
                 )
-                const auslieferungCount = (await auslieferungQuery?.fetchCount()) ?? 0
+                const auslieferungCount =
+                  (await auslieferungQuery?.fetchCount()) ?? 0
                 personGartenKulturAuslieferungFolderNodes.push(
                   buildPersonGartenKulturAuslieferungFolder({
                     kulturId,
@@ -2516,7 +2546,8 @@ export const buildNodes = async ({
                   )
 
                 if (personGartenKulturAuslieferungFolderIsOpen) {
-                  let auslieferungs: import('../../../dbModel.ts').Lieferung[] = []
+                  let auslieferungs: import('../../../dbModel.ts').Lieferung[] =
+                    []
                   try {
                     auslieferungs = (await auslieferungQuery?.fetch()) ?? []
                   } catch {}
@@ -2599,7 +2630,8 @@ export const buildNodes = async ({
         const personLieferungQuery = person.lieferungs.extend(
           ...tableFilter({ table: 'lieferung' }),
         )
-        const personLieferungCount = (await personLieferungQuery?.fetchCount()) ?? 0
+        const personLieferungCount =
+          (await personLieferungQuery?.fetchCount()) ?? 0
         personLieferungFolderNodes.push(
           buildPersonLieferungFolder({
             count: personLieferungCount,

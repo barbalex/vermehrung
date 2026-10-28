@@ -1,9 +1,6 @@
 import { useEffect, useRef } from 'react'
 import md5 from 'blueimp-md5'
-import {
-  FileUploaderRegular,
-  defineLocale,
-} from '@uploadcare/react-uploader'
+import { FileUploaderRegular, defineLocale } from '@uploadcare/react-uploader'
 import '@uploadcare/react-uploader/core.css'
 
 import { addNotification } from '../store/index.ts'

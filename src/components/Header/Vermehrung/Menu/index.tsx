@@ -11,7 +11,13 @@ import styles from './index.module.css'
 
 export const HeaderHamburgerMenu = ({ asMenu }) => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | undefined | null>(null)
-  const onClickMenu = (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => setAnchorEl(event.currentTarget)
+  const onClickMenu = (event: {
+    target: { name?: string; value: unknown }
+    currentTarget?: HTMLElement
+    preventDefault?: () => void
+    stopPropagation?: () => void
+    key?: string
+  }) => setAnchorEl(event.currentTarget)
 
   if (asMenu) {
     return (
@@ -23,10 +29,7 @@ export const HeaderHamburgerMenu = ({ asMenu }) => {
         >
           Menu
         </MenuItem>
-        <Menu
-          anchorEl={anchorEl}
-          setAnchorEl={setAnchorEl}
-        />
+        <Menu anchorEl={anchorEl} setAnchorEl={setAnchorEl} />
       </>
     )
   }
@@ -43,10 +46,7 @@ export const HeaderHamburgerMenu = ({ asMenu }) => {
       >
         <MdMenu className={styles.icon} />
       </IconButton>
-      <Menu
-        anchorEl={anchorEl}
-        setAnchorEl={setAnchorEl}
-      />
+      <Menu anchorEl={anchorEl} setAnchorEl={setAnchorEl} />
     </ErrorBoundary>
   )
 }

@@ -22,18 +22,23 @@ export const QK = ({ artId }) => {
   const user = useAtomValue(userAtom)
 
   const [tab, setTab] = useState('qk')
-  const onChangeTab = (event: import('../../../../../dbModel.ts').Event, value) => setTab(value)
+  const onChangeTab = (
+    event: import('../../../../../dbModel.ts').Event,
+    value,
+  ) => setTab(value)
 
   const [dataState, setDataState] = useState({ qks: [], userPersonOption: {} })
   useEffect(() => {
     const userPersonOptionsObservable = user.uid
       ? db
-          .get('person_option')
+          ?.get<import('../../../../../dbModel.ts').PersonOption>(
+            'person_option',
+          )
           .query(Q.on('person', Q.where('account_id', user.uid)))
           .observeWithColumns(['art_qk_choosen'])
       : $of({})
     const artQksObservable = db
-      .get('art_qk')
+      ?.get<import('../../../../../dbModel.ts').ArtQk>('art_qk')
       .query(Q.where('_deleted', false), Q.sortBy('name', Q.asc))
       .observeWithColumns(['name'])
     const combinedObservables = combineLatest([
@@ -58,7 +63,13 @@ export const QK = ({ artId }) => {
   const qkCount = qks.length
   const qkChoosenCount = qkChoosens.length
 
-  const openDocs = (e: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
+  const openDocs = (e: {
+    target: { name?: string; value: unknown }
+    currentTarget?: HTMLElement
+    preventDefault?: () => void
+    stopPropagation?: () => void
+    key?: string
+  }) => {
     e.stopPropagation()
     const url = `${constants?.getAppUri()}/Dokumentation/qualitaets-kontrollen`
     if (window.matchMedia('(display-mode: standalone)').matches) {
@@ -69,7 +80,13 @@ export const QK = ({ artId }) => {
 
   const [open, setOpen] = useState(false)
   const anim = useAnimation()
-  const onClickToggle = async (e: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
+  const onClickToggle = async (e: {
+    target: { name?: string; value: unknown }
+    currentTarget?: HTMLElement
+    preventDefault?: () => void
+    stopPropagation?: () => void
+    key?: string
+  }) => {
     e.stopPropagation()
     if (open) {
       const was = open

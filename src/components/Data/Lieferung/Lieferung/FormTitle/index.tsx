@@ -70,7 +70,8 @@ export const LieferungTitleChooser = ({
                     Q.on('sammlung', 'id', sammlungIdInActiveNodeArray),
                   ]
                 : []
-    const collection = db?.get('lieferung')
+    const collection =
+      db?.get<import('../../../../../dbModel.ts').Lieferung>('lieferung')
     const lieferungDelQuery =
       lieferungFilter._deleted === false
         ? Q.where('_deleted', false)

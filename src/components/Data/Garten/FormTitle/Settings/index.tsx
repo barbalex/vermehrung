@@ -8,7 +8,13 @@ import { GartenSettingsMenu as Menu } from './Menu.tsx'
 
 export const GartenSettings = ({ asMenu }: { asMenu: boolean }) => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | undefined | null>(null)
-  const onClickConfig = (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => setAnchorEl(event.currentTarget)
+  const onClickConfig = (event: {
+    target: { name?: string; value: unknown }
+    currentTarget?: HTMLElement
+    preventDefault?: () => void
+    stopPropagation?: () => void
+    key?: string
+  }) => setAnchorEl(event.currentTarget)
 
   if (asMenu) {
     return (
@@ -20,10 +26,7 @@ export const GartenSettings = ({ asMenu }: { asMenu: boolean }) => {
         >
           Optionen wählen
         </MenuItem>
-        <Menu
-          anchorEl={anchorEl}
-          setAnchorEl={setAnchorEl}
-        />
+        <Menu anchorEl={anchorEl} setAnchorEl={setAnchorEl} />
       </>
     )
   }
@@ -40,10 +43,7 @@ export const GartenSettings = ({ asMenu }: { asMenu: boolean }) => {
       >
         <FaCog />
       </IconButton>
-      <Menu
-        anchorEl={anchorEl}
-        setAnchorEl={setAnchorEl}
-      />
+      <Menu anchorEl={anchorEl} setAnchorEl={setAnchorEl} />
     </ErrorBoundary>
   )
 }

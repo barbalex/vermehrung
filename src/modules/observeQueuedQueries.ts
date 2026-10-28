@@ -25,119 +25,118 @@ import type { TableName } from '../store/index.ts'
 let isProcessing = false
 
 const drainQueue = async (get: Parameters<Effect>[0]): Promise<void> => {
-    if (isProcessing) return
+  if (isProcessing) return
 
-    // always tracked so the periodic tick re-runs this effect
-    void get(retryTickAtom)
-    // tracked: new or removed queries re-trigger; deferred ones do not
-    void get(queueSizeAtom)
+  // always tracked so the periodic tick re-runs this effect
+  void get(retryTickAtom)
+  // tracked: new or removed queries re-trigger; deferred ones do not
+  void get(queueSizeAtom)
 
-    if (!get(shortTermOnlineAtom)) return
+  if (!get(shortTermOnlineAtom)) return
 
-    // execute oldest operation first
-    // read via store.get so queue contents are not tracked
-    const query = store.get(queuedQueriesSortedAtom)[0]
-    if (!query) return
+  // execute oldest operation first
+  // read via store.get so queue contents are not tracked
+  const query = store.get(queuedQueriesSortedAtom)[0]
+  if (!query) return
 
-    const { revertTable, revertField, revertId, revertValue, revertValues } =
-      query as unknown as {
-        revertTable: TableName
-        revertField: string
-        revertId: string
-        revertValue: unknown
-        revertValues?: Record<string, unknown>
+  const { revertTable, revertField, revertId, revertValue, revertValues } =
+    query as unknown as {
+      revertTable: TableName
+      revertField: string
+      revertId: string
+      revertValue: unknown
+      revertValues?: Record<string, unknown>
+    }
+
+  isProcessing = true
+  let response
+  try {
+    response = await executeQueuedQuery(query)
+  } catch (error) {
+    console.error('observeQueuedQueries, error executing query:', error)
+    isProcessing = false
+    return
+  }
+  // Release the lock BEFORE any queue mutation so the observer picks up
+  // the next query immediately when removeQueuedQueryById fires
+  isProcessing = false
+
+  if (response.error) {
+    console.log('operation observer error:', response.error)
+    const { message, code, status, isNetwork } = response.error
+    const lcMessage = message.toLowerCase()
+    if (status === 401) {
+      // stale api token: fetch a fresh one, the query stays queued
+      console.log('getting auth token due to jwt error')
+      await getAuthToken()
+      return
+    } else if (code === '23505' && lcMessage.includes('_rev_id__rev_key')) {
+      // In case a conflict was caused by two EXACT SAME changes,
+      // this will bounce because of the same rev. We want to ignore this:
+      console.log(
+        'There is a conflict with exact same changes - ingoring the error thrown',
+      )
+    } else if (code === '21000') {
+      // two identical revisions made the winning-revision subquery
+      // ambiguous: the same edit was already applied - ignore
+      console.log('user sent same edit to soon again')
+    } else if (code === '23505' || lcMessage.includes('unique-constraint')) {
+      let errorText = message
+      if (lcMessage.includes('single_art_herkunft_garden_active_idx')) {
+        errorText =
+          'Pro Art, Herkunft und Garten darf nur eine Kultur aktiv sein (plus ein Zwischenlager). Offenbar gibt es schon eine aktive Kultur'
       }
-
-    isProcessing = true
-    let response
-    try {
-      response = await executeQueuedQuery(query)
-    } catch (error) {
-      console.error('observeQueuedQueries, error executing query:', error)
-      isProcessing = false
+      // do not add a notification: show this error below the field
+      setError({
+        path: `${revertTable}.${revertField}`,
+        value: errorText,
+      })
+      console.log('a unique constraint was violated')
+    } else if (isNetwork || lcMessage.includes('failed to fetch')) {
+      console.log('network is failing')
+      setShortTermOnline(false)
+      return
+    } else {
+      // Move this operation to the end of the queue
+      // to prevent it from blocking other operations
+      deferQueuedQueryById(query.id)
+      setError({
+        path: `${revertTable}.${revertField}`,
+        value: message,
+      })
+      addNotification({
+        title: 'Eine Operation kann nicht in die Datenbank geschrieben werden',
+        message,
+        info: 'Bei der nächsten Synchronisierung wird wieder versucht, diese Operation auszuführen',
+        actionLabel: 'Operation löschen',
+        actionName: 'removeQueuedQueryById',
+        actionArgument: query.id,
+      })
       return
     }
-    // Release the lock BEFORE any queue mutation so the observer picks up
-    // the next query immediately when removeQueuedQueryById fires
-    isProcessing = false
-
-    if (response.error) {
-      console.log('operation observer error:', response.error)
-      const { message, code, status, isNetwork } = response.error
-      const lcMessage = message.toLowerCase()
-      if (status === 401) {
-        // stale api token: fetch a fresh one, the query stays queued
-        console.log('getting auth token due to jwt error')
-        await getAuthToken()
-        return
-      } else if (code === '23505' && lcMessage.includes('_rev_id__rev_key')) {
-        // In case a conflict was caused by two EXACT SAME changes,
-        // this will bounce because of the same rev. We want to ignore this:
-        console.log(
-          'There is a conflict with exact same changes - ingoring the error thrown',
-        )
-      } else if (code === '21000') {
-        // two identical revisions made the winning-revision subquery
-        // ambiguous: the same edit was already applied - ignore
-        console.log('user sent same edit to soon again')
-      } else if (code === '23505' || lcMessage.includes('unique-constraint')) {
-        let errorText = message
-        if (lcMessage.includes('single_art_herkunft_garden_active_idx')) {
-          errorText =
-            'Pro Art, Herkunft und Garten darf nur eine Kultur aktiv sein (plus ein Zwischenlager). Offenbar gibt es schon eine aktive Kultur'
-        }
-        // do not add a notification: show this error below the field
-        setError({
-          path: `${revertTable}.${revertField}`,
-          value: errorText,
-        })
-        console.log('a unique constraint was violated')
-      } else if (isNetwork || lcMessage.includes('failed to fetch')) {
-        console.log('network is failing')
-        setShortTermOnline(false)
-        return
-      } else {
-        // Move this operation to the end of the queue
-        // to prevent it from blocking other operations
-        deferQueuedQueryById(query.id)
-        setError({
-          path: `${revertTable}.${revertField}`,
-          value: message,
-        })
-        addNotification({
-          title:
-            'Eine Operation kann nicht in die Datenbank geschrieben werden',
-          message,
-          info: 'Bei der nächsten Synchronisierung wird wieder versucht, diese Operation auszuführen',
-          actionLabel: 'Operation löschen',
-          actionName: 'removeQueuedQueryById',
-          actionArgument: query.id,
-        })
-        return
-      }
-      // revert change: aggregated flushes carry the full pre-flush
-      // state, single edits (insertRev deletes) the one field
-      if (revertValues) {
-        await updateModelValues({
-          table: revertTable,
-          id: revertId,
-          values: revertValues,
-        })
-      } else {
-        await updateModelValue({
-          table: revertTable,
-          id: revertId,
-          field: revertField,
-          value: revertValue,
-        })
-      }
+    // revert change: aggregated flushes carry the full pre-flush
+    // state, single edits (insertRev deletes) the one field
+    if (revertValues) {
+      await updateModelValues({
+        table: revertTable,
+        id: revertId,
+        values: revertValues,
+      })
+    } else {
+      await updateModelValue({
+        table: revertTable,
+        id: revertId,
+        field: revertField,
+        value: revertValue,
+      })
     }
-    // remove operation from queue
-    removeQueuedQueryById(query.id)
-    // the rev triggers recomputed winning revisions and conflicts
-    // server-side - fetch them promptly
-    requestSyncSoon()
   }
+  // remove operation from queue
+  removeQueuedQueryById(query.id)
+  // the rev triggers recomputed winning revisions and conflicts
+  // server-side - fetch them promptly
+  requestSyncSoon()
+}
 
 // returns unobserve function
 // https://jotai.org/docs/extensions/effect

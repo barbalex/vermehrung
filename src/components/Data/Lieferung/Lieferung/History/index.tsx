@@ -28,10 +28,15 @@ export const LieferungHistory = ({ row, rawRow, historyTakeoverCallback }) => {
     ? `/lieferung_rev?_rev=in.(${priorRevisions.join(',')})&select=id,lieferung_id,sammel_lieferung_id,art_id,person_id,von_sammlung_id,von_kultur_id,datum,nach_kultur_id,nach_ausgepflanzt,von_anzahl_individuen,anzahl_pflanzen,anzahl_auspflanzbereit,gramm_samen,andere_menge,geplant,bemerkungen,changed,changed_by,_rev,_parent_rev,_revisions,_depth,_deleted`
     : null
   const { error, data, fetching } = useApiQuery(revPath)
-    if (error) checkForOnlineError({ error })
+  if (error) checkForOnlineError({ error })
 
   const revRowsUnsorted = data ?? []
-  const revRows = revRowsUnsorted.sort((a: import('../../../../../dbModel.ts').Art, b: import('../../../../../dbModel.ts').Bedarf) => b?._depth - a?._depth)
+  const revRows = revRowsUnsorted.sort(
+    (
+      a: import('../../../../../dbModel.ts').Art,
+      b: import('../../../../../dbModel.ts').Bedarf,
+    ) => b?._depth - a?._depth,
+  )
 
   const historyRev = useAtomValue(historyRevAtom)
 
@@ -47,7 +52,6 @@ export const LieferungHistory = ({ row, rawRow, historyTakeoverCallback }) => {
     if (!revRows.length || historyRev !== true) return
     // the url ends with 'histories': add the rev of the newest revision
     navigateToRev(revRows[0]._rev)
-     
   }, [historyRev, revRows])
 
   if (fetching) {
@@ -55,7 +59,9 @@ export const LieferungHistory = ({ row, rawRow, historyTakeoverCallback }) => {
   }
 
   if (error) {
-    return <div className={artStyles.errorContainer}>{(error as Error).message}</div>
+    return (
+      <div className={artStyles.errorContainer}>{(error as Error).message}</div>
+    )
   }
 
   return (

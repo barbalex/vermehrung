@@ -36,12 +36,25 @@ const sammelLieferungFields = [
   '_deleted',
 ]
 
-export const SammelLieferungCopyMenu = ({ sammelLieferung, lieferung }: { sammelLieferung: import('../../../../shared/types.ts').WmRow | null | undefined; lieferung: import('../../../../shared/types.ts').WmRow | null | undefined }) => {
+export const SammelLieferungCopyMenu = ({
+  sammelLieferung,
+  lieferung,
+}: {
+  sammelLieferung:
+    import('../../../../shared/types.ts').WmRow | null | undefined
+  lieferung: import('../../../../shared/types.ts').WmRow | null | undefined
+}) => {
   //console.log('CopySammelLieferungMenu', { sammelLieferung, lieferung })
 
   const [anchorEl, setAnchorEl] = useState<HTMLElement | undefined | null>(null)
   const onClose = () => setAnchorEl(null)
-  const onClickConfig = (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => setAnchorEl(event.currentTarget)
+  const onClickConfig = (event: {
+    target: { name?: string; value: unknown }
+    currentTarget?: HTMLElement
+    preventDefault?: () => void
+    stopPropagation?: () => void
+    key?: string
+  }) => setAnchorEl(event.currentTarget)
 
   const containsData =
     Object.entries(sammelLieferung)

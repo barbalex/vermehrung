@@ -2,7 +2,7 @@
  * based on:
  * https://hasura.io/docs/1.0/graphql/core/api-reference/health.html
  */
- 
+
 import { useEffect } from 'react'
 import { useAtomValue } from 'jotai'
 

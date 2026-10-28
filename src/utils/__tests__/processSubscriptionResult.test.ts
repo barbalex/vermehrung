@@ -46,7 +46,9 @@ const createDbMock = (existingRows: Record<string, Row[]>) => {
     }),
     batch: async (...args: unknown[]) => {
       // batch accepts both a single array of operations or a spread
-      const ops = (Array.isArray(args[0]) ? args[0] : args) as { kind?: string }[]
+      const ops = (Array.isArray(args[0]) ? args[0] : args) as {
+        kind?: string
+      }[]
       ops.forEach((op) => {
         if (op.kind === 'create') return
         state.updated.push(op)
@@ -61,7 +63,10 @@ const flushTimers = () => new Promise((resolve) => setTimeout(resolve, 10))
 describe('processSubscriptionResult', () => {
   beforeEach(() => {
     store.set(lastUpdatedAtom, { art: 0 } as Record<TableName, number>)
-    store.set(initiallyQueriedAtom, { art: false } as Record<TableName, boolean>)
+    store.set(initiallyQueriedAtom, { art: false } as Record<
+      TableName,
+      boolean
+    >)
     store.set(initiallyQueryingAtom, '')
   })
 

@@ -18,9 +18,7 @@ import styles from './index.module.css'
 const formatOptionLabel = (
   { label }: { label: string },
   { inputValue }: { inputValue: string },
-) => (
-  <Highlighter searchWords={[inputValue]} textToHighlight={label} />
-)
+) => <Highlighter searchWords={[inputValue]} textToHighlight={label} />
 const formatGroupLabel = (data: { label: string }) => <div>{data.label}</div>
 const noOptionsMessage = () => null
 const loadingMessage = () => null
@@ -28,9 +26,13 @@ const loadingMessage = () => null
 export const HeaderSearch = () => {
   const singleColumnView = useAtomValue(singleColumnViewAtom)
 
-  const onChange = (option:
-    | { val?: string; value?: string[]; type?: string; parent?: unknown }
-    | null,
+  const onChange = (
+    option: {
+      val?: string
+      value?: string[]
+      type?: string
+      parent?: unknown
+    } | null,
   ) => {
     if (!option) return
     if (option?.val === 'none') return

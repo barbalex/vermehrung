@@ -28,7 +28,11 @@ import { buildKulturTimelineData as buildData } from './buildData.ts'
 
 import styles from './index.module.css'
 
-export const KulturTimeline = ({ row }: { row: import('../../../../shared/types.ts').WmRow | null | undefined }) => {
+export const KulturTimeline = ({
+  row,
+}: {
+  row: import('../../../../shared/types.ts').WmRow | null | undefined
+}) => {
   const { width, ref } = useResizeDetector()
   // TODO: calc runs on every render of kultur
   // need to only run when open
@@ -58,7 +62,13 @@ export const KulturTimeline = ({ row }: { row: import('../../../../shared/types.
 
   const [open, setOpen] = useState(false)
   const anim = useAnimation()
-  const onClickToggle = async (e: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
+  const onClickToggle = async (e: {
+    target: { name?: string; value: unknown }
+    currentTarget?: HTMLElement
+    preventDefault?: () => void
+    stopPropagation?: () => void
+    key?: string
+  }) => {
     e.stopPropagation()
     if (open) {
       const was = open
@@ -80,20 +90,16 @@ export const KulturTimeline = ({ row }: { row: import('../../../../shared/types.
   // need to disable animation or labels will not show on first render
   // https://github.com/recharts/recharts/issues/806
   return (
-    <section
-      ref={ref}
-      className={styles.container}
-    >
-      {!allData ?
-        null
-      : !row || !allData.length ?
+    <section ref={ref} className={styles.container}>
+      {!allData ? null : !row || !allData.length ? (
         <ErrorBoundary>
           <div className={styles.titleRow}>
             <div className={styles.title}>Zeit-Achse</div>
             <div className={styles.content}>Sorry, keine Daten verfügbar</div>
           </div>
         </ErrorBoundary>
-      : <ErrorBoundary>
+      ) : (
+        <ErrorBoundary>
           <div
             className={styles.titleRow}
             onClick={onClickToggle}
@@ -116,9 +122,7 @@ export const KulturTimeline = ({ row }: { row: import('../../../../shared/types.
                 onClick={onClickToggle}
                 size="large"
               >
-                {open ?
-                  <FaChevronUp />
-                : <FaChevronDown />}
+                {open ? <FaChevronUp /> : <FaChevronDown />}
               </IconButton>
             </div>
           </div>
@@ -127,23 +131,13 @@ export const KulturTimeline = ({ row }: { row: import('../../../../shared/types.
             transition={{ type: 'just', duration: 0.2 }}
           >
             {open && (
-              <ResponsiveContainer
-                width="99%"
-                height={450}
-              >
+              <ResponsiveContainer width="99%" height={450}>
                 <ComposedChart
                   data={allData}
                   margin={{ top: 15, right: 0, left: 0, bottom: 45 }}
                 >
-                  <CartesianGrid
-                    strokeDasharray="3 3"
-                    horizontal={false}
-                  />
-                  <XAxis
-                    dataKey="datum"
-                    tick={AxisTick}
-                    interval={0}
-                  />
+                  <CartesianGrid strokeDasharray="3 3" horizontal={false} />
+                  <XAxis dataKey="datum" tick={AxisTick} interval={0} />
                   <YAxis
                     label={{
                       value: 'Anzahl',
@@ -155,22 +149,20 @@ export const KulturTimeline = ({ row }: { row: import('../../../../shared/types.
                     fontSize={12}
                   />
                   <Tooltip content={<KulturTooltip />} />
-                  {isNarrow ?
+                  {isNarrow ? (
                     <Legend
                       layout="horizontal"
                       align="center"
                       wrapperStyle={{ bottom: 0, fontSize: 12 }}
                     />
-                  : <Legend
+                  ) : (
+                    <Legend
                       layout="vertical"
                       align="right"
                       wrapperStyle={{ right: -10, top: 50, fontSize: 12 }}
                     />
-                  }
-                  <ReferenceLine
-                    y={0}
-                    stroke="#000"
-                  />
+                  )}
+                  <ReferenceLine y={0} stroke="#000" />
                   {showCategory('Lieferung Pflanzen') && (
                     <Bar
                       dataKey="Lieferung Pflanzen"
@@ -329,7 +321,7 @@ export const KulturTimeline = ({ row }: { row: import('../../../../shared/types.
             )}
           </motion.div>
         </ErrorBoundary>
-      }
+      )}
     </section>
   )
 }

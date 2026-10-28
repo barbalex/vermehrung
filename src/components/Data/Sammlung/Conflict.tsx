@@ -33,9 +33,11 @@ export const SammlungConflict = ({
   const { error, data, fetching } = useApiQuery(
     `/sammlung_rev?sammlung_id=eq.${id}&_rev=eq.${rev}&select=id,sammlung_id,art_id,person_id,herkunft_id,nr,datum,von_anzahl_individuen,anzahl_pflanzen,gramm_samen,andere_menge,geom_point,geplant,bemerkungen,changed,changed_by,_rev,_parent_rev,_revisions,_depth,_deleted`,
   )
-    if (error) checkForOnlineError({ error })
+  if (error) checkForOnlineError({ error })
 
-  const revRow = ((data as import('../../shared/types.ts').RevRow[] | null)?.[0] ?? {}) as import('../../shared/types.ts').RevRow
+  const revRow = ((
+    data as import('../../shared/types.ts').RevRow[] | null
+  )?.[0] ?? {}) as import('../../shared/types.ts').RevRow
 
   const dataArray = createDataArray({ row, revRow })
 
@@ -70,14 +72,18 @@ export const SammlungConflict = ({
       : toPgArray([rev])
 
     try {
-    await store
-      .get(apiClientAtom)
-      ?.post('/sammlung_rev', newObject, 'resolution=merge-duplicates,return=minimal')
-  } catch (error) {
-          checkForOnlineError({ error: error })
+      await store
+        .get(apiClientAtom)
+        ?.post(
+          '/sammlung_rev',
+          newObject,
+          'resolution=merge-duplicates,return=minimal',
+        )
+    } catch (error) {
+      checkForOnlineError({ error: error })
       return addNotification({
         message: (error as Error).message,
-  })
+      })
     }
     // update model: remove this conflict
     try {
@@ -93,7 +99,7 @@ export const SammlungConflict = ({
   const onClickWiderspruchUebernehmen = async () => {
     // need to attach to the winner, that is row
     // otherwise risk to still have lower depth and thus loosing
-    const newDepth = (((row?._depth as number) ?? 0)) + 1
+    const newDepth = ((row?._depth as number) ?? 0) + 1
     const newObject: Record<string, unknown> = {
       sammlung_id: revRow.sammlung_id,
       art_id: revRow.art_id,
@@ -121,14 +127,18 @@ export const SammlungConflict = ({
       ? toPgArray([rev, ...((row?._revisions as string[]) ?? [])])
       : toPgArray([rev])
     try {
-    await store
-      .get(apiClientAtom)
-      ?.post('/sammlung_rev', newObject, 'resolution=merge-duplicates,return=minimal')
-  } catch (error) {
-          checkForOnlineError({ error: error })
+      await store
+        .get(apiClientAtom)
+        ?.post(
+          '/sammlung_rev',
+          newObject,
+          'resolution=merge-duplicates,return=minimal',
+        )
+    } catch (error) {
+      checkForOnlineError({ error: error })
       return addNotification({
         message: (error as Error).message,
-  })
+      })
     }
     // now we need to delete the previous conflict
     onClickAktuellUebernehmen()

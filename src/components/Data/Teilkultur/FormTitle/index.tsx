@@ -38,7 +38,8 @@ export const TeilkulturFormTitleChooser = ({
           Q.on('kultur', 'id', kulturIdInActiveNodeArray),
         ]
       : []
-    const collection = db?.get('teilkultur')
+    const collection =
+      db?.get<import('../../../../dbModel.ts').Teilkultur>('teilkultur')
     const teilkulturDelQuery =
       teilkulturFilter._deleted === false
         ? Q.where('_deleted', false)

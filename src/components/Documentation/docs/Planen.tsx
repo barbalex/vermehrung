@@ -44,9 +44,9 @@ export const Planen = () => (
     <p>
       In Sammlungen und Lieferungen gibt es ein Feld &quot;geplant&quot;.
       <br />
-      Zählungen konnten bis anhin als &quot;Ziel&quot; bzw.
-      &quot;Bedarf&quot; markiert werden. Diese Möglichkeit wurde entfernt.
-      Bestehende Markierungen bleiben in Auswertungen sichtbar.
+      Zählungen konnten bis anhin als &quot;Ziel&quot; bzw. &quot;Bedarf&quot;
+      markiert werden. Diese Möglichkeit wurde entfernt. Bestehende Markierungen
+      bleiben in Auswertungen sichtbar.
       <br />
       Der <Link to="/Dokumentation/bedarf">Bedarf</Link> wird neu pro Jahr und
       Kultur in eigenen Bedarf-Einträgen erfasst.

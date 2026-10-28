@@ -38,7 +38,7 @@ export const Personen = ({ filter: showFilter = false }) => {
     userRole: undefined,
   })
   useEffect(() => {
-    const collection = db?.get('person')
+    const collection = db?.get<import('../../../dbModel.ts').Person>('person')
     const personDelQuery =
       personFilter._deleted === false
         ? Q.where('_deleted', false)
@@ -66,7 +66,7 @@ export const Personen = ({ filter: showFilter = false }) => {
       .query(...tableFilter({ table: 'person' }))
       .observeWithColumns(['vorname', 'name'])
     const userRoleObservable = db
-      .get('user_role')
+      ?.get<import('../../../dbModel.ts').UserRole>('user_role')
       .query(Q.on('person', Q.where('account_id', user.uid ?? 'none')))
       .observeWithColumns(['name'])
     const combinedObservables = combineLatest([

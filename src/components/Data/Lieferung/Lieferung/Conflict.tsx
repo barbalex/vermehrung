@@ -33,9 +33,11 @@ export const LieferungConflict = ({
   const { error, data, fetching } = useApiQuery(
     `/lieferung_rev?lieferung_id=eq.${id}&_rev=eq.${rev}&select=id,lieferung_id,sammel_lieferung_id,art_id,person_id,von_sammlung_id,von_kultur_id,datum,nach_kultur_id,nach_ausgepflanzt,von_anzahl_individuen,anzahl_pflanzen,anzahl_auspflanzbereit,gramm_samen,andere_menge,geplant,bemerkungen,changed,changed_by,_rev,_parent_rev,_revisions,_depth,_deleted`,
   )
-    if (error) checkForOnlineError({ error })
+  if (error) checkForOnlineError({ error })
 
-  const revRow = ((data as import('../../../shared/types.ts').RevRow[] | null)?.[0] ?? {}) as import('../../../shared/types.ts').RevRow
+  const revRow = ((
+    data as import('../../../shared/types.ts').RevRow[] | null
+  )?.[0] ?? {}) as import('../../../shared/types.ts').RevRow
 
   const dataArray = createDataArray({ row, revRow })
 
@@ -73,14 +75,18 @@ export const LieferungConflict = ({
       : toPgArray([rev])
 
     try {
-    await store
-      .get(apiClientAtom)
-      ?.post('/lieferung_rev', newObject, 'resolution=merge-duplicates,return=minimal')
-  } catch (error) {
-          checkForOnlineError({ error: error })
+      await store
+        .get(apiClientAtom)
+        ?.post(
+          '/lieferung_rev',
+          newObject,
+          'resolution=merge-duplicates,return=minimal',
+        )
+    } catch (error) {
+      checkForOnlineError({ error: error })
       return addNotification({
         message: (error as Error).message,
-  })
+      })
     }
     // update model: remove this conflict
     try {
@@ -127,14 +133,18 @@ export const LieferungConflict = ({
       ? toPgArray([rev, ...row._revisions])
       : toPgArray([rev])
     try {
-    await store
-      .get(apiClientAtom)
-      ?.post('/lieferung_rev', newObject, 'resolution=merge-duplicates,return=minimal')
-  } catch (error) {
-          checkForOnlineError({ error: error })
+      await store
+        .get(apiClientAtom)
+        ?.post(
+          '/lieferung_rev',
+          newObject,
+          'resolution=merge-duplicates,return=minimal',
+        )
+    } catch (error) {
+      checkForOnlineError({ error: error })
       return addNotification({
         message: (error as Error).message,
-  })
+      })
     }
     // now we need to delete the previous conflict
     onClickAktuellUebernehmen()

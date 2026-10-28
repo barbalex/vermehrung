@@ -1,6 +1,12 @@
 import { first as first$ } from 'rxjs/operators'
 
-export const buildKultur = async ({ kultur, index }: { kultur: import('../../../../dbModel.ts').Kultur; index: number }) => {
+export const buildKultur = async ({
+  kultur,
+  index,
+}: {
+  kultur: import('../../../../dbModel.ts').Kultur
+  index: number
+}) => {
   let label = ''
   try {
     label = (await kultur.label.pipe(first$()).toPromise()) ?? ''

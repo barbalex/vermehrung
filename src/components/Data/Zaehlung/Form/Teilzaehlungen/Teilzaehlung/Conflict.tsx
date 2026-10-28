@@ -34,7 +34,7 @@ export const TeilzaehlungConflict = ({
   const { error, data, fetching } = useApiQuery(
     `/teilzaehlung_rev?teilzaehlung_id=eq.${id}&_rev=eq.${rev}&select=id,teilzaehlung_id,zaehlung_id,teilkultur_id,anzahl_pflanzen,anzahl_auspflanzbereit,anzahl_mutterpflanzen,andere_menge,auspflanzbereit_beschreibung,bemerkungen,prognose_von_tz,changed,changed_by,_rev,_parent_rev,_revisions,_depth,_deleted`,
   )
-    if (error) checkForOnlineError({ error })
+  if (error) checkForOnlineError({ error })
 
   const revRow = data?.[0] ?? {}
 
@@ -85,7 +85,9 @@ export const TeilzaehlungConflict = ({
     })
     // update model: remove this conflict
     try {
-      const model = await db?.get('teilzaehlung').find(revRow.teilzaehlung_id as string)
+      const model = await db
+        ?.get('teilzaehlung')
+        .find(revRow.teilzaehlung_id as string)
       await model?.removeConflict(revRow._rev)
     } catch {}
     conflictDisposalCallback()
@@ -121,14 +123,18 @@ export const TeilzaehlungConflict = ({
       ? toPgArray([rev, ...row._revisions])
       : toPgArray([rev])
     try {
-    await store
-      .get(apiClientAtom)
-      ?.post('/teilzaehlung_rev', newObject, 'resolution=merge-duplicates,return=minimal')
-  } catch (error) {
-          checkForOnlineError({ error: error })
+      await store
+        .get(apiClientAtom)
+        ?.post(
+          '/teilzaehlung_rev',
+          newObject,
+          'resolution=merge-duplicates,return=minimal',
+        )
+    } catch (error) {
+      checkForOnlineError({ error: error })
       return addNotification({
         message: (error as Error).message,
-  })
+      })
     }
     // now we need to delete the previous conflict
     onClickAktuellUebernehmen()

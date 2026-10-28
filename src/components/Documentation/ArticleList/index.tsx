@@ -10,11 +10,7 @@ import styles from './index.module.css'
 
 import type { ArticleNode } from './Article.tsx'
 
-export const ArticleList = ({
-  articles,
-}: {
-  articles: ArticleNode[]
-}) => {
+export const ArticleList = ({ articles }: { articles: ArticleNode[] }) => {
   const docFilter = useAtomValue(docFilterAtom)
 
   const articlesFiltered = articles.filter(

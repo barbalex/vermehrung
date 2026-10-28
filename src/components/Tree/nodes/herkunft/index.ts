@@ -1,6 +1,12 @@
 import { herkunftLabelFromHerkunft } from '../../../../utils/herkunftLabelFromHerkunft.ts'
 
-export const buildHerkunft = ({ herkunft, index }: { herkunft: import('../../../../dbModel.ts').Herkunft; index: number }) => ({
+export const buildHerkunft = ({
+  herkunft,
+  index,
+}: {
+  herkunft: import('../../../../dbModel.ts').Herkunft
+  index: number
+}) => ({
   nodeType: 'table',
   menuTitle: 'Herkunft',
   table: 'herkunft',

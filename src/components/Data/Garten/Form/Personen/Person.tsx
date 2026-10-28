@@ -9,17 +9,25 @@ import { personLabelFromPerson } from '../../../../../utils/personLabelFromPerso
 
 import styles from './Person.module.css'
 
-export const GartenPerson = ({ gv }: { gv: import('../../../../shared/types.ts').WmRow | null | undefined }) => {
+export const GartenPerson = ({
+  gv,
+}: {
+  gv: import('../../../../shared/types.ts').WmRow | null | undefined
+}) => {
   const [personLabel, setPersonLabel] = useState<string | null>(null)
   useEffect(() => {
     const personSubscription = gv?.person
       .observe()
-      .subscribe((person: import('../../../../../dbModel.ts').Person) => setPersonLabel(personLabelFromPerson({ person })))
+      .subscribe((person: import('../../../../../dbModel.ts').Person) =>
+        setPersonLabel(personLabelFromPerson({ person })),
+      )
 
     return () => personSubscription?.unsubscribe?.()
   }, [gv?.person])
 
-  const [delMenuAnchorEl, setDelMenuAnchorEl] = useState<EventTarget & HTMLButtonElement | null>(null)
+  const [delMenuAnchorEl, setDelMenuAnchorEl] = useState<
+    (EventTarget & HTMLButtonElement) | null
+  >(null)
   const delMenuOpen = Boolean(delMenuAnchorEl)
 
   const onClickDelete = () => gv?.delete()

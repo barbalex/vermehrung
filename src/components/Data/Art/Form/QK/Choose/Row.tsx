@@ -8,7 +8,11 @@ import { dbAtom, userAtom } from '../../../../../../store/index.ts'
 
 import styles from './Row.module.css'
 
-export const Row = ({ qk }: { qk: import('../../../../../shared/types.ts').WmRow | null | undefined }) => {
+export const Row = ({
+  qk,
+}: {
+  qk: import('../../../../../shared/types.ts').WmRow | null | undefined
+}) => {
   const db = useAtomValue(dbAtom)
   const user = useAtomValue(userAtom)
 
@@ -21,7 +25,9 @@ export const Row = ({ qk }: { qk: import('../../../../../shared/types.ts').WmRow
   useEffect(() => {
     const userPersonOptionsObservable = user.uid
       ? db
-          .get('person_option')
+          ?.get<import('../../../../../../dbModel.ts').PersonOption>(
+            'person_option',
+          )
           .query(Q.on('person', Q.where('account_id', user.uid)))
           .observeWithColumns(['art_qk_choosen'])
       : $of({})
@@ -38,7 +44,13 @@ export const Row = ({ qk }: { qk: import('../../../../../shared/types.ts').WmRow
 
   const checked = artQkChoosen.includes(qk?.id)
 
-  const onChange = (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
+  const onChange = (event: {
+    target: { name?: string; value: unknown }
+    currentTarget?: HTMLElement
+    preventDefault?: () => void
+    stopPropagation?: () => void
+    key?: string
+  }) => {
     const newValue = event.target.checked
       ? [...artQkChoosen, qk?.id]
       : artQkChoosen.filter((id) => id !== qk?.id)

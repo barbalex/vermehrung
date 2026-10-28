@@ -25,7 +25,9 @@ export const KulturSettingsMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
   useEffect(() => {
     const userPersonOptionsObservable = user.uid
       ? db
-          .get('person_option')
+          ?.get<import('../../../../../dbModel.ts').PersonOption>(
+            'person_option',
+          )
           .query(Q.on('person', Q.where('account_id', user.uid)))
           .observeWithColumns(['ku_zwischenlager', 'ku_erhaltungskultur'])
       : $of({})
@@ -52,13 +54,25 @@ export const KulturSettingsMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
   const { ku_zwischenlager, ku_erhaltungskultur } = userPersonOption ?? {}
   const { tk } = kulturOption ?? {}
 
-  const saveToDbKulturOption = async (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
+  const saveToDbKulturOption = async (event: {
+    target: { name?: string; value: unknown }
+    currentTarget?: HTMLElement
+    preventDefault?: () => void
+    stopPropagation?: () => void
+    key?: string
+  }) => {
     const field = event.target.name
     const value = event.target.value === 'false'
     kulturOption?.edit({ field, value })
   }
 
-  const saveToDbPersonOption = async (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
+  const saveToDbPersonOption = async (event: {
+    target: { name?: string; value: unknown }
+    currentTarget?: HTMLElement
+    preventDefault?: () => void
+    stopPropagation?: () => void
+    key?: string
+  }) => {
     const field = event.target.name
     const value = event.target.value === 'false'
     userPersonOption.edit({ field, value })

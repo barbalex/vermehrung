@@ -26,10 +26,7 @@ export const StringToCopyOnlyButton = ({
   return (
     <ErrorBoundary>
       <div className={styles.container}>
-        <Button
-          color="primary"
-          onClick={onCopy}
-        >
+        <Button color="primary" onClick={onCopy}>
           {copied ? `${label} kopiert` : `${label} kopieren`}
         </Button>
       </div>

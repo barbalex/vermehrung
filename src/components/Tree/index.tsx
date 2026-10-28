@@ -192,14 +192,11 @@ export const Tree = () => {
     ]
     const subscription = (
       combinedObservables as unknown as import('rxjs').Observable<Observed>
-    ).subscribe(
-       
-      ([[userPersonOption], [userRole]]) => {
-        //console.log('Tree data-useEffect ordering rebuild')
-        setDataState({ userPersonOption, userRole })
-        buildMyNodesDebounced()
-      },
-    )
+    ).subscribe(([[userPersonOption], [userRole]]) => {
+      //console.log('Tree data-useEffect ordering rebuild')
+      setDataState({ userPersonOption, userRole })
+      buildMyNodesDebounced()
+    })
 
     return () => subscription?.unsubscribe?.()
   }, [buildMyNodesDebounced, db, user.uid])

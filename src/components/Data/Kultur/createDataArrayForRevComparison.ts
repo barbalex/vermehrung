@@ -1,4 +1,7 @@
-export const createDataArrayForKulturRevComparison = ({ row, revRow }: {
+export const createDataArrayForKulturRevComparison = ({
+  row,
+  revRow,
+}: {
   row: Record<string, unknown> | null | undefined
   revRow: Record<string, unknown> | null | undefined
 }) => [
@@ -59,4 +62,3 @@ export const createDataArrayForKulturRevComparison = ({ row, revRow }: {
     label: 'gelöscht',
   },
 ]
-

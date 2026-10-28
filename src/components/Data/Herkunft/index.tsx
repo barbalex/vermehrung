@@ -42,7 +42,7 @@ export const Herkunft = ({
     () =>
       showFilter
         ? $of(herkunftFilter)
-        : (initialDataQueried || !online)
+        : initialDataQueried || !online
           ? db?.get('herkunft').findAndObserve(id)
           : $of({}),
     [db, herkunftFilter, id, initialDataQueried, online, showFilter],

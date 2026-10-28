@@ -50,12 +50,8 @@ export const TreeSettings = () => {
     return () => subscription?.unsubscribe?.()
   }, [db, user.uid])
   const { userPersonOption } = dataState
-  const {
-    tree_kultur,
-    tree_teilkultur,
-    tree_zaehlung,
-    tree_lieferung,
-  } = userPersonOption ?? {}
+  const { tree_kultur, tree_teilkultur, tree_zaehlung, tree_lieferung } =
+    userPersonOption ?? {}
 
   const saveToDb = (event: {
     target: { name?: string; value: unknown }

@@ -38,7 +38,10 @@ export const SammelLieferungFormTitleChooser = ({
     filteredCount: 0,
   })
   useEffect(() => {
-    const collection = db?.get('sammel_lieferung')
+    const collection =
+      db?.get<import('../../../../dbModel.ts').SammelLieferung>(
+        'sammel_lieferung',
+      )
     const sammelLieferungDelQuery =
       sammelLieferungFilter._deleted === false
         ? Q.where('_deleted', false)
@@ -68,7 +71,7 @@ export const SammelLieferungFormTitleChooser = ({
   }, [
     db,
     // need to rerender if any of the values of sammelLieferungFilter changes
-     
+
     sammelLieferungFilter,
   ])
 

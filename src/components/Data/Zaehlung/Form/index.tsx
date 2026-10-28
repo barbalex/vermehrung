@@ -76,7 +76,7 @@ export const ZaehlungForm = ({
               Q.where('aktiv', null),
             )
     const kultursObservable = db
-      .get('kultur')
+      ?.get<import('../../../../dbModel.ts').Kultur>('kultur')
       .query(kulturDelQuery, kulturAktivQuery)
       .observe()
     const combinedObservables = combineLatest([kultursObservable])
@@ -122,7 +122,14 @@ export const ZaehlungForm = ({
     })
 
     return () => subscription?.unsubscribe?.()
-  }, [db, kulturFilter, row?.art_id, row?.kultur, row?.kultur_option, showFilter])
+  }, [
+    db,
+    kulturFilter,
+    row?.art_id,
+    row?.kultur,
+    row?.kultur_option,
+    showFilter,
+  ])
   const { kulturWerte, kulturOption } = dataState
 
   const z_bemerkungen = kulturOption?.z_bemerkungen ?? true
@@ -131,7 +138,13 @@ export const ZaehlungForm = ({
     unsetError('zaehlung')
   }, [id])
 
-  const saveToDb = async (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
+  const saveToDb = async (event: {
+    target: { name?: string; value: unknown }
+    currentTarget?: HTMLElement
+    preventDefault?: () => void
+    stopPropagation?: () => void
+    key?: string
+  }) => {
     const field = event.target.name
     let value = ifIsNumericAsNumber(event.target.value)
     if (event.target.value === undefined) value = null
@@ -166,7 +179,7 @@ export const ZaehlungForm = ({
                 name="_deleted"
                 value={row?._deleted}
                 saveToDb={saveToDb}
-                error={errors?.zaehlung?._deleted}
+                error={errors?.zaehlung?._deleted as string | undefined}
               />
             ) : (
               <Checkbox2States
@@ -175,7 +188,7 @@ export const ZaehlungForm = ({
                 name="_deleted"
                 value={row?._deleted}
                 saveToDb={saveToDb}
-                error={errors?.zaehlung?._deleted}
+                error={errors?.zaehlung?._deleted as string | undefined}
               />
             )}
           </>
@@ -189,7 +202,7 @@ export const ZaehlungForm = ({
           options={kulturWerte}
           loading={false}
           saveToDb={saveToDb}
-          error={errors?.zaehlung?.kultur_id}
+          error={errors?.zaehlung?.kultur_id as string | undefined}
         />
         <Date
           key={`${row?.id}datum`}
@@ -197,7 +210,7 @@ export const ZaehlungForm = ({
           label="Datum"
           value={row?.datum}
           saveToDb={saveToDb}
-          error={errors?.zaehlung?.datum}
+          error={errors?.zaehlung?.datum as string | undefined}
         />
         {(z_bemerkungen || showFilter) && (
           <TextField
@@ -206,7 +219,7 @@ export const ZaehlungForm = ({
             label="Bemerkungen"
             value={row?.bemerkungen}
             saveToDb={saveToDb}
-            error={errors?.zaehlung?.bemerkungen}
+            error={errors?.zaehlung?.bemerkungen as string | undefined}
             multiLine
           />
         )}

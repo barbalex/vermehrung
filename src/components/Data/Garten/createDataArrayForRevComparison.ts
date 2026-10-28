@@ -1,4 +1,7 @@
-export const createDataArrayForGartenRevComparison = ({ row, revRow }: {
+export const createDataArrayForGartenRevComparison = ({
+  row,
+  revRow,
+}: {
   row: Record<string, unknown> | null | undefined
   revRow: Record<string, unknown> | null | undefined
 }) => [
@@ -20,8 +23,10 @@ export const createDataArrayForGartenRevComparison = ({ row, revRow }: {
   },
   { valueInRow: row?.ort, valueInRev: revRow?.ort, label: 'Ort' },
   {
-    valueInRow: (row?.geom_point as { coordinates?: unknown } | undefined)?.coordinates,
-    valueInRev: (revRow?.geom_point as { coordinates?: unknown } | undefined)?.coordinates,
+    valueInRow: (row?.geom_point as { coordinates?: unknown } | undefined)
+      ?.coordinates,
+    valueInRev: (revRow?.geom_point as { coordinates?: unknown } | undefined)
+      ?.coordinates,
     label: 'Längen- und Breitengrad',
   },
   {

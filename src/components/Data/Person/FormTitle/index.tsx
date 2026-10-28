@@ -27,7 +27,8 @@ export const PersonFormTitleChooser = ({
     filteredCount: 0,
   })
   useEffect(() => {
-    const collection = db?.get('person')
+    const collection =
+      db?.get<import('../../../../dbModel.ts').Person>('person')
     const personDelQuery =
       personFilter._deleted === false
         ? Q.where('_deleted', false)

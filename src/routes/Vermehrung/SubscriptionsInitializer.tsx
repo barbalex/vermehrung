@@ -64,7 +64,6 @@ export const SubscriptionsInitializer = () => {
       isActive = false
       stopSyncPoller()
     }
-     
   }, [authorizing, apiClient, user?.uid])
 
   return null

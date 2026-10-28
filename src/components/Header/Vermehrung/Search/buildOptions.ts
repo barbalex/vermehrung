@@ -35,82 +35,91 @@ export const buildOptions = async ({
 
   let arts: import('../../../../dbModel.ts').Art[] = []
   try {
-    arts = (await db
-      ?.get<import('../../../../dbModel.ts').Art>('art')
-      .query(...tableFilter({ table: 'art' }))
-      .fetch()) ?? []
+    arts =
+      (await db
+        ?.get<import('../../../../dbModel.ts').Art>('art')
+        .query(...tableFilter({ table: 'art' }))
+        .fetch()) ?? []
   } catch {}
   const artsSorted = await artsSortedFromArts(arts)
 
   let events: import('../../../../dbModel.ts').Event[] = []
   try {
-    events = (await db
-      ?.get<import('../../../../dbModel.ts').Event>('event')
-      .query(...tableFilter({ table: 'event' }))
-      .fetch()) ?? []
+    events =
+      (await db
+        ?.get<import('../../../../dbModel.ts').Event>('event')
+        .query(...tableFilter({ table: 'event' }))
+        .fetch()) ?? []
   } catch {}
   const eventsSorted = events.sort(eventSort)
 
   let gartens: import('../../../../dbModel.ts').Garten[] = []
   try {
-    gartens = (await db
-      ?.get<import('../../../../dbModel.ts').Garten>('garten')
-      .query(...tableFilter({ table: 'garten' }))
-      .fetch()) ?? []
+    gartens =
+      (await db
+        ?.get<import('../../../../dbModel.ts').Garten>('garten')
+        .query(...tableFilter({ table: 'garten' }))
+        .fetch()) ?? []
   } catch {}
   const gartensSorted = await gartensSortedFromGartens(gartens)
 
   let herkunfts: import('../../../../dbModel.ts').Herkunft[] = []
   try {
-    herkunfts = (await db
-      ?.get<import('../../../../dbModel.ts').Herkunft>('herkunft')
-      .query(...tableFilter({ table: 'herkunft' }))
-      .fetch()) ?? []
+    herkunfts =
+      (await db
+        ?.get<import('../../../../dbModel.ts').Herkunft>('herkunft')
+        .query(...tableFilter({ table: 'herkunft' }))
+        .fetch()) ?? []
   } catch {}
   const herkunftsSorted = herkunfts.sort(herkunftSort)
 
   let kulturs: import('../../../../dbModel.ts').Kultur[] = []
   try {
-    kulturs = (await db
-      ?.get<import('../../../../dbModel.ts').Kultur>('kultur')
-      .query(...tableFilter({ table: 'kultur' }))
-      .fetch()) ?? []
+    kulturs =
+      (await db
+        ?.get<import('../../../../dbModel.ts').Kultur>('kultur')
+        .query(...tableFilter({ table: 'kultur' }))
+        .fetch()) ?? []
   } catch {}
   const kultursSorted = await kultursSortedFromKulturs(kulturs)
 
   let lieferungs: import('../../../../dbModel.ts').Lieferung[] = []
   try {
-    lieferungs = (await db
-      ?.get<import('../../../../dbModel.ts').Lieferung>('lieferung')
-      .query(...tableFilter({ table: 'lieferung' }))
-      .fetch()) ?? []
+    lieferungs =
+      (await db
+        ?.get<import('../../../../dbModel.ts').Lieferung>('lieferung')
+        .query(...tableFilter({ table: 'lieferung' }))
+        .fetch()) ?? []
   } catch {}
   const lieferungsSorted = lieferungs.sort(lieferungSort)
 
   let persons: import('../../../../dbModel.ts').Person[] = []
   try {
-    persons = (await db
-      ?.get<import('../../../../dbModel.ts').Person>('person')
-      .query(...tableFilter({ table: 'person' }))
-      .fetch()) ?? []
+    persons =
+      (await db
+        ?.get<import('../../../../dbModel.ts').Person>('person')
+        .query(...tableFilter({ table: 'person' }))
+        .fetch()) ?? []
   } catch {}
   const personsSorted = persons.sort(personSort)
 
   let sammlungs: import('../../../../dbModel.ts').Sammlung[] = []
   try {
-    sammlungs = (await db
-      ?.get<import('../../../../dbModel.ts').Sammlung>('sammlung')
-      .query(...tableFilter({ table: 'sammlung' }))
-      .fetch()) ?? []
+    sammlungs =
+      (await db
+        ?.get<import('../../../../dbModel.ts').Sammlung>('sammlung')
+        .query(...tableFilter({ table: 'sammlung' }))
+        .fetch()) ?? []
   } catch {}
   const sammlungsSorted = await sammlungsSortedFromSammlungs(sammlungs)
 
   let zaehlungs: import('../../../../dbModel.ts').Zaehlung[] = []
   try {
-    zaehlungs = (await db
-      ?.get<import('../../../../dbModel.ts').Zaehlung>('zaehlung')
-      .query(...tableFilter({ table: 'zaehlung' }))
-      .fetch()) ?? []
+    zaehlungs =
+      (await db
+        ?.get<import('../../../../dbModel.ts').Zaehlung>('zaehlung')
+        .query(...tableFilter({ table: 'zaehlung' }))
+        .fetch()) ?? []
   } catch {}
   const zaehlungsSorted = zaehlungs.sort(zaehlungSort)
 

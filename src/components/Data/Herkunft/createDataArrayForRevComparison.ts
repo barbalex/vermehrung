@@ -1,4 +1,7 @@
-export const createDataArrayForHerkunftRevComparison = ({ row, revRow }: {
+export const createDataArrayForHerkunftRevComparison = ({
+  row,
+  revRow,
+}: {
   row: Record<string, unknown> | null | undefined
   revRow: Record<string, unknown> | null | undefined
 }) => [
@@ -16,8 +19,10 @@ export const createDataArrayForHerkunftRevComparison = ({ row, revRow }: {
   { valueInRow: row?.kanton, valueInRev: revRow?.kanton, label: 'Kanton' },
   { valueInRow: row?.land, valueInRev: revRow?.land, label: 'Land' },
   {
-    valueInRow: (row?.geom_point as { coordinates?: unknown } | undefined)?.coordinates,
-    valueInRev: (revRow?.geom_point as { coordinates?: unknown } | undefined)?.coordinates,
+    valueInRow: (row?.geom_point as { coordinates?: unknown } | undefined)
+      ?.coordinates,
+    valueInRev: (revRow?.geom_point as { coordinates?: unknown } | undefined)
+      ?.coordinates,
     label: 'Längen- und Breitengrad',
   },
   {

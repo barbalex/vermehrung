@@ -9,10 +9,7 @@ import { ApiError, type ApiClient } from './apiTypes.ts'
 const request = async (
   method: string,
   path: string,
-  {
-    body,
-    prefer,
-  }: { body?: unknown; prefer?: string } = {},
+  { body, prefer }: { body?: unknown; prefer?: string } = {},
 ): Promise<unknown> => {
   const headers: Record<string, string> = { accept: 'application/json' }
   const token = window.localStorage.getItem('token')
@@ -55,9 +52,9 @@ const request = async (
 export const apiClient: ApiClient = {
   request,
   get: (path) => request('GET', path),
-  post: <T,>(path: string, body?: unknown, prefer = 'return=minimal') =>
+  post: <T>(path: string, body?: unknown, prefer = 'return=minimal') =>
     request('POST', path, { body, prefer }) as Promise<T>,
-  patch: <T,>(path: string, body?: unknown, prefer = 'return=minimal') =>
+  patch: <T>(path: string, body?: unknown, prefer = 'return=minimal') =>
     request('PATCH', path, { body, prefer }) as Promise<T>,
   delete: (path: string, prefer = 'return=minimal') =>
     request('DELETE', path, { prefer }),

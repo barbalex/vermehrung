@@ -187,10 +187,13 @@ describe('revAggregation', () => {
     initRevAggregation()
     setActiveNodeArray(['Herkuenfte'])
     setActiveNodeArray(['Arten'])
-    await vi.waitFor(() => {
-      expect(store.get(queuedQueriesAtom)).toHaveLength(2)
-      expect(getUnflushedRevs()).toEqual({})
-    }, { interval: 10 })
+    await vi.waitFor(
+      () => {
+        expect(store.get(queuedQueriesAtom)).toHaveLength(2)
+        expect(getUnflushedRevs()).toEqual({})
+      },
+      { interval: 10 },
+    )
     expect(getUnflushedRevs()).toEqual({})
   })
 

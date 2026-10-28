@@ -182,7 +182,9 @@ const createDbMock = () => {
         raw,
       }),
     }),
-    batch: async (creates: { table: string; raw: Record<string, unknown> }[]) => {
+    batch: async (
+      creates: { table: string; raw: Record<string, unknown> }[],
+    ) => {
       batched.push(...creates)
     },
   }
@@ -218,9 +220,10 @@ describe('insertRev', () => {
       // matches the former MST actions: sammlung never set isInsert
       expect(query.isInsert).toBe(table === 'sammlung' ? false : true)
 
-      const { object, on_conflict } = JSON.parse(
-        query.variables as string,
-      ) as { object: Record<string, unknown>; on_conflict: Record<string, unknown> }
+      const { object, on_conflict } = JSON.parse(query.variables as string) as {
+        object: Record<string, unknown>
+        on_conflict: Record<string, unknown>
+      }
       expect(on_conflict.constraint).toBe(`${table}_rev_pkey`)
       expect(on_conflict.update_columns).toEqual(['id'])
 
@@ -258,8 +261,8 @@ describe('insertRev', () => {
       // kultur and person additionally create their option row
       const extraRows = { kultur: 1, person: 1 }
       expect(dbMock.batched).toHaveLength(
-      1 + (extraRows[table as 'kultur' | 'person'] ?? 0),
-    )
+        1 + (extraRows[table as 'kultur' | 'person'] ?? 0),
+      )
       const { table: createdTable, raw } = dbMock.batched[0]
       expect(createdTable).toBe(table)
       expect(raw.id).toBe(query.revertId)

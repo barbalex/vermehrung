@@ -85,21 +85,21 @@ export const TreeRow = ({
     useSymbolIcon = false
   }
 
-  const [person, setPerson] = useState<import('../../dbModel.ts').Person | null>(null)
+  const [person, setPerson] = useState<
+    import('../../dbModel.ts').Person | null
+  >(null)
   useEffect(() => {
     if (!node) return
     const personObservable =
       node?.nodeType === 'table' && node.table === 'person' && node.url
-        ? db
-            ?.get('person')
-            .findAndObserve(node.url.at(-1) ?? '')
+        ? db?.get('person').findAndObserve(node.url.at(-1) ?? '')
         : $of<import('../../dbModel.ts').Person | null>(null)
 
     const subscription = (
-      personObservable as unknown as import('rxjs').Observable<import('../../dbModel.ts').Person | null> | undefined
-    )?.subscribe(
-      (person) => setPerson(person),
-    )
+      personObservable as unknown as
+        | import('rxjs').Observable<import('../../dbModel.ts').Person | null>
+        | undefined
+    )?.subscribe((person) => setPerson(person))
 
     return () => subscription?.unsubscribe?.()
     // deps are deliberate: the whole node object gets a new identity on
@@ -215,7 +215,8 @@ export const TreeRow = ({
       x,
       y,
       title: node?.menuTitle ?? '',
-      entries: buildMenuEntries() as import('./treeContextMenuAtom.ts').ContextMenuEntry[],
+      entries:
+        buildMenuEntries() as import('./treeContextMenuAtom.ts').ContextMenuEntry[],
     })
   }
 

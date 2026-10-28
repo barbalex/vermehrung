@@ -1,6 +1,9 @@
 import { DateTime } from 'luxon'
 
-export const createDataArrayForSammlungRevComparison = ({ row, revRow }: {
+export const createDataArrayForSammlungRevComparison = ({
+  row,
+  revRow,
+}: {
   row: Record<string, unknown> | null | undefined
   revRow: Record<string, unknown> | null | undefined
 }) => [
@@ -25,11 +28,11 @@ export const createDataArrayForSammlungRevComparison = ({ row, revRow }: {
     label: 'Nr',
   },
   {
-    valueInRow:
-      row?.datum ? DateTime.fromSQL(row.datum).toFormat('dd.LL.yyyy') : '',
-    valueInRev:
-      revRow?.datum ?
-        DateTime.fromSQL(revRow.datum).toFormat('dd.LL.yyyy')
+    valueInRow: row?.datum
+      ? DateTime.fromSQL(row.datum).toFormat('dd.LL.yyyy')
+      : '',
+    valueInRev: revRow?.datum
+      ? DateTime.fromSQL(revRow.datum).toFormat('dd.LL.yyyy')
       : '',
     label: 'Datum',
   },
@@ -54,8 +57,10 @@ export const createDataArrayForSammlungRevComparison = ({ row, revRow }: {
     label: 'Andere Menge',
   },
   {
-    valueInRow: (row?.geom_point as { coordinates?: unknown } | undefined)?.coordinates,
-    valueInRev: (revRow?.geom_point as { coordinates?: unknown } | undefined)?.coordinates,
+    valueInRow: (row?.geom_point as { coordinates?: unknown } | undefined)
+      ?.coordinates,
+    valueInRev: (revRow?.geom_point as { coordinates?: unknown } | undefined)
+      ?.coordinates,
     label: 'Längen- und Breitengrad',
   },
   {

@@ -16,16 +16,15 @@ const Header = () => {
 
   return (
     <ErrorBoundary>
-      <AppBar
-        position="static"
-        className={styles.appBar}
-      >
+      <AppBar position="static" className={styles.appBar}>
         <Toolbar>
-          {isHome ?
+          {isHome ? (
             <Home location={location} />
-          : isVermehrung ?
+          ) : isVermehrung ? (
             <Vermehrung />
-          : <Doku />}
+          ) : (
+            <Doku />
+          )}
         </Toolbar>
       </AppBar>
     </ErrorBoundary>

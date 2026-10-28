@@ -26,7 +26,13 @@ export const File = ({ file, parent }) => {
   const onClickDownload = () =>
     window.open(`https://ucarecdn.com/${file.file_id}/-/inline/no/`)
 
-  const saveToDb = async (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
+  const saveToDb = async (event: {
+    target: { name?: string; value: unknown }
+    currentTarget?: HTMLElement
+    preventDefault?: () => void
+    stopPropagation?: () => void
+    key?: string
+  }) => {
     const field = event.target.name
     const value = event.target.value || null
     // TODO: need to add edit to all file models

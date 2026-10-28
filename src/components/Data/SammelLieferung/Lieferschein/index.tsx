@@ -19,7 +19,11 @@ import image from '../../../../images/toposLogo.png'
 
 import styles from './index.module.css'
 
-export const Lieferschein = ({ row }: { row: import('../../../shared/types.ts').WmRow | null | undefined }) => {
+export const Lieferschein = ({
+  row,
+}: {
+  row: import('../../../shared/types.ts').WmRow | null | undefined
+}) => {
   const db = useAtomValue(dbAtom)
 
   const [dataState, setDataState] = useState({
@@ -31,7 +35,7 @@ export const Lieferschein = ({ row }: { row: import('../../../shared/types.ts').
     const lieferungsObservable = row?.lieferungs.observe()
     const vonKulturGartenObservable = row?.von_kultur_id
       ? db
-          .get('garten')
+          ?.get<import('../../../../dbModel.ts').Garten>('garten')
           .query(
             Q.where('_deleted', false),
             Q.experimentalJoinTables(['kultur']),

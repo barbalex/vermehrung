@@ -42,10 +42,7 @@ export const tableFilter = ({
         Q.like(`%${Q.sanitizeLikeString(String(filterValue))}%`),
       )
     }
-    return Q.where(
-      key,
-      Q.eq(filterValue as string | number | boolean | null),
-    )
+    return Q.where(key, Q.eq(filterValue as string | number | boolean | null))
   })
 
   if (apFilter) {

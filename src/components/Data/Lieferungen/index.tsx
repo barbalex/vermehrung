@@ -69,7 +69,8 @@ export const Lieferungen = ({ filter: showFilter = false }) => {
       hierarchyQuery.push(Q.experimentalJoinTables(['sammlung']))
       hierarchyQuery.push(Q.on('sammlung', 'id', sammlungIdInActiveNodeArray))
     }
-    const collection = db?.get('lieferung')
+    const collection =
+      db?.get<import('../../../dbModel.ts').Lieferung>('lieferung')
     const lieferungDelQuery =
       lieferungFilter._deleted === false
         ? Q.where('_deleted', false)
@@ -105,7 +106,7 @@ export const Lieferungen = ({ filter: showFilter = false }) => {
   }, [
     db,
     // need to rerender if any of the values of lieferungFilter changes
-     
+
     lieferungFilter,
     kulturIdInActiveNodeArray,
     personIdInActiveNodeArray,

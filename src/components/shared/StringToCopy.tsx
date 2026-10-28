@@ -6,7 +6,13 @@ import { ErrorBoundary } from './ErrorBoundary.tsx'
 
 import styles from './StringToCopy.module.css'
 
-export const StringToCopy = ({ text, label }: { text: string; label: string }) => {
+export const StringToCopy = ({
+  text,
+  label,
+}: {
+  text: string
+  label: string
+}) => {
   const [copied, setCopied] = useState(false)
   const onCopy = () => {
     setCopied(true)
@@ -23,10 +29,7 @@ export const StringToCopy = ({ text, label }: { text: string; label: string }) =
         <div className={styles.stringToCopyContainer}>
           <div className={styles.guidContainer}>{text}</div>
           <div className={styles.copyButtonContainer}>
-            <Button
-              color="primary"
-              onClick={onCopy}
-            >
+            <Button color="primary" onClick={onCopy}>
               {copied ? `${label} kopiert` : `${label} kopieren`}
             </Button>
           </div>

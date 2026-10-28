@@ -1,5 +1,10 @@
 import { personFullname } from './personFullname.ts'
-import type { GartenRow, HerkunftRow, KulturRow, PersonRow } from './rowTypes.ts'
+import type {
+  GartenRow,
+  HerkunftRow,
+  KulturRow,
+  PersonRow,
+} from './rowTypes.ts'
 
 export const kulturLabelFromKulturUnderArt = ({
   kultur,

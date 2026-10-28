@@ -36,7 +36,9 @@ export const SammelLieferungWann = ({
       <div
         className={wannStyles.titleRow}
         style={{
-          backgroundColor: showFilter ? 'var(--filter-bg-alt)' : 'var(--form-bg)',
+          backgroundColor: showFilter
+            ? 'var(--filter-bg-alt)'
+            : 'var(--form-bg)',
         }}
       >
         <div className={wannStyles.title}>wann</div>
@@ -48,7 +50,7 @@ export const SammelLieferungWann = ({
           label="Datum"
           value={row?.datum}
           saveToDb={saveToDb}
-          error={errors?.sammel_lieferung?.datum}
+          error={errors?.sammel_lieferung?.datum as string | undefined}
         />
       )}
       {ifNeeded('geplant') && (
@@ -60,7 +62,7 @@ export const SammelLieferungWann = ({
               name="geplant"
               value={row?.geplant}
               saveToDb={saveToDb}
-              error={errors?.sammel_lieferung?.geplant}
+              error={errors?.sammel_lieferung?.geplant as string | undefined}
             />
           ) : (
             <Checkbox2States
@@ -69,7 +71,7 @@ export const SammelLieferungWann = ({
               name="geplant"
               value={row?.geplant}
               saveToDb={saveToDb}
-              error={errors?.sammel_lieferung?.geplant}
+              error={errors?.sammel_lieferung?.geplant as string | undefined}
             />
           )}
           <div>

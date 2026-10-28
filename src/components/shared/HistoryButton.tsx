@@ -40,11 +40,11 @@ export const HistoryButton = ({
   // removing useMemo causes: Maximum update depth exceeded
   const observable = useMemo(
     () =>
-      id && initialDataQueried && db ?
-        (db
-          .get(table)
-          .findAndObserve(id) as unknown as Observable<GenericRow>)
-      : $of(null),
+      id && initialDataQueried && db
+        ? (db
+            .get(table)
+            .findAndObserve(id) as unknown as Observable<GenericRow>)
+        : $of(null),
     [db, id, initialDataQueried, table],
   )
   const row = useObservable(observable)

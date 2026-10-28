@@ -130,7 +130,10 @@ export const Select = ({
   const selectValue: SelectOption =
     optionsToUse.find((o) => o.value === (valuePassed ?? '')) || emptyValue
   const selectStyles = {
-    option: (styles: Record<string, unknown>, { data }: { data: SelectOption }) => ({
+    option: (
+      styles: Record<string, unknown>,
+      { data }: { data: SelectOption },
+    ) => ({
       ...styles,
       ...(data.inaktiv ? { color: 'var(--text-secondary)' } : {}),
     }),
@@ -163,7 +166,9 @@ export const Select = ({
           maxheight={maxHeight ?? undefined}
           classNamePrefix="react-select"
           nocaret={noCaret}
-          styles={selectStyles as unknown as import('react-select').StylesConfig}
+          styles={
+            selectStyles as unknown as import('react-select').StylesConfig
+          }
           // using portal because sticky headers would otherwise cover the dropdown
           menuPortalTarget={document.getElementById('root')}
           aria-label={label ?? ''}

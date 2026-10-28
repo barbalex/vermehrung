@@ -85,7 +85,15 @@ export class Herkunft extends Model {
   // updates the row locally - ui and labels stay live.
   // the revision is created when the editing session on this row
   // ends (see modules/revAggregation.js), not per field change
-  @writer async edit({ field, value, values }: { field?: string; value?: unknown; values?: Record<string, unknown> }) {
+  @writer async edit({
+    field,
+    value,
+    values,
+  }: {
+    field?: string
+    value?: unknown
+    values?: Record<string, unknown>
+  }) {
     if (!field && !values) {
       throw new Error('field or values must be passed')
     }
@@ -95,7 +103,7 @@ export class Herkunft extends Model {
     // optimistically update store
     await this.update((row) => {
       Object.entries(changes).forEach(([key, val]) => {
-        (row as unknown as Record<string, unknown>)[key] = val
+        ;(row as unknown as Record<string, unknown>)[key] = val
       })
       row.changed = new Date().toISOString()
       row.changed_by = store.get(userAtom)?.email ?? null
@@ -211,7 +219,15 @@ export class Sammlung extends Model {
   // updates the row locally - ui and labels stay live.
   // the revision is created when the editing session on this row
   // ends (see modules/revAggregation.js), not per field change
-  @writer async edit({ field, value, values }: { field?: string; value?: unknown; values?: Record<string, unknown> }) {
+  @writer async edit({
+    field,
+    value,
+    values,
+  }: {
+    field?: string
+    value?: unknown
+    values?: Record<string, unknown>
+  }) {
     if (!field && !values) {
       throw new Error('field or values must be passed')
     }
@@ -221,7 +237,7 @@ export class Sammlung extends Model {
     // optimistically update store
     await this.update((row) => {
       Object.entries(changes).forEach(([key, val]) => {
-        (row as unknown as Record<string, unknown>)[key] = val
+        ;(row as unknown as Record<string, unknown>)[key] = val
       })
       row.changed = new Date().toISOString()
       row.changed_by = store.get(userAtom)?.email ?? null
@@ -274,34 +290,37 @@ export class Lieferung extends Model {
 
   @relation('art', 'art_id') art!: Relation<Art>
   @relation('sammlung', 'von_sammlung_id') sammlung!: Relation<Sammlung>
-  @relation('sammel_lieferung', 'sammel_lieferung_id') sammel_lieferung!: Relation<SammelLieferung>
+  @relation('sammel_lieferung', 'sammel_lieferung_id')
+  sammel_lieferung!: Relation<SammelLieferung>
   //@relation('kultur', 'von_kultur_id') von_kultur
   //@relation('kultur', 'nach_kultur_id') nach_kultur
   @relation('person', 'person_id') person!: Relation<Person>
   @children('lieferung_file') files!: Query<LieferungFile>
 
-  @lazy von_kultur: Observable<Promise<Kultur | undefined>> = this.observe().pipe(
-    map$(async (lieferung) => {
-      let vonKultur
-      try {
-        vonKultur = await lieferung.collections
-          .get<Kultur>('kultur')
-          .find(lieferung.von_kultur_id ?? '')
-      } catch {}
-      return vonKultur
-    }),
-  )
-  @lazy nach_kultur: Observable<Promise<Kultur | undefined>> = this.observe().pipe(
-    map$(async (lieferung) => {
-      let nachKultur
-      try {
-        nachKultur = await lieferung.collections
-          .get<Kultur>('kultur')
-          .find(lieferung.nach_kultur_id ?? '')
-      } catch {}
-      return nachKultur
-    }),
-  )
+  @lazy von_kultur: Observable<Promise<Kultur | undefined>> =
+    this.observe().pipe(
+      map$(async (lieferung) => {
+        let vonKultur
+        try {
+          vonKultur = await lieferung.collections
+            .get<Kultur>('kultur')
+            .find(lieferung.von_kultur_id ?? '')
+        } catch {}
+        return vonKultur
+      }),
+    )
+  @lazy nach_kultur: Observable<Promise<Kultur | undefined>> =
+    this.observe().pipe(
+      map$(async (lieferung) => {
+        let nachKultur
+        try {
+          nachKultur = await lieferung.collections
+            .get<Kultur>('kultur')
+            .find(lieferung.nach_kultur_id ?? '')
+        } catch {}
+        return nachKultur
+      }),
+    )
 
   @lazy label: Observable<string> = this.observe().pipe(
     distinctUntilChanged(
@@ -322,7 +341,15 @@ export class Lieferung extends Model {
   // updates the row locally - ui and labels stay live.
   // the revision is created when the editing session on this row
   // ends (see modules/revAggregation.js), not per field change
-  @writer async edit({ field, value, values }: { field?: string; value?: unknown; values?: Record<string, unknown> }) {
+  @writer async edit({
+    field,
+    value,
+    values,
+  }: {
+    field?: string
+    value?: unknown
+    values?: Record<string, unknown>
+  }) {
     if (!field && !values) {
       throw new Error('field or values must be passed')
     }
@@ -332,7 +359,7 @@ export class Lieferung extends Model {
     // optimistically update store
     await this.update((row) => {
       Object.entries(changes).forEach(([key, val]) => {
-        (row as unknown as Record<string, unknown>)[key] = val
+        ;(row as unknown as Record<string, unknown>)[key] = val
       })
       row.changed = new Date().toISOString()
       row.changed_by = store.get(userAtom)?.email ?? null
@@ -394,7 +421,15 @@ export class Art extends Model {
   // updates the row locally - ui and labels stay live.
   // the revision is created when the editing session on this row
   // ends (see modules/revAggregation.js), not per field change
-  @writer async edit({ field, value, values }: { field?: string; value?: unknown; values?: Record<string, unknown> }) {
+  @writer async edit({
+    field,
+    value,
+    values,
+  }: {
+    field?: string
+    value?: unknown
+    values?: Record<string, unknown>
+  }) {
     if (!field && !values) {
       throw new Error('field or values must be passed')
     }
@@ -404,7 +439,7 @@ export class Art extends Model {
     // optimistically update store
     await this.update((row) => {
       Object.entries(changes).forEach(([key, val]) => {
-        (row as unknown as Record<string, unknown>)[key] = val
+        ;(row as unknown as Record<string, unknown>)[key] = val
       })
       row.changed = new Date().toISOString()
       row.changed_by = store.get(userAtom)?.email ?? null
@@ -501,7 +536,15 @@ export class Garten extends Model {
   // updates the row locally - ui and labels stay live.
   // the revision is created when the editing session on this row
   // ends (see modules/revAggregation.js), not per field change
-  @writer async edit({ field, value, values }: { field?: string; value?: unknown; values?: Record<string, unknown> }) {
+  @writer async edit({
+    field,
+    value,
+    values,
+  }: {
+    field?: string
+    value?: unknown
+    values?: Record<string, unknown>
+  }) {
     if (!field && !values) {
       throw new Error('field or values must be passed')
     }
@@ -511,7 +554,7 @@ export class Garten extends Model {
     // optimistically update store
     await this.update((row) => {
       Object.entries(changes).forEach(([key, val]) => {
-        (row as unknown as Record<string, unknown>)[key] = val
+        ;(row as unknown as Record<string, unknown>)[key] = val
       })
       row.changed = new Date().toISOString()
       row.changed_by = store.get(userAtom)?.email ?? null
@@ -666,7 +709,15 @@ export class Kultur extends Model {
   // updates the row locally - ui and labels stay live.
   // the revision is created when the editing session on this row
   // ends (see modules/revAggregation.js), not per field change
-  @writer async edit({ field, value, values }: { field?: string; value?: unknown; values?: Record<string, unknown> }) {
+  @writer async edit({
+    field,
+    value,
+    values,
+  }: {
+    field?: string
+    value?: unknown
+    values?: Record<string, unknown>
+  }) {
     if (!field && !values) {
       throw new Error('field or values must be passed')
     }
@@ -676,7 +727,7 @@ export class Kultur extends Model {
     // optimistically update store
     await this.update((row) => {
       Object.entries(changes).forEach(([key, val]) => {
-        (row as unknown as Record<string, unknown>)[key] = val
+        ;(row as unknown as Record<string, unknown>)[key] = val
       })
       row.changed = new Date().toISOString()
       row.changed_by = store.get(userAtom)?.email ?? null
@@ -722,7 +773,15 @@ export class Teilkultur extends Model {
   // updates the row locally - ui and labels stay live.
   // the revision is created when the editing session on this row
   // ends (see modules/revAggregation.js), not per field change
-  @writer async edit({ field, value, values }: { field?: string; value?: unknown; values?: Record<string, unknown> }) {
+  @writer async edit({
+    field,
+    value,
+    values,
+  }: {
+    field?: string
+    value?: unknown
+    values?: Record<string, unknown>
+  }) {
     if (!field && !values) {
       throw new Error('field or values must be passed')
     }
@@ -732,7 +791,7 @@ export class Teilkultur extends Model {
     // optimistically update store
     await this.update((row) => {
       Object.entries(changes).forEach(([key, val]) => {
-        (row as unknown as Record<string, unknown>)[key] = val
+        ;(row as unknown as Record<string, unknown>)[key] = val
       })
       row.changed = new Date().toISOString()
       row.changed_by = store.get(userAtom)?.email ?? null
@@ -824,7 +883,15 @@ export class Zaehlung extends Model {
   // updates the row locally - ui and labels stay live.
   // the revision is created when the editing session on this row
   // ends (see modules/revAggregation.js), not per field change
-  @writer async edit({ field, value, values }: { field?: string; value?: unknown; values?: Record<string, unknown> }) {
+  @writer async edit({
+    field,
+    value,
+    values,
+  }: {
+    field?: string
+    value?: unknown
+    values?: Record<string, unknown>
+  }) {
     if (!field && !values) {
       throw new Error('field or values must be passed')
     }
@@ -834,7 +901,7 @@ export class Zaehlung extends Model {
     // optimistically update store
     await this.update((row) => {
       Object.entries(changes).forEach(([key, val]) => {
-        (row as unknown as Record<string, unknown>)[key] = val
+        ;(row as unknown as Record<string, unknown>)[key] = val
       })
       row.changed = new Date().toISOString()
       row.changed_by = store.get(userAtom)?.email ?? null
@@ -858,7 +925,8 @@ export class Teilzaehlung extends Model {
   @field('anzahl_auspflanzbereit') anzahl_auspflanzbereit!: number | null
   @field('anzahl_mutterpflanzen') anzahl_mutterpflanzen!: number | null
   @field('andere_menge') andere_menge!: string | null
-  @field('auspflanzbereit_beschreibung') auspflanzbereit_beschreibung!: string | null
+  @field('auspflanzbereit_beschreibung') auspflanzbereit_beschreibung!:
+    string | null
   @field('bemerkungen') bemerkungen!: string | null
   @field('prognose_von_tz') prognose_von_tz!: string | null
   @field('changed') changed!: string | null
@@ -880,7 +948,15 @@ export class Teilzaehlung extends Model {
   // updates the row locally - ui and labels stay live.
   // the revision is created when the editing session on this row
   // ends (see modules/revAggregation.js), not per field change
-  @writer async edit({ field, value, values }: { field?: string; value?: unknown; values?: Record<string, unknown> }) {
+  @writer async edit({
+    field,
+    value,
+    values,
+  }: {
+    field?: string
+    value?: unknown
+    values?: Record<string, unknown>
+  }) {
     if (!field && !values) {
       throw new Error('field or values must be passed')
     }
@@ -890,7 +966,7 @@ export class Teilzaehlung extends Model {
     // optimistically update store
     await this.update((row) => {
       Object.entries(changes).forEach(([key, val]) => {
-        (row as unknown as Record<string, unknown>)[key] = val
+        ;(row as unknown as Record<string, unknown>)[key] = val
       })
       row.changed = new Date().toISOString()
       row.changed_by = store.get(userAtom)?.email ?? null
@@ -980,7 +1056,15 @@ export class Person extends Model {
   // updates the row locally - ui and labels stay live.
   // the revision is created when the editing session on this row
   // ends (see modules/revAggregation.js), not per field change
-  @writer async edit({ field, value, values }: { field?: string; value?: unknown; values?: Record<string, unknown> }) {
+  @writer async edit({
+    field,
+    value,
+    values,
+  }: {
+    field?: string
+    value?: unknown
+    values?: Record<string, unknown>
+  }) {
     if (!field && !values) {
       throw new Error('field or values must be passed')
     }
@@ -990,7 +1074,7 @@ export class Person extends Model {
     // optimistically update store
     await this.update((row) => {
       Object.entries(changes).forEach(([key, val]) => {
-        (row as unknown as Record<string, unknown>)[key] = val
+        ;(row as unknown as Record<string, unknown>)[key] = val
       })
       row.changed = new Date().toISOString()
       row.changed_by = store.get(userAtom)?.email ?? null
@@ -1085,7 +1169,15 @@ export class SammelLieferung extends Model {
   // updates the row locally - ui and labels stay live.
   // the revision is created when the editing session on this row
   // ends (see modules/revAggregation.js), not per field change
-  @writer async edit({ field, value, values }: { field?: string; value?: unknown; values?: Record<string, unknown> }) {
+  @writer async edit({
+    field,
+    value,
+    values,
+  }: {
+    field?: string
+    value?: unknown
+    values?: Record<string, unknown>
+  }) {
     if (!field && !values) {
       throw new Error('field or values must be passed')
     }
@@ -1095,7 +1187,7 @@ export class SammelLieferung extends Model {
     // optimistically update store
     await this.update((row) => {
       Object.entries(changes).forEach(([key, val]) => {
-        (row as unknown as Record<string, unknown>)[key] = val
+        ;(row as unknown as Record<string, unknown>)[key] = val
       })
       row.changed = new Date().toISOString()
       row.changed_by = store.get(userAtom)?.email ?? null
@@ -1151,7 +1243,15 @@ export class Bedarf extends Model {
   // updates the row locally - ui and labels stay live.
   // the revision is created when the editing session on this row
   // ends (see modules/revAggregation.js), not per field change
-  @writer async edit({ field, value, values }: { field?: string; value?: unknown; values?: Record<string, unknown> }) {
+  @writer async edit({
+    field,
+    value,
+    values,
+  }: {
+    field?: string
+    value?: unknown
+    values?: Record<string, unknown>
+  }) {
     if (!field && !values) {
       throw new Error('field or values must be passed')
     }
@@ -1161,7 +1261,7 @@ export class Bedarf extends Model {
     // optimistically update store
     await this.update((row) => {
       Object.entries(changes).forEach(([key, val]) => {
-        (row as unknown as Record<string, unknown>)[key] = val
+        ;(row as unknown as Record<string, unknown>)[key] = val
       })
       row.changed = new Date().toISOString()
       row.changed_by = store.get(userAtom)?.email ?? null
@@ -1219,7 +1319,15 @@ export class Event extends Model {
   // updates the row locally - ui and labels stay live.
   // the revision is created when the editing session on this row
   // ends (see modules/revAggregation.js), not per field change
-  @writer async edit({ field, value, values }: { field?: string; value?: unknown; values?: Record<string, unknown> }) {
+  @writer async edit({
+    field,
+    value,
+    values,
+  }: {
+    field?: string
+    value?: unknown
+    values?: Record<string, unknown>
+  }) {
     if (!field && !values) {
       throw new Error('field or values must be passed')
     }
@@ -1229,7 +1337,7 @@ export class Event extends Model {
     // optimistically update store
     await this.update((row) => {
       Object.entries(changes).forEach(([key, val]) => {
-        (row as unknown as Record<string, unknown>)[key] = val
+        ;(row as unknown as Record<string, unknown>)[key] = val
       })
       row.changed = new Date().toISOString()
       row.changed_by = store.get(userAtom)?.email ?? null
@@ -1269,14 +1377,16 @@ export class Av extends Model {
     ),
     map$((p) => personLabelFromPerson({ person: p })),
   )
-  @lazy artLabel: Observable<Promise<string | undefined>> = this.art.observe().pipe(
-    distinctUntilKeyChanged('ae_id'),
-    map$(async (art) => {
-      const artLabel = await art?.label.pipe(first$()).toPromise()
+  @lazy artLabel: Observable<Promise<string | undefined>> = this.art
+    .observe()
+    .pipe(
+      distinctUntilKeyChanged('ae_id'),
+      map$(async (art) => {
+        const artLabel = await art?.label.pipe(first$()).toPromise()
 
-      return artLabel
-    }),
-  )
+        return artLabel
+      }),
+    )
 
   @writer async removeConflict(_rev: string) {
     await this.update((row) => {
@@ -1286,7 +1396,15 @@ export class Av extends Model {
   // updates the row locally - ui and labels stay live.
   // the revision is created when the editing session on this row
   // ends (see modules/revAggregation.js), not per field change
-  @writer async edit({ field, value, values }: { field?: string; value?: unknown; values?: Record<string, unknown> }) {
+  @writer async edit({
+    field,
+    value,
+    values,
+  }: {
+    field?: string
+    value?: unknown
+    values?: Record<string, unknown>
+  }) {
     if (!field && !values) {
       throw new Error('field or values must be passed')
     }
@@ -1296,7 +1414,7 @@ export class Av extends Model {
     // optimistically update store
     await this.update((row) => {
       Object.entries(changes).forEach(([key, val]) => {
-        (row as unknown as Record<string, unknown>)[key] = val
+        ;(row as unknown as Record<string, unknown>)[key] = val
       })
       row.changed = new Date().toISOString()
       row.changed_by = store.get(userAtom)?.email ?? null
@@ -1356,7 +1474,15 @@ export class Gv extends Model {
   // updates the row locally - ui and labels stay live.
   // the revision is created when the editing session on this row
   // ends (see modules/revAggregation.js), not per field change
-  @writer async edit({ field, value, values }: { field?: string; value?: unknown; values?: Record<string, unknown> }) {
+  @writer async edit({
+    field,
+    value,
+    values,
+  }: {
+    field?: string
+    value?: unknown
+    values?: Record<string, unknown>
+  }) {
     if (!field && !values) {
       throw new Error('field or values must be passed')
     }
@@ -1366,7 +1492,7 @@ export class Gv extends Model {
     // optimistically update store
     await this.update((row) => {
       Object.entries(changes).forEach(([key, val]) => {
-        (row as unknown as Record<string, unknown>)[key] = val
+        ;(row as unknown as Record<string, unknown>)[key] = val
       })
       row.changed = new Date().toISOString()
       row.changed_by = store.get(userAtom)?.email ?? null
@@ -1420,7 +1546,7 @@ export class ArtFile extends Model {
     }
     // updating server is done by calling code
     await this.update((row) => {
-      (row as unknown as Record<string, unknown>)[field as string] = value
+      ;(row as unknown as Record<string, unknown>)[field as string] = value
     })
     return
   }
@@ -1488,7 +1614,7 @@ export class GartenFile extends Model {
     }
     // updating server is done by calling code
     await this.update((row) => {
-      (row as unknown as Record<string, unknown>)[field as string] = value
+      ;(row as unknown as Record<string, unknown>)[field as string] = value
     })
     return
   }
@@ -1556,7 +1682,7 @@ export class HerkunftFile extends Model {
     }
     // updating server is done by calling code
     await this.update((row) => {
-      (row as unknown as Record<string, unknown>)[field as string] = value
+      ;(row as unknown as Record<string, unknown>)[field as string] = value
     })
     return
   }
@@ -1624,7 +1750,7 @@ export class KulturFile extends Model {
     }
     // updating server is done by calling code
     await this.update((row) => {
-      (row as unknown as Record<string, unknown>)[field as string] = value
+      ;(row as unknown as Record<string, unknown>)[field as string] = value
     })
     return
   }
@@ -1692,7 +1818,7 @@ export class LieferungFile extends Model {
     }
     // updating server is done by calling code
     await this.update((row) => {
-      (row as unknown as Record<string, unknown>)[field as string] = value
+      ;(row as unknown as Record<string, unknown>)[field as string] = value
     })
     return
   }
@@ -1760,7 +1886,7 @@ export class PersonFile extends Model {
     }
     // updating server is done by calling code
     await this.update((row) => {
-      (row as unknown as Record<string, unknown>)[field as string] = value
+      ;(row as unknown as Record<string, unknown>)[field as string] = value
     })
     return
   }
@@ -1828,7 +1954,7 @@ export class SammlungFile extends Model {
     }
     // updating server is done by calling code
     await this.update((row) => {
-      (row as unknown as Record<string, unknown>)[field as string] = value
+      ;(row as unknown as Record<string, unknown>)[field as string] = value
     })
     return
   }
@@ -1870,7 +1996,15 @@ export class ArtQk extends Model {
   // updates the row locally - ui and labels stay live.
   // the revision is created when the editing session on this row
   // ends (see modules/revAggregation.js), not per field change
-  @writer async edit({ field, value, values }: { field?: string; value?: unknown; values?: Record<string, unknown> }) {
+  @writer async edit({
+    field,
+    value,
+    values,
+  }: {
+    field?: string
+    value?: unknown
+    values?: Record<string, unknown>
+  }) {
     if (!field && !values) {
       throw new Error('field or values must be passed')
     }
@@ -1880,7 +2014,7 @@ export class ArtQk extends Model {
     // optimistically update store
     await this.update((row) => {
       Object.entries(changes).forEach(([key, val]) => {
-        (row as unknown as Record<string, unknown>)[key] = val
+        ;(row as unknown as Record<string, unknown>)[key] = val
       })
       row.changed = new Date().toISOString()
       row.changed_by = store.get(userAtom)?.email ?? null
@@ -1900,7 +2034,8 @@ export class KulturOption extends Model {
   @field('z_bemerkungen') z_bemerkungen!: boolean | null
   @field('tz_teilkultur_id') titel!: boolean | null
   @field('tz_andere_menge') tz_andere_menge!: boolean | null
-  @field('tz_auspflanzbereit_beschreibung') tz_auspflanzbereit_beschreibung!: boolean | null
+  @field('tz_auspflanzbereit_beschreibung') tz_auspflanzbereit_beschreibung!:
+    boolean | null
   @field('tz_bemerkungen') tz_bemerkungen!: boolean | null
   @field('tk') tk!: boolean | null
   @field('tk_bemerkungen') tk_bemerkungen!: boolean | null
@@ -1927,7 +2062,15 @@ export class KulturOption extends Model {
   // updates the row locally - ui and labels stay live.
   // the revision is created when the editing session on this row
   // ends (see modules/revAggregation.js), not per field change
-  @writer async edit({ field, value, values }: { field?: string; value?: unknown; values?: Record<string, unknown> }) {
+  @writer async edit({
+    field,
+    value,
+    values,
+  }: {
+    field?: string
+    value?: unknown
+    values?: Record<string, unknown>
+  }) {
     if (!field && !values) {
       throw new Error('field or values must be passed')
     }
@@ -1937,7 +2080,7 @@ export class KulturOption extends Model {
     // optimistically update store
     await this.update((row) => {
       Object.entries(changes).forEach(([key, val]) => {
-        (row as unknown as Record<string, unknown>)[key] = val
+        ;(row as unknown as Record<string, unknown>)[key] = val
       })
       row.changed = new Date().toISOString()
       row.changed_by = store.get(userAtom)?.email ?? null
@@ -1972,7 +2115,15 @@ export class KulturQk extends Model {
   // updates the row locally - ui and labels stay live.
   // the revision is created when the editing session on this row
   // ends (see modules/revAggregation.js), not per field change
-  @writer async edit({ field, value, values }: { field?: string; value?: unknown; values?: Record<string, unknown> }) {
+  @writer async edit({
+    field,
+    value,
+    values,
+  }: {
+    field?: string
+    value?: unknown
+    values?: Record<string, unknown>
+  }) {
     if (!field && !values) {
       throw new Error('field or values must be passed')
     }
@@ -1982,7 +2133,7 @@ export class KulturQk extends Model {
     // optimistically update store
     await this.update((row) => {
       Object.entries(changes).forEach(([key, val]) => {
-        (row as unknown as Record<string, unknown>)[key] = val
+        ;(row as unknown as Record<string, unknown>)[key] = val
       })
       row.changed = new Date().toISOString()
       row.changed_by = store.get(userAtom)?.email ?? null
@@ -2015,7 +2166,8 @@ export class PersonOption extends Model {
   @field('ku_erhaltungskultur') ku_erhaltungskultur!: boolean | null
   @field('li_show_sl_felder') li_show_sl_felder!: boolean | null
   @field('li_show_sl') li_show_sl!: boolean | null
-  @field('sl_show_empty_when_next_to_li') sl_show_empty_when_next_to_li!: boolean | null
+  @field('sl_show_empty_when_next_to_li') sl_show_empty_when_next_to_li!:
+    boolean | null
   @field('sl_auto_copy_edits') sl_auto_copy_edits!: boolean | null
   @field('tree_kultur') tree_kultur!: boolean | null
   @field('tree_teilkultur') tree_teilkultur!: boolean | null
@@ -2043,7 +2195,15 @@ export class PersonOption extends Model {
   // updates the row locally - ui and labels stay live.
   // the revision is created when the editing session on this row
   // ends (see modules/revAggregation.js), not per field change
-  @writer async edit({ field, value, values }: { field?: string; value?: unknown; values?: Record<string, unknown> }) {
+  @writer async edit({
+    field,
+    value,
+    values,
+  }: {
+    field?: string
+    value?: unknown
+    values?: Record<string, unknown>
+  }) {
     if (!field && !values) {
       throw new Error('field or values must be passed')
     }
@@ -2053,7 +2213,7 @@ export class PersonOption extends Model {
     // optimistically update store
     await this.update((row) => {
       Object.entries(changes).forEach(([key, val]) => {
-        (row as unknown as Record<string, unknown>)[key] = val
+        ;(row as unknown as Record<string, unknown>)[key] = val
       })
       row.changed = new Date().toISOString()
       row.changed_by = store.get(userAtom)?.email ?? null

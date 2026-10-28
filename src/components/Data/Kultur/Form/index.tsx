@@ -87,7 +87,7 @@ export const KulturForm = ({
   useEffect(() => {
     const userPersonOptionsObservable = user.uid
       ? db
-          .get('person_option')
+          ?.get<import('../../../../dbModel.ts').PersonOption>('person_option')
           .query(Q.on('person', Q.where('account_id', user.uid)))
           .observeWithColumns(['ku_zwischenlager', 'ku_erhaltungskultur'])
       : $of({})
@@ -112,7 +112,7 @@ export const KulturForm = ({
               Q.where('aktiv', null),
             )
     const gartensObservable = db
-      .get('garten')
+      ?.get<import('../../../../dbModel.ts').Garten>('garten')
       .query(gartenDelQuery, gartenAktivQuery)
       .observe()
     const gartenObservable = row?.garten
@@ -129,7 +129,7 @@ export const KulturForm = ({
               Q.where('_deleted', null),
             )
     const sammlungsObservable = db
-      .get('sammlung')
+      ?.get<import('../../../../dbModel.ts').Sammlung>('sammlung')
       .query(
         sammlungDelQuery,
         Q.where('art_id', Q.notEq(null)),
@@ -291,10 +291,20 @@ export const KulturForm = ({
   /*const artForArtWerte = artsSorted.filter(
   (a) => !!a.ae_id && artsToChoose.includes(a.id),
 )*/
-  const [dataState2, setDataState2] = useState({
-    artWerte: [],
-    herkunftWerte: [],
-  })
+  const [dataState2, setDataState2] = useState<{
+    artWerte: {
+      value: string
+      label: string | undefined
+      inaktiv?: boolean
+      link?: string[]
+    }[]
+    herkunftWerte: {
+      value: string
+      label: string | undefined
+      inaktiv?: boolean
+      link?: string[]
+    }[]
+  }>({ artWerte: [], herkunftWerte: [] })
   useEffect(() => {
     const artDelQuery =
       artFilter._deleted === false
@@ -307,7 +317,7 @@ export const KulturForm = ({
               Q.where('_deleted', null),
             )
     const artsObservable = db
-      .get('art')
+      ?.get<import('../../../../dbModel.ts').Art>('art')
       .query(
         artDelQuery,
         Q.where('ae_id', Q.notEq(null)),
@@ -325,7 +335,7 @@ export const KulturForm = ({
               Q.where('_deleted', null),
             )
     const herkunftsObservable = db
-      .get('herkunft')
+      ?.get<import('../../../../dbModel.ts').Herkunft>('herkunft')
       .query(herkunftDelQuery, Q.where('id', Q.oneOf(herkunftsToChoose)))
       .observe()
     const combinedObservables = combineLatest([
@@ -380,11 +390,16 @@ export const KulturForm = ({
     )
 
     return () => subscription?.unsubscribe?.()
-     
   }, [db, user, artsToChoose.length, herkunftsToChoose.length])
   const { artWerte, herkunftWerte } = dataState2
 
-  const saveToDb = (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
+  const saveToDb = (event: {
+    target: { name?: string; value: unknown }
+    currentTarget?: HTMLElement
+    preventDefault?: () => void
+    stopPropagation?: () => void
+    key?: string
+  }) => {
     const field = event.target.name
     let value = ifIsNumericAsNumber(event.target.value)
     if (event.target.value === undefined) value = null

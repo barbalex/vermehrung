@@ -1,4 +1,12 @@
-export const buildArtSammlungFolder = ({ count, artIndex, artId }: { count: number; artIndex: number; artId: string }) => ({
+export const buildArtSammlungFolder = ({
+  count,
+  artIndex,
+  artId,
+}: {
+  count: number
+  artIndex: number
+  artId: string
+}) => ({
   nodeType: 'folder',
   menuTitle: 'Sammlungen',
   id: `${artId}SammlungFolder`,

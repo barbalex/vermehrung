@@ -168,9 +168,7 @@ export const flushRow = async (table: string, id: string) => {
     })
 
     // optimistically update the row's chain
-    const newRevisions = existingRevisions
-      ? [rev, ...existingRevisions]
-      : [rev]
+    const newRevisions = existingRevisions ? [rev, ...existingRevisions] : [rev]
     await db.write(async () => {
       await row.update((r) => {
         const record = r as unknown as Record<string, unknown>

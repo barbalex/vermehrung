@@ -9,7 +9,13 @@ import { KulturDeleteMenu as Menu } from './Menu.tsx'
 export const KulturDeleteButton = ({ row, asMenu }) => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | undefined | null>(null)
 
-  const onClickButton = (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => setAnchorEl(event.currentTarget)
+  const onClickButton = (event: {
+    target: { name?: string; value: unknown }
+    currentTarget?: HTMLElement
+    preventDefault?: () => void
+    stopPropagation?: () => void
+    key?: string
+  }) => setAnchorEl(event.currentTarget)
 
   if (asMenu) {
     return (
@@ -21,11 +27,7 @@ export const KulturDeleteButton = ({ row, asMenu }) => {
         >
           Kultur löschen
         </MenuItem>
-        <Menu
-          anchorEl={anchorEl}
-          setAnchorEl={setAnchorEl}
-          row={row}
-        />
+        <Menu anchorEl={anchorEl} setAnchorEl={setAnchorEl} row={row} />
       </>
     )
   }
@@ -43,11 +45,7 @@ export const KulturDeleteButton = ({ row, asMenu }) => {
       >
         <FaMinus />
       </IconButton>
-      <Menu
-        anchorEl={anchorEl}
-        setAnchorEl={setAnchorEl}
-        row={row}
-      />
+      <Menu anchorEl={anchorEl} setAnchorEl={setAnchorEl} row={row} />
     </ErrorBoundary>
   )
 }

@@ -34,7 +34,9 @@ export const createNew = async ({ node }: { node: TreeNode }) => {
     if (parentId && url.length > 3) {
       parentTableTitle = url.slice(-4)[0]
       parentTable = parentTableTitle
-        ? tableFromTitleHash[parentTableTitle as keyof typeof tableFromTitleHash]
+        ? tableFromTitleHash[
+            parentTableTitle as keyof typeof tableFromTitleHash
+          ]
         : null
     }
   } else if (nodeType === 'folder') {
@@ -47,7 +49,9 @@ export const createNew = async ({ node }: { node: TreeNode }) => {
     if (parentId && url.length > 2) {
       parentTableTitle = url.slice(-3)[0]
       parentTable = parentTableTitle
-        ? tableFromTitleHash[parentTableTitle as keyof typeof tableFromTitleHash]
+        ? tableFromTitleHash[
+            parentTableTitle as keyof typeof tableFromTitleHash
+          ]
         : null
     }
   }

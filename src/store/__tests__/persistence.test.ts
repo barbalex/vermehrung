@@ -91,7 +91,9 @@ describe('persisted atoms', () => {
       buildQuery({ id: 'hydrated-1', time: 100 }),
     ])
     const postMock = vi.fn(async () => null)
-    store.set(apiClientAtom, { post: postMock } as unknown as import('../../utils/apiTypes.ts').ApiClient)
+    store.set(apiClientAtom, {
+      post: postMock,
+    } as unknown as import('../../utils/apiTypes.ts').ApiClient)
 
     await hydratePersistedAtoms()
     expect(store.get(queueSizeAtom)).toBe(1)
@@ -115,9 +117,9 @@ describe('persisted atoms', () => {
     addQueuedQuery(buildQuery({ id: 'new-1' }))
     await new Promise((resolve) => setTimeout(resolve, 10))
 
-    const persisted = storageData.get(
-      'vermehrung:queuedQueries',
-    ) as { id: string }[]
+    const persisted = storageData.get('vermehrung:queuedQueries') as {
+      id: string
+    }[]
     expect(persisted).toHaveLength(1)
     expect(persisted[0].id).toBe('new-1')
   })

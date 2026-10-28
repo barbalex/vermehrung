@@ -21,7 +21,6 @@ export interface ContextMenuState {
 // { type: 'subtitle', label, className? }
 export const treeContextMenuAtom = atom<ContextMenuState | null>(null)
 
-
 // ms a left mouse button / touch has to be held down on a row to open the menu
 export const holdToDisplayMs = 1000
 

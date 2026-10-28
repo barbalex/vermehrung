@@ -6,19 +6,11 @@ export const OpenSource = () => (
     <p className={dokuStyles.dokuDate}>15.06.2019</p>
     <p>
       vermehrung.ch wird von{' '}
-      <a
-        href="//gabriel-software.ch"
-        target="_blank"
-        rel="noreferrer"
-      >
+      <a href="//gabriel-software.ch" target="_blank" rel="noreferrer">
         Gabriel-Software
       </a>{' '}
       für die{' '}
-      <a
-        href="//naturschutz.zh.ch"
-        target="_blank"
-        rel="noreferrer"
-      >
+      <a href="//naturschutz.zh.ch" target="_blank" rel="noreferrer">
         Fachstelle Naturschutz des Kantons Zürich
       </a>{' '}
       entwickelt und soll im Rahmen des{' '}

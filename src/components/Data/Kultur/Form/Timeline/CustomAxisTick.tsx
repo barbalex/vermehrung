@@ -15,4 +15,3 @@ export const KulturCustomAxisTick = ({ x, y, payload }) => (
     </text>
   </g>
 )
-

@@ -20,18 +20,18 @@ export const buildExceljsWorksheetsForLieferungenOfYear = async ({
 
   let lieferungs: import('../../../../../dbModel.ts').Lieferung[] = []
   try {
-    lieferungs = (await db
-      ?.get<import('../../../../../dbModel.ts').Lieferung>('lieferung')
-      .query(Q.where('_deleted', false), Q.where('datum', Q.notEq(null)))
-      .fetch()) ?? []
+    lieferungs =
+      (await db
+        ?.get<import('../../../../../dbModel.ts').Lieferung>('lieferung')
+        .query(Q.where('_deleted', false), Q.where('datum', Q.notEq(null)))
+        .fetch()) ?? []
   } catch {}
   const lieferungsSorted = lieferungs.sort(lieferungSort)
 
   const lieferungsdata = await Promise.all(
     lieferungsSorted
       .filter((l) => {
-        const lYear =
-          l.datum ? DateTime.fromSQL(l.datum).toFormat('yyyy') : ''
+        const lYear = l.datum ? DateTime.fromSQL(l.datum).toFormat('yyyy') : ''
         return lYear == year
       })
       .map(async (l) => {

@@ -1,4 +1,6 @@
-const removeMetadata = (d: Record<string, unknown>): Record<string, unknown> => {
+const removeMetadata = (
+  d: Record<string, unknown>,
+): Record<string, unknown> => {
   delete d.__typename
   delete d._conflicts
   delete d._deleted

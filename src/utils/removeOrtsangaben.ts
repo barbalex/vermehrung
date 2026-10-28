@@ -45,4 +45,3 @@ export const removeOrtsangaben = async ({ db }: { db: Database }) => {
     console.log('Error removing ortsangaben:', error)
   }
 }
-

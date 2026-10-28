@@ -46,17 +46,24 @@ export const ZaehlungHistoryRow = ({
     newObject.id = uuidv7()
     newObject.changed = new Date().toISOString()
     newObject.changed_by = user.email
-    newObject._revisions = toPgArray([rev, ...((row?._revisions as string[]) ?? [])])
+    newObject._revisions = toPgArray([
+      rev,
+      ...((row?._revisions as string[]) ?? []),
+    ])
     const newObjectForStore = { ...newObject }
     try {
-    await store
-      .get(apiClientAtom)
-      ?.post('/zaehlung_rev', newObject, 'resolution=merge-duplicates,return=minimal')
-  } catch (error) {
-          checkForOnlineError({ error: error })
+      await store
+        .get(apiClientAtom)
+        ?.post(
+          '/zaehlung_rev',
+          newObject,
+          'resolution=merge-duplicates,return=minimal',
+        )
+    } catch (error) {
+      checkForOnlineError({ error: error })
       return addNotification({
         message: (error as Error).message,
-  })
+      })
     }
     historyTakeoverCallback()
     // do not stringify revisions for store

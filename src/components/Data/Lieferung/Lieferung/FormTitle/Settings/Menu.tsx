@@ -24,7 +24,9 @@ export const LieferungSettingsMenu = ({ anchorEl, setAnchorEl }) => {
   useEffect(() => {
     const userPersonOptionsObservable = user.uid
       ? db
-          .get('person_option')
+          ?.get<import('../../../../../../dbModel.ts').PersonOption>(
+            'person_option',
+          )
           .query(Q.on('person', Q.where('account_id', user.uid)))
           .observeWithColumns(['li_show_sl_felder', 'li_show_sl'])
       : $of({})
@@ -43,7 +45,13 @@ export const LieferungSettingsMenu = ({ anchorEl, setAnchorEl }) => {
 
   const { li_show_sl_felder, li_show_sl } = userPersonOption ?? {}
 
-  const saveToDb = (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
+  const saveToDb = (event: {
+    target: { name?: string; value: unknown }
+    currentTarget?: HTMLElement
+    preventDefault?: () => void
+    stopPropagation?: () => void
+    key?: string
+  }) => {
     const field = event.target.name
     const value = event.target.value === 'false'
     userPersonOption.edit({ field, value })

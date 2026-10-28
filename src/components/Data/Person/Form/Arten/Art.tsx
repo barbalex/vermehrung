@@ -9,12 +9,24 @@ import { ErrorBoundary } from '../../../../shared/ErrorBoundary.tsx'
 
 import styles from './Art.module.css'
 
-export const PersonArt = ({ av }: { av: import('../../../../shared/types.ts').WmRow | null | undefined }) => {
-  const [delMenuAnchorEl, setDelMenuAnchorEl] = useState<HTMLElement | undefined | null>(null)
+export const PersonArt = ({
+  av,
+}: {
+  av: import('../../../../shared/types.ts').WmRow | null | undefined
+}) => {
+  const [delMenuAnchorEl, setDelMenuAnchorEl] = useState<
+    HTMLElement | undefined | null
+  >(null)
   const delMenuOpen = Boolean(delMenuAnchorEl)
 
   const onClose = () => setDelMenuAnchorEl(null)
-  const onClickDeleteIcon = (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => setDelMenuAnchorEl(event.currentTarget)
+  const onClickDeleteIcon = (event: {
+    target: { name?: string; value: unknown }
+    currentTarget?: HTMLElement
+    preventDefault?: () => void
+    stopPropagation?: () => void
+    key?: string
+  }) => setDelMenuAnchorEl(event.currentTarget)
 
   const onClickDelete = () => {
     av?.delete()
@@ -23,14 +35,16 @@ export const PersonArt = ({ av }: { av: import('../../../../shared/types.ts').Wm
 
   const [artLabel, setArtLabel] = useState<string | undefined | null>(null)
   useEffect(() => {
-    const subscription = av?.art.observe().subscribe(async (art: import('../../../../../dbModel.ts').Art) => {
-      let label
-      try {
-        label = await art.label.pipe(first$()).toPromise()
-      } catch {}
+    const subscription = av?.art
+      .observe()
+      .subscribe(async (art: import('../../../../../dbModel.ts').Art) => {
+        let label
+        try {
+          label = await art.label.pipe(first$()).toPromise()
+        } catch {}
 
-      setArtLabel(label)
-    })
+        setArtLabel(label)
+      })
 
     return () => subscription?.unsubscribe?.()
   }, [av?.art])

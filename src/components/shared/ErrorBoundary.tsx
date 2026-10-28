@@ -1,7 +1,6 @@
 import { ErrorBoundary as ErrorBoundaryComponent } from 'react-error-boundary'
 import Button from '@mui/material/Button'
 
-
 import type { ReactNode } from 'react'
 
 import styles from './ErrorBoundary.module.css'
@@ -60,11 +59,14 @@ const ErrorFallback = ({
 }
 
 export const ErrorBoundary = ({ children }: { children: ReactNode }) => {
-
   return (
     <ErrorBoundaryComponent
       // componentStack is passed at runtime but not part of FallbackProps
-      FallbackComponent={ErrorFallback as unknown as import('react').ComponentType<import('react-error-boundary').FallbackProps>}
+      FallbackComponent={
+        ErrorFallback as unknown as import('react').ComponentType<
+          import('react-error-boundary').FallbackProps
+        >
+      }
       onReset={onReload}
     >
       {children}

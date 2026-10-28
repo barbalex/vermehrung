@@ -23,7 +23,11 @@ import { personLabelFromPerson } from '../../../../../utils/personLabelFromPerso
 
 import styles from './index.module.css'
 
-export const Personen = ({ art }: { art: import('../../../../shared/types.ts').WmRow | null | undefined }) => {
+export const Personen = ({
+  art,
+}: {
+  art: import('../../../../shared/types.ts').WmRow | null | undefined
+}) => {
   const db = useAtomValue(dbAtom)
   const errors = useAtomValue(errorsAtom)
   const personFilter = useAtomValue(filterPersonAtom)
@@ -32,7 +36,13 @@ export const Personen = ({ art }: { art: import('../../../../shared/types.ts').W
 
   const [open, setOpen] = useState(false)
   const anim = useAnimation()
-  const onClickToggle = async (e: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
+  const onClickToggle = async (e: {
+    target: { name?: string; value: unknown }
+    currentTarget?: HTMLElement
+    preventDefault?: () => void
+    stopPropagation?: () => void
+    key?: string
+  }) => {
     e.stopPropagation()
     if (open) {
       const was = open
@@ -74,7 +84,7 @@ export const Personen = ({ art }: { art: import('../../../../shared/types.ts').W
               Q.where('aktiv', null),
             )
     const personsObservable = db
-      .get('person')
+      ?.get<import('../../../../../dbModel.ts').Person>('person')
       .query(delQuery, aktivQuery)
       .observe()
     const avsObservable = art?.avs
@@ -89,7 +99,10 @@ export const Personen = ({ art }: { art: import('../../../../shared/types.ts').W
         const avsSorted = await avsSortByPerson(avs)
         const avPersonIds = avsSorted.map((v) => v.person_id)
         const personWerte = persons
-          .filter((a: import('../../../../../dbModel.ts').Art) => !avPersonIds.includes(a.id))
+          .filter(
+            (a: import('../../../../../dbModel.ts').Art) =>
+              !avPersonIds.includes(a.id),
+          )
           .sort(personSort)
           .map((el) => ({
             value: el.id,
@@ -103,7 +116,13 @@ export const Personen = ({ art }: { art: import('../../../../shared/types.ts').W
   }, [art?.avs, db, personFilter])
   const { avsSorted, personWerte } = dataState
 
-  const saveToDb = (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) =>
+  const saveToDb = (event: {
+    target: { name?: string; value: unknown }
+    currentTarget?: HTMLElement
+    preventDefault?: () => void
+    stopPropagation?: () => void
+    key?: string
+  }) =>
     insertAvRev({ values: { art_id: art?.id, person_id: event.target.value } })
 
   return (
@@ -148,7 +167,7 @@ export const Personen = ({ art }: { art: import('../../../../shared/types.ts').W
                 options={personWerte}
                 saveToDb={saveToDb}
                 isClearable={false}
-                error={errors?.av?.person_id}
+                error={errors?.av?.person_id as string | undefined}
               />
             )}
           </>

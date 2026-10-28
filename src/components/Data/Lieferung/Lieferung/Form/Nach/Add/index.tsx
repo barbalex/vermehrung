@@ -18,7 +18,13 @@ export const LieferungAdd = ({ disabled, lieferung, herkunft }) => {
   const onCloseTypeDialog = () => setTypeDialogOpen(false)
   const onCloseGardenDialog = () => setGardenDialogOpen(false)
 
-  const onChangeType = (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
+  const onChangeType = (event: {
+    target: { name?: string; value: unknown }
+    currentTarget?: HTMLElement
+    preventDefault?: () => void
+    stopPropagation?: () => void
+    key?: string
+  }) => {
     setKulturType(event.target.value)
     setTypeDialogOpen(false)
     setGardenDialogOpen(true)

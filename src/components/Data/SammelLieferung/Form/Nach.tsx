@@ -37,9 +37,14 @@ export const SammelLieferungNach = ({
   const kulturFilter = useAtomValue(filterKulturAtom)
   const sammlungFilter = useAtomValue(filterSammlungAtom)
 
-  const [dataState, setDataState] = useState({
-    nachKulturWerte: [],
-  })
+  const [dataState, setDataState] = useState<{
+    nachKulturWerte: {
+      value: string
+      label: string | undefined
+      inaktiv?: boolean
+      link?: string[]
+    }[]
+  }>({ nachKulturWerte: [] })
   useEffect(() => {
     const kulturDelQuery =
       kulturFilter._deleted === false
@@ -64,7 +69,7 @@ export const SammelLieferungNach = ({
     // BEWARE: need to include inactive kulturs
     const kultursObservable = db?.get('kultur').query(kulturDelQuery).observe()
     const sammlungsObservable = db
-      .get('sammlung')
+      ?.get<import('../../../../dbModel.ts').Sammlung>('sammlung')
       .query(sammlungDelQuery)
       .observe()
     const combinedObservables = combineLatest([
@@ -143,7 +148,9 @@ export const SammelLieferungNach = ({
       <div
         className={wannStyles.titleRow}
         style={{
-          backgroundColor: showFilter ? 'var(--filter-bg-alt)' : 'var(--form-bg)',
+          backgroundColor: showFilter
+            ? 'var(--filter-bg-alt)'
+            : 'var(--form-bg)',
         }}
       >
         <div className={wannStyles.title}>nach</div>
@@ -163,7 +170,7 @@ export const SammelLieferungNach = ({
           }`}
           options={nachKulturWerte}
           saveToDb={saveToDb}
-          error={errors?.sammel_lieferung?.nach_kultur_id}
+          error={errors?.sammel_lieferung?.nach_kultur_id as string | undefined}
         />
       )}
       {ifNeeded('nach_ausgepflanzt') && (
@@ -175,7 +182,10 @@ export const SammelLieferungNach = ({
               name="nach_ausgepflanzt"
               value={row?.nach_ausgepflanzt}
               saveToDb={saveToDb}
-              error={errors?.sammel_lieferung?.nach_ausgepflanzt}
+              error={
+                errors?.sammel_lieferung?.nach_ausgepflanzt as
+                  string | undefined
+              }
             />
           ) : (
             <Checkbox2States
@@ -184,7 +194,10 @@ export const SammelLieferungNach = ({
               name="nach_ausgepflanzt"
               value={row?.nach_ausgepflanzt}
               saveToDb={saveToDb}
-              error={errors?.sammel_lieferung?.nach_ausgepflanzt}
+              error={
+                errors?.sammel_lieferung?.nach_ausgepflanzt as
+                  string | undefined
+              }
             />
           )}
         </>

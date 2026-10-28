@@ -134,8 +134,11 @@ export const SelectCreatable = ({
   // show ... while options are loading
   const loadingOptions = [{ value: stateValue, label: '...' }]
   const optionsToUse = loading && stateValue ? loadingOptions : options
-  const selectValue: { value: string | number | null; label: string; link?: string[] } =
-    optionsToUse.find((o) => o.value === stateValue) || emptyValue
+  const selectValue: {
+    value: string | number | null
+    label: string
+    link?: string[]
+  } = optionsToUse.find((o) => o.value === stateValue) || emptyValue
 
   return (
     <div className={styles.container}>
@@ -147,7 +150,10 @@ export const SelectCreatable = ({
           value={selectValue}
           options={optionsToUse}
           onChange={(option, actionMeta) =>
-            onChange(option as { value: string; label: string } | null, actionMeta)
+            onChange(
+              option as { value: string; label: string } | null,
+              actionMeta,
+            )
           }
           hideSelectedOptions
           placeholder=""

@@ -97,10 +97,25 @@ export const migrations = schemaMigrations({
         createTable({
           name: 'bedarf',
           columns: [
-            { name: 'kultur_id', type: 'string', isOptional: true, isIndexed: true },
-            { name: 'person_id', type: 'string', isOptional: true, isIndexed: true },
+            {
+              name: 'kultur_id',
+              type: 'string',
+              isOptional: true,
+              isIndexed: true,
+            },
+            {
+              name: 'person_id',
+              type: 'string',
+              isOptional: true,
+              isIndexed: true,
+            },
             { name: 'jahr', type: 'number', isOptional: true, isIndexed: true },
-            { name: 'beschreibung', type: 'string', isOptional: true, isIndexed: true },
+            {
+              name: 'beschreibung',
+              type: 'string',
+              isOptional: true,
+              isIndexed: true,
+            },
             { name: 'bemerkungen', type: 'string', isOptional: true },
             { name: 'neues_material', type: 'string', isOptional: true },
             { name: 'changed', type: 'string', isOptional: true },
@@ -109,7 +124,12 @@ export const migrations = schemaMigrations({
             { name: '_parent_rev', type: 'string', isOptional: true },
             { name: '_revisions', type: 'string', isOptional: true },
             { name: '_depth', type: 'number', isOptional: true },
-            { name: '_deleted', type: 'boolean', isOptional: true, isIndexed: true },
+            {
+              name: '_deleted',
+              type: 'boolean',
+              isOptional: true,
+              isIndexed: true,
+            },
             { name: '_conflicts', type: 'string', isOptional: true },
           ],
         }),

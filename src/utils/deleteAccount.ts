@@ -11,17 +11,15 @@ import {
 import { constants } from './constants.ts'
 import type { Person } from '../dbModel.ts'
 
-export const deleteAccount = async ({
-  person,
-}: {
-  person: Person | null
-}) => {
+export const deleteAccount = async ({ person }: { person: Person | null }) => {
   const online = store.get(onlineAtom)
   const shortTermOnline = store.get(shortTermOnlineAtom)
   // delete firebase user
   if (person?.account_id) {
     try {
-      await axios.get(`${constants?.getAuthUri()}/delete-user/${person?.account_id}`)
+      await axios.get(
+        `${constants?.getAuthUri()}/delete-user/${person?.account_id}`,
+      )
     } catch (error) {
       console.log(error)
       if (online) {

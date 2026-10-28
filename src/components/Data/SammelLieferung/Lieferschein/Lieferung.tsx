@@ -26,13 +26,13 @@ export const LieferungForLieferschein = ({ lieferung: row }) => {
       : $of({})
     const vonKulturHerkunftObservable = row.von_kultur_id
       ? db
-          .get('herkunft')
+          ?.get<import('../../../../dbModel.ts').Herkunft>('herkunft')
           .query(Q.on('kultur', 'id', row.von_kultur_id))
           .observe()
       : $of({})
     const vonSammlungHerkunftObservable = row.von_sammlung_id
       ? db
-          .get('herkunft')
+          ?.get<import('../../../../dbModel.ts').Herkunft>('herkunft')
           .query(Q.on('sammlung', 'id', row.von_sammlung_id))
           .observe()
       : $of({})
@@ -64,8 +64,7 @@ export const LieferungForLieferschein = ({ lieferung: row }) => {
   const { artLabel, herkunftLabel } = dataState
 
   const wasArray = []
-  if (row.anzahl_pflanzen)
-    wasArray.push(`${row.anzahl_pflanzen} Pflanzen`)
+  if (row.anzahl_pflanzen) wasArray.push(`${row.anzahl_pflanzen} Pflanzen`)
   if (row.anzahl_auspflanzbereit)
     wasArray.push(`${row.anzahl_auspflanzbereit} Pflanzen auspflanzbereit`)
   if (row.gramm_samen) wasArray.push(`${row.gramm_samen} Gramm Samen`)

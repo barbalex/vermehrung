@@ -26,7 +26,13 @@ export const ZaehlungSettingsMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
   }, [db, kulturId])
   const { z_bemerkungen } = kulturOption ?? {}
 
-  const saveToDb = async (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
+  const saveToDb = async (event: {
+    target: { name?: string; value: unknown }
+    currentTarget?: HTMLElement
+    preventDefault?: () => void
+    stopPropagation?: () => void
+    key?: string
+  }) => {
     const field = event.target.name
     const value = event.target.value === 'false'
     kulturOption?.edit({ field, value })

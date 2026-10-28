@@ -13,7 +13,13 @@ import {
 } from '../../store/index.ts'
 import { isNodeOpen } from './isNodeOpen.ts'
 
-export const toggleNode = ({ node, nodes }: { node: TreeNode; nodes: TreeNode[] }) => {
+export const toggleNode = ({
+  node,
+  nodes,
+}: {
+  node: TreeNode
+  nodes: TreeNode[]
+}) => {
   if (!node.url) {
     console.log('passsed node has no url:', node)
     return addNotification({

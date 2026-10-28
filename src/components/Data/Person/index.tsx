@@ -43,7 +43,7 @@ export const Person = ({
   useEffect(() => {
     const personObservable = showFilter
       ? $of(personFilter)
-      : (initialDataQueried || !online)
+      : initialDataQueried || !online
         ? db?.get('person').findAndObserve(id)
         : $of({})
     const subscription = personObservable?.subscribe((newRow) => {

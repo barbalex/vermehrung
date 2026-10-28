@@ -72,10 +72,7 @@ export const DateField = ({
       variant="standard"
       className={`date-field ${styles.formControl}`}
     >
-      <InputLabel
-        htmlFor={name}
-        className={styles.labelClass}
-      >
+      <InputLabel htmlFor={name} className={styles.labelClass}>
         {label}
       </InputLabel>
       <DatePicker

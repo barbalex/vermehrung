@@ -53,7 +53,7 @@ export const SammelLieferungFormTitle = ({
   useEffect(() => {
     const userPersonOptionsObservable = user.uid
       ? db
-          .get('person_option')
+          ?.get<import('../../../../dbModel.ts').PersonOption>('person_option')
           .query(Q.on('person', Q.where('account_id', user.uid)))
           .observeWithColumns(['sl_auto_copy_edits'])
       : $of({})

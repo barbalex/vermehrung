@@ -46,7 +46,8 @@ export const KulturFormTitleChooser = ({
             Q.on('art', 'id', artIdInActiveNodeArray),
           ]
         : []
-    const collection = db?.get('kultur')
+    const collection =
+      db?.get<import('../../../../dbModel.ts').Kultur>('kultur')
     const kulturDelQuery =
       kulturFilter._deleted === false
         ? Q.where('_deleted', false)

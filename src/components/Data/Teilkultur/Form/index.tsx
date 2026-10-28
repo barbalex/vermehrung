@@ -77,7 +77,7 @@ export const TeilkulturForm = ({
               Q.where('aktiv', null),
             )
     const kultursObservable = db
-      .get('kultur')
+      ?.get<import('../../../../dbModel.ts').Kultur>('kultur')
       .query(kulturDelQuery, kulturAktivQuery)
       .observe()
     const kulturObservable = row?.kultur ? row?.kultur.observe() : $of({})
@@ -125,7 +125,13 @@ export const TeilkulturForm = ({
 
   const { tk_bemerkungen } = kulturOption ?? {}
 
-  const saveToDb = async (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
+  const saveToDb = async (event: {
+    target: { name?: string; value: unknown }
+    currentTarget?: HTMLElement
+    preventDefault?: () => void
+    stopPropagation?: () => void
+    key?: string
+  }) => {
     const field = event.target.name
     let value = ifIsNumericAsNumber(event.target.value)
     if (event.target.value === undefined) value = null
@@ -160,7 +166,7 @@ export const TeilkulturForm = ({
                 name="_deleted"
                 value={row?._deleted}
                 saveToDb={saveToDb}
-                error={errors?.teilkultur?._deleted}
+                error={errors?.teilkultur?._deleted as string | undefined}
               />
             ) : (
               <Checkbox2States
@@ -169,7 +175,7 @@ export const TeilkulturForm = ({
                 name="_deleted"
                 value={row?._deleted}
                 saveToDb={saveToDb}
-                error={errors?.teilkultur?._deleted}
+                error={errors?.teilkultur?._deleted as string | undefined}
               />
             )}
           </>
@@ -182,7 +188,7 @@ export const TeilkulturForm = ({
           label="Kultur"
           options={kulturWerte}
           saveToDb={saveToDb}
-          error={errors?.teilkultur?.kultur_id}
+          error={errors?.teilkultur?.kultur_id as string | undefined}
         />
         <TextField
           key={`${row?.id}name`}
@@ -190,7 +196,7 @@ export const TeilkulturForm = ({
           label="Name"
           value={row?.name}
           saveToDb={saveToDb}
-          error={errors?.teilkultur?.name}
+          error={errors?.teilkultur?.name as string | undefined}
         />
         <TextField
           key={`${row?.id}ort1`}
@@ -198,7 +204,7 @@ export const TeilkulturForm = ({
           label="Ort 1"
           value={row?.ort1}
           saveToDb={saveToDb}
-          error={errors?.teilkultur?.ort1}
+          error={errors?.teilkultur?.ort1 as string | undefined}
         />
         <TextField
           key={`${row?.id}ort2`}
@@ -206,7 +212,7 @@ export const TeilkulturForm = ({
           label="Ort 2"
           value={row?.ort2}
           saveToDb={saveToDb}
-          error={errors?.teilkultur?.ort2}
+          error={errors?.teilkultur?.ort2 as string | undefined}
         />
         <TextField
           key={`${row?.id}ort3`}
@@ -214,7 +220,7 @@ export const TeilkulturForm = ({
           label="Ort 3"
           value={row?.ort3}
           saveToDb={saveToDb}
-          error={errors?.teilkultur?.ort3}
+          error={errors?.teilkultur?.ort3 as string | undefined}
         />
         {(tk_bemerkungen || showFilter) && (
           <TextField
@@ -223,7 +229,7 @@ export const TeilkulturForm = ({
             label="Bemerkungen"
             value={row?.bemerkungen}
             saveToDb={saveToDb}
-            error={errors?.teilkultur?.bemerkungen}
+            error={errors?.teilkultur?.bemerkungen as string | undefined}
             multiline
           />
         )}

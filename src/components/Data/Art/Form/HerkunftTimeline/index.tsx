@@ -25,7 +25,7 @@ export const HerkunftTimeline = ({
   const [herkunfts, setHerkunfts] = useState([])
   useEffect(() => {
     const sammlungsObservable = db
-      .get('sammlung')
+      ?.get<import('../../../../../dbModel.ts').Sammlung>('sammlung')
       .query(
         Q.where('_deleted', false),
         Q.where('art_id', artId),
@@ -33,7 +33,7 @@ export const HerkunftTimeline = ({
       )
       .observe()
     const herkunftsObservable = db
-      .get('herkunft')
+      ?.get<import('../../../../../dbModel.ts').Herkunft>('herkunft')
       .query(Q.where('_deleted', false))
       .observe()
     const combinedObservables = combineLatest([
@@ -55,7 +55,13 @@ export const HerkunftTimeline = ({
 
   const [open, setOpen] = useState(false)
   const anim = useAnimation()
-  const onClickToggle = async (e: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
+  const onClickToggle = async (e: {
+    target: { name?: string; value: unknown }
+    currentTarget?: HTMLElement
+    preventDefault?: () => void
+    stopPropagation?: () => void
+    key?: string
+  }) => {
     e.stopPropagation()
     if (open) {
       const was = open

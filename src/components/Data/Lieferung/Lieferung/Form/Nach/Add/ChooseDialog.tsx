@@ -22,7 +22,8 @@ export const LieferungAddChooseDialog = ({
   onClose: () => void
   onChange: (event: unknown) => void
   kulturType: string
-  lieferung: import('../../../../../../shared/types.ts').WmRow | null | undefined
+  lieferung:
+    import('../../../../../../shared/types.ts').WmRow | null | undefined
   herkunft: import('../../../../../../shared/types.ts').WmRow | null | undefined
 }) => {
   const db = useAtomValue(dbAtom)
@@ -52,7 +53,7 @@ export const LieferungAddChooseDialog = ({
               Q.where('aktiv', null),
             )
     const gartensObservable = db
-      .get('garten')
+      ?.get<import('../../../../../../../dbModel.ts').Garten>('garten')
       .query(gartenDelQuery, gartenAktivQuery)
       .observe()
     const subscription = gartensObservable.subscribe(async (gartens) => {

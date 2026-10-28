@@ -17,7 +17,11 @@ import { personLabelFromPerson } from '../../../../../utils/personLabelFromPerso
 
 import styles from './index.module.css'
 
-export const GartenPersonen = ({ garten }: { garten: import('../../../../shared/types.ts').WmRow | null | undefined }) => {
+export const GartenPersonen = ({
+  garten,
+}: {
+  garten: import('../../../../shared/types.ts').WmRow | null | undefined
+}) => {
   const db = useAtomValue(dbAtom)
   const personFilter = useAtomValue(filterPersonAtom)
 
@@ -26,7 +30,13 @@ export const GartenPersonen = ({ garten }: { garten: import('../../../../shared/
 
   const [open, setOpen] = useState(false)
   const anim = useAnimation()
-  const onClickToggle = async (e: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
+  const onClickToggle = async (e: {
+    target: { name?: string; value: unknown }
+    currentTarget?: HTMLElement
+    preventDefault?: () => void
+    stopPropagation?: () => void
+    key?: string
+  }) => {
     e.stopPropagation()
     if (open) {
       const was = open
@@ -68,7 +78,7 @@ export const GartenPersonen = ({ garten }: { garten: import('../../../../shared/
               Q.where('aktiv', null),
             )
     const personsObservable = db
-      .get('person')
+      ?.get<import('../../../../../dbModel.ts').Person>('person')
       .query(delQuery, aktivQuery)
       .observe()
     const gvsObservable = garten?.gvs
@@ -83,7 +93,10 @@ export const GartenPersonen = ({ garten }: { garten: import('../../../../shared/
         const gvsSorted = await gvsSortByPerson(gvs)
         const gvPersonIds = gvsSorted.map((v) => v.person_id)
         const personWerte = persons
-          .filter((a: import('../../../../../dbModel.ts').Art) => !gvPersonIds.includes(a.id))
+          .filter(
+            (a: import('../../../../../dbModel.ts').Art) =>
+              !gvPersonIds.includes(a.id),
+          )
           .sort(personSort)
           .map((el) => ({
             value: el.id,
@@ -98,7 +111,13 @@ export const GartenPersonen = ({ garten }: { garten: import('../../../../shared/
   }, [db, personFilter, garten?.gvs])
   const { gvsSorted, personWerte } = dataState
 
-  const saveToDb = (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
+  const saveToDb = (event: {
+    target: { name?: string; value: unknown }
+    currentTarget?: HTMLElement
+    preventDefault?: () => void
+    stopPropagation?: () => void
+    key?: string
+  }) => {
     insertGvRev({
       values: { person_id: event.target.value, garten_id: garten?.id },
     })

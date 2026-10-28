@@ -65,11 +65,26 @@ export const SammlungForm = ({
   const errors = useAtomValue(errorsAtom)
   const db = useAtomValue(dbAtom)
 
-  const [dataState, setDataState] = useState({
-    personWerte: [],
-    herkunftWerte: [],
-    artWerte: [],
-  })
+  const [dataState, setDataState] = useState<{
+    personWerte: {
+      value: string
+      label: string | undefined
+      inaktiv?: boolean
+      link?: string[]
+    }[]
+    herkunftWerte: {
+      value: string
+      label: string | undefined
+      inaktiv?: boolean
+      link?: string[]
+    }[]
+    artWerte: {
+      value: string
+      label: string | undefined
+      inaktiv?: boolean
+      link?: string[]
+    }[]
+  }>({ personWerte: [], herkunftWerte: [], artWerte: [] })
   useEffect(() => {
     const personDelQuery =
       personFilter._deleted === false
@@ -92,7 +107,7 @@ export const SammlungForm = ({
               Q.where('aktiv', null),
             )
     const personsObservable = db
-      .get('person')
+      ?.get<import('../../../../dbModel.ts').Person>('person')
       .query(personDelQuery, personAktivQuery)
       .observeWithColumns(['vorname', 'name'])
     const herkunftDelQuery =
@@ -106,7 +121,7 @@ export const SammlungForm = ({
               Q.where('_deleted', null),
             )
     const herkunftsObservable = db
-      .get('herkunft')
+      ?.get<import('../../../../dbModel.ts').Herkunft>('herkunft')
       .query(herkunftDelQuery)
       .observeWithColumns(['gemeinde', 'lokalname', 'nr'])
     const artDelQuery =
@@ -120,7 +135,7 @@ export const SammlungForm = ({
               Q.where('_deleted', null),
             )
     const artsObservable = db
-      .get('art')
+      ?.get<import('../../../../dbModel.ts').Art>('art')
       .query(artDelQuery)
       .observeWithColumns(['ae_id'])
     const sammlungDelQuery =
@@ -137,7 +152,7 @@ export const SammlungForm = ({
       showFilter || !exists(row?.nr)
         ? $of(0)
         : db
-            .get('sammlung')
+            ?.get<import('../../../../dbModel.ts').Sammlung>('sammlung')
             .query(sammlungDelQuery, Q.where('nr', row.nr))
             .observeCount()
     const combinedObservables = combineLatest([
@@ -236,7 +251,13 @@ export const SammlungForm = ({
     unsetError('sammlung')
   }, [id])
 
-  const saveToDb = (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
+  const saveToDb = (event: {
+    target: { name?: string; value: unknown }
+    currentTarget?: HTMLElement
+    preventDefault?: () => void
+    stopPropagation?: () => void
+    key?: string
+  }) => {
     const field = event.target.name
     let value = ifIsNumericAsNumber(event.target.value)
     if (event.target.value === undefined) value = null
@@ -287,7 +308,7 @@ export const SammlungForm = ({
                 name="_deleted"
                 value={row?._deleted}
                 saveToDb={saveToDb}
-                error={errors?.sammlung?._deleted}
+                error={errors?.sammlung?._deleted as string | undefined}
               />
             ) : (
               <Checkbox2States
@@ -296,7 +317,7 @@ export const SammlungForm = ({
                 name="_deleted"
                 value={row?._deleted}
                 saveToDb={saveToDb}
-                error={errors?.sammlung?._deleted}
+                error={errors?.sammlung?._deleted as string | undefined}
               />
             )}
           </>
@@ -307,7 +328,7 @@ export const SammlungForm = ({
           label="Nr."
           value={row?.nr}
           saveToDb={saveToDb}
-          error={errors?.sammlung?.nr}
+          error={errors?.sammlung?.nr as string | undefined}
           type="text"
         />
         <Select
@@ -318,7 +339,7 @@ export const SammlungForm = ({
           label="Art"
           options={artWerte}
           saveToDb={saveToDb}
-          error={errors?.sammlung?.art_id}
+          error={errors?.sammlung?.art_id as string | undefined}
         />
         <Select
           key={`${row?.id}${row?.herkunft_id}herkunft_id`}
@@ -328,7 +349,7 @@ export const SammlungForm = ({
           label="Herkunft"
           options={herkunftWerte}
           saveToDb={saveToDb}
-          error={errors?.sammlung?.herkunft_id}
+          error={errors?.sammlung?.herkunft_id as string | undefined}
         />
         <Select
           key={`${row?.id}${row?.person_id}person_id`}
@@ -338,7 +359,7 @@ export const SammlungForm = ({
           label="Person"
           options={personWerte}
           saveToDb={saveToDb}
-          error={errors?.sammlung?.person_id}
+          error={errors?.sammlung?.person_id as string | undefined}
         />
         <Date
           key={`${row?.id}datum`}
@@ -346,7 +367,7 @@ export const SammlungForm = ({
           label="Datum"
           value={row?.datum}
           saveToDb={saveToDb}
-          error={errors?.sammlung?.datum}
+          error={errors?.sammlung?.datum as string | undefined}
         />
         <TextField
           key={`${row?.id}anzahl_pflanzen`}
@@ -354,7 +375,7 @@ export const SammlungForm = ({
           label="Anzahl Pflanzen"
           value={row?.anzahl_pflanzen}
           saveToDb={saveToDb}
-          error={errors?.sammlung?.anzahl_pflanzen}
+          error={errors?.sammlung?.anzahl_pflanzen as string | undefined}
           type="number"
         />
         <div className={styles.fieldRow}>
@@ -364,7 +385,7 @@ export const SammlungForm = ({
             label="Gramm Samen"
             value={row?.gramm_samen}
             saveToDb={saveToDb}
-            error={errors?.sammlung?.gramm_samen}
+            error={errors?.sammlung?.gramm_samen as string | undefined}
             type="number"
           />
           <TextField
@@ -373,7 +394,7 @@ export const SammlungForm = ({
             label={`Andere Menge (z.B. "3 Zwiebeln")`}
             value={row?.andere_menge}
             saveToDb={saveToDb}
-            error={errors?.sammlung?.andere_menge}
+            error={errors?.sammlung?.andere_menge as string | undefined}
             type="text"
           />
         </div>
@@ -384,7 +405,9 @@ export const SammlungForm = ({
             label="von Anzahl Individuen"
             value={row?.von_anzahl_individuen}
             saveToDb={saveToDb}
-            error={errors?.sammlung?.von_anzahl_individuen}
+            error={
+              errors?.sammlung?.von_anzahl_individuen as string | undefined
+            }
             type="number"
           />
           <div>
@@ -409,7 +432,7 @@ export const SammlungForm = ({
               name="geplant"
               value={row?.geplant}
               saveToDb={saveToDb}
-              error={errors?.sammlung?.geplant}
+              error={errors?.sammlung?.geplant as string | undefined}
             />
           ) : (
             <Checkbox2States
@@ -418,7 +441,7 @@ export const SammlungForm = ({
               name="geplant"
               value={row?.geplant}
               saveToDb={saveToDb}
-              error={errors?.sammlung?.geplant}
+              error={errors?.sammlung?.geplant as string | undefined}
             />
           )}
           <div>
@@ -438,7 +461,7 @@ export const SammlungForm = ({
           label="Bemerkungen"
           value={row?.bemerkungen}
           saveToDb={saveToDb}
-          error={errors?.sammlung?.bemerkungen}
+          error={errors?.sammlung?.bemerkungen as string | undefined}
           multiLine
         />
         {online && !showFilter && row?._conflicts?.map && (

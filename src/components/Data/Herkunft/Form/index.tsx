@@ -53,7 +53,7 @@ export const HerkunftForm = ({
   useEffect(() => {
     const userPersonOptionsObservable = user.uid
       ? db
-          .get('person_option')
+          ?.get<import('../../../../dbModel.ts').PersonOption>('person_option')
           .query(Q.on('person', Q.where('account_id', user.uid)))
           .observeWithColumns([
             'hk_kanton',
@@ -76,7 +76,7 @@ export const HerkunftForm = ({
       showFilter || !exists(row?.nr)
         ? $of(0)
         : db
-            .get('herkunft')
+            ?.get<import('../../../../dbModel.ts').Herkunft>('herkunft')
             .query(delQuery, Q.where('nr', row.nr))
             .observeCount()
     const combinedObservables = combineLatest([
@@ -108,7 +108,13 @@ export const HerkunftForm = ({
     unsetError('herkunft')
   }, [id])
 
-  const saveToDb = async (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
+  const saveToDb = async (event: {
+    target: { name?: string; value: unknown }
+    currentTarget?: HTMLElement
+    preventDefault?: () => void
+    stopPropagation?: () => void
+    key?: string
+  }) => {
     const field = event.target.name
     let value = ifIsNumericAsNumber(event.target.value)
     if (event.target.value === undefined) value = null
@@ -142,7 +148,7 @@ export const HerkunftForm = ({
               name="_deleted"
               value={row?._deleted}
               saveToDb={saveToDb}
-              error={errors?.herkunft?._deleted}
+              error={errors?.herkunft?._deleted as string | undefined}
             />
           ) : (
             <Checkbox2States
@@ -151,7 +157,7 @@ export const HerkunftForm = ({
               name="_deleted"
               value={row?._deleted}
               saveToDb={saveToDb}
-              error={errors?.herkunft?._deleted}
+              error={errors?.herkunft?._deleted as string | undefined}
             />
           )}
         </>
@@ -162,7 +168,7 @@ export const HerkunftForm = ({
         label="Nr"
         value={row?.nr}
         saveToDb={saveToDb}
-        error={errors?.herkunft?.nr}
+        error={errors?.herkunft?.nr as string | undefined}
       />
       <TextField
         key={`${row?.id}lokalname`}
@@ -170,7 +176,7 @@ export const HerkunftForm = ({
         label="Lokalname"
         value={row?.lokalname}
         saveToDb={saveToDb}
-        error={errors?.herkunft?.lokalname}
+        error={errors?.herkunft?.lokalname as string | undefined}
       />
       <TextField
         key={`${row?.id}gemeinde`}
@@ -178,7 +184,7 @@ export const HerkunftForm = ({
         label="Gemeinde"
         value={row?.gemeinde}
         saveToDb={saveToDb}
-        error={errors?.herkunft?.gemeinde}
+        error={errors?.herkunft?.gemeinde as string | undefined}
       />
       {hk_kanton && (
         <TextField
@@ -187,7 +193,7 @@ export const HerkunftForm = ({
           label="Kanton"
           value={row?.kanton}
           saveToDb={saveToDb}
-          error={errors?.herkunft?.kanton}
+          error={errors?.herkunft?.kanton as string | undefined}
         />
       )}
       {hk_land && (
@@ -197,7 +203,7 @@ export const HerkunftForm = ({
           label="Land"
           value={row?.land}
           saveToDb={saveToDb}
-          error={errors?.herkunft?.land}
+          error={errors?.herkunft?.land as string | undefined}
         />
       )}
       {!showFilter && hk_geom_point && (
@@ -210,7 +216,7 @@ export const HerkunftForm = ({
           label="Bemerkungen"
           value={row?.bemerkungen}
           saveToDb={saveToDb}
-          error={errors?.herkunft?.bemerkungen}
+          error={errors?.herkunft?.bemerkungen as string | undefined}
           multiLine
         />
       )}

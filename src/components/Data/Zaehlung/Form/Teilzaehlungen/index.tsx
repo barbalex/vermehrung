@@ -14,7 +14,11 @@ import { teilzaehlungsSortByTk } from '../../../../../utils/teilzaehlungsSortByT
 
 import styles from './index.module.css'
 
-export const Teilzaehlungen = ({ zaehlung }: { zaehlung: import('../../../../shared/types.ts').WmRow | null | undefined }) => {
+export const Teilzaehlungen = ({
+  zaehlung,
+}: {
+  zaehlung: import('../../../../shared/types.ts').WmRow | null | undefined
+}) => {
   const db = useAtomValue(dbAtom)
 
   const kulturId = zaehlung?.kultur_id

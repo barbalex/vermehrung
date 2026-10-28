@@ -16,9 +16,8 @@ export const sammlungLabelFromSammlungUnderHerkunft = ({
 }) => {
   const artLabel = art ? (ae_art?.name ?? '(Art ohne Name)') : '(keine Art)'
   const personLabel = personLabelFromPerson({ person })
-  const datumLabel =
-    sammlung?.datum ?
-      DateTime.fromSQL(sammlung?.datum).toFormat('yyyy.LL.dd')
+  const datumLabel = sammlung?.datum
+    ? DateTime.fromSQL(sammlung?.datum).toFormat('yyyy.LL.dd')
     : 'Kein Datum'
   const geplantLabel = sammlung?.geplant ? 'geplant' : undefined
   const label = [datumLabel, artLabel, personLabel, geplantLabel]

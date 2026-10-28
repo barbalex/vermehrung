@@ -1,4 +1,13 @@
-export const herkunftLabelFromHerkunft = ({ herkunft }: { herkunft: { id?: string | null; nr?: string | null; lokalname?: string | null; gemeinde?: string | null } | null }) => {
+export const herkunftLabelFromHerkunft = ({
+  herkunft,
+}: {
+  herkunft: {
+    id?: string | null
+    nr?: string | null
+    lokalname?: string | null
+    gemeinde?: string | null
+  } | null
+}) => {
   if (!herkunft) return 'keine Herkunft'
   if (!herkunft?.id) return 'keine Herkunft'
   // only show lokalname if exist

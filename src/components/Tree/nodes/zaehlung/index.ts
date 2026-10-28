@@ -1,6 +1,12 @@
 import { first as first$ } from 'rxjs/operators'
 
-export const buildZaehlung = async ({ zaehlung, index }: { zaehlung: import('../../../../dbModel.ts').Zaehlung; index: number }) => {
+export const buildZaehlung = async ({
+  zaehlung,
+  index,
+}: {
+  zaehlung: import('../../../../dbModel.ts').Zaehlung
+  index: number
+}) => {
   let label = ''
   try {
     label = (await zaehlung.label.pipe(first$()).toPromise()) ?? ''

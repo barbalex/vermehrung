@@ -33,9 +33,11 @@ export const TeilkulturConflict = ({
   const { error, data, fetching } = useApiQuery(
     `/teilkultur_rev?teilkultur_id=eq.${id}&_rev=eq.${rev}&select=id,teilkultur_id,kultur_id,name,ort1,ort2,ort3,bemerkungen,changed,changed_by,_rev,_parent_rev,_revisions,_depth,_deleted`,
   )
-    if (error) checkForOnlineError({ error })
+  if (error) checkForOnlineError({ error })
 
-  const revRow = ((data as import('../../shared/types.ts').RevRow[] | null)?.[0] ?? {}) as import('../../shared/types.ts').RevRow
+  const revRow = ((
+    data as import('../../shared/types.ts').RevRow[] | null
+  )?.[0] ?? {}) as import('../../shared/types.ts').RevRow
 
   const dataArray = createDataArray({ row, revRow })
 
@@ -64,19 +66,26 @@ export const TeilkulturConflict = ({
       : toPgArray([rev])
 
     try {
-    await store
-      .get(apiClientAtom)
-      ?.post('/teilkultur_rev', newObject, 'resolution=merge-duplicates,return=minimal')
-  } catch (error) {
-          checkForOnlineError({ error: error })
+      await store
+        .get(apiClientAtom)
+        ?.post(
+          '/teilkultur_rev',
+          newObject,
+          'resolution=merge-duplicates,return=minimal',
+        )
+    } catch (error) {
+      checkForOnlineError({ error: error })
       return addNotification({
         message: (error as Error).message,
-  })
+      })
     }
     // update model: remove this conflict
     try {
       const db = store.get(dbAtom)
-      const model = (await db?.get('teilkultur').find(revRow.teilkultur_id as string)) as unknown as import('../../shared/types.ts').WmRow | undefined
+      const model = (await db
+        ?.get('teilkultur')
+        .find(revRow.teilkultur_id as string)) as unknown as
+        import('../../shared/types.ts').WmRow | undefined
       await model?.removeConflict?.(revRow._rev ?? '')
     } catch {}
     conflictDisposalCallback()
@@ -85,7 +94,7 @@ export const TeilkulturConflict = ({
   const onClickWiderspruchUebernehmen = async () => {
     // need to attach to the winner, that is row
     // otherwise risk to still have lower depth and thus loosing
-    const newDepth = (((row?._depth as number) ?? 0)) + 1
+    const newDepth = ((row?._depth as number) ?? 0) + 1
     const newObject: Record<string, unknown> = {
       teilkultur_id: revRow.teilkultur_id,
       kultur_id: revRow.kultur_id,
@@ -107,14 +116,18 @@ export const TeilkulturConflict = ({
       ? toPgArray([rev, ...((row?._revisions as string[]) ?? [])])
       : toPgArray([rev])
     try {
-    await store
-      .get(apiClientAtom)
-      ?.post('/teilkultur_rev', newObject, 'resolution=merge-duplicates,return=minimal')
-  } catch (error) {
-          checkForOnlineError({ error: error })
+      await store
+        .get(apiClientAtom)
+        ?.post(
+          '/teilkultur_rev',
+          newObject,
+          'resolution=merge-duplicates,return=minimal',
+        )
+    } catch (error) {
+      checkForOnlineError({ error: error })
       return addNotification({
         message: (error as Error).message,
-  })
+      })
     }
     // now we need to delete the previous conflict
     onClickAktuellUebernehmen()

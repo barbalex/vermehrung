@@ -10,16 +10,16 @@ export const TeilkulturTeilzaehlung = ({ tz }) => {
 
   useEffect(() => {
     const zaehlungObservable = tz.zaehlung.observe()
-    const subscription = zaehlungObservable.subscribe((zaehlung: import('../../../../../dbModel.ts').Zaehlung) =>
-      setZaehlung(zaehlung),
+    const subscription = zaehlungObservable.subscribe(
+      (zaehlung: import('../../../../../dbModel.ts').Zaehlung) =>
+        setZaehlung(zaehlung),
     )
 
     return () => subscription?.unsubscribe?.()
   }, [tz.zaehlung])
 
-  const datum =
-    zaehlung?.datum ?
-      format(new Date(zaehlung?.datum), 'yyyy.MM.dd')
+  const datum = zaehlung?.datum
+    ? format(new Date(zaehlung?.datum), 'yyyy.MM.dd')
     : 'Kein Datum'
 
   return (
@@ -32,22 +32,22 @@ export const TeilkulturTeilzaehlung = ({ tz }) => {
         {exists(tz.anzahl_pflanzen) ? `${tz.anzahl_pflanzen} Pflanzen` : ''}
       </div>
       <div className={styles.auspflanzbereit}>
-        {exists(tz.anzahl_auspflanzbereit) ?
-          `${tz.anzahl_auspflanzbereit} auspflanzbereit`
-        : ''}
+        {exists(tz.anzahl_auspflanzbereit)
+          ? `${tz.anzahl_auspflanzbereit} auspflanzbereit`
+          : ''}
       </div>
       <div className={styles.auspflanzbereit}>
-        {exists(tz.anzahl_mutterpflanzen) ?
-          `${tz.anzahl_mutterpflanzen} Mutterpflanzen`
-        : ''}
+        {exists(tz.anzahl_mutterpflanzen)
+          ? `${tz.anzahl_mutterpflanzen} Mutterpflanzen`
+          : ''}
       </div>
       <div className={styles.auspflanzbereit}>
         {exists(tz.andere_menge) ? tz.andere_menge : ''}
       </div>
       <div className={styles.other}>
-        {exists(tz.auspflanzebereit_beschreibung) ?
-          tz.auspflanzebereit_beschreibung
-        : ''}
+        {exists(tz.auspflanzebereit_beschreibung)
+          ? tz.auspflanzebereit_beschreibung
+          : ''}
       </div>
       <div className={styles.other}>{tz.bemerkungen ? tz.bemerkungen : ''}</div>
     </div>

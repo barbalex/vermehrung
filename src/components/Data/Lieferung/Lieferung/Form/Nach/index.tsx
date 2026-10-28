@@ -48,7 +48,9 @@ export const LieferungNach = ({
       <div
         className={wannStyles.titleRow}
         style={{
-          backgroundColor: showFilter ? 'var(--filter-bg-alt)' : 'var(--form-bg)',
+          backgroundColor: showFilter
+            ? 'var(--filter-bg-alt)'
+            : 'var(--form-bg)',
         }}
       >
         <div className={wannStyles.title}>nach</div>
@@ -69,7 +71,7 @@ export const LieferungNach = ({
             }`}
             options={nachKulturWerte}
             saveToDb={saveToDb}
-            error={errors?.lieferung?.nach_kultur_id}
+            error={errors?.lieferung?.nach_kultur_id as string | undefined}
           />
           <Add
             disabled={!(row?.art_id && herkunft) || !row?.von_sammlung_id}
@@ -87,7 +89,7 @@ export const LieferungNach = ({
               name="nach_ausgepflanzt"
               value={row?.nach_ausgepflanzt}
               saveToDb={saveToDb}
-              error={errors?.lieferung?.nach_ausgepflanzt}
+              error={errors?.lieferung?.nach_ausgepflanzt as string | undefined}
             />
           ) : (
             <Checkbox2States
@@ -96,7 +98,7 @@ export const LieferungNach = ({
               name="nach_ausgepflanzt"
               value={row?.nach_ausgepflanzt}
               saveToDb={saveToDb}
-              error={errors?.lieferung?.nach_ausgepflanzt}
+              error={errors?.lieferung?.nach_ausgepflanzt as string | undefined}
             />
           )}
         </>

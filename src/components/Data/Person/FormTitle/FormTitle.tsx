@@ -33,7 +33,7 @@ export const PersonFormTitle = ({
   const [userRole, setUserRole] = useState(undefined)
   useEffect(() => {
     const userRoleObservable = db
-      .get('user_role')
+      ?.get<import('../../../../dbModel.ts').UserRole>('user_role')
       .query(Q.on('person', Q.where('account_id', user.uid ?? 'none')))
       .observeWithColumns(['name'])
     const subscription = userRoleObservable.subscribe(([userRole]) =>

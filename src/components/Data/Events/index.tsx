@@ -40,7 +40,7 @@ export const Events = ({ filter: showFilter = false }) => {
           Q.on('kultur', 'id', kulturIdInActiveNodeArray),
         ]
       : []
-    const collection = db?.get('event')
+    const collection = db?.get<import('../../../dbModel.ts').Event>('event')
     const delQuery =
       eventFilter._deleted === false
         ? Q.where('_deleted', false)
@@ -69,7 +69,6 @@ export const Events = ({ filter: showFilter = false }) => {
 
     return () => subscription?.unsubscribe?.()
     // need to rerender if any of the values of eventFilter changes
-     
   }, [db, kulturIdInActiveNodeArray, eventFilter])
 
   const { events, totalCount } = dataState

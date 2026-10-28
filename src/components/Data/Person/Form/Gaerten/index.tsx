@@ -17,7 +17,11 @@ import { gvsSortByGarten } from '../../../../../utils/gvsSortByGarten.ts'
 
 import styles from './index.module.css'
 
-export const PersonGaerten = ({ person }: { person: import('../../../../shared/types.ts').WmRow | null | undefined }) => {
+export const PersonGaerten = ({
+  person,
+}: {
+  person: import('../../../../shared/types.ts').WmRow | null | undefined
+}) => {
   const db = useAtomValue(dbAtom)
   const gartenFilter = useAtomValue(filterGartenAtom)
 
@@ -26,7 +30,13 @@ export const PersonGaerten = ({ person }: { person: import('../../../../shared/t
 
   const [open, setOpen] = useState(false)
   const anim = useAnimation()
-  const onClickToggle = async (e: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
+  const onClickToggle = async (e: {
+    target: { name?: string; value: unknown }
+    currentTarget?: HTMLElement
+    preventDefault?: () => void
+    stopPropagation?: () => void
+    key?: string
+  }) => {
     e.stopPropagation()
     if (open) {
       const was = open
@@ -70,7 +80,7 @@ export const PersonGaerten = ({ person }: { person: import('../../../../shared/t
               Q.where('aktiv', null),
             )
     const gartensObservable = db
-      .get('garten')
+      ?.get<import('../../../../../dbModel.ts').Garten>('garten')
       .query(
         gartenDelQuery,
         gartenAktivQuery,
@@ -108,7 +118,13 @@ export const PersonGaerten = ({ person }: { person: import('../../../../shared/t
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [person?.gvs, gvGartenIds.length, db, gartenFilter])
 
-  const saveToDb = (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
+  const saveToDb = (event: {
+    target: { name?: string; value: unknown }
+    currentTarget?: HTMLElement
+    preventDefault?: () => void
+    stopPropagation?: () => void
+    key?: string
+  }) => {
     insertGvRev({
       values: { garten_id: event.target.value, person_id: person?.id },
     })

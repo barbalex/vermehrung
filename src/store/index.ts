@@ -74,7 +74,7 @@ const persistedAtoms: {
   dirty: boolean
 }[] = []
 
-const persistedAtom = <T,>(key: string, initialValue: T): PrimitiveAtom<T> => {
+const persistedAtom = <T>(key: string, initialValue: T): PrimitiveAtom<T> => {
   const baseAtom = atom<T>(initialValue)
   const entry = {
     key: `vermehrung:${key}`,
@@ -239,7 +239,10 @@ export const addOpenNodes = (nodes: string[][]) => {
   const set = new Set(
     [...store.get(openNodesAtom), ...nodes].map((n) => JSON.stringify(n)),
   )
-  store.set(openNodesAtom, Array.from(set).map((n) => JSON.parse(n) as string[]))
+  store.set(
+    openNodesAtom,
+    Array.from(set).map((n) => JSON.parse(n) as string[]),
+  )
 }
 
 export const addOpenNode = (url: string[]) => {
@@ -254,7 +257,10 @@ export const addOpenNode = (url: string[]) => {
 export const setOpenNodes = (val: string[][]) => {
   // need set to ensure contained arrays are unique
   const set = new Set(val.map((n) => JSON.stringify(n)))
-  store.set(openNodesAtom, Array.from(set).map((n) => JSON.parse(n) as string[]))
+  store.set(
+    openNodesAtom,
+    Array.from(set).map((n) => JSON.parse(n) as string[]),
+  )
 }
 
 export const removeOpenNode = (val: string[]) => {
@@ -407,13 +413,7 @@ export const defaultErrors = Object.fromEntries(
 ) as Record<string, Record<string, unknown>>
 export const errorsAtom = atom(defaultErrors)
 
-export const setError = ({
-  path,
-  value,
-}: {
-  path: string
-  value: unknown
-}) => {
+export const setError = ({ path, value }: { path: string; value: unknown }) => {
   const [table, field] = path.split('.')
   const tableErrors = store.get(errorsAtom)[table] ?? {}
   store.set(errorsAtom, {
@@ -572,18 +572,20 @@ export const resetSyncState = () => {
   store.set(lastUpdatedAtom, initialLastUpdated())
   store.set(
     initiallyQueriedAtom,
-    Object.fromEntries(
-      tables.map((table) => [table, false]),
-    ) as Record<TableName, boolean>,
+    Object.fromEntries(tables.map((table) => [table, false])) as Record<
+      TableName,
+      boolean
+    >,
   )
 }
 
 // initially_queried flags are deliberately not persisted:
 // initial queries are re-run on every boot
 export const initiallyQueriedAtom = atom<Record<TableName, boolean>>(
-  Object.fromEntries(
-    tables.map((table) => [table, false]),
-  ) as Record<TableName, boolean>,
+  Object.fromEntries(tables.map((table) => [table, false])) as Record<
+    TableName,
+    boolean
+  >,
 )
 
 export const setInitiallyQueried = ({ table }: { table: TableName }) => {
@@ -604,7 +606,8 @@ export const initialDataQueriedAtom = atom((get) => {
 // === setters for flags and volatiles ===
 export const setApFilter = (val: boolean) => store.set(apFilterAtom, val)
 export const setDocFilter = (val: string) => store.set(docFilterAtom, val)
-export const setDocsCount = (val: number | null) => store.set(docsCountAtom, val)
+export const setDocsCount = (val: number | null) =>
+  store.set(docsCountAtom, val)
 export const setDocsFilteredCount = (val: number | null) =>
   store.set(docsFilteredCountAtom, val)
 export const setIsPrint = (val: boolean) => store.set(isPrintAtom, val)
@@ -612,7 +615,8 @@ export const setSingleColumnView = (val: boolean) =>
   store.set(singleColumnViewAtom, val)
 export const setShowTreeInSingleColumnView = (val: boolean) =>
   store.set(showTreeInSingleColumnViewAtom, val)
-export const setDiffConflict = (val: boolean) => store.set(diffConflictAtom, val)
+export const setDiffConflict = (val: boolean) =>
+  store.set(diffConflictAtom, val)
 export const setInitiallyQuerying = (val: string) =>
   store.set(initiallyQueryingAtom, val)
 export const setOnline = (val: boolean) => store.set(onlineAtom, val)

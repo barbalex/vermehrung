@@ -7,7 +7,11 @@ import { Q } from '@nozbe/watermelondb'
 import { userAtom, dbAtom } from '../../../../../../store/index.ts'
 import styles from './Row.module.css'
 
-export const ChooseKulturQkRow = ({ qk }: { qk: import('../../../../../shared/types.ts').WmRow | null | undefined }) => {
+export const ChooseKulturQkRow = ({
+  qk,
+}: {
+  qk: import('../../../../../shared/types.ts').WmRow | null | undefined
+}) => {
   const user = useAtomValue(userAtom)
   const db = useAtomValue(dbAtom)
 
@@ -20,7 +24,9 @@ export const ChooseKulturQkRow = ({ qk }: { qk: import('../../../../../shared/ty
   useEffect(() => {
     const userPersonOptionsObservable = user.uid
       ? db
-          .get('person_option')
+          ?.get<import('../../../../../../dbModel.ts').PersonOption>(
+            'person_option',
+          )
           .query(Q.on('person', Q.where('account_id', user.uid)))
           .observeWithColumns(['kultur_qk_choosen'])
       : $of({})

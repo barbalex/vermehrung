@@ -9,13 +9,17 @@ import { TeilkulturTeilzaehlung as Teilzaehlungen } from './Teilzaehlungen.tsx'
 
 import styles from './index.module.css'
 
-export const TeilkulturZaehlungen = ({ teilkultur }: { teilkultur: import('../../../../shared/types.ts').WmRow | null | undefined }) => {
+export const TeilkulturZaehlungen = ({
+  teilkultur,
+}: {
+  teilkultur: import('../../../../shared/types.ts').WmRow | null | undefined
+}) => {
   const db = useAtomValue(dbAtom)
 
   const [teilzaehlungs, setTeilzaehlungs] = useState([])
   useEffect(() => {
     const teilzaehlungsObservable = db
-      .get('teilzaehlung')
+      ?.get<import('../../../../../dbModel.ts').Teilzaehlung>('teilzaehlung')
       .query(
         Q.where('_deleted', false),
         Q.on('zaehlung', Q.where('kultur_id', teilkultur?.kultur_id)),

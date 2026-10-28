@@ -28,7 +28,8 @@ export const GartenFormTitle = ({ showFilter, row, rawRow, showHistory }) => {
           Q.on('person', 'id', personIdInActiveNodeArray),
         ]
       : []
-    const collection = db?.get('garten')
+    const collection =
+      db?.get<import('../../../../dbModel.ts').Garten>('garten')
     const delQuery =
       gartenFilter._deleted === false
         ? Q.where('_deleted', false)
@@ -69,7 +70,7 @@ export const GartenFormTitle = ({ showFilter, row, rawRow, showHistory }) => {
     db,
     personIdInActiveNodeArray,
     // need to rerender if any of the values of gartenFilter changes
-     
+
     gartenFilter,
   ])
 

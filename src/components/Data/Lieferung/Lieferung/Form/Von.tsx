@@ -69,7 +69,7 @@ export const LieferungVon = ({
               Q.where('_deleted', null),
             )
     const sammlungsObservable = db
-      .get('sammlung')
+      ?.get<import('../../../../../dbModel.ts').Sammlung>('sammlung')
       .query(sammlungDelQuery)
       .observe()
     const combinedObservables = combineLatest([
@@ -130,7 +130,9 @@ export const LieferungVon = ({
         )
         let sammlung
         try {
-          sammlung = await db?.get('sammlung').find(row?.von_sammlung_id as string)
+          sammlung = await db
+            ?.get('sammlung')
+            .find(row?.von_sammlung_id as string)
         } catch {}
         const sammlungsIncludingChoosen = uniqBy(
           [...sammlungs, ...(sammlung && !showFilter ? [sammlung] : [])],
@@ -181,7 +183,9 @@ export const LieferungVon = ({
       <div
         className={wannStyles.titleRow}
         style={{
-          backgroundColor: showFilter ? 'var(--filter-bg-alt)' : 'var(--form-bg)',
+          backgroundColor: showFilter
+            ? 'var(--filter-bg-alt)'
+            : 'var(--form-bg)',
         }}
       >
         <div className={wannStyles.title}>von</div>
@@ -197,7 +201,7 @@ export const LieferungVon = ({
           }`}
           options={sammlungWerte}
           saveToDb={saveToDb}
-          error={errors?.lieferung?.von_sammlung_id}
+          error={errors?.lieferung?.von_sammlung_id as string | undefined}
         />
       )}
       {ifNeeded('von_kultur_id') && (
@@ -211,7 +215,7 @@ export const LieferungVon = ({
           }`}
           options={vonKulturWerte}
           saveToDb={saveToDb}
-          error={errors?.lieferung?.von_kultur_id}
+          error={errors?.lieferung?.von_kultur_id as string | undefined}
         />
       )}
       <div

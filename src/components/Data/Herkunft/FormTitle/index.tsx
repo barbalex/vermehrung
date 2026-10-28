@@ -42,7 +42,8 @@ export const HerkunftFormTitleChooser = ({
           Q.on('sammlung', 'id', sammlungIdInActiveNodeArray),
         ]
       : []
-    const collection = db?.get('herkunft')
+    const collection =
+      db?.get<import('../../../../dbModel.ts').Herkunft>('herkunft')
     const delQuery =
       herkunftFilter._deleted === false
         ? Q.where('_deleted', false)

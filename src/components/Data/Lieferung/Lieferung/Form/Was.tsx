@@ -36,7 +36,7 @@ export const LieferungWas = ({ showFilter, row, saveToDb, ifNeeded }) => {
               Q.where('_deleted', null),
             )
     const subscription = db
-      .get('art')
+      ?.get<import('../../../../../dbModel.ts').Art>('art')
       .query(artDelQuery)
       .observe()
       .subscribe(async (arts) => {
@@ -83,7 +83,9 @@ export const LieferungWas = ({ showFilter, row, saveToDb, ifNeeded }) => {
       <div
         className={wannStyles.titleRow}
         style={{
-          backgroundColor: showFilter ? 'var(--filter-bg-alt)' : 'var(--form-bg)',
+          backgroundColor: showFilter
+            ? 'var(--filter-bg-alt)'
+            : 'var(--form-bg)',
         }}
       >
         <div className={wannStyles.title}>was</div>
@@ -97,7 +99,7 @@ export const LieferungWas = ({ showFilter, row, saveToDb, ifNeeded }) => {
           label="Art"
           options={artWerte}
           saveToDb={saveToDb}
-          error={errors?.lieferung?.art_id}
+          error={errors?.lieferung?.art_id as string | undefined}
         />
       )}
       <div className={wannStyles.fieldRow}>
@@ -108,7 +110,7 @@ export const LieferungWas = ({ showFilter, row, saveToDb, ifNeeded }) => {
             label="Anzahl Pflanzen"
             value={row.anzahl_pflanzen}
             saveToDb={saveToDb}
-            error={errors?.lieferung?.anzahl_pflanzen}
+            error={errors?.lieferung?.anzahl_pflanzen as string | undefined}
             type="number"
           />
         )}
@@ -119,7 +121,9 @@ export const LieferungWas = ({ showFilter, row, saveToDb, ifNeeded }) => {
             label="Anzahl auspflanzbereit"
             value={row.anzahl_auspflanzbereit}
             saveToDb={saveToDb}
-            error={errors?.lieferung?.anzahl_auspflanzbereit}
+            error={
+              errors?.lieferung?.anzahl_auspflanzbereit as string | undefined
+            }
             type="number"
           />
         )}
@@ -132,7 +136,7 @@ export const LieferungWas = ({ showFilter, row, saveToDb, ifNeeded }) => {
             label="Gramm Samen"
             value={row.gramm_samen}
             saveToDb={saveToDb}
-            error={errors?.lieferung?.gramm_samen}
+            error={errors?.lieferung?.gramm_samen as string | undefined}
             type="number"
           />
         )}
@@ -143,7 +147,7 @@ export const LieferungWas = ({ showFilter, row, saveToDb, ifNeeded }) => {
             label={`Andere Menge (z.B. "3 Zwiebeln")`}
             value={row.andere_menge}
             saveToDb={saveToDb}
-            error={errors?.lieferung?.andere_menge}
+            error={errors?.lieferung?.andere_menge as string | undefined}
             type="text"
           />
         )}
@@ -156,7 +160,9 @@ export const LieferungWas = ({ showFilter, row, saveToDb, ifNeeded }) => {
             label="von Anzahl Individuen"
             value={row.von_anzahl_individuen}
             saveToDb={saveToDb}
-            error={errors?.lieferung?.von_anzahl_individuen}
+            error={
+              errors?.lieferung?.von_anzahl_individuen as string | undefined
+            }
             type="number"
           />
           <div>

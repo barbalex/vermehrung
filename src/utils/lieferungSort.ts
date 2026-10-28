@@ -4,8 +4,12 @@ export const lieferungSort = <T extends object>(
 ) => {
   const ra = a as Record<string, unknown> | undefined
   const rb = b as Record<string, unknown> | undefined
-  const datumA = ra?.datum ? new Date(ra.datum as string) : new Date('1000-01-01')
-  const datumB = rb?.datum ? new Date(rb.datum as string) : new Date('1000-01-01')
+  const datumA = ra?.datum
+    ? new Date(ra.datum as string)
+    : new Date('1000-01-01')
+  const datumB = rb?.datum
+    ? new Date(rb.datum as string)
+    : new Date('1000-01-01')
   if (datumA > datumB) return -1
   if (datumA < datumB) return 1
 

@@ -26,7 +26,7 @@ export const RootRow = ({ style, row }) => {
   const [count, setCount] = useState(0)
   useEffect(() => {
     const subscription = db
-      .get(row.table)
+      ?.get(row.table)
       .query(
         ...tableFilter({
           table: row.table,

@@ -19,9 +19,7 @@ export const RouterErrorBoundary = ({
   return (
     <div className={styles.container}>
       <p>Sorry, ein Fehler ist aufgetreten:</p>
-      <pre className={styles.preWrapping}>
-        {(error as Error)?.message}
-      </pre>
+      <pre className={styles.preWrapping}>{(error as Error)?.message}</pre>
       <div className={styles.buttonContainer}>
         <Button
           variant="outlined"

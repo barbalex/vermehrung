@@ -66,7 +66,9 @@ export const processSubscriptionResult = async ({
     // has not reached the server yet, so the sync data is stale for
     // them. the flush + the following sync reconcile the row
     if (isUnflushedRev(table, o.id)) return false
-    const dat = stripTypename(dataToCheck.find((d) => d.id === o.id) ?? { id: '' })
+    const dat = stripTypename(
+      dataToCheck.find((d) => d.id === o.id) ?? { id: '' },
+    )
     return !Object.entries(dat).every(([key, value]) =>
       isEqual(value, (o as unknown as Record<string, unknown>)[key]),
     )
@@ -88,11 +90,9 @@ export const processSubscriptionResult = async ({
           // rows per table and a spread would blow the call stack
           await db.batch([
             ...objectsToUpdate.map((object) => {
-              const thisObjectsData =
-                (dataToCheck.find((d) => d.id === object.id) ?? {}) as Record<
-                  string,
-                  unknown
-                >
+              const thisObjectsData = (dataToCheck.find(
+                (d) => d.id === object.id,
+              ) ?? {}) as Record<string, unknown>
 
               return object.prepareUpdate((ob: Model) => {
                 Object.keys(thisObjectsData)

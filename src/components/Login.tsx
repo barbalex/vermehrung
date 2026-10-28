@@ -21,7 +21,12 @@ import {
 } from 'firebase/auth'
 
 import { ErrorBoundary } from './shared/ErrorBoundary.tsx'
-import { dbAtom, firebaseAuthAtom, resetSyncState, store } from '../store/index.ts'
+import {
+  dbAtom,
+  firebaseAuthAtom,
+  resetSyncState,
+  store,
+} from '../store/index.ts'
 import { constants } from '../utils/constants.ts'
 
 import styles from './Login.module.css'
@@ -51,8 +56,7 @@ export const Login = () => {
     // why? password-managers enter values but do not blur/change
     // if password-manager enters values and user clicks "Anmelden"
     // it will not work without previous blurring
-    const emailToUse =
-      emailPassed || email || emailInput.current?.value || ''
+    const emailToUse = emailPassed || email || emailInput.current?.value || ''
     const passwordToUse =
       passwordPassed || password || passwordInput.current?.value || ''
     // do everything to clean up so no data is left
@@ -64,7 +68,11 @@ export const Login = () => {
     setTimeout(async () => {
       try {
         if (!firebaseAuth) return
-        await signInWithEmailAndPassword(firebaseAuth, emailToUse, passwordToUse)
+        await signInWithEmailAndPassword(
+          firebaseAuth,
+          emailToUse,
+          passwordToUse,
+        )
       } catch (error) {
         setEmailErrorText((error as Error).message)
         return setPasswordErrorText((error as Error).message)
@@ -95,10 +103,7 @@ export const Login = () => {
   }
   const onKeyPressEmail = (e: { key: string; target: { value: string } }) =>
     e.key === 'Enter' && onBlurEmail(e)
-  const onKeyPressPassword = (e: {
-    key: string
-    target: { value: string }
-  }) =>
+  const onKeyPressPassword = (e: { key: string; target: { value: string } }) =>
     e.key === 'Enter' && onBlurPassword(e)
   const onClickShowPass = () => setShowPass(!showPass)
   const onMouseDownShowPass = (e: { preventDefault: () => void }) =>
@@ -154,8 +159,8 @@ export const Login = () => {
                 onBlur={onBlurEmail}
                 autoFocus
                 onKeyPress={
-          onKeyPressEmail as unknown as import('react').KeyboardEventHandler
-        }
+                  onKeyPressEmail as unknown as import('react').KeyboardEventHandler
+                }
                 inputRef={emailInput}
               />
               <FormHelperText id="emailHelper">{emailErrorText}</FormHelperText>
@@ -174,8 +179,8 @@ export const Login = () => {
                 defaultValue={password}
                 onBlur={onBlurPassword}
                 onKeyPress={
-          onKeyPressPassword as unknown as import('react').KeyboardEventHandler
-        }
+                  onKeyPressPassword as unknown as import('react').KeyboardEventHandler
+                }
                 autoComplete="current-password"
                 autoCorrect="off"
                 spellCheck="false"

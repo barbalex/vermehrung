@@ -9,28 +9,44 @@ import { ErrorBoundary } from '../../../../shared/ErrorBoundary.tsx'
 
 import styles from './Garten.module.css'
 
-export const PersonGarten = ({ gv }: { gv: import('../../../../shared/types.ts').WmRow | null | undefined }) => {
-  const [delMenuAnchorEl, setDelMenuAnchorEl] = useState<HTMLElement | undefined | null>(null)
+export const PersonGarten = ({
+  gv,
+}: {
+  gv: import('../../../../shared/types.ts').WmRow | null | undefined
+}) => {
+  const [delMenuAnchorEl, setDelMenuAnchorEl] = useState<
+    HTMLElement | undefined | null
+  >(null)
   const delMenuOpen = Boolean(delMenuAnchorEl)
 
   const onClose = () => setDelMenuAnchorEl(null)
-  const onClickDeleteIcon = (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => setDelMenuAnchorEl(event.currentTarget)
+  const onClickDeleteIcon = (event: {
+    target: { name?: string; value: unknown }
+    currentTarget?: HTMLElement
+    preventDefault?: () => void
+    stopPropagation?: () => void
+    key?: string
+  }) => setDelMenuAnchorEl(event.currentTarget)
 
   const onClickDelete = () => {
     gv?.delete()
     setDelMenuAnchorEl(null)
   }
 
-  const [gartenLabel, setGartenLabel] = useState<string | undefined | null>(null)
+  const [gartenLabel, setGartenLabel] = useState<string | undefined | null>(
+    null,
+  )
   useEffect(() => {
-    const gartenSubscription = gv?.garten.observe().subscribe(async (garten: import('../../../../../dbModel.ts').Garten) => {
-      let label
-      try {
-        label = await garten.label.pipe(first$()).toPromise()
-      } catch {}
+    const gartenSubscription = gv?.garten
+      .observe()
+      .subscribe(async (garten: import('../../../../../dbModel.ts').Garten) => {
+        let label
+        try {
+          label = await garten.label.pipe(first$()).toPromise()
+        } catch {}
 
-      setGartenLabel(label)
-    })
+        setGartenLabel(label)
+      })
 
     return () => gartenSubscription?.unsubscribe?.()
   }, [gv?.garten])

@@ -1,4 +1,12 @@
-export const buildKulturBedarfFolder = ({ count, kulturIndex, kulturId }: { count: number; kulturIndex: number; kulturId: string }) => ({
+export const buildKulturBedarfFolder = ({
+  count,
+  kulturIndex,
+  kulturId,
+}: {
+  count: number
+  kulturIndex: number
+  kulturId: string
+}) => ({
   nodeType: 'folder',
   menuTitle: 'Bedarf',
   id: `${kulturId}BedarfFolder`,

@@ -59,12 +59,13 @@ export const Coordinates = ({
     userPersonOption: undefined,
   })
   useEffect(() => {
-    const userPersonOptionsObservable = user.uid && db
-      ? db
-          .get('person_option')
-          .query(Q.on('person', Q.where('account_id', user.uid)))
-          .observeWithColumns(['ga_lat_lng'])
-      : $of<Record<string, unknown>[]>([])
+    const userPersonOptionsObservable =
+      user.uid && db
+        ? db
+            .get('person_option')
+            .query(Q.on('person', Q.where('account_id', user.uid)))
+            .observeWithColumns(['ga_lat_lng'])
+        : $of<Record<string, unknown>[]>([])
     const combinedObservables = combineLatest([
       userPersonOptionsObservable as Observable<Record<string, unknown>[]>,
     ])
@@ -111,7 +112,10 @@ export const Coordinates = ({
     originalSaveToDb(fakeEvent)
   }
 
-  const saveToDbLv95 = (x: number | string | null, y: number | string | null) => {
+  const saveToDbLv95 = (
+    x: number | string | null,
+    y: number | string | null,
+  ) => {
     let geomPoint = null
     if (x && y) {
       geomPoint = {

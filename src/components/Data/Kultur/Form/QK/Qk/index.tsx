@@ -15,7 +15,13 @@ export const KulturQk = ({ kultur, qkChoosens }) => {
   const db = useAtomValue(dbAtom)
 
   const [filter, setFilter] = useState('')
-  const onChangeFilter = (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => setFilter(event.target.value)
+  const onChangeFilter = (event: {
+    target: { name?: string; value: unknown }
+    currentTarget?: HTMLElement
+    preventDefault?: () => void
+    stopPropagation?: () => void
+    key?: string
+  }) => setFilter(event.target.value)
 
   const [messageGroups, setMessageGroups] = useState<
     { messages: { message: string }[] }[] | null

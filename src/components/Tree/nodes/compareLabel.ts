@@ -1,7 +1,4 @@
-const compareLabel = (
-  a: { label?: unknown },
-  b: { label?: unknown },
-) => {
+const compareLabel = (a: { label?: unknown }, b: { label?: unknown }) => {
   // catch if label is null
   if (!b.label && !a.label) return 0
   if (!b.label) return -1

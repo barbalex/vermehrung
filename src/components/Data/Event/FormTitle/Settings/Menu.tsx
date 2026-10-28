@@ -20,7 +20,7 @@ export const EventSettingsMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
 
   useEffect(() => {
     const kulturOptionObservable = db
-      .get('kultur_option')
+      ?.get<import('../../../../../dbModel.ts').KulturOption>('kultur_option')
       .findAndObserve(kulturId)
     const subscription = kulturOptionObservable.subscribe((kulturOption) =>
       setDataState({ kulturOption }),
@@ -31,7 +31,13 @@ export const EventSettingsMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
 
   const { ev_datum, tk, ev_geplant, ev_person_id } = kulturOption ?? {}
 
-  const saveToDb = (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
+  const saveToDb = (event: {
+    target: { name?: string; value: unknown }
+    currentTarget?: HTMLElement
+    preventDefault?: () => void
+    stopPropagation?: () => void
+    key?: string
+  }) => {
     const field = event.target.name
     const value = event.target.value === 'false'
     kulturOption?.edit({ field, value })

@@ -66,7 +66,7 @@ export const GartenForm = ({
   useEffect(() => {
     const userPersonOptionsObservable = user.uid
       ? db
-          .get('person_option')
+          ?.get<import('../../../../dbModel.ts').PersonOption>('person_option')
           .query(Q.on('person', Q.where('account_id', user.uid)))
           .observeWithColumns([
             'ga_strasse',
@@ -98,7 +98,7 @@ export const GartenForm = ({
               Q.where('aktiv', null),
             )
     const personsObservable = db
-      .get('person')
+      ?.get<import('../../../../dbModel.ts').Person>('person')
       .query(delQuery, aktivQuery)
       .observeWithColumns(['vorname', 'name'])
     const personObservable = row?.person ? row?.person.observe() : $of({})
@@ -159,7 +159,13 @@ export const GartenForm = ({
 
   // console.log('Garten, render, Form', { ga_aktiv })
 
-  const saveToDb = async (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
+  const saveToDb = async (event: {
+    target: { name?: string; value: unknown }
+    currentTarget?: HTMLElement
+    preventDefault?: () => void
+    stopPropagation?: () => void
+    key?: string
+  }) => {
     const field = event.target.name
     let value = ifIsNumericAsNumber(event.target.value)
     if (event.target.value === undefined) value = null
@@ -205,7 +211,7 @@ export const GartenForm = ({
               name="_deleted"
               value={row?._deleted}
               saveToDb={saveToDb}
-              error={errors?.garten?._deleted}
+              error={errors?.garten?._deleted as string | undefined}
             />
           ) : (
             <Checkbox2States
@@ -214,7 +220,7 @@ export const GartenForm = ({
               name="_deleted"
               value={row?._deleted}
               saveToDb={saveToDb}
-              error={errors?.garten?._deleted}
+              error={errors?.garten?._deleted as string | undefined}
             />
           )}
         </>
@@ -225,7 +231,7 @@ export const GartenForm = ({
         label="Name"
         value={row?.name}
         saveToDb={saveToDb}
-        error={errors?.garten?.name}
+        error={errors?.garten?.name as string | undefined}
       />
       <Select
         key={`${row?.id}${row?.person_id}person_id`}
@@ -235,7 +241,7 @@ export const GartenForm = ({
         label="Person"
         options={personWerte}
         saveToDb={saveToDb}
-        error={errors?.garten?.person_id}
+        error={errors?.garten?.person_id as string | undefined}
       />
       {ga_strasse && (
         <TextField
@@ -244,7 +250,7 @@ export const GartenForm = ({
           label="Strasse"
           value={row?.strasse}
           saveToDb={saveToDb}
-          error={errors?.garten?.strasse}
+          error={errors?.garten?.strasse as string | undefined}
         />
       )}
       {ga_plz && (
@@ -254,7 +260,7 @@ export const GartenForm = ({
           label="PLZ"
           value={row?.plz}
           saveToDb={saveToDb}
-          error={errors?.garten?.plz}
+          error={errors?.garten?.plz as string | undefined}
           type="number"
         />
       )}
@@ -265,7 +271,7 @@ export const GartenForm = ({
           label="Ort"
           value={row?.ort}
           saveToDb={saveToDb}
-          error={errors?.garten?.ort}
+          error={errors?.garten?.ort as string | undefined}
         />
       )}
       {!showFilter && ga_geom_point && (
@@ -280,7 +286,7 @@ export const GartenForm = ({
               name="aktiv"
               value={row?.aktiv}
               saveToDb={saveToDb}
-              error={errors?.garten?.aktiv}
+              error={errors?.garten?.aktiv as string | undefined}
             />
           ) : (
             <Checkbox2States
@@ -289,7 +295,7 @@ export const GartenForm = ({
               name="aktiv"
               value={row?.aktiv}
               saveToDb={saveToDb}
-              error={errors?.garten?.aktiv}
+              error={errors?.garten?.aktiv as string | undefined}
             />
           )}
         </>
@@ -301,7 +307,7 @@ export const GartenForm = ({
           label="Bemerkungen"
           value={row?.bemerkungen}
           saveToDb={saveToDb}
-          error={errors?.garten?.bemerkungen}
+          error={errors?.garten?.bemerkungen as string | undefined}
           multiLine
         />
       )}

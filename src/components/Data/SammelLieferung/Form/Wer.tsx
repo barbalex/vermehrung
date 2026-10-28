@@ -58,7 +58,7 @@ export const SammelLieferungWer = ({ showFilter, ifNeeded, saveToDb, id }) => {
               Q.where('aktiv', null),
             )
     const personsObservable = db
-      .get('person')
+      ?.get<import('../../../../dbModel.ts').Person>('person')
       .query(personDelQuery, personAktivQuery)
       .observeWithColumns(['name', 'vorname'])
     const combinedObservables = combineLatest([
@@ -108,7 +108,9 @@ export const SammelLieferungWer = ({ showFilter, ifNeeded, saveToDb, id }) => {
       <div
         className={wannStyles.titleRow}
         style={{
-          backgroundColor: showFilter ? 'var(--filter-bg-alt)' : 'var(--form-bg)',
+          backgroundColor: showFilter
+            ? 'var(--filter-bg-alt)'
+            : 'var(--form-bg)',
         }}
       >
         <div className={wannStyles.title}>wer</div>
@@ -122,7 +124,7 @@ export const SammelLieferungWer = ({ showFilter, ifNeeded, saveToDb, id }) => {
           label="Person"
           options={personWerte}
           saveToDb={saveToDb}
-          error={errors?.sammel_lieferung?.person_id}
+          error={errors?.sammel_lieferung?.person_id as string | undefined}
         />
       )}
       {ifNeeded('bemerkungen') && (
@@ -132,7 +134,7 @@ export const SammelLieferungWer = ({ showFilter, ifNeeded, saveToDb, id }) => {
           label="Bemerkungen"
           value={row.bemerkungen}
           saveToDb={saveToDb}
-          error={errors?.sammel_lieferung?.bemerkungen}
+          error={errors?.sammel_lieferung?.bemerkungen as string | undefined}
           multiLine
         />
       )}

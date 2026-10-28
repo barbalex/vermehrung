@@ -38,15 +38,19 @@ export const GartenHistory = ({
     getNavigate()?.(`/Vermehrung/${url.join('/')}`, { replace: true })
   }
 
-  const priorRevisions = (row?._revisions as { slice?: unknown } | undefined)?.slice(1) ?? []
+  const priorRevisions =
+    (row?._revisions as { slice?: unknown } | undefined)?.slice(1) ?? []
   const revPath = priorRevisions.length
     ? `/garten_rev?_rev=in.(${priorRevisions.join(',')})&select=id,garten_id,name,strasse,plz,ort,geom_point,aktiv,bemerkungen,changed,changed_by,_rev,_parent_rev,_revisions,_depth,_deleted`
     : null
   const { error, data, fetching } = useApiQuery(revPath)
-    if (error) checkForOnlineError({ error })
+  if (error) checkForOnlineError({ error })
 
-  const revRowsUnsorted = (data ?? []) as import('../../../shared/types.ts').RevRow[]
-  const revRows = revRowsUnsorted.sort((a, b) => (b._depth ?? 0) - (a._depth ?? 0))
+  const revRowsUnsorted = (data ??
+    []) as import('../../../shared/types.ts').RevRow[]
+  const revRows = revRowsUnsorted.sort(
+    (a, b) => (b._depth ?? 0) - (a._depth ?? 0),
+  )
 
   const indexOfRev = revRows.findIndex((r) => r._rev === historyRev)
 
@@ -54,7 +58,6 @@ export const GartenHistory = ({
     if (!revRows.length || historyRev !== true) return
     // the url ends with 'histories': add the rev of the newest revision
     navigateToRev(revRows[0]._rev)
-     
   }, [historyRev, revRows])
 
   if (fetching) {
@@ -62,7 +65,9 @@ export const GartenHistory = ({
   }
 
   if (error) {
-    return <div className={artStyles.errorContainer}>{(error as Error).message}</div>
+    return (
+      <div className={artStyles.errorContainer}>{(error as Error).message}</div>
+    )
   }
 
   return (

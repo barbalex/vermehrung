@@ -96,7 +96,7 @@ export const EventForm = ({
               Q.where('aktiv', null),
             )
     const kultursObservable = db
-      .get('kultur')
+      ?.get<import('../../../../dbModel.ts').Kultur>('kultur')
       .query(kulturDelQuery, kulturAktivQuery)
       .observeWithColumns([
         'garten_id',
@@ -116,7 +116,7 @@ export const EventForm = ({
             )
     const teilkulturObservable = kulturId
       ? db
-          .get('teilkultur')
+          ?.get<import('../../../../dbModel.ts').Teilkultur>('teilkultur')
           .query(
             tkDelQuery,
             ...(showFilter ? [] : [Q.where('kultur_id', kulturId)]),
@@ -144,7 +144,7 @@ export const EventForm = ({
               Q.where('aktiv', null),
             )
     const personsObservable = db
-      .get('person')
+      ?.get<import('../../../../dbModel.ts').Person>('person')
       .query(personDelQuery, personAktivQuery)
       .observeWithColumns(['vorname', 'name'])
     const kulturOptionObservable = row?.kultur_id
@@ -237,7 +237,7 @@ export const EventForm = ({
     kulturId,
     row,
     // TODO: this provokes indefinite loop
-     
+
     // ...[Object.values(row)],
     // solution: rawRow
     rawRow,
@@ -247,7 +247,13 @@ export const EventForm = ({
 
   const { tk, ev_datum, ev_geplant, ev_person_id } = kulturOption ?? {}
 
-  const saveToDb = (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
+  const saveToDb = (event: {
+    target: { name?: string; value: unknown }
+    currentTarget?: HTMLElement
+    preventDefault?: () => void
+    stopPropagation?: () => void
+    key?: string
+  }) => {
     const field = event.target.name
     let value = ifIsNumericAsNumber(event.target.value)
     if (event.target.value === undefined) value = null
@@ -300,7 +306,7 @@ export const EventForm = ({
                 name="_deleted"
                 value={row?._deleted}
                 saveToDb={saveToDb}
-                error={errors?.event?._deleted}
+                error={errors?.event?._deleted as string | undefined}
               />
             ) : (
               <Checkbox2States
@@ -309,7 +315,7 @@ export const EventForm = ({
                 name="_deleted"
                 value={row?._deleted}
                 saveToDb={saveToDb}
-                error={errors?.event?._deleted}
+                error={errors?.event?._deleted as string | undefined}
               />
             )}
           </>
@@ -322,7 +328,7 @@ export const EventForm = ({
           label="Kultur"
           options={kulturWerte}
           saveToDb={saveToDb}
-          error={errors?.event?.kultur_id}
+          error={errors?.event?.kultur_id as string | undefined}
         />
         {(tk || showFilter) && (
           <SelectCreatable
@@ -333,7 +339,7 @@ export const EventForm = ({
             field="teilkultur_id"
             label="Teilkultur"
             options={teilkulturWerte}
-            error={errors?.event?.teilkultur_id}
+            error={errors?.event?.teilkultur_id as string | undefined}
             onCreateNew={onCreateNewTeilkultur}
           />
         )}
@@ -343,7 +349,7 @@ export const EventForm = ({
           label="Beschreibung"
           value={row?.beschreibung}
           saveToDb={saveToDb}
-          error={errors?.event?.beschreibung}
+          error={errors?.event?.beschreibung as string | undefined}
           multiline
         />
         {(ev_person_id || showFilter) && (
@@ -355,7 +361,7 @@ export const EventForm = ({
             label="Wer"
             options={personWerte}
             saveToDb={saveToDb}
-            error={errors?.event?.person_id}
+            error={errors?.event?.person_id as string | undefined}
           />
         )}
         {(ev_datum || showFilter) && (
@@ -365,7 +371,7 @@ export const EventForm = ({
             label="Datum"
             value={row?.datum}
             saveToDb={saveToDb}
-            error={errors?.event?.datum}
+            error={errors?.event?.datum as string | undefined}
           />
         )}
         {(ev_geplant || showFilter) && (
@@ -377,7 +383,7 @@ export const EventForm = ({
                 name="geplant"
                 value={row?.geplant}
                 saveToDb={saveToDb}
-                error={errors?.event?.geplant}
+                error={errors?.event?.geplant as string | undefined}
               />
             ) : (
               <Checkbox2States
@@ -386,7 +392,7 @@ export const EventForm = ({
                 name="geplant"
                 value={row?.geplant}
                 saveToDb={saveToDb}
-                error={errors?.event?.geplant}
+                error={errors?.event?.geplant as string | undefined}
               />
             )}
             <div>

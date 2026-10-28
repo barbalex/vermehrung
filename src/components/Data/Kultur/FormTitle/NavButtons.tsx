@@ -15,7 +15,11 @@ import BeDownSvg from '../../../../svg/to_be_down.svg?react'
 import TkDownSvg from '../../../../svg/to_tk_down.svg?react'
 import UpSvg from '../../../../svg/to_up.svg?react'
 
-export const KulturNavButtons = ({ row }: { row: import('../../../shared/types.ts').WmRow | null | undefined }) => {
+export const KulturNavButtons = ({
+  row,
+}: {
+  row: import('../../../shared/types.ts').WmRow | null | undefined
+}) => {
   const onClickToKulturen = () => {
     const activeNodeArray = store.get(activeNodeArrayAtom)
     removeOpenNode(activeNodeArray)
@@ -90,11 +94,7 @@ export const KulturNavButtons = ({ row }: { row: import('../../../shared/types.t
       >
         <AusLiDownSvg />
       </IconButton>
-      <IconButton
-        title="Zum Bedarf"
-        onClick={onClickToBedarf}
-        size="large"
-      >
+      <IconButton title="Zum Bedarf" onClick={onClickToBedarf} size="large">
         <BeDownSvg />
       </IconButton>
     </>

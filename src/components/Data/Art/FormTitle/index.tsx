@@ -17,7 +17,7 @@ export const ArtFormTitle = ({ row, rawRow, showFilter, showHistory }) => {
     filteredCount: 0,
   })
   useEffect(() => {
-    const collection = db?.get('art')
+    const collection = db?.get<import('../../../../dbModel.ts').Art>('art')
     const delQuery =
       artFilter._deleted === false
         ? Q.where('_deleted', false)

@@ -43,7 +43,7 @@ export const Bedarfe = ({ filter: showFilter = false }) => {
           Q.on('kultur', 'id', kulturIdInActiveNodeArray),
         ]
       : []
-    const collection = db?.get('bedarf')
+    const collection = db?.get<import('../../../dbModel.ts').Bedarf>('bedarf')
     const delQuery =
       bedarfFilter._deleted === false
         ? Q.where('_deleted', false)
@@ -72,7 +72,6 @@ export const Bedarfe = ({ filter: showFilter = false }) => {
 
     return () => subscription?.unsubscribe?.()
     // need to rerender if any of the values of bedarfFilter changes
-     
   }, [db, kulturIdInActiveNodeArray, bedarfFilter])
 
   const { bedarfe, totalCount } = dataState

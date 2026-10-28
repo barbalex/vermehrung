@@ -40,7 +40,8 @@ export const Zaehlungen = ({ filter: showFilter = false }) => {
           Q.on('kultur', 'id', kulturIdInActiveNodeArray),
         ]
       : []
-    const collection = db?.get('zaehlung')
+    const collection =
+      db?.get<import('../../../dbModel.ts').Zaehlung>('zaehlung')
     const zaehlungDelQuery =
       zaehlungFilter._deleted === false
         ? Q.where('_deleted', false)

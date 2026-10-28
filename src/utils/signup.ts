@@ -9,11 +9,7 @@ import {
 import { constants } from './constants.ts'
 import type { Person } from '../dbModel.ts'
 
-export const signup = async ({
-  person,
-}: {
-  person: Person | null
-}) => {
+export const signup = async ({ person }: { person: Person | null }) => {
   const online = store.get(onlineAtom)
 
   // fetch email of this person

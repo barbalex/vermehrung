@@ -71,7 +71,7 @@ export const TeilzaehlungForm = ({
               Q.where('_deleted', null),
             )
     const teilkultursObservable = db
-      .get('teilkultur')
+      ?.get<import('../../../../../../../dbModel.ts').Teilkultur>('teilkultur')
       .query(teilkulturDelQuery, Q.where('kultur_id', kulturId))
       .observeWithColumns(['name'])
     const kulturOptionObservable = kulturId
@@ -138,7 +138,13 @@ export const TeilzaehlungForm = ({
     unsetError('teilzaehlung')
   }, [id])
 
-  const saveToDb = (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
+  const saveToDb = (event: {
+    target: { name?: string; value: unknown }
+    currentTarget?: HTMLElement
+    preventDefault?: () => void
+    stopPropagation?: () => void
+    key?: string
+  }) => {
     const field = event.target.name
     let value = ifIsNumericAsNumber(event.target.value)
     if (event.target.value === undefined) value = null
@@ -184,7 +190,7 @@ export const TeilzaehlungForm = ({
               name="_deleted"
               value={row._deleted}
               saveToDb={saveToDb}
-              error={errors?.teilzaehlung?._deleted}
+              error={errors?.teilzaehlung?._deleted as string | undefined}
             />
           </div>
         )}
@@ -196,7 +202,7 @@ export const TeilzaehlungForm = ({
               field="teilkultur_id"
               label="Teilkultur"
               options={teilkulturWerte}
-              error={errors?.teilzaehlung?.teilkultur_id}
+              error={errors?.teilzaehlung?.teilkultur_id as string | undefined}
               onCreateNew={onCreateNewTeilkultur}
             />
           </div>
@@ -209,7 +215,7 @@ export const TeilzaehlungForm = ({
             label="Anzahl Pflanzen"
             value={row.anzahl_pflanzen}
             saveToDb={saveToDb}
-            error={errors?.teilzaehlung?.anzahl_pflanzen}
+            error={errors?.teilzaehlung?.anzahl_pflanzen as string | undefined}
             type="number"
           />
         </div>
@@ -220,7 +226,9 @@ export const TeilzaehlungForm = ({
             label="Anzahl auspflanz-bereit"
             value={row.anzahl_auspflanzbereit}
             saveToDb={saveToDb}
-            error={errors?.teilzaehlung?.anzahl_auspflanzbereit}
+            error={
+              errors?.teilzaehlung?.anzahl_auspflanzbereit as string | undefined
+            }
             type="number"
           />
         </div>
@@ -231,7 +239,9 @@ export const TeilzaehlungForm = ({
             label="Anzahl Mutter-Pflanzen"
             value={row.anzahl_mutterpflanzen}
             saveToDb={saveToDb}
-            error={errors?.teilzaehlung?.anzahl_mutterpflanzen}
+            error={
+              errors?.teilzaehlung?.anzahl_mutterpflanzen as string | undefined
+            }
             type="number"
           />
         </div>
@@ -254,7 +264,7 @@ export const TeilzaehlungForm = ({
               labelWeight={700}
               value={row.andere_menge}
               saveToDb={saveToDb}
-              error={errors?.teilzaehlung?.andere_menge}
+              error={errors?.teilzaehlung?.andere_menge as string | undefined}
               type="text"
             />
           </div>
@@ -268,7 +278,10 @@ export const TeilzaehlungForm = ({
               labelWeight={700}
               value={row.auspflanzbereit_beschreibung}
               saveToDb={saveToDb}
-              error={errors?.teilzaehlung?.auspflanzbereit_beschreibung}
+              error={
+                errors?.teilzaehlung?.auspflanzbereit_beschreibung as
+                  string | undefined
+              }
               type="text"
             />
           </div>
@@ -282,7 +295,7 @@ export const TeilzaehlungForm = ({
               labelWeight={700}
               value={row.bemerkungen}
               saveToDb={saveToDb}
-              error={errors?.teilzaehlung?.bemerkungen}
+              error={errors?.teilzaehlung?.bemerkungen as string | undefined}
               multiLine
             />
           </div>

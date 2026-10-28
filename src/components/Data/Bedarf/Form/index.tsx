@@ -56,10 +56,20 @@ export const BedarfForm = ({
     unsetError('bedarf')
   }, [id])
 
-  const [dataState, setDataState] = useState({
-    kulturWerte: [],
-    personWerte: [],
-  })
+  const [dataState, setDataState] = useState<{
+    kulturWerte: {
+      value: string
+      label: string | undefined
+      inaktiv?: boolean
+      link?: string[]
+    }[]
+    personWerte: {
+      value: string
+      label: string | undefined
+      inaktiv?: boolean
+      link?: string[]
+    }[]
+  }>({ kulturWerte: [], personWerte: [] })
   useEffect(() => {
     const kulturDelQuery =
       kulturFilter._deleted === false
@@ -82,7 +92,7 @@ export const BedarfForm = ({
               Q.where('aktiv', null),
             )
     const kultursObservable = db
-      .get('kultur')
+      ?.get<import('../../../../dbModel.ts').Kultur>('kultur')
       .query(kulturDelQuery, kulturAktivQuery)
       .observeWithColumns([
         'garten_id',
@@ -111,7 +121,7 @@ export const BedarfForm = ({
               Q.where('aktiv', null),
             )
     const personsObservable = db
-      .get('person')
+      ?.get<import('../../../../dbModel.ts').Person>('person')
       .query(personDelQuery, personAktivQuery)
       .observeWithColumns(['vorname', 'name'])
     const combinedObservables = combineLatest([
@@ -180,7 +190,7 @@ export const BedarfForm = ({
     personFilter.aktiv,
     row,
     // TODO: this provokes indefinite loop
-     
+
     // ...[Object.values(row)],
     // solution: rawRow
     rawRow,
@@ -188,7 +198,13 @@ export const BedarfForm = ({
   ])
   const { kulturWerte, personWerte } = dataState
 
-  const saveToDb = (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
+  const saveToDb = (event: {
+    target: { name?: string; value: unknown }
+    currentTarget?: HTMLElement
+    preventDefault?: () => void
+    stopPropagation?: () => void
+    key?: string
+  }) => {
     const field = event.target.name
     let value = ifIsNumericAsNumber(event.target.value)
     if (event.target.value === undefined) value = null
@@ -223,7 +239,7 @@ export const BedarfForm = ({
                 name="_deleted"
                 value={row?._deleted}
                 saveToDb={saveToDb}
-                error={errors?.bedarf?._deleted}
+                error={errors?.bedarf?._deleted as string | undefined}
               />
             ) : (
               <Checkbox2States
@@ -232,7 +248,7 @@ export const BedarfForm = ({
                 name="_deleted"
                 value={row?._deleted}
                 saveToDb={saveToDb}
-                error={errors?.bedarf?._deleted}
+                error={errors?.bedarf?._deleted as string | undefined}
               />
             )}
           </>
@@ -245,7 +261,7 @@ export const BedarfForm = ({
           label="Kultur"
           options={kulturWerte}
           saveToDb={saveToDb}
-          error={errors?.bedarf?.kultur_id}
+          error={errors?.bedarf?.kultur_id as string | undefined}
         />
         <TextField
           key={`${row?.id}jahr`}
@@ -253,7 +269,7 @@ export const BedarfForm = ({
           label="Jahr"
           value={row?.jahr}
           saveToDb={saveToDb}
-          error={errors?.bedarf?.jahr}
+          error={errors?.bedarf?.jahr as string | undefined}
           type="number"
         />
         <TextField
@@ -262,7 +278,7 @@ export const BedarfForm = ({
           label="Beschreibung"
           value={row?.beschreibung}
           saveToDb={saveToDb}
-          error={errors?.bedarf?.beschreibung}
+          error={errors?.bedarf?.beschreibung as string | undefined}
           multiline
         />
         <TextField
@@ -271,7 +287,7 @@ export const BedarfForm = ({
           label="Bemerkungen"
           value={row?.bemerkungen}
           saveToDb={saveToDb}
-          error={errors?.bedarf?.bemerkungen}
+          error={errors?.bedarf?.bemerkungen as string | undefined}
           multiline
         />
         <TextField
@@ -280,7 +296,7 @@ export const BedarfForm = ({
           label="Neues Material"
           value={row?.neues_material}
           saveToDb={saveToDb}
-          error={errors?.bedarf?.neues_material}
+          error={errors?.bedarf?.neues_material as string | undefined}
           multiline
         />
         <Select
@@ -291,7 +307,7 @@ export const BedarfForm = ({
           label="Wer"
           options={personWerte}
           saveToDb={saveToDb}
-          error={errors?.bedarf?.person_id}
+          error={errors?.bedarf?.person_id as string | undefined}
         />
         {online && !showFilter && row?._conflicts?.map && (
           <ConflictList

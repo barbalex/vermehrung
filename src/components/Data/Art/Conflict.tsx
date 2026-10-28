@@ -33,9 +33,11 @@ export const ArtConflict = ({
   const { error, data, fetching } = useApiQuery(
     `/art_rev?art_id=eq.${id}&_rev=eq.${rev}&select=id,art_id,ae_id,set,apflora_av,apflora_ap,changed,changed_by,_rev,_parent_rev,_revisions,_depth,_deleted`,
   )
-    if (error) checkForOnlineError({ error })
+  if (error) checkForOnlineError({ error })
 
-  const revRow = ((data as import('../../shared/types.ts').RevRow[] | null)?.[0] ?? {}) as import('../../shared/types.ts').RevRow
+  const revRow = ((
+    data as import('../../shared/types.ts').RevRow[] | null
+  )?.[0] ?? {}) as import('../../shared/types.ts').RevRow
 
   const dataArray = createDataArrayForRevComparison({ row, revRow })
 
@@ -64,18 +66,25 @@ export const ArtConflict = ({
       : toPgArray([rev])
 
     try {
-    await store
-      .get(apiClientAtom)
-      ?.post('/art_rev', newObject, 'resolution=merge-duplicates,return=minimal')
-  } catch (error) {
-          checkForOnlineError({ error: error })
+      await store
+        .get(apiClientAtom)
+        ?.post(
+          '/art_rev',
+          newObject,
+          'resolution=merge-duplicates,return=minimal',
+        )
+    } catch (error) {
+      checkForOnlineError({ error: error })
       return addNotification({
         message: (error as Error).message,
-  })
+      })
     }
     // update model: remove this conflict
     try {
-      const model = (await db?.get('art').find(revRow.art_id as string)) as unknown as import('../../shared/types.ts').WmRow | undefined
+      const model = (await db
+        ?.get('art')
+        .find(revRow.art_id as string)) as unknown as
+        import('../../shared/types.ts').WmRow | undefined
       await model?.removeConflict?.(revRow._rev ?? '')
     } catch {}
     conflictDisposalCallback()
@@ -85,7 +94,7 @@ export const ArtConflict = ({
     const user = store.get(userAtom)
     // need to attach to the winner, that is row
     // otherwise risk to still have lower depth and thus loosing
-    const newDepth = (((row?._depth as number) ?? 0)) + 1
+    const newDepth = ((row?._depth as number) ?? 0) + 1
     const newObject: Record<string, unknown> = {
       art_id: revRow.art_id,
       ae_id: revRow.ae_id,
@@ -105,14 +114,18 @@ export const ArtConflict = ({
       ? toPgArray([rev, ...((row?._revisions as string[]) ?? [])])
       : toPgArray([rev])
     try {
-    await store
-      .get(apiClientAtom)
-      ?.post('/art_rev', newObject, 'resolution=merge-duplicates,return=minimal')
-  } catch (error) {
-          checkForOnlineError({ error: error })
+      await store
+        .get(apiClientAtom)
+        ?.post(
+          '/art_rev',
+          newObject,
+          'resolution=merge-duplicates,return=minimal',
+        )
+    } catch (error) {
+      checkForOnlineError({ error: error })
       return addNotification({
         message: (error as Error).message,
-  })
+      })
     }
     // now we need to delete the previous conflict
     onClickAktuellUebernehmen()

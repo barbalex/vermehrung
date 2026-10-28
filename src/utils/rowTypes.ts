@@ -2,36 +2,51 @@
 // list helpers read them. Interim typing until dbModel's model classes
 // expose their fields typed - then these can be replaced by the models.
 
-export type PersonRow = {
-  vorname?: string | null
-  name?: string | null
-  ort?: string | null
-  email?: string | null
-} | null | undefined
+export type PersonRow =
+  | {
+      vorname?: string | null
+      name?: string | null
+      ort?: string | null
+      email?: string | null
+    }
+  | null
+  | undefined
 
 export type AeArtRow = { name?: string | null } | null | undefined
 
-export type HerkunftRow = {
-  id?: string | null
-  nr?: string | null
-} | null | undefined
+export type HerkunftRow =
+  | {
+      id?: string | null
+      nr?: string | null
+    }
+  | null
+  | undefined
 
-export type GartenRow = {
-  id?: string | null
-  name?: string | null
-  person_id?: string | null
-} | null | undefined
+export type GartenRow =
+  | {
+      id?: string | null
+      name?: string | null
+      person_id?: string | null
+    }
+  | null
+  | undefined
 
-export type KulturRow = {
-  garten_id?: string | null
-  herkunft_id?: string | null
-  zwischenlager?: boolean | null
-} | null | undefined
+export type KulturRow =
+  | {
+      garten_id?: string | null
+      herkunft_id?: string | null
+      zwischenlager?: boolean | null
+    }
+  | null
+  | undefined
 
-export type SammlungRow = {
-  datum?: string | null
-  geplant?: boolean | null
-} | null | undefined
+export type SammlungRow =
+  | {
+      datum?: string | null
+      geplant?: boolean | null
+    }
+  | null
+  | undefined
 
 export interface ZaehlungRow {
   id?: string

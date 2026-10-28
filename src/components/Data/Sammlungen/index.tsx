@@ -53,7 +53,8 @@ export const Sammlungen = ({ filter: showFilter = false }) => {
       hierarchyQuery.push(Q.experimentalJoinTables(['person']))
       hierarchyQuery.push(Q.on('person', 'id', personIdInActiveNodeArray))
     }
-    const collection = db?.get('sammlung')
+    const collection =
+      db?.get<import('../../../dbModel.ts').Sammlung>('sammlung')
     const sammlungDelQuery =
       sammlungFilter._deleted === false
         ? Q.where('_deleted', false)

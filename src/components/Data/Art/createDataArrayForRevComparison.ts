@@ -1,4 +1,7 @@
-export const createDataArrayForRevComparison = ({ row, revRow }: {
+export const createDataArrayForRevComparison = ({
+  row,
+  revRow,
+}: {
   row: Record<string, unknown> | null | undefined
   revRow: Record<string, unknown> | null | undefined
 }) => [

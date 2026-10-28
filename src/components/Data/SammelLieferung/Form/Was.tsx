@@ -78,7 +78,9 @@ export const SammelLieferungWas = ({ showFilter, row, ifNeeded, saveToDb }) => {
       <div
         className={wannStyles.titleRow}
         style={{
-          backgroundColor: showFilter ? 'var(--filter-bg-alt)' : 'var(--form-bg)',
+          backgroundColor: showFilter
+            ? 'var(--filter-bg-alt)'
+            : 'var(--form-bg)',
         }}
       >
         <div className={wannStyles.title}>was</div>
@@ -92,7 +94,7 @@ export const SammelLieferungWas = ({ showFilter, row, ifNeeded, saveToDb }) => {
           label="Art"
           options={artWerte}
           saveToDb={saveToDb}
-          error={errors?.sammel_lieferung?.art_id}
+          error={errors?.sammel_lieferung?.art_id as string | undefined}
         />
       )}
       <div className={wannStyles.fieldRow}>
@@ -103,7 +105,9 @@ export const SammelLieferungWas = ({ showFilter, row, ifNeeded, saveToDb }) => {
             label="Anzahl Pflanzen"
             value={row.anzahl_pflanzen}
             saveToDb={saveToDb}
-            error={errors?.sammel_lieferung?.anzahl_pflanzen}
+            error={
+              errors?.sammel_lieferung?.anzahl_pflanzen as string | undefined
+            }
             type="number"
           />
         )}
@@ -114,7 +118,10 @@ export const SammelLieferungWas = ({ showFilter, row, ifNeeded, saveToDb }) => {
             label="Anzahl auspflanzbereit"
             value={row.anzahl_auspflanzbereit}
             saveToDb={saveToDb}
-            error={errors?.sammel_lieferung?.anzahl_auspflanzbereit}
+            error={
+              errors?.sammel_lieferung?.anzahl_auspflanzbereit as
+                string | undefined
+            }
             type="number"
           />
         )}
@@ -127,7 +134,7 @@ export const SammelLieferungWas = ({ showFilter, row, ifNeeded, saveToDb }) => {
             label="Gramm Samen"
             value={row.gramm_samen}
             saveToDb={saveToDb}
-            error={errors?.sammel_lieferung?.gramm_samen}
+            error={errors?.sammel_lieferung?.gramm_samen as string | undefined}
             type="number"
           />
         )}
@@ -138,7 +145,7 @@ export const SammelLieferungWas = ({ showFilter, row, ifNeeded, saveToDb }) => {
             label={`Andere Menge (z.B. "3 Zwiebeln")`}
             value={row.andere_menge}
             saveToDb={saveToDb}
-            error={errors?.sammel_lieferung?.andere_menge}
+            error={errors?.sammel_lieferung?.andere_menge as string | undefined}
             type="text"
           />
         )}
@@ -151,7 +158,10 @@ export const SammelLieferungWas = ({ showFilter, row, ifNeeded, saveToDb }) => {
             label="von Anzahl Individuen"
             value={row.von_anzahl_individuen}
             saveToDb={saveToDb}
-            error={errors?.sammel_lieferung?.von_anzahl_individuen}
+            error={
+              errors?.sammel_lieferung?.von_anzahl_individuen as
+                string | undefined
+            }
             type="number"
           />
           <div>

@@ -55,7 +55,7 @@ export const PersonForm = ({
       showFilter || !exists(row?.nr)
         ? $of(0)
         : db
-            .get('person')
+            ?.get<import('../../../../dbModel.ts').Person>('person')
             .query(Q.where('_deleted', false), Q.where('nr', row.nr))
             .observeCount()
     const userRolesObservable = db?.get('user_role').query().observe()
@@ -94,7 +94,13 @@ export const PersonForm = ({
     unsetError('person')
   }, [id])
 
-  const saveToDb = (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
+  const saveToDb = (event: {
+    target: { name?: string; value: unknown }
+    currentTarget?: HTMLElement
+    preventDefault?: () => void
+    stopPropagation?: () => void
+    key?: string
+  }) => {
     const field = event.target.name
     let value = ifIsNumericAsNumber(event.target.value)
     if (event.target.value === undefined) value = null
@@ -128,7 +134,7 @@ export const PersonForm = ({
               name="_deleted"
               value={row?._deleted}
               saveToDb={saveToDb}
-              error={errors?.person?._deleted}
+              error={errors?.person?._deleted as string | undefined}
             />
           ) : (
             <Checkbox2States
@@ -137,7 +143,7 @@ export const PersonForm = ({
               name="_deleted"
               value={row?._deleted}
               saveToDb={saveToDb}
-              error={errors?.person?._deleted}
+              error={errors?.person?._deleted as string | undefined}
             />
           )}
         </>
@@ -151,7 +157,7 @@ export const PersonForm = ({
         helperText={userRole?.comment || ' '}
         options={userRoleWerte}
         saveToDb={saveToDb}
-        error={errors?.person?.user_role_id}
+        error={errors?.person?.user_role_id as string | undefined}
       />
       <TextField
         key={`${row?.id}nr`}
@@ -159,7 +165,7 @@ export const PersonForm = ({
         label="Nr"
         value={row?.nr}
         saveToDb={saveToDb}
-        error={errors?.person?.nr}
+        error={errors?.person?.nr as string | undefined}
       />
       <TextField
         key={`${row?.id}vorname`}
@@ -167,7 +173,7 @@ export const PersonForm = ({
         label="Vorname"
         value={row?.vorname}
         saveToDb={saveToDb}
-        error={errors?.person?.vorname}
+        error={errors?.person?.vorname as string | undefined}
       />
       <TextField
         key={`${row?.id}name`}
@@ -175,7 +181,7 @@ export const PersonForm = ({
         label="Nachname"
         value={row?.name}
         saveToDb={saveToDb}
-        error={errors?.person?.name}
+        error={errors?.person?.name as string | undefined}
       />
       <TextField
         key={`${row?.id}adresszusatz`}
@@ -183,7 +189,7 @@ export const PersonForm = ({
         label="Adress-Zusatz"
         value={row?.adresszusatz}
         saveToDb={saveToDb}
-        error={errors?.person?.adresszusatz}
+        error={errors?.person?.adresszusatz as string | undefined}
       />
       <TextField
         key={`${row?.id}strasse`}
@@ -191,7 +197,7 @@ export const PersonForm = ({
         label="Strasse"
         value={row?.strasse}
         saveToDb={saveToDb}
-        error={errors?.person?.strasse}
+        error={errors?.person?.strasse as string | undefined}
       />
       <TextField
         key={`${row?.id}plz`}
@@ -199,7 +205,7 @@ export const PersonForm = ({
         label="PLZ"
         value={row?.plz}
         saveToDb={saveToDb}
-        error={errors?.person?.plz}
+        error={errors?.person?.plz as string | undefined}
         type="number"
       />
       <TextField
@@ -208,7 +214,7 @@ export const PersonForm = ({
         label="Ort"
         value={row?.ort}
         saveToDb={saveToDb}
-        error={errors?.person?.ort}
+        error={errors?.person?.ort as string | undefined}
       />
       <TextField
         key={`${row?.id}telefon_privat`}
@@ -216,7 +222,7 @@ export const PersonForm = ({
         label="Telefon privat"
         value={row?.telefon_privat}
         saveToDb={saveToDb}
-        error={errors?.person?.telefon_privat}
+        error={errors?.person?.telefon_privat as string | undefined}
       />
       <TextField
         key={`${row?.id}telefon_geschaeft`}
@@ -224,7 +230,7 @@ export const PersonForm = ({
         label="Telefon Geschäft"
         value={row?.telefon_geschaeft}
         saveToDb={saveToDb}
-        error={errors?.person?.telefon_geschaeft}
+        error={errors?.person?.telefon_geschaeft as string | undefined}
       />
       <TextField
         key={`${row?.id}telefon_mobile`}
@@ -232,7 +238,7 @@ export const PersonForm = ({
         label="Telefon mobile"
         value={row?.telefon_mobile}
         saveToDb={saveToDb}
-        error={errors?.person?.telefon_mobile}
+        error={errors?.person?.telefon_mobile as string | undefined}
       />
       <TextField
         key={`${row?.id}email`}
@@ -240,7 +246,7 @@ export const PersonForm = ({
         label="Email"
         value={row?.email}
         saveToDb={saveToDb}
-        error={errors?.person?.email}
+        error={errors?.person?.email as string | undefined}
       />
       {showFilter ? (
         <JesNo
@@ -249,7 +255,7 @@ export const PersonForm = ({
           name="kein_email"
           value={row?.kein_email}
           saveToDb={saveToDb}
-          error={errors?.person?.kein_email}
+          error={errors?.person?.kein_email as string | undefined}
         />
       ) : (
         <Checkbox2States
@@ -258,7 +264,7 @@ export const PersonForm = ({
           name="kein_email"
           value={row?.kein_email}
           saveToDb={saveToDb}
-          error={errors?.person?.kein_email}
+          error={errors?.person?.kein_email as string | undefined}
         />
       )}
       {showFilter ? (
@@ -268,7 +274,7 @@ export const PersonForm = ({
           name="kommerziell"
           value={row?.kommerziell}
           saveToDb={saveToDb}
-          error={errors?.person?.kommerziell}
+          error={errors?.person?.kommerziell as string | undefined}
         />
       ) : (
         <Checkbox2States
@@ -277,7 +283,7 @@ export const PersonForm = ({
           name="kommerziell"
           value={row?.kommerziell}
           saveToDb={saveToDb}
-          error={errors?.person?.kommerziell}
+          error={errors?.person?.kommerziell as string | undefined}
         />
       )}
       {showFilter ? (
@@ -287,7 +293,7 @@ export const PersonForm = ({
           name="info"
           value={row?.info}
           saveToDb={saveToDb}
-          error={errors?.person?.info}
+          error={errors?.person?.info as string | undefined}
         />
       ) : (
         <Checkbox2States
@@ -296,7 +302,7 @@ export const PersonForm = ({
           name="info"
           value={row?.info}
           saveToDb={saveToDb}
-          error={errors?.person?.info}
+          error={errors?.person?.info as string | undefined}
         />
       )}
       {showFilter ? (
@@ -306,7 +312,7 @@ export const PersonForm = ({
           name="aktiv"
           value={row?.aktiv}
           saveToDb={saveToDb}
-          error={errors?.person?.aktiv}
+          error={errors?.person?.aktiv as string | undefined}
         />
       ) : (
         <Checkbox2States
@@ -315,7 +321,7 @@ export const PersonForm = ({
           name="aktiv"
           value={row?.aktiv}
           saveToDb={saveToDb}
-          error={errors?.person?.aktiv}
+          error={errors?.person?.aktiv as string | undefined}
         />
       )}
       <TextField
@@ -324,7 +330,7 @@ export const PersonForm = ({
         label="Bemerkungen"
         value={row?.bemerkungen}
         saveToDb={saveToDb}
-        error={errors?.person?.bemerkungen}
+        error={errors?.person?.bemerkungen as string | undefined}
         multiLine
       />
       {online && !showFilter && row?._conflicts?.map && (

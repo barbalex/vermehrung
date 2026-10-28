@@ -85,7 +85,6 @@ export const App = () => {
       isActive = false
       unregister?.()
     }
-     
   }, [])
 
   // without database and client bad things happen

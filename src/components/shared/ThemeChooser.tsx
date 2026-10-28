@@ -33,7 +33,9 @@ export const ThemeChooser = () => {
     <IconButton
       title={label}
       aria-label={label}
-      onClick={() => setThemeMode(NEXT_MODE[themeMode as keyof typeof NEXT_MODE])}
+      onClick={() =>
+        setThemeMode(NEXT_MODE[themeMode as keyof typeof NEXT_MODE])
+      }
       color="inherit"
     >
       <ModeIcon size={24} />

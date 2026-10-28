@@ -54,7 +54,7 @@ export const Root = ({ filter: showFilter }) => {
     () => {
       const userPersonOptionsObservable = user.uid
         ? db
-            .get('person_option')
+            ?.get<import('../../../dbModel.ts').PersonOption>('person_option')
             .query(Q.on('person', Q.where('account_id', user.uid)))
             .observeWithColumns([
               'tree_kultur',
@@ -65,7 +65,7 @@ export const Root = ({ filter: showFilter }) => {
         : $of([])
       const userRoleObservable = user.uid
         ? db
-            .get('user_role')
+            ?.get<import('../../../dbModel.ts').UserRole>('user_role')
             .query(Q.on('person', Q.where('account_id', user.uid)))
             .observeWithColumns(['name'])
         : $of([])
@@ -121,7 +121,7 @@ export const Root = ({ filter: showFilter }) => {
     [
       db,
       showArt,
-        showGarten,
+      showGarten,
       showHerkunft,
       showKultur,
       showLieferung,

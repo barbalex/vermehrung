@@ -9,16 +9,10 @@ export const FilterNumbers = ({
 }) => (
   <div className={styles.container}>
     <div className={styles.innerContainer}>
-      <div
-        className={styles.filtered}
-        title="gefilterte Anzahl"
-      >
+      <div className={styles.filtered} title="gefilterte Anzahl">
         {filteredCount}
       </div>
-      <div
-        className={styles.total}
-        title="totale Anzahl"
-      >
+      <div className={styles.total} title="totale Anzahl">
         {totalCount}
       </div>
     </div>

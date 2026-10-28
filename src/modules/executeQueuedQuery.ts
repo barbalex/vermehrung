@@ -19,7 +19,10 @@ export interface QueuedQueryResult {
 export const executeQueuedQuery = async (
   query: QueuedQuery,
 ): Promise<QueuedQueryResult> => {
-  const { name, variables } = query as unknown as { name: string; variables: string }
+  const { name, variables } = query as unknown as {
+    name: string
+    variables: string
+  }
   const match = name?.match?.(/^mutateInsert_(.+)_rev_one$/)
   if (!match) {
     throw new Error('keine Mutation gefunden für: ' + name)

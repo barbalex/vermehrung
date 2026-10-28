@@ -63,10 +63,9 @@ describe('observeQueuedQueries', () => {
       if (typeof nextResponse === 'function') return nextResponse()
       throw nextResponse
     })
-    store.set(
-      apiClientAtom,
-      { post: postMock } as unknown as import('../../utils/apiTypes.ts').ApiClient,
-    )
+    store.set(apiClientAtom, {
+      post: postMock,
+    } as unknown as import('../../utils/apiTypes.ts').ApiClient)
 
     unobserve?.()
     unobserve = observeQueuedQueries()
@@ -118,7 +117,8 @@ describe('observeQueuedQueries', () => {
     const uniqueRevError = new Error(
       'duplicate key value violates unique constraint "_rev_id__rev_key"',
     )
-    ;(uniqueRevError as import('../../utils/apiTypes.ts').ApiError).code = '23505'
+    ;(uniqueRevError as import('../../utils/apiTypes.ts').ApiError).code =
+      '23505'
     nextResponse = uniqueRevError
     addQueuedQuery(buildQuery({ id: 'a', time: 100 }))
 
@@ -131,7 +131,8 @@ describe('observeQueuedQueries', () => {
     const cardinalityError = new Error(
       'more than one row returned by a subquery used as an expression',
     )
-    ;(cardinalityError as import('../../utils/apiTypes.ts').ApiError).code = '21000'
+    ;(cardinalityError as import('../../utils/apiTypes.ts').ApiError).code =
+      '21000'
     nextResponse = cardinalityError
     addQueuedQuery(buildQuery({ id: 'a', time: 100 }))
 

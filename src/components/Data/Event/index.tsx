@@ -42,7 +42,7 @@ export const Event = ({
     () =>
       showFilter
         ? $of(eventFilter)
-        : (initialDataQueried || !online)
+        : initialDataQueried || !online
           ? db?.get('event').findAndObserve(id)
           : $of({}),
     [db, eventFilter, id, initialDataQueried, online, showFilter],

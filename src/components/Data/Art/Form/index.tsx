@@ -54,7 +54,7 @@ export const ArtForm = ({
   })
   useEffect(() => {
     const aeArtObservable = db
-      .get('ae_art')
+      ?.get<import('../../../../dbModel.ts').AeArt>('ae_art')
       .query(Q.sortBy('taxonomy'), Q.sortBy('name'))
       .observe()
     const delQuery =
@@ -88,7 +88,13 @@ export const ArtForm = ({
     unsetError('art')
   }, [id])
 
-  const saveToDb = async (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
+  const saveToDb = async (event: {
+    target: { name?: string; value: unknown }
+    currentTarget?: HTMLElement
+    preventDefault?: () => void
+    stopPropagation?: () => void
+    key?: string
+  }) => {
     const field = event.target.name
     let value = ifIsNumericAsNumber(event.target.value)
     if (event.target.value === undefined) value = null
@@ -152,7 +158,7 @@ export const ArtForm = ({
                 name="_deleted"
                 value={row?._deleted}
                 saveToDb={saveToDb}
-                error={errors?.art?._deleted}
+                error={errors?.art?._deleted as string | undefined}
               />
             ) : (
               <Checkbox2States
@@ -161,7 +167,7 @@ export const ArtForm = ({
                 name="_deleted"
                 value={row?._deleted}
                 saveToDb={saveToDb}
-                error={errors?.art?._deleted}
+                error={errors?.art?._deleted as string | undefined}
               />
             )}
           </>
@@ -170,7 +176,7 @@ export const ArtForm = ({
           key={`${row?.id}${row?.ae_id}ae_id`}
           art={row}
           saveToDb={saveToDb}
-          error={errors?.art?.ae_id}
+          error={errors?.art?.ae_id as string | undefined}
           modelFilter={aeArtsFilter}
         />
         <SelectCreatable
@@ -181,7 +187,7 @@ export const ArtForm = ({
           field="set"
           label="Set"
           options={setValues}
-          error={errors?.art?.set}
+          error={errors?.art?.set as string | undefined}
           onCreateNew={onCreateSet}
           formatCreateLabel={(val) => `"${val}" als neues Set aufnehmen`}
         />
@@ -191,7 +197,7 @@ export const ArtForm = ({
           label="Artverantwortlich in AP Flora"
           value={row?.apflora_av}
           saveToDb={saveToDb}
-          error={errors?.art?.apflora_av}
+          error={errors?.art?.apflora_av as string | undefined}
         />
         {showFilter ? (
           <JesNo
@@ -200,7 +206,7 @@ export const ArtForm = ({
             name="apflora_ap"
             value={row?.apflora_ap}
             saveToDb={saveToDb}
-            error={errors?.art?.apflora_ap}
+            error={errors?.art?.apflora_ap as string | undefined}
           />
         ) : (
           <Checkbox2States
@@ -209,7 +215,7 @@ export const ArtForm = ({
             name="apflora_ap"
             value={row?.apflora_ap}
             saveToDb={saveToDb}
-            error={errors?.art?.apflora_ap}
+            error={errors?.art?.apflora_ap as string | undefined}
           />
         )}
         {online && !showFilter && row?._conflicts?.map && (

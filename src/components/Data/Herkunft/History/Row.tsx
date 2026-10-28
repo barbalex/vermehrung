@@ -30,7 +30,7 @@ export const HerkunftHistoryRow = ({
 
   const onClickWiderspruchUebernehmen = async () => {
     const user = store.get(userAtom)
-    const db = store.get(dbAtom)    // need to attach to the winner, that is row
+    const db = store.get(dbAtom) // need to attach to the winner, that is row
     // otherwise risk to still have lower depth and thus loosing
     const newDepth = ((row?._depth as number) ?? 0) + 1
     const newObject: Record<string, unknown> = {
@@ -51,18 +51,25 @@ export const HerkunftHistoryRow = ({
     newObject.id = uuidv7()
     newObject.changed = new Date().toISOString()
     newObject.changed_by = user.email
-    newObject._revisions = toPgArray([rev, ...((row?._revisions as string[]) ?? [])])
+    newObject._revisions = toPgArray([
+      rev,
+      ...((row?._revisions as string[]) ?? []),
+    ])
     const newObjectForStore = { ...newObject }
     //console.log('Herkunft History', { row, revRow, newObject })
     try {
-    await store
-      .get(apiClientAtom)
-      ?.post('/herkunft_rev', newObject, 'resolution=merge-duplicates,return=minimal')
-  } catch (error) {
-          checkForOnlineError({ error: error })
+      await store
+        .get(apiClientAtom)
+        ?.post(
+          '/herkunft_rev',
+          newObject,
+          'resolution=merge-duplicates,return=minimal',
+        )
+    } catch (error) {
+      checkForOnlineError({ error: error })
       return addNotification({
         message: (error as Error).message,
-  })
+      })
     }
     historyTakeoverCallback()
     // do not stringify revisions for store

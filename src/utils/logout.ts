@@ -1,7 +1,12 @@
 import localForage from 'localforage'
 import { signOut } from 'firebase/auth'
 
-import { store, dbAtom, firebaseAuthAtom, resetSyncState } from '../store/index.ts'
+import {
+  store,
+  dbAtom,
+  firebaseAuthAtom,
+  resetSyncState,
+} from '../store/index.ts'
 
 export const logout = async () => {
   console.log('logout called')

@@ -38,11 +38,7 @@ const poll = async () => {
   if (stopped || polling) return
 
   const apiClient = store.get(apiClientAtom)
-  if (
-    !apiClient ||
-    !store.get(userAtom)?.uid ||
-    store.get(authorizingAtom)
-  ) {
+  if (!apiClient || !store.get(userAtom)?.uid || store.get(authorizingAtom)) {
     return scheduleNext(POLL_INTERVAL_MS)
   }
 

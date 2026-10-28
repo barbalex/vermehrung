@@ -60,7 +60,7 @@ export const SammelLieferungForm = ({
   useEffect(() => {
     const userPersonOptionsObservable = user.uid
       ? db
-          .get('person_option')
+          ?.get<import('../../../../dbModel.ts').PersonOption>('person_option')
           .query(Q.on('person', Q.where('account_id', user.uid)))
           .observeWithColumns(['sl_show_empty_when_next_to_li'])
       : $of({})
@@ -87,7 +87,9 @@ export const SammelLieferungForm = ({
         if (row?.von_kultur_id) {
           let vonKultur
           try {
-            vonKultur = await db?.get('kultur').find(row?.von_kultur_id as string)
+            vonKultur = await db
+              ?.get('kultur')
+              .find(row?.von_kultur_id as string)
           } catch {}
           let herkunftByVonKultur
           try {
@@ -103,7 +105,9 @@ export const SammelLieferungForm = ({
         }
         let nachKultur
         try {
-          nachKultur = await db?.get('kultur').find(row?.nach_kultur_id as string)
+          nachKultur = await db
+            ?.get('kultur')
+            .find(row?.nach_kultur_id as string)
         } catch {}
         let herkunftByNachKultur
         try {
@@ -142,7 +146,13 @@ export const SammelLieferungForm = ({
     }
   }, [id])
 
-  const saveToDb = (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
+  const saveToDb = (event: {
+    target: { name?: string; value: unknown }
+    currentTarget?: HTMLElement
+    preventDefault?: () => void
+    stopPropagation?: () => void
+    key?: string
+  }) => {
     const field = event.target.name
     let value = ifIsNumericAsNumber(event.target.value)
     if (event.target.value === undefined) value = null
@@ -198,7 +208,7 @@ export const SammelLieferungForm = ({
                 name="_deleted"
                 value={row?._deleted}
                 saveToDb={saveToDb}
-                error={errors?.sammel_lieferung?._deleted}
+                error={errors?.sammel_lieferung?._deleted as string | undefined}
               />
             ) : (
               <Checkbox2States
@@ -207,7 +217,7 @@ export const SammelLieferungForm = ({
                 name="_deleted"
                 value={row?._deleted}
                 saveToDb={saveToDb}
-                error={errors?.sammel_lieferung?._deleted}
+                error={errors?.sammel_lieferung?._deleted as string | undefined}
               />
             )}
           </>

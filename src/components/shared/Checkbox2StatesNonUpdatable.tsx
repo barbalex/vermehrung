@@ -40,10 +40,7 @@ export const Checkbox2StatesNonUpdatable = ({
         aria-describedby={`${label}MessageText`}
         variant="standard"
       >
-        <FormLabel
-          component="legend"
-          className={checkboxStyles.formLabel}
-        >
+        <FormLabel component="legend" className={checkboxStyles.formLabel}>
           {label}
         </FormLabel>
         <Checkbox

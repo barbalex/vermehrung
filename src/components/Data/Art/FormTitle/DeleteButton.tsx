@@ -15,10 +15,20 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 
 import styles from './DeleteButton.module.css'
 
-export const DeleteButton = ({ row }: { row: import('../../../shared/types.ts').WmRow | null | undefined }) => {
+export const DeleteButton = ({
+  row,
+}: {
+  row: import('../../../shared/types.ts').WmRow | null | undefined
+}) => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | undefined | null>(null)
   const closeMenu = () => setAnchorEl(null)
-  const onClickButton = (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => setAnchorEl(event.currentTarget)
+  const onClickButton = (event: {
+    target: { name?: string; value: unknown }
+    currentTarget?: HTMLElement
+    preventDefault?: () => void
+    stopPropagation?: () => void
+    key?: string
+  }) => setAnchorEl(event.currentTarget)
 
   const remove = () => {
     row?.delete()

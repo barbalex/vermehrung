@@ -19,7 +19,13 @@ export const Timeline = ({
 
   const anim = useAnimation()
 
-  const openDocs = (e: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
+  const openDocs = (e: {
+    target: { name?: string; value: unknown }
+    currentTarget?: HTMLElement
+    preventDefault?: () => void
+    stopPropagation?: () => void
+    key?: string
+  }) => {
     e.stopPropagation()
     const url = `${constants?.getAppUri()}/Dokumentation/zeitachse-art`
     if (window.matchMedia('(display-mode: standalone)').matches) {
@@ -27,7 +33,13 @@ export const Timeline = ({
     }
     window.open(url)
   }
-  const onClickToggle = async (e: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
+  const onClickToggle = async (e: {
+    target: { name?: string; value: unknown }
+    currentTarget?: HTMLElement
+    preventDefault?: () => void
+    stopPropagation?: () => void
+    key?: string
+  }) => {
     e.stopPropagation()
     if (open) {
       const was = open
@@ -66,22 +78,12 @@ export const Timeline = ({
             onClick={onClickToggle}
             size="large"
           >
-            {open ?
-              <FaChevronUp />
-            : <FaChevronDown />}
+            {open ? <FaChevronUp /> : <FaChevronDown />}
           </IconButton>
         </div>
       </section>
-      <motion.div
-        animate={anim}
-        transition={{ type: 'just', duration: 0.2 }}
-      >
-        {open && (
-          <Pflanzen
-            key={artId}
-            artId={artId}
-          />
-        )}
+      <motion.div animate={anim} transition={{ type: 'just', duration: 0.2 }}>
+        {open && <Pflanzen key={artId} artId={artId} />}
       </motion.div>
     </ErrorBoundary>
   )

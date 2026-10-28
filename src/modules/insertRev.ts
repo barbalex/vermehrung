@@ -256,9 +256,7 @@ export const insertRev = async (
   const newObject: Record<string, unknown> = {}
   for (const [field, idAtomKey, fixedValue] of fields) {
     if (idAtomKey) {
-      newObject[field as string] = store.get(
-        idAtoms[idAtomKey as string],
-      )
+      newObject[field as string] = store.get(idAtoms[idAtomKey as string])
     } else {
       newObject[field as string] =
         field === idField ? id : (fixedValue ?? undefined)
@@ -330,19 +328,33 @@ export const insertRev = async (
   return id
 }
 
-export const insertArtRev = (args: Record<string, unknown>) => insertRev('art', args)
-export const insertAvRev = (args: Record<string, unknown>) => insertRev('av', args)
-export const insertBedarfRev = (args: Record<string, unknown>) => insertRev('bedarf', args)
-export const insertEventRev = (args: Record<string, unknown>) => insertRev('event', args)
-export const insertGartenRev = (args: Record<string, unknown>) => insertRev('garten', args)
-export const insertGvRev = (args: Record<string, unknown>) => insertRev('gv', args)
-export const insertHerkunftRev = (args: Record<string, unknown>) => insertRev('herkunft', args)
-export const insertKulturRev = (args: Record<string, unknown>) => insertRev('kultur', args)
-export const insertLieferungRev = (args: Record<string, unknown>) => insertRev('lieferung', args)
-export const insertPersonRev = (args: Record<string, unknown>) => insertRev('person', args)
+export const insertArtRev = (args: Record<string, unknown>) =>
+  insertRev('art', args)
+export const insertAvRev = (args: Record<string, unknown>) =>
+  insertRev('av', args)
+export const insertBedarfRev = (args: Record<string, unknown>) =>
+  insertRev('bedarf', args)
+export const insertEventRev = (args: Record<string, unknown>) =>
+  insertRev('event', args)
+export const insertGartenRev = (args: Record<string, unknown>) =>
+  insertRev('garten', args)
+export const insertGvRev = (args: Record<string, unknown>) =>
+  insertRev('gv', args)
+export const insertHerkunftRev = (args: Record<string, unknown>) =>
+  insertRev('herkunft', args)
+export const insertKulturRev = (args: Record<string, unknown>) =>
+  insertRev('kultur', args)
+export const insertLieferungRev = (args: Record<string, unknown>) =>
+  insertRev('lieferung', args)
+export const insertPersonRev = (args: Record<string, unknown>) =>
+  insertRev('person', args)
 export const insertSammelLieferungRev = (args: Record<string, unknown>) =>
   insertRev('sammel_lieferung', args)
-export const insertSammlungRev = (args: Record<string, unknown>) => insertRev('sammlung', args)
-export const insertTeilkulturRev = (args: Record<string, unknown>) => insertRev('teilkultur', args)
-export const insertTeilzaehlungRev = (args: Record<string, unknown>) => insertRev('teilzaehlung', args)
-export const insertZaehlungRev = (args: Record<string, unknown>) => insertRev('zaehlung', args)
+export const insertSammlungRev = (args: Record<string, unknown>) =>
+  insertRev('sammlung', args)
+export const insertTeilkulturRev = (args: Record<string, unknown>) =>
+  insertRev('teilkultur', args)
+export const insertTeilzaehlungRev = (args: Record<string, unknown>) =>
+  insertRev('teilzaehlung', args)
+export const insertZaehlungRev = (args: Record<string, unknown>) =>
+  insertRev('zaehlung', args)

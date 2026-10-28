@@ -1,6 +1,9 @@
 import { DateTime } from 'luxon'
 
-export const createDataArrayForSammellieferungRevComparison = ({ row, revRow }: {
+export const createDataArrayForSammellieferungRevComparison = ({
+  row,
+  revRow,
+}: {
   row: Record<string, unknown> | null | undefined
   revRow: Record<string, unknown> | null | undefined
 }) => [
@@ -94,4 +97,3 @@ export const createDataArrayForSammellieferungRevComparison = ({ row, revRow }: 
     label: 'gelöscht',
   },
 ]
-

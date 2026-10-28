@@ -12,10 +12,7 @@ export const Home = () => (
   <>
     <ErrorBoundary>
       <div className={styles.outerContainer}>
-        <ProgressiveImg
-          src={image}
-          placeholderSrc={placeholderSrc}
-        />
+        <ProgressiveImg src={image} placeholderSrc={placeholderSrc} />
         <div className={styles.scrollContainer}>
           <div className={styles.container}>
             <Typography

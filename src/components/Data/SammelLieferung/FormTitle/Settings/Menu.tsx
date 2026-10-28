@@ -21,7 +21,9 @@ export const SettingsSammelLieferungMenu = ({ anchorEl, setAnchorEl }) => {
   useEffect(() => {
     const userPersonOptionsObservable = user.uid
       ? db
-          .get('person_option')
+          ?.get<import('../../../../../dbModel.ts').PersonOption>(
+            'person_option',
+          )
           .query(Q.on('person', Q.where('account_id', user.uid)))
           .observeWithColumns([
             'sl_show_empty_when_next_to_li',
@@ -43,7 +45,13 @@ export const SettingsSammelLieferungMenu = ({ anchorEl, setAnchorEl }) => {
   const { sl_show_empty_when_next_to_li, sl_auto_copy_edits } =
     userPersonOption ?? {}
 
-  const saveToDb = (event: { target: { name?: string; value: unknown }; currentTarget?: HTMLElement; preventDefault?: () => void; stopPropagation?: () => void; key?: string }) => {
+  const saveToDb = (event: {
+    target: { name?: string; value: unknown }
+    currentTarget?: HTMLElement
+    preventDefault?: () => void
+    stopPropagation?: () => void
+    key?: string
+  }) => {
     const field = event.target.name
     const value = event.target.value === 'false'
     userPersonOption.edit({ field, value })

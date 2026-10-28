@@ -33,9 +33,11 @@ export const SammelLieferungConflict = ({
   const { error, data, fetching } = useApiQuery(
     `/sammel_lieferung_rev?sammel_lieferung_id=eq.${id}&_rev=eq.${rev}&select=id,sammel_lieferung_id,art_id,person_id,von_sammlung_id,von_kultur_id,datum,nach_kultur_id,nach_ausgepflanzt,von_anzahl_individuen,anzahl_pflanzen,anzahl_auspflanzbereit,gramm_samen,andere_menge,geplant,bemerkungen,changed,changed_by,_rev,_parent_rev,_revisions,_depth,_deleted`,
   )
-    if (error) checkForOnlineError({ error })
+  if (error) checkForOnlineError({ error })
 
-  const revRow = ((data as import('../../shared/types.ts').RevRow[] | null)?.[0] ?? {}) as import('../../shared/types.ts').RevRow
+  const revRow = ((
+    data as import('../../shared/types.ts').RevRow[] | null
+  )?.[0] ?? {}) as import('../../shared/types.ts').RevRow
 
   const dataArray = createDataArray({ row, revRow })
 
@@ -75,19 +77,23 @@ export const SammelLieferungConflict = ({
       : toPgArray([rev])
 
     try {
-    await store
-      .get(apiClientAtom)
-      ?.post('/sammel_lieferung_rev', newObject, 'resolution=merge-duplicates,return=minimal')
-  } catch (error) {
-          checkForOnlineError({ error: error })
+      await store
+        .get(apiClientAtom)
+        ?.post(
+          '/sammel_lieferung_rev',
+          newObject,
+          'resolution=merge-duplicates,return=minimal',
+        )
+    } catch (error) {
+      checkForOnlineError({ error: error })
       return addNotification({
         message: (error as Error).message,
-  })
+      })
     }
     // remove conflict from model
     try {
       const model = await db
-        .get('sammel_lieferung')
+        ?.get<import('../../../dbModel.ts').SammelLieferung>('sammel_lieferung')
         .find(revRow.sammel_lieferung_id as string)
       await model?.removeConflict?.(revRow._rev ?? '')
     } catch {}
@@ -98,7 +104,7 @@ export const SammelLieferungConflict = ({
     const user = store.get(userAtom)
     // need to attach to the winner, that is row
     // otherwise risk to still have lower depth and thus loosing
-    const newDepth = (((row?._depth as number) ?? 0)) + 1
+    const newDepth = ((row?._depth as number) ?? 0) + 1
     const newObject: Record<string, unknown> = {
       sammel_lieferung_id: revRow.sammel_lieferung_id,
       art_id: revRow.art_id,
@@ -128,14 +134,18 @@ export const SammelLieferungConflict = ({
       ? toPgArray([rev, ...((row?._revisions as string[]) ?? [])])
       : toPgArray([rev])
     try {
-    await store
-      .get(apiClientAtom)
-      ?.post('/sammel_lieferung_rev', newObject, 'resolution=merge-duplicates,return=minimal')
-  } catch (error) {
-          checkForOnlineError({ error: error })
+      await store
+        .get(apiClientAtom)
+        ?.post(
+          '/sammel_lieferung_rev',
+          newObject,
+          'resolution=merge-duplicates,return=minimal',
+        )
+    } catch (error) {
+      checkForOnlineError({ error: error })
       return addNotification({
         message: (error as Error).message,
-  })
+      })
     }
     // now we need to delete the previous conflict
     onClickAktuellUebernehmen()

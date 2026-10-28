@@ -10,9 +10,8 @@ export const lieferungLabelFromLieferung = ({
     geplant?: boolean | null
   } | null
 }) => {
-  const datumLabel =
-    lieferung?.datum ?
-      DateTime.fromSQL(lieferung.datum).toFormat('yyyy.LL.dd')
+  const datumLabel = lieferung?.datum
+    ? DateTime.fromSQL(lieferung.datum).toFormat('yyyy.LL.dd')
     : 'Kein Datum'
   const anz = (lieferung?.anzahl_pflanzen ?? '').toString().padStart(3, '_')
   const anzAb = (lieferung?.anzahl_auspflanzbereit ?? '')

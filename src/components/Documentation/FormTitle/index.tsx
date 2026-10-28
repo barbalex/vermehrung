@@ -18,11 +18,7 @@ export const DocumentationFormTitle = () => {
     <div className={styles.container}>
       <div className={styles.title}>Dokumentation</div>
       <div className={styles.symbols}>
-        <IconButton
-          title="zurück"
-          onClick={onClickUp}
-          size="large"
-        >
+        <IconButton title="zurück" onClick={onClickUp} size="large">
           <UpSvg />
         </IconButton>
       </div>
