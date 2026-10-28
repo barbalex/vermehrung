@@ -23,6 +23,15 @@ export const Conflict = ({
   onClickAktuellUebernehmen,
   onClickWiderspruchUebernehmen,
   onClickSchliessen,
+}: {
+  name: string
+  rev?: string | boolean | null
+  dataArray: { label: string; valueInRow: unknown; valueInRev: unknown }[]
+  loading: boolean
+  error?: { message?: string } | null
+  onClickAktuellUebernehmen: () => void
+  onClickWiderspruchUebernehmen: () => void
+  onClickSchliessen: () => void
 }) => {
   const diffConflict = useAtomValue(diffConflictAtom)
 

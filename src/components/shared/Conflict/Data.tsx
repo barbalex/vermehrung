@@ -37,7 +37,13 @@ const diffStyles = {
   },
 }
 
-export const Data = ({ dataArray, loading }) => {
+export const Data = ({
+  dataArray,
+  loading,
+}: {
+  dataArray?: { label: string; valueInRow: unknown; valueInRev: unknown }[]
+  loading?: boolean
+}) => {
   const diffConflict = useAtomValue(diffConflictAtom)
 
   if (loading) return <Spinner message="lade Daten" />
@@ -55,7 +61,8 @@ export const Data = ({ dataArray, loading }) => {
 
     const showDiff =
       diffConflict && !['geändert', 'geändert von'].includes(d.label)
-    const isLast = index + 1 === dataArray.length
+    const rows = dataArray ?? []
+    const isLast = index + 1 === rows.length
     const rowStyle = {
       borderBottom: isLast ? '1px solid var(--row-border)' : 'none',
     }

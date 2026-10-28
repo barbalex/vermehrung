@@ -1,6 +1,6 @@
 import styles from './Explainer.module.css'
 
-export const Explainer = ({ name }) => (
+export const Explainer = ({ name }: { name: string }) => (
   <details className={styles.optionalHelp}>
     <summary className={styles.summary}>Infos und Anleitung</summary>
     <div className={styles.details}>

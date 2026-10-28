@@ -7,7 +7,7 @@ import { ErrorBoundary } from './ErrorBoundary.tsx'
 
 import styles from './ApFilter.module.css'
 
-export const ApFilter = ({ color }) => {
+export const ApFilter = ({ color }: { color?: string }) => {
   const apFilter = useAtomValue(apFilterAtom)
 
   const onChange = () => setApFilter(!apFilter)

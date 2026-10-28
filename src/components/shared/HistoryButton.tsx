@@ -15,6 +15,8 @@ import {
 } from '../../store/index.ts'
 import { ErrorBoundary } from './ErrorBoundary.tsx'
 import { useObservable } from '../../utils/useObservable.ts'
+import type { Observable } from 'rxjs'
+import type { GenericRow } from './types.ts'
 
 import styles from './HistoryButton.module.css'
 
@@ -24,6 +26,12 @@ export const HistoryButton = ({
   showHistory,
   setShowHistory,
   table,
+}: {
+  asMenu?: boolean
+  id?: string | null
+  showHistory?: boolean | null
+  setShowHistory?: (show: boolean) => void
+  table: string
 }) => {
   const online = useAtomValue(onlineAtom)
   const db = useAtomValue(dbAtom)
@@ -32,7 +40,11 @@ export const HistoryButton = ({
   // removing useMemo causes: Maximum update depth exceeded
   const observable = useMemo(
     () =>
-      id && initialDataQueried ? db.get(table).findAndObserve(id) : $of(null),
+      id && initialDataQueried && db ?
+        (db
+          .get(table)
+          .findAndObserve(id) as unknown as Observable<GenericRow>)
+      : $of(null),
     [db, id, initialDataQueried, table],
   )
   const row = useObservable(observable)

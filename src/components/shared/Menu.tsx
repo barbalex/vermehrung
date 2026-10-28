@@ -3,10 +3,19 @@ import IconButton from '@mui/material/IconButton'
 import MuiMenu from '@mui/material/Menu'
 import { FaBars } from 'react-icons/fa'
 
-export const Menu = ({ children, title = 'Menu', white = true }) => {
-  const [anchorEl, setAnchorEl] = useState(null)
+export const Menu = ({
+  children,
+  title = 'Menu',
+  white = true,
+}: {
+  children: import('react').ReactNode
+  title?: string
+  white?: boolean
+}) => {
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
   const closeMenu = () => setAnchorEl(null)
-  const onClickButton = (event) => setAnchorEl(event.currentTarget)
+  const onClickButton = (event: { currentTarget: HTMLElement }) =>
+    setAnchorEl(event.currentTarget)
 
   const menuButtonStyle = white ? { color: 'white' } : {}
 

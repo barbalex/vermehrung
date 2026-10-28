@@ -2,11 +2,21 @@ import { ErrorBoundary as ErrorBoundaryComponent } from 'react-error-boundary'
 import Button from '@mui/material/Button'
 
 
+import type { ReactNode } from 'react'
+
 import styles from './ErrorBoundary.module.css'
 
-const onReload = () => window.location.reload(true)
+const onReload = () => window.location.reload()
 
-const ErrorFallback = ({ error, componentStack, resetErrorBoundary }) => {
+const ErrorFallback = ({
+  error,
+  componentStack,
+  resetErrorBoundary,
+}: {
+  error: Error
+  componentStack?: string | null
+  resetErrorBoundary: () => void
+}) => {
   // ISSUE:
   // WatermelonDB throws error when record not found
   // this can happen when data is loaded first time and url is direct link to a dataset
@@ -49,11 +59,12 @@ const ErrorFallback = ({ error, componentStack, resetErrorBoundary }) => {
   )
 }
 
-export const ErrorBoundary = ({ children }) => {
+export const ErrorBoundary = ({ children }: { children: ReactNode }) => {
 
   return (
     <ErrorBoundaryComponent
-      FallbackComponent={ErrorFallback}
+      // componentStack is passed at runtime but not part of FallbackProps
+      FallbackComponent={ErrorFallback as unknown as import('react').ComponentType<import('react-error-boundary').FallbackProps>}
       onReset={onReload}
     >
       {children}

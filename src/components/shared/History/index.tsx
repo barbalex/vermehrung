@@ -11,7 +11,15 @@ import { constants } from '../../../utils/constants.ts'
 
 import styles from './index.module.css'
 
-export const History = ({ rev, dataArray, onClickWiderspruchUebernehmen }) => {
+export const History = ({
+  rev,
+  dataArray,
+  onClickWiderspruchUebernehmen,
+}: {
+  rev?: string | boolean | null
+  dataArray?: { label: string; valueInRow: unknown; valueInRev: unknown }[]
+  onClickWiderspruchUebernehmen: () => void
+}) => {
   const diffConflict = useAtomValue(diffConflictAtom)
 
   const onClickToggleDiff = () => setDiffConflict(!diffConflict)

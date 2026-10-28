@@ -12,13 +12,18 @@ export const Checkbox2StatesNonUpdatable = ({
   name,
   value: valuePassed,
   message: messagePassed = 'Dieser Wert ist nicht veränderbar',
+}: {
+  label: string
+  name: string
+  value: boolean | null | undefined
+  message?: string | null
 }) => {
   const [stateValue, setStateValue] = useState(valuePassed)
   useEffect(() => {
     setStateValue(valuePassed)
   }, [valuePassed])
 
-  const [message, setMessage] = useState(messagePassed)
+  const [message, setMessage] = useState<string | null>(messagePassed)
   const onClickButton = () => {
     setMessage(message)
     // can fire after component was unmounted...

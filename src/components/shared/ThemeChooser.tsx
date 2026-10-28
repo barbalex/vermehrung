@@ -26,14 +26,14 @@ const MODE_LABELS = {
 export const ThemeChooser = () => {
   const [themeMode, setThemeMode] = useAtom(themeModeAtom)
 
-  const label = MODE_LABELS[themeMode]
-  const ModeIcon = MODE_ICONS[themeMode]
+  const label = MODE_LABELS[themeMode as keyof typeof MODE_LABELS]
+  const ModeIcon = MODE_ICONS[themeMode as keyof typeof MODE_ICONS]
 
   return (
     <IconButton
       title={label}
       aria-label={label}
-      onClick={() => setThemeMode(NEXT_MODE[themeMode])}
+      onClick={() => setThemeMode(NEXT_MODE[themeMode as keyof typeof NEXT_MODE])}
       color="inherit"
     >
       <ModeIcon size={24} />

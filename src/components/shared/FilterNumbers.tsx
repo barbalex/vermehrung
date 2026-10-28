@@ -2,7 +2,15 @@ import MenuItem from '@mui/material/MenuItem'
 
 import styles from './FilterNumbers.module.css'
 
-export const FilterNumbers = ({ filteredCount, totalCount, asMenu }) => {
+export const FilterNumbers = ({
+  filteredCount,
+  totalCount,
+  asMenu,
+}: {
+  filteredCount: number | null
+  totalCount: number | null
+  asMenu?: boolean
+}) => {
   if (asMenu) {
     return (
       <MenuItem

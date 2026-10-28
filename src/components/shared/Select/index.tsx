@@ -5,11 +5,15 @@ import styled from '@emotion/styled'
 
 import { Link } from './Link.tsx'
 
+import type { SaveToDbFn } from '../types.ts'
+
 import styles from './index.module.css'
 
 // leave this styled use as css modules can't deal with nested classes
 // and multiple selects are styled differently
-export const StyledSelect = styled(SelectComponent)`
+export const StyledSelect = styled(SelectComponent, {
+  shouldForwardProp: (prop) => !['nocaret', 'maxheight'].includes(prop),
+})<{ nocaret?: boolean; maxheight?: number }>`
   .react-select__control {
     background-color: rgba(0, 0, 0, 0) !important;
     border-bottom-color: var(--input-underline);
@@ -67,6 +71,13 @@ const emptyValue = {
   label: '',
 }
 
+export interface SelectOption {
+  value: string | number | null
+  label: string
+  inaktiv?: boolean
+  link?: string[]
+}
+
 export const Select = ({
   value: valuePassed,
   field = '',
@@ -80,13 +91,28 @@ export const Select = ({
   isClearable = true,
   noCaret = false,
   saveToDb,
+}: {
+  value: string | number | null
+  field?: string
+  label?: string
+  name: string
+  error?: string | boolean | null
+  helperText?: string
+  options: SelectOption[]
+  loading?: boolean
+  maxHeight?: number | null
+  isClearable?: boolean
+  noCaret?: boolean
+  saveToDb: SaveToDbFn
 }) => {
-  const [stateValue, setStateValue] = useState(valuePassed ?? '')
+  const [stateValue, setStateValue] = useState<string | number | null>(
+    valuePassed ?? '',
+  )
   useEffect(() => {
     setStateValue(valuePassed)
   }, [valuePassed])
 
-  const onChange = (option) => {
+  const onChange = (option: SelectOption | null | undefined) => {
     const newValue = option ? option.value : null
     setStateValue(newValue)
     const fakeEvent = {
@@ -99,16 +125,16 @@ export const Select = ({
   }
 
   // show ... while options are loading
-  const loadingOptions = [{ value: stateValue, label: '...' }]
+  const loadingOptions: SelectOption[] = [{ value: stateValue, label: '...' }]
   const optionsToUse = loading && valuePassed ? loadingOptions : options
-  const selectValue =
+  const selectValue: SelectOption =
     optionsToUse.find((o) => o.value === (valuePassed ?? '')) || emptyValue
   const selectStyles = {
-    option: (styles, { data }) => ({
+    option: (styles: Record<string, unknown>, { data }: { data: SelectOption }) => ({
       ...styles,
       ...(data.inaktiv ? { color: 'var(--text-secondary)' } : {}),
     }),
-    menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+    menuPortal: (base: Record<string, unknown>) => ({ ...base, zIndex: 9999 }),
   }
 
   // console.log('SharedSelect', {
@@ -128,16 +154,16 @@ export const Select = ({
           name={field}
           value={selectValue}
           options={optionsToUse}
-          onChange={onChange}
+          onChange={(option) => onChange(option as SelectOption | null)}
           hideSelectedOptions
           placeholder=""
           isClearable={isClearable}
           isSearchable
           noOptionsMessage={() => '(keine)'}
-          maxheight={maxHeight}
+          maxheight={maxHeight ?? undefined}
           classNamePrefix="react-select"
           nocaret={noCaret}
-          styles={selectStyles}
+          styles={selectStyles as unknown as import('react-select').StylesConfig}
           // using portal because sticky headers would otherwise cover the dropdown
           menuPortalTarget={document.getElementById('root')}
           aria-label={label ?? ''}

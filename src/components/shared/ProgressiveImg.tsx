@@ -2,7 +2,15 @@ import { useState, useEffect } from 'react'
 
 import styles from './ProgressiveImg.module.css'
 
-export const ProgressiveImg = ({ placeholderSrc, src, ...props }) => {
+export const ProgressiveImg = ({
+  placeholderSrc,
+  src,
+  ...props
+}: {
+  placeholderSrc?: string
+  src: string
+  [key: string]: unknown
+}) => {
   const [imgSrc, setImgSrc] = useState(placeholderSrc || src)
 
   useEffect(() => {
@@ -31,9 +39,9 @@ export const ProgressiveImg = ({ placeholderSrc, src, ...props }) => {
   return (
     <img
       {...{ src: imgSrc, ...props }}
-      alt={props.alt || ''}
-      height={props.height ?? '100%'}
-      width={props.width ?? '100%'}
+      alt={(props.alt as string) || ''}
+      height={(props.height as string) ?? '100%'}
+      width={(props.width as string) ?? '100%'}
       className={`image ${customClass} ${styles.imgClass}`}
       style={style}
     />

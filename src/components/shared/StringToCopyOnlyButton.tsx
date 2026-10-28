@@ -6,7 +6,13 @@ import { ErrorBoundary } from './ErrorBoundary.tsx'
 
 import styles from './StringToCopyOnlyButton.module.css'
 
-export const StringToCopyOnlyButton = ({ text, label }) => {
+export const StringToCopyOnlyButton = ({
+  text,
+  label,
+}: {
+  text: string
+  label: string
+}) => {
   const [copied, setCopied] = useState(false)
   const onCopy = () => {
     navigator.clipboard.writeText(text)

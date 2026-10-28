@@ -4,6 +4,8 @@ import FormLabel from '@mui/material/FormLabel'
 import FormControl from '@mui/material/FormControl'
 import FormHelperText from '@mui/material/FormHelperText'
 
+import type { SaveToDbFn } from './types.ts'
+
 import styles from './Checkbox2States.module.css'
 
 export const Checkbox2States = ({
@@ -12,6 +14,12 @@ export const Checkbox2States = ({
   value: valuePassed,
   error,
   saveToDb,
+}: {
+  label: string
+  name: string
+  value: boolean | null | undefined
+  error?: string | boolean | null
+  saveToDb: SaveToDbFn
 }) => {
   const [stateValue, setStateValue] = useState(valuePassed)
   useEffect(() => {

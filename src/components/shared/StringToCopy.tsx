@@ -6,7 +6,7 @@ import { ErrorBoundary } from './ErrorBoundary.tsx'
 
 import styles from './StringToCopy.module.css'
 
-export const StringToCopy = ({ text, label }) => {
+export const StringToCopy = ({ text, label }: { text: string; label: string }) => {
   const [copied, setCopied] = useState(false)
   const onCopy = () => {
     setCopied(true)

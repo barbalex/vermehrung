@@ -4,6 +4,8 @@ import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
 import FormHelperText from '@mui/material/FormHelperText'
 
+import type { SaveToDbFn } from './types.ts'
+
 import styles from './TextField.module.css'
 
 export const TextField = ({
@@ -19,6 +21,19 @@ export const TextField = ({
   error,
   saveToDb,
   schrinkLabel = true,
+}: {
+  value: string | number | null
+  label: string
+  labelWeight?: number
+  name: string
+  type?: string
+  multiLine?: boolean
+  disabled?: boolean
+  hintText?: string
+  helperText?: string
+  error?: string | boolean | null
+  saveToDb: SaveToDbFn
+  schrinkLabel?: boolean
 }) => {
   const [stateValue, setStateValue] = useState(
     value || value === 0 ? value : '',
@@ -26,9 +41,15 @@ export const TextField = ({
   useEffect(() => {
     setStateValue(value || value === 0 ? value : '')
   }, [value])
-  const onChange = (event) => setStateValue(event.target.value)
+  const onChange = (event: { target: { value: string } }) =>
+    setStateValue(event.target.value)
 
-  const onKeyPress = (event) => {
+  const onKeyPress = (event: {
+    key: string
+    target: { name?: string; value: unknown }
+    preventDefault: () => void
+    stopPropagation: () => void
+  }) => {
     if (event.key === 'Enter') {
       saveToDb(event)
     }
@@ -62,7 +83,9 @@ export const TextField = ({
         multiline={multiLine}
         onChange={onChange}
         onBlur={saveToDb}
-        onKeyPress={onKeyPress}
+        onKeyPress={
+          onKeyPress as unknown as import('react').KeyboardEventHandler
+        }
         placeholder={hintText}
       />
       {!!error && (

@@ -2,13 +2,18 @@ import { useState } from 'react'
 import Popover from '@mui/material/Popover'
 import { MdInfoOutline as InfoOutlineIcon } from 'react-icons/md'
 
+import type { ReactNode } from 'react'
+
 import styles from './InfoWithPopover.module.css'
 
-export const InfoWithPopover = ({ children }) => {
+export const InfoWithPopover = ({ children }: { children: ReactNode }) => {
   const [popupOpen, changePopupOpen] = useState(false)
-  const [popupAnchorEl, changePopupAnchorEl] = useState(null)
+  const [popupAnchorEl, changePopupAnchorEl] = useState<Element | null>(null)
 
-  const onClickFontIcon = (event) => {
+  const onClickFontIcon = (event: {
+    preventDefault: () => void
+    currentTarget: Element
+  }) => {
     event.preventDefault()
     changePopupOpen(!popupOpen)
     changePopupAnchorEl(event.currentTarget)

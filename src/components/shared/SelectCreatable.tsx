@@ -10,7 +10,9 @@ import styles from './SelectCreatable.module.css'
 
 // leave this styled use due to css modules not able to nest classes
 // and different stylings existing for selects
-const StyledSelect = styled(Select)`
+const StyledSelect = styled(Select, {
+  shouldForwardProp: (prop) => !['nocaret', 'maxheight'].includes(prop),
+})<{ nocaret?: boolean; maxheight?: number }>`
   .react-select__control {
     background-color: rgba(0, 0, 0, 0) !important;
     border-bottom-color: var(--input-underline);
@@ -82,19 +84,40 @@ export const SelectCreatable = ({
   onCreateNew,
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   callback = () => {},
-  formatCreateLabel = (val) => `"${val}" als neue Teilkultur aufnehmen`,
+  formatCreateLabel = (val: string) => `"${val}" als neue Teilkultur aufnehmen`,
+}: {
+  field?: string
+  label?: string
+  row: Record<string, unknown> & {
+    edit?: (args: { field: string; value: unknown }) => void
+  }
+  showFilter?: boolean
+  table: string
+  error?: string | boolean | null
+  options: { value: string; label: string }[]
+  loading?: boolean
+  maxHeight?: number | null
+  noCaret?: boolean
+  onCreateNew: ({ name }: { name: string }) => void
+  callback?: () => void
+  formatCreateLabel?: (val: string) => string
 }) => {
-  const [stateValue, setStateValue] = useState(row[field])
+  const [stateValue, setStateValue] = useState<string | number | null>(
+    row[field] as string | number | null,
+  )
   useEffect(() => {
-    setStateValue(row[field])
+    setStateValue(row[field] as string | number | null)
   }, [])
 
-  const onChange = (option, actionMeta) => {
+  const onChange = (
+    option: { value: string; label: string; link?: string[] } | null,
+    actionMeta: { action: string },
+  ) => {
     // if action is create-option
     // need to create new dataset
     if (actionMeta.action === 'create-option') {
       // 1. create new dataset
-      onCreateNew({ name: option.label })
+      onCreateNew({ name: option?.label ?? '' })
       return
     }
     const newValue = option ? option.value : null
@@ -103,7 +126,7 @@ export const SelectCreatable = ({
     if (showFilter) {
       setFilterValue({ table, key: field, value: newValue })
     } else {
-      row.edit({ field, value: newValue })
+      row.edit?.({ field, value: newValue })
     }
     callback()
   }
@@ -111,7 +134,7 @@ export const SelectCreatable = ({
   // show ... while options are loading
   const loadingOptions = [{ value: stateValue, label: '...' }]
   const optionsToUse = loading && stateValue ? loadingOptions : options
-  const selectValue =
+  const selectValue: { value: string | number | null; label: string; link?: string[] } =
     optionsToUse.find((o) => o.value === stateValue) || emptyValue
 
   return (
@@ -123,13 +146,15 @@ export const SelectCreatable = ({
           name={field}
           value={selectValue}
           options={optionsToUse}
-          onChange={onChange}
+          onChange={(option, actionMeta) =>
+            onChange(option as { value: string; label: string } | null, actionMeta)
+          }
           hideSelectedOptions
           placeholder=""
           isClearable
           isSearchable
           noOptionsMessage={() => '(keine)'}
-          maxheight={maxHeight}
+          maxheight={maxHeight ?? undefined}
           classNamePrefix="react-select"
           nocaret={noCaret}
           formatCreateLabel={formatCreateLabel}

@@ -13,8 +13,13 @@ export const TextFieldNonUpdatable = ({
   value = '',
   message = 'Dieser Wert ist nicht veränderbar',
   schrinkLabel = false,
+}: {
+  label: string
+  value?: string | number | null
+  message?: string | null
+  schrinkLabel?: boolean
 }) => {
-  const [error, setError] = useState(null)
+  const [error, setError] = useState<string | null>(null)
   const onChange = () => {
     setError(message)
     // can fire after component was unmounted...
@@ -23,7 +28,7 @@ export const TextFieldNonUpdatable = ({
 
   // once shrink is set, need to manually control it
   // shrink if value exists or shrinkLabel was passed
-  const schrink = schrinkLabel || !!value || value === 0
+  const schrink = schrinkLabel || !!value || String(value) === '0'
 
   return (
     <FormControl

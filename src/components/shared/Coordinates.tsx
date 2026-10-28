@@ -8,7 +8,7 @@ import IconButton from '@mui/material/IconButton'
 import { FaGlobeEurope } from 'react-icons/fa'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
-import { combineLatest, of as $of } from 'rxjs'
+import { combineLatest, of as $of, type Observable } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
 import { ifIsNumericAsNumber } from '../../utils/ifIsNumericAsNumber.ts'
@@ -31,27 +31,45 @@ import {
 } from '../../utils/wgs84LongIsValid.ts'
 import { dbAtom, userAtom } from '../../store/index.ts'
 
+import type { SaveToDbFn } from './types.ts'
+
 import styles from './Coordinates.module.css'
 
-export const Coordinates = ({ row, saveToDb: originalSaveToDb }) => {
+export const Coordinates = ({
+  row,
+  saveToDb: originalSaveToDb,
+}: {
+  row: {
+    id?: string
+    lv95_x?: string | number | null
+    lv95_y?: string | number | null
+    wgs84_lat?: string | number | null
+    wgs84_long?: string | number | null
+  }
+  saveToDb: SaveToDbFn
+}) => {
   const db = useAtomValue(dbAtom)
   const user = useAtomValue(userAtom)
 
   const { id, lv95_x, lv95_y, wgs84_lat, wgs84_long } = row
 
-  const [dataState, setDataState] = useState({
+  const [dataState, setDataState] = useState<{
+    userPersonOption: Record<string, unknown> | undefined
+  }>({
     userPersonOption: undefined,
   })
   useEffect(() => {
-    const userPersonOptionsObservable = user.uid
+    const userPersonOptionsObservable = user.uid && db
       ? db
           .get('person_option')
           .query(Q.on('person', Q.where('account_id', user.uid)))
           .observeWithColumns(['ga_lat_lng'])
-      : $of({})
-    const combinedObservables = combineLatest([userPersonOptionsObservable])
+      : $of<Record<string, unknown>[]>([])
+    const combinedObservables = combineLatest([
+      userPersonOptionsObservable as Observable<Record<string, unknown>[]>,
+    ])
     const subscription = combinedObservables.subscribe(
-      ([userPersonOptions]) => {
+      ([userPersonOptions]: [Record<string, unknown>[]]) => {
         setDataState({
           userPersonOption: userPersonOptions?.[0],
         })
@@ -83,7 +101,7 @@ export const Coordinates = ({ row, saveToDb: originalSaveToDb }) => {
     setWgs84LongState(wgs84_long || '')
   }, [wgs84_lat, wgs84_long])
 
-  const saveToDb = (geomPoint) => {
+  const saveToDb = (geomPoint: unknown) => {
     const fakeEvent = {
       target: {
         name: 'geom_point',
@@ -93,7 +111,7 @@ export const Coordinates = ({ row, saveToDb: originalSaveToDb }) => {
     originalSaveToDb(fakeEvent)
   }
 
-  const saveToDbLv95 = (x, y) => {
+  const saveToDbLv95 = (x: number | string | null, y: number | string | null) => {
     let geomPoint = null
     if (x && y) {
       geomPoint = {
@@ -102,15 +120,15 @@ export const Coordinates = ({ row, saveToDb: originalSaveToDb }) => {
         crs: { type: 'name', properties: { name: 'EPSG:4326' } },
       }
     }
-    saveToDb(geomPoint, 'lv95')
+    saveToDb(geomPoint)
   }
 
-  const onChangeX = (event) => {
+  const onChangeX = (event: { target: { value: string } }) => {
     const value = ifIsNumericAsNumber(event.target.value)
     setLv95XState(value)
   }
 
-  const onBlurX = (event) => {
+  const onBlurX = (event: { target: { value: string } }) => {
     const value = ifIsNumericAsNumber(event.target.value)
     const isValid = xIsValid(value)
     if (!isValid) return setXError(xMessage)
@@ -122,12 +140,12 @@ export const Coordinates = ({ row, saveToDb: originalSaveToDb }) => {
     }
   }
 
-  const onChangeY = (event) => {
+  const onChangeY = (event: { target: { value: string } }) => {
     const value = ifIsNumericAsNumber(event.target.value)
     setLv95YState(value)
   }
 
-  const onBlurY = (event) => {
+  const onBlurY = (event: { target: { value: string } }) => {
     const value = ifIsNumericAsNumber(event.target.value)
     const isValid = yIsValid(value)
     if (!isValid) return setYError(yMessage)
@@ -138,7 +156,10 @@ export const Coordinates = ({ row, saveToDb: originalSaveToDb }) => {
       saveToDbLv95(lv95XState, value)
   }
 
-  const saveToDbWgs84 = (lat, long) => {
+  const saveToDbWgs84 = (
+    lat: number | string | null,
+    long: number | string | null,
+  ) => {
     let geomPoint = null
     if (lat && long) {
       geomPoint = {
@@ -147,15 +168,15 @@ export const Coordinates = ({ row, saveToDb: originalSaveToDb }) => {
         crs: { type: 'name', properties: { name: 'EPSG:4326' } },
       }
     }
-    saveToDb(geomPoint, 'wgs84')
+    saveToDb(geomPoint)
   }
 
-  const onChangeWgs84Lat = (event) => {
+  const onChangeWgs84Lat = (event: { target: { value: string } }) => {
     const value = ifIsNumericAsNumber(event.target.value)
     setWgs84LatState(value)
   }
 
-  const onBlurWgs84Lat = (event) => {
+  const onBlurWgs84Lat = (event: { target: { value: string } }) => {
     const value = ifIsNumericAsNumber(event.target.value)
     const isValid = wgs84LatIsValid(value)
     if (!isValid) return setWgs84LatError(wgs84LatMessage)
@@ -167,12 +188,12 @@ export const Coordinates = ({ row, saveToDb: originalSaveToDb }) => {
     }
   }
 
-  const onChangeWgs84Long = (event) => {
+  const onChangeWgs84Long = (event: { target: { value: string } }) => {
     const value = ifIsNumericAsNumber(event.target.value)
     setWgs84LongState(value)
   }
 
-  const onBlurWgs84Long = (event) => {
+  const onBlurWgs84Long = (event: { target: { value: string } }) => {
     const value = ifIsNumericAsNumber(event.target.value)
     const isValid = wgs84LongIsValid(value)
     if (!isValid) return setWgs84LongError(wgs84LongMessage)
@@ -212,7 +233,7 @@ export const Coordinates = ({ row, saveToDb: originalSaveToDb }) => {
   return (
     <div className={styles.container}>
       <div className={styles.fieldContainer}>
-        {ga_lat_lng && (
+        {!!ga_lat_lng && (
           <div className={styles.rowClass}>
             <FormControl
               fullWidth

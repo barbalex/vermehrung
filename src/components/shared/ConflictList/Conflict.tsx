@@ -1,6 +1,14 @@
 import styles from './Conflict.module.css'
 
-export const Conflict = ({ conflict, activeConflict, setActiveConflict }) => {
+export const Conflict = ({
+  conflict,
+  activeConflict,
+  setActiveConflict,
+}: {
+  conflict: string
+  activeConflict: string | null
+  setActiveConflict: (conflict: string | null) => void
+}) => {
   const onClick = () =>
     setActiveConflict(
       !activeConflict ? conflict

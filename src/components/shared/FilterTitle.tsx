@@ -15,7 +15,17 @@ import {
 
 import styles from './FilterTitle.module.css'
 
-export const FilterTitle = ({ title, table, totalCount, filteredCount }) => {
+export const FilterTitle = ({
+  title,
+  table,
+  totalCount,
+  filteredCount,
+}: {
+  title: string
+  table: string
+  totalCount: number | null
+  filteredCount: number | null
+}) => {
   const existsTableFilterAtom = useMemo(
     () => tableIsFilteredAtom(table),
     [table],

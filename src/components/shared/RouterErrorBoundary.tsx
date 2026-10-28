@@ -5,9 +5,13 @@ import { logout } from '../../utils/logout.ts'
 
 import styles from './ErrorBoundary.module.css'
 
-const onReload = () => window.location.reload(true)
+const onReload = () => window.location.reload()
 
-export const RouterErrorBoundary = ({ children: _children }) => {
+export const RouterErrorBoundary = ({
+  children: _children,
+}: {
+  children?: import('react').ReactNode
+}) => {
   const error = useRouteError()
 
   const onReset = () => logout()
@@ -15,7 +19,9 @@ export const RouterErrorBoundary = ({ children: _children }) => {
   return (
     <div className={styles.container}>
       <p>Sorry, ein Fehler ist aufgetreten:</p>
-      <pre className={styles.preWrapping}>{error.message}</pre>
+      <pre className={styles.preWrapping}>
+        {(error as Error)?.message}
+      </pre>
       <div className={styles.buttonContainer}>
         <Button
           variant="outlined"

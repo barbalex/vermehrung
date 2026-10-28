@@ -4,8 +4,8 @@ import IconButton from '@mui/material/IconButton'
 import { constants } from '../../../utils/constants.ts'
 
 // link is active node array
-export const Link = ({ link }) => {
-  const open = (e) => {
+export const Link = ({ link }: { link: string[] }) => {
+  const open = (e: { stopPropagation: () => void }) => {
     e.stopPropagation()
     const url = `${constants?.getAppUri()}/Vermehrung/${link.join('/')}`
     if (window.matchMedia('(display-mode: standalone)').matches) {

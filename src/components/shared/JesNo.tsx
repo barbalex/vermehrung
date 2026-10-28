@@ -7,6 +7,8 @@ import FormHelperText from '@mui/material/FormHelperText'
 import FormControlLabel from '@mui/material/FormControlLabel'
 
 import { toStringIfPossible } from '../../utils/toStringIfPossible.ts'
+import type { SaveToDbFn } from './types.ts'
+
 import styles from './JesNo.module.css'
 
 const dataSource = [
@@ -27,20 +29,28 @@ export const JesNo = ({
   error,
   helperText = '',
   saveToDb,
+}: {
+  value: boolean | null | undefined
+  label: string
+  name: string
+  error?: string | boolean | null
+  helperText?: string
+  saveToDb: SaveToDbFn
 }) => {
   const [stateValue, setStateValue] = useState(valuePassed)
   useEffect(() => {
     setStateValue(valuePassed)
   }, [valuePassed])
 
-  const onClickButton = (event) => {
+  const onClickButton = (event: { target: EventTarget }) => {
     /**
      * if clicked element is active value: set null
      * Problem: does not work on change event on RadioGroup
      * because that only fires on changes
      * Solution: do this in click event of button
      */
-    const targetValue = event.target.value === 'true'
+    const targetValue =
+      (event.target as { value?: unknown }).value === 'true'
     if (targetValue === stateValue) {
       // an already active option was clicked
       // set value null
@@ -55,9 +65,9 @@ export const JesNo = ({
     }
   }
 
-  const onChangeGroup = (event) => {
+  const onChangeGroup = (event: { target: EventTarget }) => {
     // group only changes if value changes
-    const targetValue = event.target.value
+    const targetValue = (event.target as { value?: unknown }).value
     // values are passed as strings > need to convert
     const newValue = targetValue === 'true'
     setStateValue(newValue)
