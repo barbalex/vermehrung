@@ -1,6 +1,6 @@
 import { lazy } from 'react'
 import { useAtomValue } from 'jotai'
-import isUuid from 'is-uuid'
+import { isId } from '../../utils/isId.js'
 
 const Art = lazy(async () => ({
   default: (await import('./Art/index.jsx')).Art,
@@ -86,7 +86,7 @@ export const Data = () => {
   const activeForm = useAtomValue(activeFormAtom)
   const activeNodeArray = useAtomValue(activeNodeArrayAtom)
 
-  const id = activeNodeArray.filter((e) => isUuid.v1(e)).at(-1)
+  const id = activeNodeArray.filter((e) => isId(e)).at(-1)
 
   switch (activeForm) {
     case 'root':

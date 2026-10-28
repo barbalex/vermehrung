@@ -21,11 +21,11 @@ import { createHmac } from 'node:crypto'
 const EMAIL = 'test@vermehrung.ch'
 const PASSWORD = 'not-a-real-password'
 const UID = 'e2e-test-uid'
-const PERSON_ID = '33333333-3333-1333-8333-333333333333'
-const ART_ID = '11111111-1111-1111-8111-111111111111'
-const AE_ART_ID = '22222222-2222-1222-8222-222222222222'
+const PERSON_ID = '0174bb08-6d26-7c48-8a52-7a5cef62f310'
+const ART_ID = '0174bb08-6d26-7330-8a52-7a5cef62f310'
+const AE_ART_ID = '0174bb08-6d26-7331-8a52-7a5cef62f310'
 const ARTNAME = 'E2E-Sumpf-Distel'
-const ROLE_ID = '44444444-4444-1444-8444-444444444444'
+const ROLE_ID = '0174bb08-6d26-7332-8a52-7a5cef62f310'
 
 // ---- token mints (nothing verifies the signatures - the api is mocked)
 const b64 = (payload: object) =>
@@ -230,9 +230,9 @@ test('local-first: login, sync, offline boot, re-login resets cursors', async ({
 
   await test.step('login loads initial data', async () => {
     await page.goto('/Vermehrung/')
-    await expect(
-      page.getByRole('dialog', { name: 'Anmeldung' }),
-    ).toBeVisible({ timeout: 15_000 })
+    await expect(page.getByRole('dialog', { name: 'Anmeldung' })).toBeVisible({
+      timeout: 15_000,
+    })
     await page.locator('#email').fill(EMAIL)
     await page.locator('#passwort').fill(PASSWORD)
     await page.getByRole('button', { name: 'anmelden' }).click()
@@ -264,10 +264,9 @@ test('local-first: login, sync, offline boot, re-login resets cursors', async ({
 
   await test.step('later polls advance the cursors', async () => {
     await expect
-      .poll(
-        () => syncBodies.filter((b) => b.p_since?.ae_art > 0).length,
-        { timeout: 20_000 },
-      )
+      .poll(() => syncBodies.filter((b) => b.p_since?.ae_art > 0).length, {
+        timeout: 20_000,
+      })
       .toBeGreaterThan(0)
   })
 
@@ -285,9 +284,9 @@ test('local-first: login, sync, offline boot, re-login resets cursors', async ({
     // initial query while offline
     await page.getByText(ARTNAME).first().click()
     await expect(page).toHaveURL(new RegExp(`/Vermehrung/Arten/${ART_ID}$`))
-    await expect(
-      page.getByText('Art', { exact: true }).first(),
-    ).toBeVisible({ timeout: 20_000 })
+    await expect(page.getByText('Art', { exact: true }).first()).toBeVisible({
+      timeout: 20_000,
+    })
   })
 
   await test.step('back online: syncing continues from the watermark', async () => {
@@ -308,9 +307,9 @@ test('local-first: login, sync, offline boot, re-login resets cursors', async ({
     // the app stays empty forever
     await page.getByRole('button', { name: 'Konto' }).click()
     await page.getByRole('menuitem', { name: /abmelden$/ }).click()
-    await expect(
-      page.getByRole('dialog', { name: 'Anmeldung' }),
-    ).toBeVisible({ timeout: 20_000 })
+    await expect(page.getByRole('dialog', { name: 'Anmeldung' })).toBeVisible({
+      timeout: 20_000,
+    })
 
     const syncCountBefore = syncBodies.length
     await page.locator('#email').fill(EMAIL)

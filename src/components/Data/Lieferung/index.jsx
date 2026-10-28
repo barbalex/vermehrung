@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useAtomValue } from 'jotai'
 import { Allotment } from 'allotment'
-import isUuid from 'is-uuid'
+import { isId } from '../../../utils/isId.js'
 import { combineLatest, of as $of } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
@@ -31,7 +31,7 @@ export const LieferungContainer = ({
   if (!idPassed) {
     id = showFilter
       ? '99999999-9999-9999-9999-999999999999'
-      : activeNodeArray.filter((e) => isUuid.v1(e)).at(-1)
+      : activeNodeArray.filter((e) => isId(e)).at(-1)
   }
 
   const [dataState, setDataState] = useState({

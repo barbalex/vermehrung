@@ -1,5 +1,5 @@
 import { camelCase } from 'es-toolkit'
-import isUuid from 'is-uuid'
+import { isId } from '../../utils/isId.js'
 
 import tableFromTitleHash from '../../utils/tableFromTitleHash.json'
 import { exists } from '../../utils/exists.js'
@@ -40,7 +40,7 @@ export const createNew = async ({ node }) => {
     tableTitle = url.slice(-1)[0]
     table = tableFromTitleHash[tableTitle]
     // need to check for Werte-Listen and top level tables
-    if (url.length > 1 && isUuid.v1(url[1])) {
+    if (url.length > 1 && isId(url[1])) {
       parentId = url.slice(-2)[0]
     }
     if (parentId && url.length > 2) {

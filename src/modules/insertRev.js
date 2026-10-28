@@ -1,6 +1,6 @@
 import { v7 as uuidv7 } from 'uuid'
 import md5 from 'blueimp-md5'
-import isUuid from 'is-uuid'
+import { isId } from '../utils/isId.js'
 
 import {
   store,
@@ -301,7 +301,7 @@ export const insertRev = async (table, args = {}) => {
   if (shouldNavigate) {
     const activeNodeArray = store.get(activeNodeArrayAtom)
     setTimeout(() => {
-      const newActiveNodeArray = isUuid.v1(activeNodeArray.at(-1))
+      const newActiveNodeArray = isId(activeNodeArray.at(-1))
         ? // slice if last is uuid
           [...activeNodeArray.slice(0, -1), id]
         : [...activeNodeArray, id]
