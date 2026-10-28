@@ -31,7 +31,7 @@ export const LieferungVon = ({
   showFilter: boolean
   row: import('../../../../../dbModel.ts').Lieferung | null | undefined
   saveToDb: (event: { target: { name?: string; value: unknown } }) => void
-  ifNeeded: boolean
+  ifNeeded: (field: string) => boolean
   herkunft: import('../../../../shared/types.ts').WmRow | null | undefined
   herkunftQuelle: Record<string, unknown> | null | undefined
 }) => {
@@ -40,7 +40,16 @@ export const LieferungVon = ({
   const kulturFilter = useAtomValue(filterKulturAtom)
   const sammlungFilter = useAtomValue(filterSammlungAtom)
 
-  const [dataState, setDataState] = useState({
+  const [dataState, setDataState] = useState<{
+    herkunftLabel?: string
+    vonKulturWerte: {
+      value: string
+      label: string | undefined
+      inaktiv?: boolean
+      link?: string[]
+    }[]
+    sammlungWerte: { value: string; label: string | undefined; link?: string[] }[]
+  }>({
     herkunftLabel: undefined,
     vonKulturWerte: [],
     sammlungWerte: [],
@@ -57,7 +66,10 @@ export const LieferungVon = ({
               Q.where('_deleted', null),
             )
     // BEWARE: need to include inactive kulturs, persons
-    const kultursObservable = db?.get('kultur').query(kulturDelQuery).observe()
+    const kultursObservable = db
+      ?.get<import('../../../../../dbModel.ts').Kultur>('kultur')
+      .query(kulturDelQuery)
+      .observe()
     const sammlungDelQuery =
       sammlungFilter._deleted === false
         ? Q.where('_deleted', false)
@@ -76,13 +88,21 @@ export const LieferungVon = ({
       kultursObservable,
       sammlungsObservable,
     ])
-    const subscription = combinedObservables.subscribe(
-      async ([kulturs, sammlungs]: [
+    const subscription = (combinedObservables as unknown as import('rxjs').Observable<
+        [
           import('../../../../../dbModel.ts').Kultur[],
           import('../../../../../dbModel.ts').Sammlung[],
-        ]) => {
+        ]
+      >).subscribe(async ([kulturs, sammlungs]) => {
         const herkunftLabel =
-          herkunftLabelFromHerkunft({ herkunft }) ??
+          herkunftLabelFromHerkunft({
+            herkunft: herkunft as unknown as {
+              id?: string | null
+              nr?: string | null
+              lokalname?: string | null
+              gemeinde?: string | null
+            },
+          }) ??
           '(verfügbar, wenn Sammlung oder Kultur gewählt)'
         const kultursFiltered = kulturs
           // show only kulturen of art_id
@@ -114,7 +134,7 @@ export const LieferungVon = ({
           (e) => e.id,
         )
         const kultursSorted = await kultursSortedFromKulturs(
-          kultursIncludingChoosen,
+          kultursIncludingChoosen as unknown as import('../../../../../dbModel.ts').Kultur[],
         )
         const vonKulturWerte = await Promise.all(
           kultursSorted.map(async (el) => {
@@ -142,7 +162,7 @@ export const LieferungVon = ({
           (e) => e.id,
         )
         const sammlungsSorted = await sammlungsSortedFromSammlungs(
-          sammlungsIncludingChoosen,
+          sammlungsIncludingChoosen as unknown as import('../../../../../dbModel.ts').Sammlung[],
         )
         const sammlungWerte = await Promise.all(
           sammlungsSorted.map(async (el) => {

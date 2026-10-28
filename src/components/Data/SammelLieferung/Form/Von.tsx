@@ -40,7 +40,16 @@ export const SammelLieferungVon = ({
   const kulturFilter = useAtomValue(filterKulturAtom)
   const sammlungFilter = useAtomValue(filterSammlungAtom)
 
-  const [dataState, setDataState] = useState({
+  const [dataState, setDataState] = useState<{
+    herkunftLabel?: string
+    vonKulturWerte: {
+      value: string
+      label: string | undefined
+      inaktiv?: boolean
+      link?: string[]
+    }[]
+    sammlungWerte: { value: string; label: string | undefined; link?: string[] }[]
+  }>({
     herkunftLabel: undefined,
     vonKulturWerte: [],
     sammlungWerte: [],
@@ -67,7 +76,10 @@ export const SammelLieferungVon = ({
               Q.where('_deleted', null),
             )
     // BEWARE: need to include inactive kulturs, persons
-    const kultursObservable = db?.get('kultur').query(kulturDelQuery).observe()
+    const kultursObservable = db
+      ?.get<import('../../../../dbModel.ts').Kultur>('kultur')
+      .query(kulturDelQuery)
+      .observe()
     const sammlungsObservable = db
       ?.get<import('../../../../dbModel.ts').Sammlung>('sammlung')
       .query(sammlungDelQuery)
@@ -76,11 +88,14 @@ export const SammelLieferungVon = ({
       kultursObservable,
       sammlungsObservable,
     ])
-    const subscription = combinedObservables.subscribe(
-      async ([kulturs, sammlungs]: [
+    const subscription = (
+      combinedObservables as unknown as import('rxjs').Observable<
+        [
           import('../../../../dbModel.ts').Kultur[],
           import('../../../../dbModel.ts').Sammlung[],
-        ]) => {
+        ]
+      >
+    ).subscribe(async ([kulturs, sammlungs]) => {
         const herkunftLabel =
           herkunftLabelFromHerkunft({
             herkunft: herkunft as unknown as {
@@ -120,7 +135,7 @@ export const SammelLieferungVon = ({
           (e) => e.id,
         )
         const kultursSorted = await kultursSortedFromKulturs(
-          kultursIncludingChoosen,
+          kultursIncludingChoosen as unknown as import('../../../../dbModel.ts').Kultur[],
         )
         const vonKulturWerte = await Promise.all(
           kultursSorted.map(async (el) => {
