@@ -48,7 +48,12 @@ export const LierferungForm = ({
   const errors = useAtomValue(errorsAtom)
   const lieferungFilter = useAtomValue(filterLieferungAtom)
 
-  const [dataState, setDataState] = useState({
+  const [dataState, setDataState] = useState<{
+    herkunft?: import('../../../../../dbModel.ts').Herkunft
+    herkunftQuelle?: string
+    userPersonOption?: import('../../../../../dbModel.ts').PersonOption
+    sammelLieferung?: import('../../../../../dbModel.ts').SammelLieferung
+  }>({
     herkunft: undefined,
     herkunftQuelle: undefined,
     userPersonOption: undefined,
@@ -70,18 +75,21 @@ export const LierferungForm = ({
       userPersonOptionsObservable,
       sLObservable,
     ])
-    const subscription = combinedObservables.subscribe(
-      async ([userPersonOptions, sammelLieferung]: [
-          Record<string, unknown> | undefined,
-          Record<string, unknown> | undefined,
-        ]) => {
+    const subscription = (
+      combinedObservables as unknown as import('rxjs').Observable<
+        [
+          import('../../../../../dbModel.ts').PersonOption[] | undefined,
+          import('../../../../../dbModel.ts').SammelLieferung | undefined,
+        ]
+      >
+    ).subscribe(async ([userPersonOptions, sammelLieferung]) => {
         let vonSammlung
         try {
           vonSammlung = await row?.sammlung.fetch()
         } catch {}
         let vonSammlungHerkunft
         try {
-          vonSammlungHerkunft = await vonSammlung?.herkunft.fetch()
+          vonSammlungHerkunft = await vonSammlung?.herkunft?.fetch()
         } catch {}
 
         if (vonSammlungHerkunft) {
@@ -97,12 +105,12 @@ export const LierferungForm = ({
           let vonKultur
           try {
             vonKultur = await db
-              ?.get('kultur')
+              ?.get<import('../../../../../dbModel.ts').Kultur>('kultur')
               .find(row?.von_kultur_id as string)
           } catch {}
           let herkunftByVonKultur
           try {
-            herkunftByVonKultur = await vonKultur?.herkunft.fetch()
+            herkunftByVonKultur = await vonKultur?.herkunft?.fetch()
           } catch {}
           if (herkunftByVonKultur) {
             return setDataState({
@@ -116,12 +124,12 @@ export const LierferungForm = ({
         let nachKultur
         try {
           nachKultur = await db
-            ?.get('kultur')
+            ?.get<import('../../../../../dbModel.ts').Kultur>('kultur')
             .find(row?.nach_kultur_id as string)
         } catch {}
         let herkunftByNachKultur
         try {
-          herkunftByNachKultur = await nachKultur?.herkunft.fetch()
+          herkunftByNachKultur = await nachKultur?.herkunft?.fetch()
         } catch {}
 
         setDataState({
@@ -148,20 +156,20 @@ export const LierferungForm = ({
 
   const { li_show_sl_felder } = userPersonOption ?? {}
 
-  const ifNeeded = (field) => {
+  const ifNeeded = (field: string) => {
     if (existsSammelLieferung && li_show_sl_felder) return true
-    if (
-      !exists(sammelLieferung?.[field]) ||
-      sammelLieferung?.[field] === false
-    ) {
+    const sl = sammelLieferung as unknown as Record<string, unknown>
+    const l = row as unknown as Record<string, unknown>
+    if (!exists(sl?.[field]) || sl?.[field] === false) {
       return true
-    } else if (sammelLieferung?.[field] !== row[field]) {
+    } else if (sl?.[field] !== l?.[field]) {
       return true
     }
     return false
   }
 
-  const ifSomeNeeded = (fields) => fields.some((f) => ifNeeded(f))
+  const ifSomeNeeded = (fields: string[]) =>
+    fields.some((f) => ifNeeded(f))
 
   useEffect(() => {
     unsetError('lieferung')
@@ -175,12 +183,14 @@ export const LierferungForm = ({
     key?: string
   }) => {
     const field = event.target.name
-    let value = ifIsNumericAsNumber(event.target.value)
+    let value: string | number | null = ifIsNumericAsNumber(
+      event.target.value as string | number,
+    )
     if (event.target.value === undefined) value = null
     if (event.target.value === '') value = null
 
     if (showFilter) {
-      return setFilterValue({ table: 'lieferung', key: field, value })
+      return setFilterValue({ table: 'lieferung', key: field as string, value })
     }
 
     // only update if value has changed

@@ -137,12 +137,14 @@ export const TeilkulturForm = ({
     key?: string
   }) => {
     const field = event.target.name
-    let value = ifIsNumericAsNumber(event.target.value)
+    let value: string | number | null = ifIsNumericAsNumber(
+      event.target.value as string | number,
+    )
     if (event.target.value === undefined) value = null
     if (event.target.value === '') value = null
 
     if (showFilter) {
-      return setFilterValue({ table: 'teilkultur', key: field, value })
+      return setFilterValue({ table: 'teilkultur', key: field as string, value })
     }
 
     const previousValue = ifIsNumericAsNumber(row[field])

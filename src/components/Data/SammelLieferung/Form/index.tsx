@@ -154,7 +154,9 @@ export const SammelLieferungForm = ({
     key?: string
   }) => {
     const field = event.target.name
-    let value = ifIsNumericAsNumber(event.target.value)
+    let value: string | number | null = ifIsNumericAsNumber(
+      event.target.value as string | number,
+    )
     if (event.target.value === undefined) value = null
     if (event.target.value === '') value = null
     const previousValue = ifIsNumericAsNumber(row[field])
@@ -187,7 +189,8 @@ export const SammelLieferungForm = ({
     return true
   }
 
-  const ifSomeNeeded = (fields) => fields.some((f) => ifNeeded(f))
+  const ifSomeNeeded = (fields: string[]) =>
+    fields.some((f) => ifNeeded(f))
 
   const showDeleted = sammelLieferungFilter._deleted !== false || row?._deleted
 
