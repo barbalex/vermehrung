@@ -18,14 +18,27 @@ import { personSort } from '../../../../utils/personSort.ts'
 
 import wannStyles from '../../Lieferung/Lieferung/Form/Wann.module.css'
 
-export const SammelLieferungWer = ({ showFilter, ifNeeded, saveToDb, id }) => {
+export const SammelLieferungWer = ({
+  showFilter,
+  ifNeeded,
+  saveToDb,
+  id,
+}: {
+  showFilter?: boolean
+  ifNeeded: (field: string) => boolean
+  saveToDb: (event: { target: { name?: string; value: unknown } }) => void
+  id?: string
+}) => {
   const errors = useAtomValue(errorsAtom)
   const db = useAtomValue(dbAtom)
   const sammelLieferungFilter = useAtomValue(filterSammelLieferungAtom)
   const personFilter = useAtomValue(filterPersonAtom)
   const initialDataQueried = useAtomValue(initialDataQueriedAtom)
 
-  const [dataState, setDataState] = useState({
+  const [dataState, setDataState] = useState<{
+    personWerte: { value: string; label: string | undefined; inaktiv?: boolean; link?: string[] }[]
+    row: import('../../../../dbModel.ts').SammelLieferung | undefined
+  }>({
     personWerte: [],
     row: undefined,
   })
@@ -35,7 +48,7 @@ export const SammelLieferungWer = ({ showFilter, ifNeeded, saveToDb, id }) => {
     const rowObservable = showFilter
       ? $of(sammelLieferungFilter)
       : initialDataQueried
-        ? db?.get('sammel_lieferung').findAndObserve(id)
+        ? db?.get<import('../../../../dbModel.ts').SammelLieferung>('sammel_lieferung').findAndObserve(id ?? '')
         : $of({})
     const personDelQuery =
       personFilter._deleted === false
@@ -65,11 +78,12 @@ export const SammelLieferungWer = ({ showFilter, ifNeeded, saveToDb, id }) => {
       personsObservable,
       rowObservable,
     ])
-    const subscription = combinedObservables.subscribe(
-      async ([persons, row]: [
+    const subscription = (combinedObservables as unknown as import('rxjs').Observable<
+        [
           import('../../../../dbModel.ts').Person[],
           import('../../../../dbModel.ts').SammelLieferung | undefined,
-        ]) => {
+        ]
+      >).subscribe(async ([persons, row]) => {
         // need to show a choosen kultur even if inactive but not if deleted
         let person
         try {

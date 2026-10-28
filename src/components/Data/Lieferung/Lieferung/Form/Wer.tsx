@@ -32,7 +32,7 @@ export const LieferungWer = ({
   showFilter: boolean
   id: string | undefined
   saveToDb: (event: { target: { name?: string; value: unknown } }) => void
-  ifNeeded: boolean
+  ifNeeded: (field: string) => boolean
   activeConflict: string | null
   setActiveConflict: (val: unknown) => void
 }) => {
@@ -43,7 +43,10 @@ export const LieferungWer = ({
   const personFilter = useAtomValue(filterPersonAtom)
   const initialDataQueried = useAtomValue(initialDataQueriedAtom)
 
-  const [dataState, setDataState] = useState({
+  const [dataState, setDataState] = useState<{
+    personWerte: { value: string; label: string | undefined; inaktiv?: boolean; link?: string[] }[]
+    row: import('../../../../../dbModel.ts').Lieferung | undefined
+  }>({
     personWerte: [],
     row: undefined,
   })
@@ -53,7 +56,7 @@ export const LieferungWer = ({
     const rowObservable = showFilter
       ? $of(lieferungFilter)
       : initialDataQueried
-        ? db?.get('lieferung').findAndObserve(id)
+        ? db?.get<import('../../../../../dbModel.ts').Lieferung>('lieferung').findAndObserve(id ?? '')
         : $of({})
     const personDelQuery =
       personFilter._deleted === false
@@ -83,11 +86,12 @@ export const LieferungWer = ({
       personsObservable,
       rowObservable,
     ])
-    const subscription = combinedObservables.subscribe(
-      async ([persons, row]: [
+    const subscription = (combinedObservables as unknown as import('rxjs').Observable<
+        [
           import('../../../../../dbModel.ts').Person[],
           import('../../../../../dbModel.ts').Lieferung | undefined,
-        ]) => {
+        ]
+      >).subscribe(async ([persons, row]) => {
         // need to show a choosen kultur even if inactive but not if deleted
         let person
         try {
