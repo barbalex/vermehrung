@@ -9,3 +9,43 @@
     background-color: rgba(74, 20, 140, 0.1) !important;
   }
 }
+
+/* dark mode: react-datepicker's default popup is a white box.
+   theme it like the rest of the surfaces */
+html[data-theme='dark'] .date-field {
+  .react-datepicker {
+    background-color: var(--surface);
+    border-color: var(--divider);
+    color: var(--text);
+  }
+  .react-datepicker__header {
+    background-color: rgba(255, 255, 255, 0.06) !important;
+    border-bottom-color: var(--divider);
+  }
+  .react-datepicker__current-month,
+  .react-datepicker__day-name,
+  .react-datepicker-time__header {
+    color: var(--text);
+  }
+  .react-datepicker__day {
+    color: var(--text);
+    &:hover {
+      background-color: var(--hover-overlay);
+    }
+  }
+  .react-datepicker__day--disabled {
+    color: var(--text-secondary);
+    opacity: 0.5;
+  }
+  .react-datepicker__day--selected,
+  .react-datepicker__day--keyboard-selected {
+    color: #1c0f2d;
+  }
+  .react-datepicker__navigation-icon::before {
+    border-color: var(--text);
+  }
+  /* the little arrow above the popup is painted with borders */
+  .react-datepicker__triangle {
+    display: none;
+  }
+}
