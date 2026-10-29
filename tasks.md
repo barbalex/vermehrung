@@ -1,19 +1,36 @@
 typescript migration (started 2026-10-28): all src files are now .ts/.tsx.
 
-state 2026-10-29: tsc 683 (from 6746). ALL of Data's entity stacks are
-typed except scattered long tail (~130 files, <12 errors each; biggest:
-SammelLieferung Form 13, Kultur FormTitle buildExceljsWorksheets 13,
-Kultur FormTitle FormTitle 12, Sammlung Form 11, Lieferschein 11).
+state 2026-10-29 (evening): PHASE D COMPLETE. tsc 0 (from 6746 at start,
+683 at day start). lint 0 problems (--max-warnings 0 equivalent), tests
+54/54 green, type-coverage 97.98% (73.49% at start). ALL of Data's entity
+stacks typed: Forms, FormTitles, Choosers, History/Conflict twins, list
+pages + Rows, entity indexes, Files, QK, Timelines, TaxonSelect, Root.
 Working recipe per file: type dataState useState with entity model
 types, cast combinedObservables to Observable<[ModelA[], ModelB[]]>,
 db?.get<Entity>('table'), Record casts for dynamic-column props
 (tk_/ga_/hk_/ev_/tz_/ku_ prefixes), handler casts to
 MouseEventHandler<HTMLElement>, errors-atom reads cast to string.
-Fixers: tools/nullsafe.py tools/jsxfix.py tools/formfix.py (position
-driven, run to fixpoint after each batch). Entity History/Row twins
-and Settings menus all follow identical patterns - check a done
-sibling before typing the next one.
-Phase E after Data: noUnusedLocals/noUnusedParameters, drop
+Entity History/Row twins and Settings menus all follow identical
+patterns - check a done sibling before typing the next one.
+
+latent runtime bugs found while typing (behavior preserved, flagged):
+- SammelLieferung Copy updateAllLieferungen iterates watermelon Query
+  (not iterable) - for...of would throw
+- Root getShow* helpers receive UserRole model but compare to strings
+  (role logic always truthy)
+- Lieferungen add() called insertLieferungRev() without args (would
+  throw when sammel_lieferung lookup fails) - now { values: {} }
+- Lieferschein pageContainer was unbound since css-modules refactor
+  (ReferenceError on render) - fixed to styles.pageContainer
+- Teilzaehlung teilkultur relation was read as t.kultur (undefined) -
+  fixed to t.teilkultur
+- Teilkultur Teilzaehlungen read auspflanzebereit_beschreibung (typo,
+  always undefined) - fixed to auspflanzbereit_beschreibung
+- SammelLieferung printPreview initializer referenced itself (TDZ in
+  esbuild) - fixed to useState(isPrint)
+- MUI 9: PaperProps -> slotProps.paper in two delete menus
+
+Phase E next: noUnusedLocals/noUnusedParameters, drop
 allowJs/checkJs, wire lint+typecheck+test into npm run deploy, update
 CLAUDE.md.(0 problems, --max-warnings 0)
 
