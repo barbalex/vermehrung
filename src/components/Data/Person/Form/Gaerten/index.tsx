@@ -20,7 +20,7 @@ import styles from './index.module.css'
 export const PersonGaerten = ({
   person,
 }: {
-  person: import('../../../../shared/types.ts').WmRow | null | undefined
+  person: import('../../../../../dbModel.ts').Person | null | undefined
 }) => {
   const db = useAtomValue(dbAtom)
   const gartenFilter = useAtomValue(filterGartenAtom)
@@ -37,7 +37,7 @@ export const PersonGaerten = ({
     stopPropagation?: () => void
     key?: string
   }) => {
-    e.stopPropagation()
+    e.stopPropagation?.()
     if (open) {
       const was = open
       await anim.start({ opacity: 0 })
@@ -52,7 +52,10 @@ export const PersonGaerten = ({
     }
   }
 
-  const [dataState, setDataState] = useState({ gvs: [], gartenWerte: [] })
+  const [dataState, setDataState] = useState<{
+    gvs: import('../../../../../dbModel.ts').Gv[]
+    gartenWerte: { value: string; label: string | undefined; link?: string[] }[]
+  }>({ gvs: [], gartenWerte: [] })
   const { gvs, gartenWerte } = dataState
   const gvGartenIds = gvs.map((v) => v.garten_id)
   useEffect(() => {
@@ -84,15 +87,22 @@ export const PersonGaerten = ({
       .query(
         gartenDelQuery,
         gartenAktivQuery,
-        Q.where('id', Q.notIn(gvGartenIds)),
+        Q.where(
+          'id',
+          Q.notIn(((gvGartenIds ?? []) as (string | null)[]).filter(Boolean) as string[]),
+        ),
       )
       .observe()
     const combinedObservables = combineLatest([
       gvsObservable,
       gartensObservable,
     ])
-    const subscription = combinedObservables.subscribe(
-      async ([gvs, gartens]) => {
+    const subscription = (combinedObservables as unknown as import('rxjs').Observable<
+        [
+          import('../../../../../dbModel.ts').Gv[],
+          import('../../../../../dbModel.ts').Garten[],
+        ]
+      >).subscribe(async ([gvs, gartens]) => {
         const gvsSorted = await gvsSortByGarten(gvs)
         const gartensSorted = await gartensSortedFromGartens(gartens)
         const gartenWerte = await Promise.all(
@@ -147,7 +157,7 @@ export const PersonGaerten = ({
           <IconButton
             aria-label={open ? 'schliessen' : 'öffnen'}
             title={open ? 'schliessen' : 'öffnen'}
-            onClick={onClickToggle}
+            onClick={onClickToggle as unknown as import('react').MouseEventHandler<HTMLElement>}
             size="large"
           >
             {open ? <FaChevronUp /> : <FaChevronDown />}
@@ -178,7 +188,10 @@ export const PersonGaerten = ({
                 options={gartenWerte}
                 saveToDb={saveToDb}
                 isClearable={false}
-                error={errors.garten_id as string | undefined}
+                error={
+                  (errors as Record<string, unknown>).garten_id as
+                    string | undefined
+                }
               />
             )}
           </>

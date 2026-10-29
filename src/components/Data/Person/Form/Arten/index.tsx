@@ -20,7 +20,7 @@ import styles from './index.module.css'
 export const PersonArten = ({
   person,
 }: {
-  person: import('../../../../shared/types.ts').WmRow | null | undefined
+  person: import('../../../../../dbModel.ts').Person | null | undefined
 }) => {
   const db = useAtomValue(dbAtom)
 
@@ -36,7 +36,7 @@ export const PersonArten = ({
     stopPropagation?: () => void
     key?: string
   }) => {
-    e.stopPropagation()
+    e.stopPropagation?.()
     if (open) {
       const was = open
       await anim.start({ opacity: 0 })
@@ -51,7 +51,10 @@ export const PersonArten = ({
     }
   }
 
-  const [dataState, setDataState] = useState({ avs: [], artWerte: [] })
+  const [dataState, setDataState] = useState<{
+    avs: import('../../../../../dbModel.ts').Av[]
+    artWerte: { value: string; label: string | undefined; link?: string[] }[]
+  }>({ avs: [], artWerte: [] })
   const { avs, artWerte } = dataState
   const avArtIds = avs.map((v) => v.art_id)
   useEffect(() => {
@@ -74,7 +77,14 @@ export const PersonArten = ({
       .query(artDelQuery, Q.where('id', Q.notIn(avArtIds)))
       .observe()
     const combinedObservables = combineLatest([avsObservable, artsObservable])
-    const subscription = combinedObservables.subscribe(async ([avs, arts]) => {
+    const subscription = (
+      combinedObservables as unknown as import('rxjs').Observable<
+        [
+          import('../../../../../dbModel.ts').Av[],
+          import('../../../../../dbModel.ts').Art[],
+        ]
+      >
+    ).subscribe(async ([avs, arts]) => {
       const avsSorted = await avsSortByArt(avs)
       const artsSorted = await artsSortedFromArts(arts)
       const artWerte = await Promise.all(
@@ -127,7 +137,7 @@ export const PersonArten = ({
           <IconButton
             aria-label={open ? 'schliessen' : 'öffnen'}
             title={open ? 'schliessen' : 'öffnen'}
-            onClick={onClickToggle}
+            onClick={onClickToggle as unknown as import('react').MouseEventHandler<HTMLElement>}
             size="large"
           >
             {open ? <FaChevronUp /> : <FaChevronDown />}
@@ -155,7 +165,9 @@ export const PersonArten = ({
                 options={artWerte}
                 saveToDb={saveToDb}
                 isClearable={false}
-                error={errors.art_id as string | undefined}
+                error={
+                (errors as Record<string, unknown>).art_id as string | undefined
+              }
               />
             )}
           </>
