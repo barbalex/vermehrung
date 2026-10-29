@@ -9,6 +9,7 @@ import {
 } from '../../store/index.ts'
 import { singularOfFolder, labelOfSingular } from '../../utils/singularOfFolder.ts'
 import { useRowLabel } from '../Breadcrumbs/useRowLabel.ts'
+import { useChildCount } from './useChildCount.ts'
 import { ErrorBoundary } from '../shared/ErrorBoundary.tsx'
 
 import styles from './ObjectList.module.css'
@@ -77,6 +78,33 @@ const childrenOf = ({
   }
 }
 
+// a child table row with its count, like the nav tree folders
+const ChildRow = ({
+  table,
+  id,
+  folder,
+  label,
+  onClick,
+}: {
+  table: string
+  id?: string
+  folder: string
+  label: string
+  onClick: () => void
+}) => {
+  const count = useChildCount({ ownerTable: table, ownerId: id, folder })
+
+  return (
+    <div
+      className={styles.row}
+      onClick={onClick}
+      title={count === undefined ? label : `${label} (${count})`}
+    >
+      <div>{count === undefined ? label : `${label} (${count})`}</div>
+    </div>
+  )
+}
+
 // rendered at an object's url when breadcrumbs are enabled:
 // the object itself (leading to its form) plus its child tables,
 // like apf2's object menus
@@ -135,14 +163,14 @@ export const ObjectList = ({
             <div>{objectLabel}</div>
           </div>
           {children.map((child) => (
-            <div
+            <ChildRow
               key={child.folder}
-              className={styles.row}
+              table={table}
+              id={id}
+              folder={child.folder}
+              label={child.label}
               onClick={() => onClickRow([child.folder])}
-              title={child.label}
-            >
-              <div>{child.label}</div>
-            </div>
+            />
           ))}
         </div>
       </div>

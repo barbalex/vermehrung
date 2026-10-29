@@ -69,6 +69,7 @@ const fullSync = () => ({
       garten_id: null,
       herkunft_id: null,
       zwischenlager: false,
+      aktiv: true,
       _deleted: false,
       _conflicts: null,
       _revisions: null,
@@ -79,6 +80,7 @@ const fullSync = () => ({
       garten_id: GARTEN_ID,
       herkunft_id: null,
       zwischenlager: false,
+      aktiv: true,
       _deleted: false,
       _conflicts: null,
       _revisions: null,
@@ -230,9 +232,9 @@ test('object urls render apf2-style object lists', async ({ page }) => {
     await expect(rows.filter({ hasText: 'Art' }).first()).toBeVisible({
       timeout: 60_000,
     })
-    await expect(page.getByTitle('Herkünfte')).toBeVisible()
-    await expect(page.getByTitle('Sammlungen')).toBeVisible()
-    await expect(page.getByTitle('Kulturen')).toBeVisible()
+    await expect(page.getByTitle('Herkünfte (0)')).toBeVisible()
+    await expect(page.getByTitle('Sammlungen (0)')).toBeVisible()
+    await expect(page.getByTitle('Kulturen (1)')).toBeVisible()
     // the list title shows the object's own label
     await expect(page.getByText(ARTNAME).first()).toBeVisible()
     // no suffix in the url
@@ -280,10 +282,10 @@ test('object urls render apf2-style object lists', async ({ page }) => {
   await test.step('kultur object list shows its child tables', async () => {
     await page.goto(`/Vermehrung/Arten/${ART_ID}/Kulturen/${KULTUR_ID}`)
     await expect(page.getByTitle('Kultur')).toBeVisible({ timeout: 60_000 })
-    await expect(page.getByTitle('Zählungen')).toBeVisible()
-    await expect(page.getByTitle('An-Lieferungen')).toBeVisible()
-    await expect(page.getByTitle('Aus-Lieferungen')).toBeVisible()
-    await expect(page.getByTitle('Bedarf')).toBeVisible()
+    await expect(page.getByTitle('Zählungen (1)')).toBeVisible()
+    await expect(page.getByTitle('An-Lieferungen (0)')).toBeVisible()
+    await expect(page.getByTitle('Aus-Lieferungen (0)')).toBeVisible()
+    await expect(page.getByTitle('Bedarf (0)')).toBeVisible()
     // no teilkulturen: the kultur's option says tk: false
     await expect(page.getByTitle('Teilkulturen')).toHaveCount(0)
   })
