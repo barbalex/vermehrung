@@ -44,15 +44,13 @@
   text-overflow: ellipsis;
 }
 
-/* crumbs in the header's brand purple; links a wee bit bolder for
-   legibility (the purple is dark on the dark strip) */
+/* crumbs in the header's brand purple (lightened in dark mode) */
 .trail ol > li > a {
   color: var(--crumb-text);
-  font-weight: 600;
 }
 
-/* the current crumb: same color and weight as the links, just not a link */
+/* the current crumb: same color as the links, just not a link */
 .current {
   color: var(--crumb-text);
-  font-weight: 600;
+  font-weight: 500;
 }
