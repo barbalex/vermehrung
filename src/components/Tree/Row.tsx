@@ -38,16 +38,18 @@ import styles from './Row.module.css'
 import type { TreeNode } from './nodes/index.ts'
 
 export const TreeRow = ({
-  style: _style,
-  node,
+  style: rowStyle,
+  index,
   nodes,
   userRole,
 }: {
-  style?: Record<string, unknown>
-  node: TreeNode | undefined | null
+  style?: import('react').CSSProperties
+  index?: number
   nodes: TreeNode[]
   userRole: string | null | undefined
 }) => {
+  const node: TreeNode | undefined | null = nodes[index ?? 0]
+
   const db = useAtomValue(dbAtom)
   const activeNodeArray = useAtomValue(activeNodeArrayAtom)
   const showTreeInSingleColumnView = useAtomValue(
@@ -264,7 +266,9 @@ export const TreeRow = ({
   }
 
   // for unknown reason this happens momentarily when new art is created
-  if (!node?.url) return null
+  // keep rendering an (invisible) row: react-window maps measurement
+  // attributes to the list children by position
+  if (!node?.url) return <div style={rowStyle} />
 
   const level =
     node?.url[0] === 'Projekte' ? node?.url?.length - 1 : node?.url?.length
@@ -274,6 +278,7 @@ export const TreeRow = ({
     <div
       className={styles.nodeClass}
       style={{
+        ...rowStyle,
         paddingLeft: level * 17 - 10,
         color: nodeIsInActiveNodePath
           ? '#D84315'

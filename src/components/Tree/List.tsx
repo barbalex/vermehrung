@@ -6,7 +6,7 @@
 import { useEffect, useRef } from 'react'
 import { useAtomValue } from 'jotai'
 import { isEqual } from 'es-toolkit'
-import { Virtuoso } from 'react-virtuoso'
+import { List, useDynamicRowHeight, useListRef } from 'react-window'
 
 import {
   activeNodeArrayAtom,
@@ -17,27 +17,29 @@ import { TreeRow } from './Row.tsx'
 import type { TreeNode } from './nodes/index.ts'
 
 export const TreeList = ({
-  width,
-  height,
   nodes,
   userRole,
 }: {
-  width?: number
-  height?: number
   nodes: TreeNode[]
   userRole?: string | null
 }) => {
   const aNA = useAtomValue(activeNodeArrayAtom)
   const lastActiveNodeArray = useAtomValue(lastActiveNodeArrayAtom)
 
-  const listRef = useRef<import('react-virtuoso').VirtuosoHandle | null>(null)
+  const listRef = useListRef(null)
+  // tree rows wrap (white-space: normal on the label span), so heights are
+  // measured per row; 21px is the single-line row height
+  // (contain-intrinsic-size in Row.module.css)
+  const dynamicRowHeight = useDynamicRowHeight({
+    defaultRowHeight: 21,
+  })
+
   // when loading on url, lastActiveNodeArray may not be set
   const urlToFocus = lastActiveNodeArray.length ? lastActiveNodeArray : aNA
   const nodeIndex = nodes.findIndex((node) => isEqual(node.url, urlToFocus))
 
   // Only scroll once on initial mount, not on every click
   const hasScrolledRef = useRef(false)
-  const initialIndexRef = useRef(nodeIndex && nodeIndex > -1 ? nodeIndex : 0)
 
   useEffect(() => {
     if (!hasScrolledRef.current && nodeIndex > -1) {
@@ -45,34 +47,21 @@ export const TreeList = ({
       // when loading on a url, nodes are built after this list has mounted:
       // scroll the focused node into view as soon as it exists.
       // center: rows have dynamic heights, so the position is only estimated
-      listRef.current?.scrollToIndex({
+      listRef.current?.scrollToRow({
         index: nodeIndex,
         align: 'center',
       })
     }
-  }, [nodeIndex])
+  }, [nodeIndex, listRef])
 
-  // using Virtuoso instead of react-virtualized because of white-space: normal on the tree rows
-  // react-virtualized only supports predefined heights
   return (
-    <Virtuoso
-      ref={listRef}
-      style={{
-        height: (height ?? 0) - 5,
-        width: width ?? 0,
-        marginTop: 5,
-        scrollbarWidth: 'thin',
-      }}
-      totalCount={nodes.length}
-      initialTopMostItemIndex={initialIndexRef.current}
-      itemContent={(index) => (
-        <TreeRow
-          key={index}
-          node={nodes[index]}
-          nodes={nodes}
-          userRole={userRole}
-        />
-      )}
+    <List
+      listRef={listRef}
+      style={{ marginTop: 5, scrollbarWidth: 'thin' }}
+      rowComponent={TreeRow}
+      rowCount={nodes.length}
+      rowHeight={dynamicRowHeight}
+      rowProps={{ nodes, userRole }}
     />
   )
 }

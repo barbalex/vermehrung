@@ -4,7 +4,6 @@ import { interval, combineLatest } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 import { throttle } from 'rxjs/operators'
 import { useDebouncedCallback } from 'use-debounce'
-import { AutoSizer } from 'react-virtualized-auto-sizer'
 
 import {
   dbAtom,
@@ -235,15 +234,9 @@ export const Tree = () => {
         <Settings />
         <ApFilterWarning />
         <div className={styles.listContainer}>
-          <AutoSizer
-            renderProp={({ height, width }) => (
-              <List
-                nodes={nodes}
-                width={width}
-                height={height}
-                userRole={(userRole as { name?: string } | undefined)?.name}
-              />
-            )}
+          <List
+            nodes={nodes}
+            userRole={(userRole as { name?: string } | undefined)?.name}
           />
         </div>
         <TreeContextMenu />
