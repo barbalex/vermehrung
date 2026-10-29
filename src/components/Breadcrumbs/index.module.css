@@ -47,12 +47,12 @@
 /* crumbs in the header's brand purple; links a wee bit bolder for
    legibility (the purple is dark on the dark strip) */
 .trail ol > li > a {
-  color: var(--header-bg);
+  color: var(--crumb-text);
   font-weight: 600;
 }
 
 /* the current crumb: same color and weight as the links, just not a link */
 .current {
-  color: var(--header-bg);
+  color: var(--crumb-text);
   font-weight: 600;
 }

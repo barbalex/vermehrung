@@ -36,7 +36,9 @@
   --card-overlay-bg: rgba(255, 255, 255, 0.65);
   /* the app bar keeps purple[900] in both modes - see materialTheme.ts */
   --header-bg: #4a148c;
+  --crumb-text: #4a148c;
   --scrollbar-thumb: #4a148c;
+  --crumb-text: #6e43a3;
   --scrollbar-track: rgba(248, 243, 254, 1);
 }
 
