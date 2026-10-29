@@ -9,7 +9,15 @@ import {
 
 import styles from '../Arten/Row.module.css'
 
-export const SammelLieferungRow = ({ style, index, rows }) => {
+export const SammelLieferungRow = ({
+  style,
+  index,
+  rows
+}: {
+  style: Record<string, unknown>
+  index: number
+  rows: import('../../../dbModel.ts').SammelLieferung[]
+}) => {
   const row = rows[index]
 
   const onClickRow = () => {

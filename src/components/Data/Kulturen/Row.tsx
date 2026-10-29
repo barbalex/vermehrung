@@ -12,7 +12,15 @@ import {
 
 import styles from '../Arten/Row.module.css'
 
-export const KulturRow = ({ style, index, rows }) => {
+export const KulturRow = ({
+  style,
+  index,
+  rows
+}: {
+  style: Record<string, unknown>
+  index: number
+  rows: import('../../../dbModel.ts').Kultur[]
+}) => {
   const artIdInActiveNodeArray = useAtomValue(artIdInActiveNodeArrayAtom)
   const gartenIdInActiveNodeArray = useAtomValue(gartenIdInActiveNodeArrayAtom)
 

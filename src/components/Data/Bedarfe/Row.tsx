@@ -7,7 +7,15 @@ import { bedarfLabelFromBedarf } from '../../../utils/bedarfLabelFromBedarf.ts'
 
 import styles from '../Arten/Row.module.css'
 
-export const BedarfRow = ({ style, index, rows }) => {
+export const BedarfRow = ({
+  style,
+  index,
+  rows
+}: {
+  style: Record<string, unknown>
+  index: number
+  rows: import('../../../dbModel.ts').Bedarf[]
+}) => {
   const row = rows[index]
 
   const onClickRow = () =>

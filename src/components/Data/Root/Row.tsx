@@ -11,12 +11,18 @@ import { tableFilter } from '../../../utils/tableFilter.ts'
 
 import styles from '../Arten/Row.module.css'
 
-export const RootRow = ({ style, row }) => {
+export const RootRow = ({
+  style,
+  row
+}: {
+  style: Record<string, unknown>
+  row: Record<string, unknown> | null | undefined
+}) => {
   const db = useAtomValue(dbAtom)
   const apFilter = useAtomValue(apFilterAtom)
   const filterAtom = useMemo(
-    () => filterTableAtoms[row.table] ?? atom({}),
-    [row.table],
+    () => filterTableAtoms[row?.table] ?? atom({}),
+    [row?.table],
   )
   const filter = useAtomValue(filterAtom)
 
@@ -26,13 +32,13 @@ export const RootRow = ({ style, row }) => {
   const [count, setCount] = useState(0)
   useEffect(() => {
     const subscription = db
-      ?.get(row.table)
+      ?.get(row?.table)
       .query(
         ...tableFilter({
-          table: row.table,
+          table: row?.table,
           // like the tree and the art list view: the 'nur AP' filter
           // applies to art only (apflora_ap exists on no other table)
-          apFilter: row.table === 'art' && apFilter,
+          apFilter: row?.table === 'art' && apFilter,
         }),
       )
       .observe()
@@ -41,18 +47,18 @@ export const RootRow = ({ style, row }) => {
       })
 
     return () => subscription?.unsubscribe?.()
-  }, [db, row.table, filter, apFilter])
+  }, [db, row?.table, filter, apFilter])
 
-  const onClickRow = () => setActiveNodeArray(row.url)
+  const onClickRow = () => setActiveNodeArray(row?.url)
 
   return (
     <div
       className={styles.container}
-      key={row.id}
+      key={row?.id}
       onClick={onClickRow}
       style={style}
     >
-      <div>{`${row.name} (${count})`}</div>
+      <div>{`${row?.name} (${count})`}</div>
     </div>
   )
 }

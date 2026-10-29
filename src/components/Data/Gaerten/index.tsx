@@ -71,8 +71,9 @@ export const Gaerten = ({ filter: showFilter = false }) => {
       totalCountObservable,
       gartenObservable,
     ])
-    const subscription = combinedObservables.subscribe(
-      async ([totalCount, gartens]) => {
+    const subscription = (combinedObservables as unknown as import('rxjs').Observable<
+        [number, import('../../../dbModel.ts').Garten[]]
+      >).subscribe(async ([totalCount, gartens]) => {
         const gartensSorted = await gartensSortedFromGartens(gartens)
         setDataState({
           gartens: gartensSorted,

@@ -27,7 +27,11 @@ import { ApFilter } from '../../shared/ApFilter.tsx'
 
 import artStyles from './index.module.css'
 
-export const Arten = ({ filter: showFilter }) => {
+export const Arten = ({
+  filter: showFilter,
+}: {
+  filter?: boolean
+}) => {
   const db = useAtomValue(dbAtom)
   const activeNodeArray = useAtomValue(activeNodeArrayAtom)
   const apFilter = useAtomValue(apFilterAtom)
@@ -54,8 +58,9 @@ export const Arten = ({ filter: showFilter }) => {
       totalCountObservable,
       artsObservable,
     ])
-    const subscription = combinedObservables.subscribe(
-      async ([totalCount, arts]) => {
+    const subscription = (combinedObservables as unknown as import('rxjs').Observable<
+        [number, import('../../../dbModel.ts').Art[]]
+      >).subscribe(async ([totalCount, arts]) => {
         const artsSorted = await artsSortedFromArts(arts)
         setDataState({ arts: artsSorted, totalCount })
       },

@@ -12,7 +12,7 @@ import styles from './Person.module.css'
 export const Person = ({
   av,
 }: {
-  av: import('../../../../shared/types.ts').WmRow | null | undefined
+  av: import('../../../../../dbModel.ts').Av | null | undefined
 }) => {
   const [delMenuAnchorEl, setDelMenuAnchorEl] = useState<
     HTMLElement | undefined | null
@@ -56,25 +56,27 @@ export const Person = ({
           aria-label="löschen"
           aria-owns={delMenuOpen ? 'delMenu' : undefined}
           aria-haspopup="true"
-          onClick={onClickDeleteIcon}
+          onClick={onClickDeleteIcon as unknown as import('react').MouseEventHandler<HTMLElement>}
           className={styles.delIcon}
         >
           <FaTimes />
         </IconButton>
         <Menu
           id="delMenu"
-          anchorEl={delMenuAnchorEl}
+          anchorEl={delMenuAnchorEl ?? null}
           open={delMenuOpen}
           onClose={onClose}
-          PaperProps={{
-            style: {
-              maxHeight: 48 * 4.5,
-              width: 120,
+          {...({
+            PaperProps: {
+              style: {
+                maxHeight: 48 * 4.5,
+                width: 120,
+              },
             },
-          }}
+          } as Record<string, unknown>)}
         >
           <h3 className={styles.menuTitle}>löschen?</h3>
-          <MenuItem onClick={onClickDelete}>ja</MenuItem>
+          <MenuItem onClick={onClickDelete as unknown as import('react').MouseEventHandler<HTMLElement>}>ja</MenuItem>
           <MenuItem onClick={onClose}>nein</MenuItem>
         </Menu>
       </div>

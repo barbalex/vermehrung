@@ -7,7 +7,15 @@ import { lieferungLabelFromLieferung } from '../../../utils/lieferungLabelFromLi
 
 import styles from '../Arten/Row.module.css'
 
-export const LieferungRow = ({ style, index, rows }) => {
+export const LieferungRow = ({
+  style,
+  index,
+  rows
+}: {
+  style: Record<string, unknown>
+  index: number
+  rows: import('../../../dbModel.ts').Lieferung[]
+}) => {
   const row = rows[index]
 
   const onClickRow = () =>

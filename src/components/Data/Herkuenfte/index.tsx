@@ -27,7 +27,11 @@ import { constants } from '../../../utils/constants.ts'
 
 import artStyles from '../Arten/index.module.css'
 
-export const Herkuenfte = ({ filter: showFilter }) => {
+export const Herkuenfte = ({
+  filter: showFilter,
+}: {
+  filter?: boolean
+}) => {
   const db = useAtomValue(dbAtom)
   const activeNodeArray = useAtomValue(activeNodeArrayAtom)
   const sammlungIdInActiveNodeArray = useAtomValue(

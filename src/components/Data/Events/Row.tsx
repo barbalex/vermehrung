@@ -7,7 +7,15 @@ import { eventLabelFromEvent } from '../../../utils/eventLabelFromEvent.ts'
 
 import styles from '../Arten/Row.module.css'
 
-export const EventRow = ({ style, index, rows }) => {
+export const EventRow = ({
+  style,
+  index,
+  rows
+}: {
+  style: Record<string, unknown>
+  index: number
+  rows: import('../../../dbModel.ts').Event[]
+}) => {
   const row = rows[index]
 
   const onClickRow = () =>

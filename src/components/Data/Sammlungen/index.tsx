@@ -74,8 +74,9 @@ export const Sammlungen = ({ filter: showFilter = false }) => {
 
     // so need to hackly use merge
     const combinedObservables = combineLatest([countObservable, dataObservable])
-    const subscription = combinedObservables.subscribe(
-      async ([totalCount, sammlungs]) => {
+    const subscription = (combinedObservables as unknown as import('rxjs').Observable<
+        [number, import('../../../dbModel.ts').Sammlung[]]
+      >).subscribe(async ([totalCount, sammlungs]) => {
         const sammlungsSorted = await sammlungsSortedFromSammlungs(sammlungs)
         setDataState({
           sammlungs: sammlungsSorted,

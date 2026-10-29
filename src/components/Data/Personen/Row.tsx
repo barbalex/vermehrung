@@ -7,7 +7,15 @@ import { personLabelFromPerson } from '../../../utils/personLabelFromPerson.ts'
 
 import styles from '../Arten/Row.module.css'
 
-export const PersonRow = ({ style, index, rows }) => {
+export const PersonRow = ({
+  style,
+  index,
+  rows
+}: {
+  style: Record<string, unknown>
+  index: number
+  rows: import('../../../dbModel.ts').Person[]
+}) => {
   const row = rows[index]
 
   const onClickRow = () => {

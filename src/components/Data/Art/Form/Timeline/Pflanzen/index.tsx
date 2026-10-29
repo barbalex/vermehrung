@@ -25,13 +25,17 @@ import { buildData } from './buildData.ts'
 
 import styles from './index.module.css'
 
-export const Pflanzen = ({ artId }) => {
+export const Pflanzen = ({
+  artId,
+}: {
+  artId: string | undefined
+}) => {
   const db = useAtomValue(dbAtom)
 
   const { width, ref } = useResizeDetector()
-  const isNarrow = width < 1100
+  const isNarrow = (width ?? 0) < 1100
 
-  const [data, setData] = useState(null)
+  const [data, setData] = useState<Record<string, unknown>[] | null>(null)
   useEffect(() => {
     let isActive = true
     buildData({ db, artId }).then((data) => {

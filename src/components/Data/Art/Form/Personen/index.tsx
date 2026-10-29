@@ -26,7 +26,7 @@ import styles from './index.module.css'
 export const Personen = ({
   art,
 }: {
-  art: import('../../../../shared/types.ts').WmRow | null | undefined
+  art: import('../../../../../dbModel.ts').Art | null | undefined
 }) => {
   const db = useAtomValue(dbAtom)
   const errors = useAtomValue(errorsAtom)
@@ -43,7 +43,7 @@ export const Personen = ({
     stopPropagation?: () => void
     key?: string
   }) => {
-    e.stopPropagation()
+    e.stopPropagation?.()
     if (open) {
       const was = open
       await anim.start({ opacity: 0 })
@@ -58,10 +58,12 @@ export const Personen = ({
     }
   }
 
-  const [dataState, setDataState] = useState({
-    avsSorted: [],
+  const [dataState, setDataState] = useState<{
+  avsSorted: unknown[]
+  personWerte: { value: string; label: string | undefined; link?: string[] }[]
+}>({    avsSorted: [],
     personWerte: [],
-  })
+})
   useEffect(() => {
     const delQuery =
       personFilter?._deleted === false
@@ -88,23 +90,28 @@ export const Personen = ({
       .query(delQuery, aktivQuery)
       .observe()
     const avsObservable = art?.avs
-      ? art?.avs.extend(Q.where('_deleted', false)).observe()
+      ? art?.avs?.extend(Q.where('_deleted', false))?.observe()
       : $of([])
     const combinedObservables = combineLatest([
       personsObservable,
       avsObservable,
     ])
-    const subscription = combinedObservables.subscribe(
-      async ([persons, avs]) => {
+    const subscription = (
+      combinedObservables as unknown as import('rxjs').Observable<
+        [
+          import('../../../../../dbModel.ts').Person[],
+          import('../../../../../dbModel.ts').Av[],
+        ]
+      >
+    ).subscribe(async ([persons, avs]) => {
         const avsSorted = await avsSortByPerson(avs)
         const avPersonIds = avsSorted.map((v) => v.person_id)
         const personWerte = persons
           .filter(
-            (a: import('../../../../../dbModel.ts').Art) =>
-              !avPersonIds.includes(a.id),
+            (a) => !avPersonIds.includes(a.id),
           )
           .sort(personSort)
-          .map((el) => ({
+          .map((el: import('../../../../../dbModel.ts').Person) => ({
             value: el.id,
             label: personLabelFromPerson({ person: el }),
             inaktiv: el.aktiv === false,
@@ -141,7 +148,7 @@ export const Personen = ({
           <IconButton
             aria-label={open ? 'schliessen' : 'öffnen'}
             title={open ? 'schliessen' : 'öffnen'}
-            onClick={onClickToggle}
+            onClick={onClickToggle as unknown as import('react').MouseEventHandler<HTMLElement>}
             size="large"
           >
             {open ? <FaChevronUp /> : <FaChevronDown />}
@@ -156,7 +163,7 @@ export const Personen = ({
         {open && (
           <>
             <div className={styles.aven}>
-              {avsSorted.map((av, index) => (
+              {avsSorted.map((av: import('../../../../../dbModel.ts').Av, index: number) => (
                 <Person key={`${av.art_id}/${av.person_id}/${index}`} av={av} />
               ))}
             </div>

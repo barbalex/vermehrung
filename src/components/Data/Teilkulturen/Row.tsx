@@ -7,7 +7,15 @@ import { teilkulturLabelFromTeilkultur } from '../../../utils/teilkulturLabelFro
 
 import styles from '../Arten/Row.module.css'
 
-export const TeilkulturRow = ({ style, index, rows }) => {
+export const TeilkulturRow = ({
+  style,
+  index,
+  rows
+}: {
+  style: Record<string, unknown>
+  index: number
+  rows: import('../../../dbModel.ts').Teilkultur[]
+}) => {
   const row = rows[index]
 
   const onClickRow = () =>

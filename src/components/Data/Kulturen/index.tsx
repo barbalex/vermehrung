@@ -86,8 +86,9 @@ export const Kulturen = ({ filter: showFilter = false }) => {
         'zwischenlager',
       ])
     const combinedObservables = combineLatest([countObservable, dataObservable])
-    const subscription = combinedObservables.subscribe(
-      async ([totalCount, kulturs]) => {
+    const subscription = (combinedObservables as unknown as import('rxjs').Observable<
+        [number, import('../../../dbModel.ts').Kultur[]]
+      >).subscribe(async ([totalCount, kulturs]) => {
         const kultursSorted = await kultursSortedFromKulturs(kulturs)
         setDataState({
           kulturs: kultursSorted,

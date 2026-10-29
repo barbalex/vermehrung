@@ -11,7 +11,15 @@ import {
 
 import styles from '../Arten/Row.module.css'
 
-export const SammlungRow = ({ style, index, rows }) => {
+export const SammlungRow = ({
+  style,
+  index,
+  rows
+}: {
+  style: Record<string, unknown>
+  index: number
+  rows: import('../../../dbModel.ts').Sammlung[]
+}) => {
   const herkunftIdInActiveNodeArray = useAtomValue(
     herkunftIdInActiveNodeArrayAtom,
   )

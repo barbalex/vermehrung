@@ -7,7 +7,15 @@ import { herkunftLabelFromHerkunft } from '../../../utils/herkunftLabelFromHerku
 
 import styles from '../Arten/Row.module.css'
 
-export const HerkunftRow = ({ style, index, rows }) => {
+export const HerkunftRow = ({
+  style,
+  index,
+  rows
+}: {
+  style: Record<string, unknown>
+  index: number
+  rows: import('../../../dbModel.ts').Herkunft[]
+}) => {
   const row = rows[index]
 
   const onClickRow = () =>

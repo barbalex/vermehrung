@@ -32,7 +32,7 @@ export const Pflanzen = ({ artId, herkunft }) => {
 
   const { width, ref } = useResizeDetector()
 
-  const [data, setData] = useState(null)
+  const [data, setData] = useState<Record<string, unknown>[] | null>(null)
   useEffect(() => {
     let isActive = true
     buildData({ db, artId, herkunftId }).then((data) => {
@@ -46,7 +46,7 @@ export const Pflanzen = ({ artId, herkunft }) => {
     }
   }, [artId, herkunftId, db])
 
-  const isNarrow = width < 1100
+  const isNarrow = (width ?? 0) < 1100
 
   const herkunftLabel = herkunftLabelFromHerkunft({ herkunft })
 

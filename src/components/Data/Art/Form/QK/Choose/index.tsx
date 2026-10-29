@@ -3,7 +3,11 @@ import { ErrorBoundary } from '../../../../../shared/ErrorBoundary.tsx'
 
 import styles from './index.module.css'
 
-export const Choose = ({ qks }) => (
+export const Choose = ({
+  qks,
+}: {
+  qks: import('../../../../../../dbModel.ts').ArtQk[]
+}) => (
   <ErrorBoundary>
     <div className={styles.container}>
       <div className={styles.info}>Diese Wahl gilt für alle Arten</div>

@@ -9,7 +9,15 @@ import {
 
 import styles from './Row.module.css'
 
-export const ArtRow = ({ style, index, rows }) => {
+export const ArtRow = ({
+  style,
+  index,
+  rows
+}: {
+  style: Record<string, unknown>
+  index: number
+  rows: import('../../../dbModel.ts').Art[]
+}) => {
   const row = rows[index]
 
   const [label, setLabel] = useState('')
