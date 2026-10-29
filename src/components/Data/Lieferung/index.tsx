@@ -37,12 +37,12 @@ export const LieferungContainer = ({
       : activeNodeArray.filter((e) => isId(e)).at(-1)
   }
 
-  const [dataState, setDataState] = useState({
-    row: undefined,
+  const [dataState, setDataState] = useState<{
+    row: import('../../../dbModel.ts').Lieferung | undefined
     // need raw row because observable does not provoke rerendering of components
-    rawRow: undefined,
-    userPersonOption: undefined,
-  })
+    rawRow: string | undefined
+    userPersonOption: import('../../../dbModel.ts').PersonOption | undefined
+  }>({ row: undefined, rawRow: undefined, userPersonOption: undefined })
 
   const { row, rawRow, userPersonOption } = dataState
   const { li_show_sl } = userPersonOption ?? {}
@@ -57,13 +57,22 @@ export const LieferungContainer = ({
     const lieferungObservable = showFilter
       ? $of(lieferungFilter)
       : initialDataQueried || !online
-        ? db?.get('lieferung').findAndObserve(id)
-        : $of({})
+        ? db
+            ?.get<import('../../../dbModel.ts').Lieferung>('lieferung')
+            .findAndObserve(id as string)
+        : $of(undefined)
     const combinedObservables = combineLatest([
       userPersonOptionsObservable,
       lieferungObservable,
     ])
-    const subscription = combinedObservables.subscribe(
+    const subscription = (
+      combinedObservables as unknown as import('rxjs').Observable<
+        [
+          import('../../../dbModel.ts').PersonOption[] | undefined,
+          import('../../../dbModel.ts').Lieferung | undefined,
+        ]
+      >
+    ).subscribe(
       async ([userPersonOptions, lieferung]) =>
         setDataState({
           row: lieferung,
@@ -91,7 +100,7 @@ export const LieferungContainer = ({
       <Allotment vertical>
         <Lieferung showFilter={showFilter} row={row} rawRow={rawRow} id={id} />
         <SammelLieferung
-          showFilter={showFilter}
+          filter={showFilter}
           id={row?.sammel_lieferung_id}
           lieferung={row}
         />

@@ -11,7 +11,7 @@ export const CustomAxisTick = ({ x, y, payload }: { x?: number; y?: number; payl
       transform="rotate(-90)"
       style={{ fontSize: 11 }}
     >
-      {DateTime.fromSQL(payload?.value).toFormat('yyyy.LL.dd')}
+      {DateTime.fromSQL((payload?.value ?? '') as string).toFormat('yyyy.LL.dd')}
     </text>
   </g>
 )

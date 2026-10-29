@@ -19,11 +19,21 @@ import { LieferungHistory as History } from './History/index.tsx'
 
 import artStyles from '../../Art/index.module.css'
 
-export const Lieferung = ({ id, showFilter, row, rawRow }) => {
+export const Lieferung = ({
+  id,
+  showFilter,
+  row,
+  rawRow,
+}: {
+  id?: string | undefined
+  showFilter?: boolean
+  row: import('../../../../dbModel.ts').Lieferung | null | undefined
+  rawRow: string | null | undefined
+}) => {
   const online = useAtomValue(onlineAtom)
   const filterShow = useAtomValue(filterShowAtom)
 
-  const [activeConflict, setActiveConflict] = useState(null)
+  const [activeConflict, setActiveConflict] = useState<string | null>(null)
   const conflictDisposalCallback = () => setActiveConflict(null)
   const conflictSelectionCallback = () => setActiveConflict(null)
 
@@ -53,14 +63,13 @@ export const Lieferung = ({ id, showFilter, row, rawRow }) => {
       >
         <FormTitle
           row={row}
-          rawRow={rawRow}
-          showFilter={showFilter}
+          showFilter={showFilter ?? false}
           showHistory={showHistory}
         />
         <div className={artStyles.splitPaneContainer}>
           <Allotment key={`${activeConflict}/${showHistory}`}>
             <Form
-              showFilter={showFilter}
+              showFilter={showFilter ?? false}
               id={id}
               row={row}
               rawRow={rawRow}
@@ -76,7 +85,6 @@ export const Lieferung = ({ id, showFilter, row, rawRow }) => {
                   rev={activeConflict}
                   id={id}
                   row={row}
-                  rawRow={rawRow}
                   conflictDisposalCallback={conflictDisposalCallback}
                   conflictSelectionCallback={conflictSelectionCallback}
                   setActiveConflict={

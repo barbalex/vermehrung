@@ -33,7 +33,7 @@ export const SammelLieferung = ({
 }: {
   filter?: boolean
   id?: string | undefined
-  lieferung: import('../../dbModel.ts').Lieferung | null | undefined
+  lieferung: import('../../../dbModel.ts').Lieferung | null | undefined
 }) => {
   const isPrint = useAtomValue(isPrintAtom)
   const online = useAtomValue(onlineAtom)
@@ -48,11 +48,21 @@ export const SammelLieferung = ({
       showFilter
         ? $of(sammelLieferungFilter)
         : initialDataQueried || !online
-          ? db?.get('sammel_lieferung').findAndObserve(id)
-          : $of({}),
+          ? db
+              ?.get<import('../../../dbModel.ts').SammelLieferung>(
+                'sammel_lieferung',
+              )
+              .findAndObserve(id)
+          : $of(undefined),
     [db, sammelLieferungFilter, id, initialDataQueried, online, showFilter],
   )
-  const row = useObservable(observable)
+  const row = useObservable(
+    observable as unknown as
+      | import('rxjs').Observable<
+          import('../../../dbModel.ts').SammelLieferung | undefined
+        >
+      | undefined,
+  )
 
   const [activeConflict, setActiveConflict] = useState(null)
   const conflictDisposalCallback = () => setActiveConflict(null)
@@ -66,7 +76,8 @@ export const SammelLieferung = ({
 
   // setting initial value like this is necessary
   // because during printing page Vermehrung re-renders without tree
-  const [printPreview, setPrintPreview] = useState(isPrint && !printPreview)
+  // isPrint && !printPreview of the original code evaluates to isPrint
+  const [printPreview, setPrintPreview] = useState(isPrint)
 
   // history is url-driven: the url ends with '/histories/<rev>'
   // which is not part of activeNodeArray
@@ -91,7 +102,9 @@ export const SammelLieferung = ({
           row={row}
           lieferung={lieferung}
           printPreview={printPreview}
-          setPrintPreview={setPrintPreview}
+          setPrintPreview={
+            setPrintPreview as unknown as (val: unknown) => void
+          }
           showHistory={showHistory}
         />
         {printPreview ? (

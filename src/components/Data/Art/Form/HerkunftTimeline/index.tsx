@@ -22,7 +22,9 @@ export const HerkunftTimeline = ({
   const db = useAtomValue(dbAtom)
   const herkunftFilter = useAtomValue(filterHerkunftAtom)
 
-  const [herkunfts, setHerkunfts] = useState([])
+  const [herkunfts, setHerkunfts] = useState<
+    import('../../../../../dbModel.ts').Herkunft[]
+  >([])
   useEffect(() => {
     const sammlungsObservable = db
       ?.get<import('../../../../../dbModel.ts').Sammlung>('sammlung')
@@ -40,10 +42,17 @@ export const HerkunftTimeline = ({
       sammlungsObservable,
       herkunftsObservable,
     ])
-    const subscription = combinedObservables.subscribe(
+    const subscription = (
+      combinedObservables as unknown as import('rxjs').Observable<
+        [
+          import('../../../../../dbModel.ts').Sammlung[] | undefined,
+          import('../../../../../dbModel.ts').Herkunft[] | undefined,
+        ]
+      >
+    ).subscribe(
       ([sammlungs, herkunfts]) => {
-        const herkunftIds = uniq(sammlungs?.map((s) => s.herkunft_id))
-        const herkunftsSorted = herkunfts
+        const herkunftIds = uniq((sammlungs ?? []).map((s) => s.herkunft_id))
+        const herkunftsSorted = (herkunfts ?? [])
           .filter((h) => herkunftIds.includes(h.id))
           .sort(herkunftSort)
         setHerkunfts(herkunftsSorted)
@@ -62,17 +71,17 @@ export const HerkunftTimeline = ({
     stopPropagation?: () => void
     key?: string
   }) => {
-    e.stopPropagation()
+    e.stopPropagation?.()
     if (open) {
       const was = open
-      await anim.start({ opacity: 0 })
-      await anim.start({ height: 0 })
+      await anim.start?.({ opacity: 0 })
+      await anim.start?.({ height: 0 })
       setOpen(!was)
     } else {
       setOpen(!open)
       setTimeout(async () => {
-        await anim.start({ height: 'auto' })
-        await anim.start({ opacity: 1 })
+        await anim.start?.({ height: 'auto' })
+        await anim.start?.({ opacity: 1 })
       })
     }
   }

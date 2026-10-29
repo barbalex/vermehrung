@@ -22,7 +22,6 @@ export const LieferungTitleChooser = ({
   showHistory,
 }: {
   row?: import('../../../../../dbModel.ts').Lieferung | null | undefined
-  rawRow: Record<string, unknown> | null | undefined
   showFilter: boolean
   showHistory: boolean
 }) => {

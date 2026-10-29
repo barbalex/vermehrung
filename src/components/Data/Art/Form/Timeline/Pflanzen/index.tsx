@@ -72,7 +72,12 @@ export const Pflanzen = ({
             margin={{ top: 35, right: 0, left: 0, bottom: 45 }}
           >
             <CartesianGrid strokeDasharray="3 3" horizontal={false} />
-            <XAxis dataKey="datum" tick={CustomAxisTick} interval={0} />
+            <XAxis dataKey="datum" tick={
+                      CustomAxisTick as unknown as {
+                        value: unknown
+                        fill: string
+                      }
+                    } interval={0} />
             <YAxis
               label={{
                 value: 'Anzahl Pflanzen',

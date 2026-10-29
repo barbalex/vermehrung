@@ -36,7 +36,7 @@ export const LierferungForm = ({
   showFilter: boolean
   id?: string | undefined
   row: import('../../../../../dbModel.ts').Lieferung | null | undefined
-  rawRow: Record<string, unknown> | null | undefined
+  rawRow: string | null | undefined
   activeConflict: string | null
   setActiveConflict: (val: unknown) => void
   showHistory: boolean

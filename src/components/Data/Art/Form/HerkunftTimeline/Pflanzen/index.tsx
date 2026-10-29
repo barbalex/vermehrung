@@ -26,7 +26,13 @@ import { buildData } from './buildData.ts'
 
 import styles from './index.module.css'
 
-export const Pflanzen = ({ artId, herkunft }) => {
+export const Pflanzen = ({
+  artId,
+  herkunft,
+}: {
+  artId: string | null | undefined
+  herkunft: import('../../../../../../dbModel.ts').Herkunft
+}) => {
   const db = useAtomValue(dbAtom)
   const herkunftId = herkunft.id
 
@@ -35,7 +41,7 @@ export const Pflanzen = ({ artId, herkunft }) => {
   const [data, setData] = useState<Record<string, unknown>[] | null>(null)
   useEffect(() => {
     let isActive = true
-    buildData({ db, artId, herkunftId }).then((data) => {
+    buildData({ db, artId: artId ?? undefined, herkunftId }).then((data) => {
       if (!isActive) return
 
       setData(data)
@@ -76,7 +82,12 @@ export const Pflanzen = ({ artId, herkunft }) => {
             margin={{ top: 25, right: 0, left: 0, bottom: 45 }}
           >
             <CartesianGrid strokeDasharray="3 3" horizontal={false} />
-            <XAxis dataKey="datum" tick={CustomAxisTick} interval={0} />
+            <XAxis dataKey="datum" tick={
+                      CustomAxisTick as unknown as {
+                        value: unknown
+                        fill: string
+                      }
+                    } interval={0} />
             <YAxis
               label={{
                 value: 'Anzahl Pflanzen',

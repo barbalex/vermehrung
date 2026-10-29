@@ -1,6 +1,16 @@
 import { Text } from 'recharts'
 
-export const LabelZaehlung = ({ x, y, stroke, value }) => {
+export const LabelZaehlung = ({
+  x,
+  y,
+  stroke,
+  value,
+}: {
+  x?: number
+  y?: number
+  stroke?: string
+  value?: number
+}) => {
   if (value === undefined) return null
   return (
     <Text

@@ -39,6 +39,9 @@ CLAUDE.md.(0 problems, --max-warnings 0)
 
 ---
 
+is there something wrong with sync? I am getting the same message every few seconds. I would assume that the sammlung_file that needs updating would be updated after the first message:
+processSubscriptionResult.ts:76 processSubscriptionResult: {table: 'sammlung_file', toUpdate: 1, toCreate: 0}
+
 ---
 
 ---

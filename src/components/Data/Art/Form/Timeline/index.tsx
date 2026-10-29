@@ -26,7 +26,7 @@ export const Timeline = ({
     stopPropagation?: () => void
     key?: string
   }) => {
-    e.stopPropagation()
+    e.stopPropagation?.()
     const url = `${constants?.getAppUri()}/Dokumentation/zeitachse-art`
     if (window.matchMedia('(display-mode: standalone)').matches) {
       return window.open(url, '_blank', 'toolbar=no')
@@ -40,7 +40,7 @@ export const Timeline = ({
     stopPropagation?: () => void
     key?: string
   }) => {
-    e.stopPropagation()
+    e.stopPropagation?.()
     if (open) {
       const was = open
       await anim.start({ opacity: 0 })
@@ -89,7 +89,7 @@ export const Timeline = ({
         </div>
       </section>
       <motion.div animate={anim} transition={{ duration: 0.2 }}>
-        {open && <Pflanzen key={artId} artId={artId} />}
+        {open && <Pflanzen key={artId ?? ''} artId={artId ?? undefined} />}
       </motion.div>
     </ErrorBoundary>
   )

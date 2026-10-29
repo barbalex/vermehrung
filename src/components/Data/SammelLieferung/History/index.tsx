@@ -24,11 +24,9 @@ const sliderSettings = {
 
 export const SammelLieferungHistory = ({
   row,
-  rawRow: _rawRow,
   historyTakeoverCallback,
 }: {
   row: import('../../../../dbModel.ts').SammelLieferung | null | undefined
-  rawRow: Record<string, unknown> | null | undefined
   historyTakeoverCallback: () => void
 }) => {
   const priorRevisions =
