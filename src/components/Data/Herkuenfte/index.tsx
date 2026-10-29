@@ -21,6 +21,7 @@ import { HerkunftRow as Row } from './Row.tsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
 import { FilterNumbers } from '../../shared/FilterNumbers.tsx'
 import UpSvg from '../../../svg/to_up.svg?react'
+import { breadcrumbsEnabled } from '../../../utils/breadcrumbsEnabled.ts'
 import { tableFilter } from '../../../utils/tableFilter.ts'
 import { herkunftSort } from '../../../utils/herkunftSort.ts'
 import { constants } from '../../../utils/constants.ts'
@@ -121,9 +122,11 @@ export const Herkuenfte = ({
           <div className={artStyles.titleContainer}>
             <div className={artStyles.title}>Herkünfte</div>
             <div className={artStyles.titleSymbols}>
-              <IconButton title={upTitle} onClick={onClickUp} size="large">
-                <UpSvg />
-              </IconButton>
+              {!breadcrumbsEnabled && (
+                <IconButton title={upTitle} onClick={onClickUp} size="large">
+                  <UpSvg />
+                </IconButton>
+              )}
               {showPlus && (
                 <IconButton
                   aria-label="neue Herkunft"

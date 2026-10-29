@@ -24,6 +24,7 @@ import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
 import { FilterNumbers } from '../../shared/FilterNumbers.tsx'
 import { exists } from '../../../utils/exists.ts'
 import UpSvg from '../../../svg/to_up.svg?react'
+import { breadcrumbsEnabled } from '../../../utils/breadcrumbsEnabled.ts'
 import { tableFilter } from '../../../utils/tableFilter.ts'
 import { lieferungSort } from '../../../utils/lieferungSort.ts'
 import { constants } from '../../../utils/constants.ts'
@@ -202,9 +203,11 @@ export const Lieferungen = ({ filter: showFilter = false }) => {
           <div className={artStyles.titleContainer}>
             <div className={artStyles.title}>Lieferungen</div>
             <div className={artStyles.titleSymbols}>
-              <IconButton title={upTitle} onClick={onClickUp} size="large">
-                <UpSvg />
-              </IconButton>
+              {!breadcrumbsEnabled && (
+                <IconButton title={upTitle} onClick={onClickUp} size="large">
+                  <UpSvg />
+                </IconButton>
+              )}
               <IconButton
                 aria-label="neue Lieferung"
                 title="neue Lieferung"

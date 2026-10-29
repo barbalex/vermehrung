@@ -20,6 +20,7 @@ import { GartenRow as Row } from './Row.tsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
 import { FilterNumbers } from '../../shared/FilterNumbers.tsx'
 import UpSvg from '../../../svg/to_up.svg?react'
+import { breadcrumbsEnabled } from '../../../utils/breadcrumbsEnabled.ts'
 import { tableFilter } from '../../../utils/tableFilter.ts'
 import { gartensSortedFromGartens } from '../../../utils/gartensSortedFromGartens.ts'
 import { constants } from '../../../utils/constants.ts'
@@ -127,9 +128,11 @@ export const Gaerten = ({ filter: showFilter = false }) => {
           <div className={artStyles.titleContainer}>
             <div className={artStyles.title}>Gärten</div>
             <div className={artStyles.titleSymbols}>
-              <IconButton title={upTitle} onClick={onClickUp} size="large">
-                <UpSvg />
-              </IconButton>
+              {!breadcrumbsEnabled && (
+                <IconButton title={upTitle} onClick={onClickUp} size="large">
+                  <UpSvg />
+                </IconButton>
+              )}
               <IconButton
                 aria-label="neuer Garten"
                 title="neuer Garten"

@@ -4,6 +4,7 @@ import { FaPlus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import { List } from 'react-window'
 import UpSvg from '../../../svg/to_up.svg?react'
+import { breadcrumbsEnabled } from '../../../utils/breadcrumbsEnabled.ts'
 import { combineLatest } from 'rxjs'
 import { Q } from '@nozbe/watermelondb'
 
@@ -107,9 +108,11 @@ export const Arten = ({
               <div className={artStyles.apFilterContainer}>
                 <ApFilter />
               </div>
-              <IconButton title={upTitle} onClick={onClickUp} size="large">
-                <UpSvg />
-              </IconButton>
+              {!breadcrumbsEnabled && (
+                <IconButton title={upTitle} onClick={onClickUp} size="large">
+                  <UpSvg />
+                </IconButton>
+              )}
               <IconButton
                 aria-label="neue Art"
                 title="neue Art"

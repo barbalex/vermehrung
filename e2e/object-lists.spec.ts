@@ -228,6 +228,14 @@ test('object urls render apf2-style object lists', async ({ page }) => {
     await expect(
       page.getByText('Kulturen', { exact: true }).first(),
     ).toBeVisible({ timeout: 60_000 })
+    // its up button is hidden with breadcrumbs enabled...
+    await expect(
+      page.locator(
+        'button[title="Eine Ebene höher"], button[title="Zur Art"], button[title="Zu allen Listen"]',
+      ),
+    ).toHaveCount(0)
+    // ...while the add button remains
+    await expect(page.getByTitle('neue Kultur')).toBeVisible()
   })
 
   await test.step('kultur object list shows its child tables', async () => {

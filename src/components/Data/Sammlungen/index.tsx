@@ -22,6 +22,7 @@ import { SammlungRow as Row } from './Row.tsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
 import { FilterNumbers } from '../../shared/FilterNumbers.tsx'
 import UpSvg from '../../../svg/to_up.svg?react'
+import { breadcrumbsEnabled } from '../../../utils/breadcrumbsEnabled.ts'
 import { tableFilter } from '../../../utils/tableFilter.ts'
 import { sammlungsSortedFromSammlungs } from '../../../utils/sammlungsSortedFromSammlungs.ts'
 import { constants } from '../../../utils/constants.ts'
@@ -138,9 +139,11 @@ export const Sammlungen = ({ filter: showFilter = false }) => {
           <div className={artStyles.titleContainer}>
             <div className={artStyles.title}>Sammlungen</div>
             <div className={artStyles.titleSymbols}>
-              <IconButton title={upTitle} onClick={onClickUp} size="large">
-                <UpSvg />
-              </IconButton>
+              {!breadcrumbsEnabled && (
+                <IconButton title={upTitle} onClick={onClickUp} size="large">
+                  <UpSvg />
+                </IconButton>
+              )}
               <IconButton
                 aria-label="neue Sammlung"
                 title="neue Sammlung"
