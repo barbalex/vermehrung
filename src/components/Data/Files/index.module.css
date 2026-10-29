@@ -20,7 +20,8 @@
 }
 
 .buttons {
-  margin-top: 7px;
+  display: flex;
+  align-items: center;
 }
 
 .spacer {

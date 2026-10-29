@@ -1,6 +1,7 @@
 import { useRef, useState, useMemo } from 'react'
 import { useAtomValue } from 'jotai'
 import ImageGallery from 'react-image-gallery'
+import 'react-image-gallery/build/image-gallery.css'
 import Button from '@mui/material/Button'
 import { v7 as uuidv7 } from 'uuid'
 import { of as $of } from 'rxjs'
