@@ -82,14 +82,13 @@ export const Root = ({ filter: showFilter }: { filter?: boolean }) => {
         >
       ).subscribe(
         async ([[userPersonOption], [userRole]]) => {
-          const sArt =
-            getShowArt({
-              userRole: userRole as unknown as string | null | undefined,
-              activeNodeArray,
-            })
+          const sArt = getShowArt({
+            userRole: userRole?.name,
+            activeNodeArray,
+          })
           const sGarten = getShowGarten()
           const sHerkunft = getShowHerkunft({
-            userRole: userRole as unknown as string | null | undefined,
+            userRole: userRole?.name,
             activeNodeArray,
           })
           const sKultur = getShowKultur({ userPersonOption, activeNodeArray })
@@ -103,7 +102,7 @@ export const Root = ({ filter: showFilter }: { filter?: boolean }) => {
           //   activeNodeArray,
           // })
           const sSammlung = getShowSammlung({
-            userRole: userRole as unknown as string | null | undefined,
+            userRole: userRole?.name,
             activeNodeArray,
           })
           const sTeilkultur = getShowTeilkultur({

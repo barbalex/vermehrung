@@ -57,7 +57,8 @@ export const SammelLieferungCopyMenu = ({
   }) => setAnchorEl(event.currentTarget)
 
   const containsData =
-    Object.entries(sammelLieferung ?? {})
+    // watermelon models keep field values in _raw
+    Object.entries(sammelLieferung?._raw ?? {})
       .filter(
         // only accept lieferung's fields
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -66,7 +67,7 @@ export const SammelLieferungCopyMenu = ({
       )
       // only update with existing values
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      .filter(([key, val]) => exists(val) && val !== false).length > 0
+      .filter(([key, val]) => exists(val) && val !== (false as unknown)).length > 0
 
   const onClickActiveLieferung = async () => {
     setAnchorEl(null)

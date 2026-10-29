@@ -10,12 +10,12 @@ export const updateAllSammelLieferungen = async ({
 }) => {
   // pass field to mark which field should be updated
   // even if it has value null
-  const lieferungs = (sammelLieferung.lieferungs ?? []) as unknown as import('../../../../../dbModel.ts').Lieferung[]
+  const lieferungs = await sammelLieferung.lieferungs.fetch()
   //console.log('updateAllLieferungen', { sammelLieferung, lieferungs })
   let error = null
   for (const lieferung of lieferungs) {
     try {
-      updateSammelLieferung({
+      await updateSammelLieferung({
         lieferung,
         sammelLieferung,
         field,

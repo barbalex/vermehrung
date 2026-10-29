@@ -13,11 +13,20 @@ MouseEventHandler<HTMLElement>, errors-atom reads cast to string.
 Entity History/Row twins and Settings menus all follow identical
 patterns - check a done sibling before typing the next one.
 
-latent runtime bugs found while typing (behavior preserved, flagged):
-- SammelLieferung Copy updateAllLieferungen iterates watermelon Query
-  (not iterable) - for...of would throw
-- Root getShow* helpers receive UserRole model but compare to strings
-  (role logic always truthy)
+latent runtime bugs found while typing - ALL FIXED 2026-10-29:
+- SammelLieferung "Daten kopieren" was fully dead: containsData read
+  Object.entries(model) (own props only -> always empty -> button
+  always disabled); updateSammelLieferung/oldValues read the same way
+  (would have wiped fields); updateAllLieferungen iterated a watermelon
+  Query (not iterable) without awaiting. Now reads _raw everywhere,
+  fetch()es the query, awaits updates (errors caught, notification
+  after completion)
+
+- Lieferungen add-from-SammelLieferung prefill read Object.entries(sl)
+  (empty) - now reads sl._raw
+- Root getShow* helpers received the UserRole model but compared to
+  strings (role logic always truthy) - now passes userRole?.name like
+  the Tree already did; gaertners get the intended node filtering
 - Lieferungen add() called insertLieferungRev() without args (would
   throw when sammel_lieferung lookup fails) - now { values: {} }
 - Lieferschein pageContainer was unbound since css-modules refactor
@@ -28,7 +37,7 @@ latent runtime bugs found while typing (behavior preserved, flagged):
   always undefined) - fixed to auspflanzbereit_beschreibung
 - SammelLieferung printPreview initializer referenced itself (TDZ in
   esbuild) - fixed to useState(isPrint)
-- MUI 9: PaperProps -> slotProps.paper in two delete menus
+- MUI 9: PaperProps -> slotProps.paper in all five delete menus
 
 Phase E next: noUnusedLocals/noUnusedParameters, drop
 allowJs/checkJs, wire lint+typecheck+test into npm run deploy, update
@@ -55,6 +64,8 @@ CLAUDE.md.(0 problems, --max-warnings 0)
 ---
 
 ---
+
+get Sammel-Lieferung/lieferschein to work again
 
 ---
 

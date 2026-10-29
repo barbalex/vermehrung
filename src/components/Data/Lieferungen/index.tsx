@@ -140,7 +140,8 @@ export const Lieferungen = ({ filter: showFilter = false }) => {
       } catch {}
       const additionalValuesToSet: Record<string, unknown> = {}
 
-      const entries = Object.entries(sl ?? {})
+      // watermelon models keep field values in _raw
+      const entries = Object.entries(sl?._raw ?? {})
         .filter(
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
           ([key, value]) =>

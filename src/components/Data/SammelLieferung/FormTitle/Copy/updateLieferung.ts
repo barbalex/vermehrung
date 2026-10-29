@@ -79,8 +79,10 @@ export const updateSammelLieferung = async ({
   console.log('updateLieferung, lieferung:', lieferung)
   // pass field to mark which field should be updated
   // even if it has value null
+  // watermelon models keep field values in _raw - Object.entries on the
+  // model itself only returns implementation internals
   const newValuesFromSl = Object.fromEntries(
-    Object.entries(sammelLieferung)
+    Object.entries(sammelLieferung._raw)
       .filter(
         // only accept lieferung's fields
 
@@ -96,7 +98,7 @@ export const updateSammelLieferung = async ({
   // need to query existing object to get revisions
   const lfLastVersion = lieferung
   const oldValuesFromL = Object.fromEntries(
-    Object.entries(lfLastVersion).filter(
+    Object.entries(lfLastVersion._raw).filter(
       // only accept lieferung's fields
 
       ([key]) => lieferungFields.includes(key),

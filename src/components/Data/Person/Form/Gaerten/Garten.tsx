@@ -75,14 +75,14 @@ export const PersonGarten = ({
           anchorEl={delMenuAnchorEl ?? null}
           open={delMenuOpen}
           onClose={onClose}
-          {...({
-            PaperProps: {
+          slotProps={{
+            paper: {
               style: {
                 maxHeight: 48 * 4.5,
                 width: 120,
               },
             },
-          } as Record<string, unknown>)}
+          }}
         >
           <h3 className={styles.menuTitle}>löschen?</h3>
           <MenuItem onClick={onClickDelete as unknown as import('react').MouseEventHandler<HTMLElement>}>ja</MenuItem>
