@@ -30,7 +30,7 @@ import { personFullname } from '../../../utils/personFullname.ts'
 
 import styles from './Account.module.css'
 
-const Account = () => {
+const Account = ({ asMenu }: { asMenu?: boolean }) => {
   const user = useAtomValue(userAtom)
   const online = useAtomValue(onlineAtom)
   const db = useAtomValue(dbAtom)
@@ -125,29 +125,40 @@ const Account = () => {
   return (
     <ErrorBoundary>
       <>
-        <IconButton
-          aria-label="Konto"
-          aria-owns={anchorEl ? 'long-menu' : undefined}
-          aria-haspopup="true"
-          title={`Konto und Daten verwalten`}
-          onClick={
-            onClickMenu as unknown as import("react").MouseEventHandler<HTMLButtonElement>
-          }
-          size="large"
-        >
-          <UserIcon className={styles.userIcon} />
-        </IconButton>
+        {asMenu ? (
+          <MenuItem
+            aria-label="Konto"
+            aria-owns={anchorEl ? 'menu-appbar' : undefined}
+            aria-haspopup="true"
+            onClick={
+              onClickMenu as unknown as import('react').MouseEventHandler<HTMLLIElement>
+            }
+          >
+            Konto
+          </MenuItem>
+        ) : (
+          <IconButton
+            aria-label="Konto"
+            aria-owns={anchorEl ? 'long-menu' : undefined}
+            aria-haspopup="true"
+            title={`Konto und Daten verwalten`}
+            onClick={
+              onClickMenu as unknown as import("react").MouseEventHandler<HTMLButtonElement>
+            }
+            size="large"
+          >
+            <UserIcon className={styles.userIcon} />
+          </IconButton>
+        )}
         <Menu
           id="menu-appbar"
           anchorEl={anchorEl}
-          anchorOrigin={{
-            vertical: 'top',
-            horizontal: 'right',
-          }}
-          transformOrigin={{
-            vertical: 'top',
-            horizontal: 'right',
-          }}
+          anchorOrigin={
+            asMenu ? undefined : { vertical: 'top', horizontal: 'right' }
+          }
+          transformOrigin={
+            asMenu ? undefined : { vertical: 'top', horizontal: 'right' }
+          }
           open={!!anchorEl}
           onClose={onCloseMenu}
         >

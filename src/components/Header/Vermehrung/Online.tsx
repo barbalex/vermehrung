@@ -1,5 +1,7 @@
+import { useContext } from 'react'
 import { useAtomValue } from 'jotai'
 import IconButton from '@mui/material/IconButton'
+import MenuItem from '@mui/material/MenuItem'
 import Badge from '@mui/material/Badge'
 import {
   MdCloudDone as NetworkOn,
@@ -9,6 +11,7 @@ import styled from '@emotion/styled'
 import { useLocation, useNavigate } from 'react-router'
 
 import { onlineAtom, queueSizeAtom } from '../../../store/index.ts'
+import { MenuCloseContext } from '../../shared/MenuCloseContext.ts'
 
 // keep this use of styled
 const StyledBadge = styled(Badge)`
@@ -17,11 +20,12 @@ const StyledBadge = styled(Badge)`
   }
 `
 
-export const Online = () => {
+export const Online = ({ asMenu }: { asMenu?: boolean }) => {
   const online = useAtomValue(onlineAtom)
   const queueSize = useAtomValue(queueSizeAtom)
   const { pathname } = useLocation()
   const navigate = useNavigate()
+  const closeMenu = useContext(MenuCloseContext)
 
   const title = online
     ? 'Sie sind online'
@@ -39,6 +43,29 @@ export const Online = () => {
     } else {
       navigate('/Vermehrung/ausstehende-Operationen')
     }
+  }
+
+  if (asMenu) {
+    return (
+      <MenuItem
+        onClick={() => {
+          closeMenu()
+          onClick()
+        }}
+        aria-label={title}
+        title={title}
+      >
+        <StyledBadge
+          color="primary"
+          badgeContent={queueSize}
+          max={999}
+          style={{ marginRight: 12 }}
+        >
+          {online ? <NetworkOn /> : <NetworkOff />}
+        </StyledBadge>
+        {title}
+      </MenuItem>
+    )
   }
 
   return (

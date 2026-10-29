@@ -3,6 +3,8 @@ import IconButton from '@mui/material/IconButton'
 import MuiMenu from '@mui/material/Menu'
 import { FaBars } from 'react-icons/fa'
 
+import { MenuCloseContext } from './MenuCloseContext.ts'
+
 export const Menu = ({
   children,
   title = 'Menu',
@@ -39,7 +41,9 @@ export const Menu = ({
         open={Boolean(anchorEl)}
         onClose={closeMenu}
       >
-        {children}
+        <MenuCloseContext.Provider value={closeMenu}>
+          {children}
+        </MenuCloseContext.Provider>
       </MuiMenu>
     </>
   )

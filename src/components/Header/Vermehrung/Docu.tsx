@@ -11,15 +11,15 @@ import styles from './Docu.module.css'
 export const HeaderDocu = ({ asMenu }: { asMenu?: boolean }) => {
   const singleColumnView = useAtomValue(singleColumnViewAtom)
 
-  if (singleColumnView) {
-    if (asMenu) {
-      return (
-        <MenuItem component={Link} to="/Dokumentation/">
-          Dokumentation
-        </MenuItem>
-      )
-    }
+  if (asMenu) {
+    return (
+      <MenuItem component={Link} to="/Dokumentation/">
+        Dokumentation
+      </MenuItem>
+    )
+  }
 
+  if (singleColumnView) {
     return (
       <IconButton
         color="inherit"
