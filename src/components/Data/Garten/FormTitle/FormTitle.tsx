@@ -14,6 +14,7 @@ import { GartenDownload as Download } from './Download/index.tsx'
 import { FilterNumbers } from '../../../shared/FilterNumbers.tsx'
 import UpSvg from '../../../../svg/to_up.svg?react'
 import KuDownSvg from '../../../../svg/to_ku_down.svg?react'
+import { breadcrumbsEnabled } from '../../../../utils/breadcrumbsEnabled.ts'
 import { HistoryButton } from '../../../shared/HistoryButton.tsx'
 import { Menu } from '../../../shared/Menu.tsx'
 
@@ -47,16 +48,20 @@ export const GartenFormTitle = ({
     <div className={artStyles.container} ref={ref}>
       <div className={artStyles.title}>Garten</div>
       <div className={artStyles.symbols}>
-        <IconButton title="Zur Liste" onClick={onClickUp} size="large">
-          <UpSvg />
-        </IconButton>
-        <IconButton
-          title="Zu den Kulturen"
-          onClick={onClickToKulturen}
-          size="large"
-        >
-          <KuDownSvg />
-        </IconButton>
+        {!breadcrumbsEnabled && (
+          <>
+            <IconButton title="Zur Liste" onClick={onClickUp} size="large">
+              <UpSvg />
+            </IconButton>
+            <IconButton
+              title="Zu den Kulturen"
+              onClick={onClickToKulturen}
+              size="large"
+            >
+              <KuDownSvg />
+            </IconButton>
+          </>
+        )}
         <AddButton />
         <DeleteButton row={row} />
         <Download gartenId={row?.id} />

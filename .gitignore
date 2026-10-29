@@ -90,3 +90,6 @@ dist/
 dist/*
 
 git_stats.txt
+
+# playwright test output
+test-results/

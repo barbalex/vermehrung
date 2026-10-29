@@ -15,6 +15,7 @@ import { Data } from '../../components/Data/index.tsx'
 import { Filter } from '../../components/Filter.tsx'
 import { Fallback } from '../../components/shared/Fallback.tsx'
 import { ErrorBoundary } from '../../components/shared/ErrorBoundary.tsx'
+import { breadcrumbsEnabled } from '../../utils/breadcrumbsEnabled.ts'
 
 import styles from './Vermehrung.module.css'
 
@@ -64,7 +65,13 @@ export const Vermehrung = () => {
 
   // need the key on Allotment or it would only render correctly on second render
   return (
-    <div className={styles.container}>
+    <div
+      className={
+        breadcrumbsEnabled
+          ? `${styles.container} ${styles.containerWithBreadcrumbs}`
+          : styles.container
+      }
+    >
       <Allotment
         key={`${treeWidth}/${formWidth}`}
         defaultSizes={[treeSizePx, formSizePx]}

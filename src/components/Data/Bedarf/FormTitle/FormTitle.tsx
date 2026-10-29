@@ -13,6 +13,7 @@ import { FilterNumbers } from '../../../shared/FilterNumbers.tsx'
 import { HistoryButton } from '../../../shared/HistoryButton.tsx'
 import { Menu } from '../../../shared/Menu.tsx'
 import UpSvg from '../../../../svg/to_up.svg?react'
+import { breadcrumbsEnabled } from '../../../../utils/breadcrumbsEnabled.ts'
 
 import artStyles from '../../Art/FormTitle/FormTitle.module.css'
 
@@ -39,9 +40,11 @@ export const BedarfFormTitle = ({
     <div className={artStyles.container} ref={ref}>
       <div className={artStyles.title}>Bedarf</div>
       <div className={artStyles.symbols}>
-        <IconButton title="Zur Liste" onClick={onClickUp} size="large">
-          <UpSvg />
-        </IconButton>
+        {!breadcrumbsEnabled && (
+          <IconButton title="Zur Liste" onClick={onClickUp} size="large">
+            <UpSvg />
+          </IconButton>
+        )}
         <AddButton />
         <DeleteButton row={row} />
         {(width ?? 0) < 520 ? (

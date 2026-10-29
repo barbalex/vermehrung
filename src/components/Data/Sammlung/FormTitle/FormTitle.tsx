@@ -16,6 +16,7 @@ import { Menu } from '../../../shared/Menu.tsx'
 import UpSvg from '../../../../svg/to_up.svg?react'
 import LiDownSvg from '../../../../svg/to_ausli_down.svg?react'
 import HeDownSvg from '../../../../svg/to_he_down.svg?react'
+import { breadcrumbsEnabled } from '../../../../utils/breadcrumbsEnabled.ts'
 
 import artStyles from '../../Art/FormTitle/FormTitle.module.css'
 
@@ -52,30 +53,34 @@ export const SammlungFormTitle = ({
     <div className={artStyles.container} ref={ref}>
       <div className={artStyles.title}>Sammlung</div>
       <div className={artStyles.symbols}>
-        <IconButton
-          title="Zur Sammlungs-Liste"
-          onClick={onClickUp}
-          size="large"
-        >
-          <UpSvg />
-        </IconButton>
-        {showToHe && (
-          <IconButton
-            title="Zu den Herkünften dieser Sammlung"
-            onClick={onClickToHerkuenfte}
-            size="large"
-          >
-            <HeDownSvg />
-          </IconButton>
-        )}
-        {showToLi && (
-          <IconButton
-            title="Zu den Aus-Lieferungen dieser Sammlung"
-            onClick={onClickToLieferungen}
-            size="large"
-          >
-            <LiDownSvg />
-          </IconButton>
+        {!breadcrumbsEnabled && (
+          <>
+            <IconButton
+              title="Zur Sammlungs-Liste"
+              onClick={onClickUp}
+              size="large"
+            >
+              <UpSvg />
+            </IconButton>
+            {showToHe && (
+              <IconButton
+                title="Zu den Herkünften dieser Sammlung"
+                onClick={onClickToHerkuenfte}
+                size="large"
+              >
+                <HeDownSvg />
+              </IconButton>
+            )}
+            {showToLi && (
+              <IconButton
+                title="Zu den Aus-Lieferungen dieser Sammlung"
+                onClick={onClickToLieferungen}
+                size="large"
+              >
+                <LiDownSvg />
+              </IconButton>
+            )}
+          </>
         )}
         <AddButton />
         <DeleteButton row={row} />

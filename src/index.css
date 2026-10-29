@@ -79,6 +79,7 @@ html {
   overflow: hidden !important;
   height: 100%;
   --app-bar-height: 64px;
+  --breadcrumbs-height: 40px;
   --title-row-height: 48px;
   --single-row-height: 48px;
 }

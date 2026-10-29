@@ -16,6 +16,7 @@ import { HistoryButton } from '../../../../shared/HistoryButton.tsx'
 import { Menu } from '../../../../shared/Menu.tsx'
 import UpSvg from '../../../../../svg/to_up.svg?react'
 import KuDownSvg from '../../../../../svg/to_ku_down.svg?react'
+import { breadcrumbsEnabled } from '../../../../../utils/breadcrumbsEnabled.ts'
 
 import artStyles from '../../../Art/FormTitle/FormTitle.module.css'
 
@@ -54,13 +55,21 @@ export const LieferungFormTitle = ({
     <div className={artStyles.container} ref={ref}>
       <div className={artStyles.title}>Lieferung</div>
       <div className={artStyles.symbols}>
-        <IconButton title="Zur Liste" onClick={onClickUp} size="large">
-          <UpSvg />
-        </IconButton>
-        {showToKu && (
-          <IconButton title="Zur Kultur" onClick={onClickToKultur} size="large">
-            <KuDownSvg />
-          </IconButton>
+        {!breadcrumbsEnabled && (
+          <>
+            <IconButton title="Zur Liste" onClick={onClickUp} size="large">
+              <UpSvg />
+            </IconButton>
+            {showToKu && (
+              <IconButton
+                title="Zur Kultur"
+                onClick={onClickToKultur}
+                size="large"
+              >
+                <KuDownSvg />
+              </IconButton>
+            )}
+          </>
         )}
         <AddButton />
         <DeleteButton row={row} />

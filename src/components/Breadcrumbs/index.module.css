@@ -1,0 +1,24 @@
+.container {
+  height: var(--breadcrumbs-height);
+  display: flex;
+  align-items: center;
+  background-color: var(--bg);
+  color: var(--text);
+  border-bottom: 1px solid var(--separator-border);
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+  padding: 0 10px;
+  font-size: 0.85rem;
+}
+
+/* the trail is a single line: overflow scrolls horizontally */
+.trail ol {
+  flex-wrap: nowrap;
+  white-space: nowrap;
+}
+
+.current {
+  color: var(--text);
+  font-weight: 500;
+}

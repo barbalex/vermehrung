@@ -16,6 +16,7 @@ import { HistoryButton } from '../../../shared/HistoryButton.tsx'
 import { Menu } from '../../../shared/Menu.tsx'
 import UpSvg from '../../../../svg/to_up.svg?react'
 import SaDownSvg from '../../../../svg/to_sa_down.svg?react'
+import { breadcrumbsEnabled } from '../../../../utils/breadcrumbsEnabled.ts'
 
 import artStyles from '../../Art/FormTitle/FormTitle.module.css'
 
@@ -55,17 +56,21 @@ export const HerkunftFormTitle = ({
         className={artStyles.title}
       >{`Herkunft${activeConflict ? ': Konflikt lösen' : ''}`}</div>
       <div className={artStyles.symbols}>
-        <IconButton title="Zur Liste" onClick={onClickUp} size="large">
-          <UpSvg />
-        </IconButton>
-        {showToSa && (
-          <IconButton
-            title="Zu den Sammlungen"
-            onClick={onClickToSammlungen}
-            size="large"
-          >
-            <SaDownSvg />
-          </IconButton>
+        {!breadcrumbsEnabled && (
+          <>
+            <IconButton title="Zur Liste" onClick={onClickUp} size="large">
+              <UpSvg />
+            </IconButton>
+            {showToSa && (
+              <IconButton
+                title="Zu den Sammlungen"
+                onClick={onClickToSammlungen}
+                size="large"
+              >
+                <SaDownSvg />
+              </IconButton>
+            )}
+          </>
         )}
         {editingAllowed && (
           <>
