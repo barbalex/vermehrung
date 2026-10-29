@@ -26,6 +26,50 @@
   white-space: nowrap;
 }
 
+/* arrow tabs as in apf2: each crumb is a tab whose right edge points
+   into the notch of the next - clearly visible borders between the
+   nav links */
+.trail ol > li {
+  display: flex;
+  align-items: center;
+  height: 28px;
+  padding: 0 16px 0 22px;
+  margin-left: 5px;
+  max-width: 45vw;
+  background-color: var(--crumb-bg);
+  clip-path: polygon(
+    0 0,
+    calc(100% - 9px) 0,
+    100% 50%,
+    calc(100% - 9px) 100%,
+    0 100%,
+    9px 50%
+  );
+}
+
+/* the first crumb starts flush */
+.trail ol > li:first-of-type {
+  padding-left: 14px;
+  clip-path: polygon(
+    0 0,
+    calc(100% - 9px) 0,
+    100% 50%,
+    calc(100% - 9px) 100%,
+    0 100%
+  );
+}
+
+/* the chevron separators are replaced by the tab edges */
+.trail ol > li.MuiBreadcrumbs-separator {
+  display: none;
+}
+
+.trail ol > li > a,
+.trail ol > li > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .current {
   color: var(--text);
   font-weight: 500;
