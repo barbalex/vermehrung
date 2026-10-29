@@ -75,6 +75,7 @@ export const Vermehrung = () => {
       <Allotment
         key={`${treeWidth}/${formWidth}`}
         defaultSizes={[treeSizePx, formSizePx]}
+        separator={treeWidth !== 0 && formWidth !== 0}
       >
         <Allotment.Pane
           visible={treeWidth !== 0}
