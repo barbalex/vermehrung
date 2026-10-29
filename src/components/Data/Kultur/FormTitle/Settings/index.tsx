@@ -21,9 +21,9 @@ export const KulturSettings = ({ asMenu, kulturId }: { asMenu?: boolean; kulturI
     return (
       <>
         <MenuItem
-          aria-owns={anchorEl ? 'menu' : null}
+          aria-owns={anchorEl ? 'menu' : undefined}
           aria-haspopup="true"
-          onClick={onClickConfig}
+          onClick={onClickConfig as unknown as import('react').MouseEventHandler<HTMLElement>}
         >
           Optionen wählen
         </MenuItem>
@@ -40,10 +40,10 @@ export const KulturSettings = ({ asMenu, kulturId }: { asMenu?: boolean; kulturI
     <ErrorBoundary>
       <IconButton
         aria-label="Optionen wählen"
-        aria-owns={anchorEl ? 'menu' : null}
+        aria-owns={anchorEl ? 'menu' : undefined}
         aria-haspopup="true"
         title="Optionen wählen"
-        onClick={onClickConfig}
+        onClick={onClickConfig as unknown as import('react').MouseEventHandler<HTMLElement>}
         size="large"
       >
         <FaCog />

@@ -12,19 +12,31 @@ import { constants } from '../../../../../utils/constants.ts'
 
 import styles from './Menu.module.css'
 
-export const ZaehlungSettingsMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
+export const ZaehlungSettingsMenu = ({
+  anchorEl,
+  setAnchorEl,
+  kulturId,
+}: {
+  anchorEl: HTMLElement | null | undefined
+  setAnchorEl: (el: HTMLElement | null) => void
+  kulturId?: string
+}) => {
   const db = useAtomValue(dbAtom)
 
-  const [kulturOption, setKulturOption] = useState()
+  const [kulturOption, setKulturOption] = useState<
+    Record<string, unknown> | undefined
+  >(undefined)
   useEffect(() => {
-    const kOObservable = db?.get('kultur_option').findAndObserve(kulturId)
-    const subscription = kOObservable?.subscribe((kulturOption) =>
-      setKulturOption(kulturOption),
+    const kOObservable = db?.get('kultur_option').findAndObserve(kulturId ?? '')
+    const subscription = (kOObservable as unknown as import('rxjs').Observable<import('../../../../../dbModel.ts').KulturOption | undefined>)?.subscribe((kulturOption) =>
+      setKulturOption(
+        kulturOption as unknown as Record<string, unknown> | undefined,
+      ),
     )
 
     return () => subscription?.unsubscribe?.()
   }, [db, kulturId])
-  const { z_bemerkungen } = kulturOption ?? {}
+  const { z_bemerkungen } = (kulturOption ?? {}) as unknown as Record<string, unknown>
 
   const saveToDb = async (event: {
     target: { name?: string; value: unknown }
@@ -35,7 +47,9 @@ export const ZaehlungSettingsMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
   }) => {
     const field = event.target.name
     const value = event.target.value === 'false'
-    kulturOption?.edit({ field, value })
+    ;(kulturOption as unknown as {
+      edit?: (args: { field?: string; value?: unknown }) => void
+    })?.edit?.({ field, value })
   }
 
   const openSettingsDocs = () => {
@@ -75,7 +89,7 @@ export const ZaehlungSettingsMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
           control={
             <Checkbox
               color="primary"
-              checked={z_bemerkungen}
+              checked={!!z_bemerkungen}
               onClick={
                   saveToDb as unknown as import('react').MouseEventHandler
                 }

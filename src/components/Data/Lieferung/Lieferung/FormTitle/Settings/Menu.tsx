@@ -14,7 +14,13 @@ import { constants } from '../../../../../../utils/constants.ts'
 
 import styles from './Menu.module.css'
 
-export const LieferungSettingsMenu = ({ anchorEl, setAnchorEl }) => {
+export const LieferungSettingsMenu = ({
+  anchorEl,
+  setAnchorEl,
+}: {
+  anchorEl: HTMLElement | null | undefined
+  setAnchorEl: (el: HTMLElement | null) => void
+}) => {
   const db = useAtomValue(dbAtom)
   const user = useAtomValue(userAtom)
 
@@ -31,8 +37,11 @@ export const LieferungSettingsMenu = ({ anchorEl, setAnchorEl }) => {
           .observeWithColumns(['li_show_sl_felder', 'li_show_sl'])
       : $of({})
     const combinedObservables = combineLatest([userPersonOptionsObservable])
-    const subscription = combinedObservables.subscribe(
-      ([userPersonOptions]) => {
+    const subscription = (
+      combinedObservables as unknown as import('rxjs').Observable<
+        [Record<string, unknown>[]]
+      >
+    ).subscribe(([userPersonOptions]) => {
         setDataState({
           userPersonOption: userPersonOptions?.[0],
         })
@@ -43,7 +52,8 @@ export const LieferungSettingsMenu = ({ anchorEl, setAnchorEl }) => {
   }, [db, user.uid])
   const { userPersonOption } = dataState
 
-  const { li_show_sl_felder, li_show_sl } = userPersonOption ?? {}
+  const { li_show_sl_felder, li_show_sl } =
+      (userPersonOption ?? {}) as unknown as Record<string, unknown>
 
   const saveToDb = (event: {
     target: { name?: string; value: unknown }
@@ -54,7 +64,10 @@ export const LieferungSettingsMenu = ({ anchorEl, setAnchorEl }) => {
   }) => {
     const field = event.target.name
     const value = event.target.value === 'false'
-    userPersonOption.edit({ field, value })
+    const option = userPersonOption as unknown as {
+      edit?: (args: { field?: string; value?: unknown }) => void
+    }
+    option?.edit?.({ field, value })
   }
 
   const openSettingsDocs = () => {
@@ -94,7 +107,7 @@ export const LieferungSettingsMenu = ({ anchorEl, setAnchorEl }) => {
           control={
             <Checkbox
               color="primary"
-              checked={li_show_sl}
+              checked={!!li_show_sl}
               onClick={
                   saveToDb as unknown as import('react').MouseEventHandler
                 }
@@ -111,7 +124,7 @@ export const LieferungSettingsMenu = ({ anchorEl, setAnchorEl }) => {
           control={
             <Checkbox
               color="primary"
-              checked={li_show_sl_felder}
+              checked={!!li_show_sl_felder}
               onClick={
                   saveToDb as unknown as import('react').MouseEventHandler
                 }

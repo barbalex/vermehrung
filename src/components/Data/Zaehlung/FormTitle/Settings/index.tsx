@@ -20,9 +20,9 @@ export const ZaehlungSettings = ({ asMenu, kulturId }: { asMenu?: boolean; kultu
     return (
       <>
         <MenuItem
-          aria-owns={anchorEl ? 'menu' : null}
+          aria-owns={anchorEl ? 'menu' : undefined}
           aria-haspopup="true"
-          onClick={onClickConfig}
+          onClick={onClickConfig as unknown as import('react').MouseEventHandler<HTMLElement>}
         >
           Optionen wählen
         </MenuItem>
@@ -39,10 +39,10 @@ export const ZaehlungSettings = ({ asMenu, kulturId }: { asMenu?: boolean; kultu
     <ErrorBoundary>
       <IconButton
         aria-label="Felder wählen"
-        aria-owns={anchorEl ? 'long-menu' : null}
+        aria-owns={anchorEl ? 'long-menu' : undefined}
         aria-haspopup="true"
         title="Felder wählen"
-        onClick={onClickConfig}
+        onClick={onClickConfig as unknown as import('react').MouseEventHandler<HTMLElement>}
         size="large"
       >
         <FaCog />

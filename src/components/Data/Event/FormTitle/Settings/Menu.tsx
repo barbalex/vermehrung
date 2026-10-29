@@ -12,24 +12,34 @@ import { constants } from '../../../../../utils/constants.ts'
 
 import styles from './Menu.module.css'
 
-export const EventSettingsMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
+export const EventSettingsMenu = ({
+  anchorEl,
+  setAnchorEl,
+  kulturId,
+}: {
+  anchorEl: HTMLElement | null | undefined
+  setAnchorEl: (el: HTMLElement | null) => void
+  kulturId?: string
+}) => {
   const db = useAtomValue(dbAtom)
 
-  const [dataState, setDataState] = useState({ kulturOption: undefined })
+  const [dataState, setDataState] = useState<{
+    kulturOption: import('../../../../../dbModel.ts').KulturOption | undefined
+  }>({ kulturOption: undefined })
   const { kulturOption } = dataState
 
   useEffect(() => {
     const kulturOptionObservable = db
       ?.get<import('../../../../../dbModel.ts').KulturOption>('kultur_option')
-      .findAndObserve(kulturId)
-    const subscription = kulturOptionObservable?.subscribe((kulturOption) =>
+      .findAndObserve(kulturId ?? '')
+    const subscription = (kulturOptionObservable as unknown as import('rxjs').Observable<import('../../../../../dbModel.ts').KulturOption | undefined>)?.subscribe((kulturOption) =>
       setDataState({ kulturOption }),
     )
 
     return () => subscription?.unsubscribe?.()
   }, [db, kulturId])
 
-  const { ev_datum, tk, ev_geplant, ev_person_id } = kulturOption ?? {}
+  const { ev_datum, tk, ev_geplant, ev_person_id } = (kulturOption ?? {}) as unknown as Record<string, unknown>
 
   const saveToDb = (event: {
     target: { name?: string; value: unknown }
@@ -80,7 +90,7 @@ export const EventSettingsMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
           control={
             <Checkbox
               color="primary"
-              checked={tk}
+              checked={!!tk}
               onClick={
                   saveToDb as unknown as import('react').MouseEventHandler
                 }
@@ -97,7 +107,7 @@ export const EventSettingsMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
           control={
             <Checkbox
               color="primary"
-              checked={ev_person_id}
+              checked={!!ev_person_id}
               onClick={
                   saveToDb as unknown as import('react').MouseEventHandler
                 }
@@ -114,7 +124,7 @@ export const EventSettingsMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
           control={
             <Checkbox
               color="primary"
-              checked={ev_datum}
+              checked={!!ev_datum}
               onClick={
                   saveToDb as unknown as import('react').MouseEventHandler
                 }
@@ -131,7 +141,7 @@ export const EventSettingsMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
           control={
             <Checkbox
               color="primary"
-              checked={ev_geplant}
+              checked={!!ev_geplant}
               onClick={
                   saveToDb as unknown as import('react').MouseEventHandler
                 }

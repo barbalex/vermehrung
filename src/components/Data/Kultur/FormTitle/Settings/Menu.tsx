@@ -14,13 +14,24 @@ import { constants } from '../../../../../utils/constants.ts'
 
 import styles from './Menu.module.css'
 
-export const KulturSettingsMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
+export const KulturSettingsMenu = ({
+  anchorEl,
+  setAnchorEl,
+  kulturId,
+}: {
+  anchorEl: HTMLElement | null | undefined
+  setAnchorEl: (el: HTMLElement | null) => void
+  kulturId?: string
+}) => {
   const user = useAtomValue(userAtom)
   const db = useAtomValue(dbAtom)
 
-  const [dataState, setDataState] = useState({
+  const [dataState, setDataState] = useState<{
+    kulturOption: import('../../../../../dbModel.ts').KulturOption | undefined
+    userPersonOption: import('../../../../../dbModel.ts').PersonOption | undefined
+  }>({
     kulturOption: undefined,
-    userPersonOption: {},
+    userPersonOption: undefined,
   })
   useEffect(() => {
     const userPersonOptionsObservable = user.uid
@@ -32,14 +43,20 @@ export const KulturSettingsMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
           .observeWithColumns(['ku_zwischenlager', 'ku_erhaltungskultur'])
       : $of({})
     const kulturOptionObservable = kulturId
-      ? db?.get('kultur_option').findAndObserve(kulturId)
+      ? db?.get('kultur_option').findAndObserve(kulturId ?? '')
       : $of({})
     const combinedObservables = combineLatest([
       userPersonOptionsObservable,
       kulturOptionObservable,
     ])
-    const subscription = combinedObservables.subscribe(
-      ([userPersonOptions, kulturOption]) => {
+    const subscription = (
+      combinedObservables as unknown as import('rxjs').Observable<
+        [
+          import('../../../../../dbModel.ts').PersonOption[] | undefined,
+          import('../../../../../dbModel.ts').KulturOption | undefined,
+        ]
+      >
+    ).subscribe(([userPersonOptions, kulturOption]) => {
         setDataState({
           userPersonOption: userPersonOptions?.[0],
           kulturOption,
@@ -51,8 +68,9 @@ export const KulturSettingsMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
   }, [db, kulturId, user])
   const { kulturOption, userPersonOption } = dataState
 
-  const { ku_zwischenlager, ku_erhaltungskultur } = userPersonOption ?? {}
-  const { tk } = kulturOption ?? {}
+  const { ku_zwischenlager, ku_erhaltungskultur } =
+      (userPersonOption ?? {}) as unknown as Record<string, unknown>
+  const { tk } = (kulturOption ?? {}) as unknown as Record<string, unknown>
 
   const saveToDbKulturOption = async (event: {
     target: { name?: string; value: unknown }
@@ -75,7 +93,10 @@ export const KulturSettingsMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
   }) => {
     const field = event.target.name
     const value = event.target.value === 'false'
-    userPersonOption.edit({ field, value })
+    const option = userPersonOption as unknown as {
+      edit?: (args: { field?: string; value?: unknown }) => void
+    }
+    option?.edit?.({ field, value })
   }
 
   const onClose = () => setAnchorEl(null)
@@ -103,8 +124,8 @@ export const KulturSettingsMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
           control={
             <Checkbox
               color="primary"
-              checked={tk}
-              onClick={saveToDbKulturOption}
+              checked={!!tk}
+              onClick={saveToDbKulturOption as unknown as import('react').MouseEventHandler<HTMLButtonElement>}
               name="tk"
             />
           }
@@ -131,8 +152,8 @@ export const KulturSettingsMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
           control={
             <Checkbox
               color="primary"
-              checked={ku_zwischenlager}
-              onClick={saveToDbPersonOption}
+              checked={!!ku_zwischenlager}
+              onClick={saveToDbPersonOption as unknown as import('react').MouseEventHandler<HTMLButtonElement>}
               name="ku_zwischenlager"
             />
           }
@@ -146,8 +167,8 @@ export const KulturSettingsMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
           control={
             <Checkbox
               color="primary"
-              checked={ku_erhaltungskultur}
-              onClick={saveToDbPersonOption}
+              checked={!!ku_erhaltungskultur}
+              onClick={saveToDbPersonOption as unknown as import('react').MouseEventHandler<HTMLButtonElement>}
               name="ku_erhaltungskultur"
             />
           }

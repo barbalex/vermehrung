@@ -11,7 +11,13 @@ import { dbAtom, userAtom } from '../../../../../store/index.ts'
 
 import settingsStyles from '../../../Lieferung/Lieferung/FormTitle/Settings/Menu.module.css'
 
-export const SettingsSammelLieferungMenu = ({ anchorEl, setAnchorEl }) => {
+export const SettingsSammelLieferungMenu = ({
+  anchorEl,
+  setAnchorEl,
+}: {
+  anchorEl: HTMLElement | null | undefined
+  setAnchorEl: (el: HTMLElement | null) => void
+}) => {
   const db = useAtomValue(dbAtom)
   const user = useAtomValue(userAtom)
 
@@ -31,8 +37,11 @@ export const SettingsSammelLieferungMenu = ({ anchorEl, setAnchorEl }) => {
           ])
       : $of({})
     const combinedObservables = combineLatest([userPersonOptionsObservable])
-    const subscription = combinedObservables.subscribe(
-      ([userPersonOptions]) => {
+    const subscription = (
+      combinedObservables as unknown as import('rxjs').Observable<
+        [Record<string, unknown>[]]
+      >
+    ).subscribe(([userPersonOptions]) => {
         setDataState({
           userPersonOption: userPersonOptions?.[0],
         })
@@ -43,7 +52,7 @@ export const SettingsSammelLieferungMenu = ({ anchorEl, setAnchorEl }) => {
   }, [db, user.uid])
   const { userPersonOption } = dataState
   const { sl_show_empty_when_next_to_li, sl_auto_copy_edits } =
-    userPersonOption ?? {}
+      (userPersonOption ?? {}) as unknown as Record<string, unknown>
 
   const saveToDb = (event: {
     target: { name?: string; value: unknown }
@@ -54,7 +63,10 @@ export const SettingsSammelLieferungMenu = ({ anchorEl, setAnchorEl }) => {
   }) => {
     const field = event.target.name
     const value = event.target.value === 'false'
-    userPersonOption.edit({ field, value })
+    const option = userPersonOption as unknown as {
+      edit?: (args: { field?: string; value?: unknown }) => void
+    }
+    option?.edit?.({ field, value })
   }
 
   const onClose = () => setAnchorEl(null)
@@ -77,7 +89,7 @@ export const SettingsSammelLieferungMenu = ({ anchorEl, setAnchorEl }) => {
           control={
             <Checkbox
               color="primary"
-              checked={sl_show_empty_when_next_to_li}
+              checked={!!sl_show_empty_when_next_to_li}
               onClick={
                   saveToDb as unknown as import('react').MouseEventHandler
                 }
@@ -94,7 +106,7 @@ export const SettingsSammelLieferungMenu = ({ anchorEl, setAnchorEl }) => {
           control={
             <Checkbox
               color="primary"
-              checked={sl_auto_copy_edits}
+              checked={!!sl_auto_copy_edits}
               onClick={
                   saveToDb as unknown as import('react').MouseEventHandler
                 }

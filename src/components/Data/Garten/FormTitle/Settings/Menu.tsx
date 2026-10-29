@@ -14,13 +14,19 @@ import { constants } from '../../../../../utils/constants.ts'
 
 import styles from './Menu.module.css'
 
-export const GartenSettingsMenu = ({ anchorEl, setAnchorEl }) => {
+export const GartenSettingsMenu = ({
+  anchorEl,
+  setAnchorEl,
+}: {
+  anchorEl: HTMLElement | null | undefined
+  setAnchorEl: (el: HTMLElement | null) => void
+}) => {
   const db = useAtomValue(dbAtom)
   const user = useAtomValue(userAtom)
 
-  const [dataState, setDataState] = useState({
+  const [dataState, setDataState] = useState<Record<string, unknown>>({
     userPersonOption: undefined,
-  })
+})
   useEffect(() => {
     const userPersonOptionsObservable = user.uid
       ? db
@@ -39,8 +45,11 @@ export const GartenSettingsMenu = ({ anchorEl, setAnchorEl }) => {
           ])
       : $of({})
     const combinedObservables = combineLatest([userPersonOptionsObservable])
-    const subscription = combinedObservables.subscribe(
-      ([userPersonOptions]) => {
+    const subscription = (
+      combinedObservables as unknown as import('rxjs').Observable<
+        [Record<string, unknown>[]]
+      >
+    ).subscribe(([userPersonOptions]) => {
         setDataState({
           userPersonOption: userPersonOptions?.[0],
         })
@@ -59,7 +68,7 @@ export const GartenSettingsMenu = ({ anchorEl, setAnchorEl }) => {
     ga_lat_lng,
     ga_aktiv,
     ga_bemerkungen,
-  } = userPersonOption ?? {}
+} = (userPersonOption ?? {}) as unknown as Record<string, unknown>
 
   const saveToDb = (event: {
     target: { name?: string; value: unknown }
@@ -70,7 +79,10 @@ export const GartenSettingsMenu = ({ anchorEl, setAnchorEl }) => {
   }) => {
     const field = event.target.name
     const value = event.target.value === 'false'
-    userPersonOption?.edit({ field, value })
+    const option = userPersonOption as unknown as {
+      edit?: (args: { field?: string; value?: unknown }) => void
+    }
+    option?.edit?.({ field, value })
   }
 
   const openSettingsDocs = () => {
@@ -110,7 +122,7 @@ export const GartenSettingsMenu = ({ anchorEl, setAnchorEl }) => {
           control={
             <Checkbox
               color="primary"
-              checked={ga_strasse}
+              checked={!!ga_strasse}
               onClick={
                   saveToDb as unknown as import('react').MouseEventHandler
                 }
@@ -127,7 +139,7 @@ export const GartenSettingsMenu = ({ anchorEl, setAnchorEl }) => {
           control={
             <Checkbox
               color="primary"
-              checked={ga_plz}
+              checked={!!ga_plz}
               onClick={
                   saveToDb as unknown as import('react').MouseEventHandler
                 }
@@ -144,7 +156,7 @@ export const GartenSettingsMenu = ({ anchorEl, setAnchorEl }) => {
           control={
             <Checkbox
               color="primary"
-              checked={ga_ort}
+              checked={!!ga_ort}
               onClick={
                   saveToDb as unknown as import('react').MouseEventHandler
                 }
@@ -161,7 +173,7 @@ export const GartenSettingsMenu = ({ anchorEl, setAnchorEl }) => {
           control={
             <Checkbox
               color="primary"
-              checked={ga_geom_point}
+              checked={!!ga_geom_point}
               onClick={
                   saveToDb as unknown as import('react').MouseEventHandler
                 }
@@ -178,7 +190,7 @@ export const GartenSettingsMenu = ({ anchorEl, setAnchorEl }) => {
           control={
             <Checkbox
               color="primary"
-              checked={ga_lat_lng}
+              checked={!!ga_lat_lng}
               onClick={
                   saveToDb as unknown as import('react').MouseEventHandler
                 }
@@ -195,7 +207,7 @@ export const GartenSettingsMenu = ({ anchorEl, setAnchorEl }) => {
           control={
             <Checkbox
               color="primary"
-              checked={ga_aktiv}
+              checked={!!ga_aktiv}
               onClick={
                   saveToDb as unknown as import('react').MouseEventHandler
                 }
@@ -212,7 +224,7 @@ export const GartenSettingsMenu = ({ anchorEl, setAnchorEl }) => {
           control={
             <Checkbox
               color="primary"
-              checked={ga_bemerkungen}
+              checked={!!ga_bemerkungen}
               onClick={
                   saveToDb as unknown as import('react').MouseEventHandler
                 }

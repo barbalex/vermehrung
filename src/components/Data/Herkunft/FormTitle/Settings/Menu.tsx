@@ -14,7 +14,13 @@ import { constants } from '../../../../../utils/constants.ts'
 
 import styles from './Menu.module.css'
 
-export const HerkunftSettingsMenu = ({ anchorEl, setAnchorEl }) => {
+export const HerkunftSettingsMenu = ({
+  anchorEl,
+  setAnchorEl,
+}: {
+  anchorEl: HTMLElement | null | undefined
+  setAnchorEl: (el: HTMLElement | null) => void
+}) => {
   const user = useAtomValue(userAtom)
   const db = useAtomValue(dbAtom)
 
@@ -36,8 +42,11 @@ export const HerkunftSettingsMenu = ({ anchorEl, setAnchorEl }) => {
           ])
       : $of({})
     const combinedObservables = combineLatest([userPersonOptionsObservable])
-    const subscription = combinedObservables.subscribe(
-      ([userPersonOptions]) => {
+    const subscription = (
+      combinedObservables as unknown as import('rxjs').Observable<
+        [Record<string, unknown>[]]
+      >
+    ).subscribe(([userPersonOptions]) => {
         setDataState({
           userPersonOption: userPersonOptions?.[0],
         })
@@ -49,7 +58,7 @@ export const HerkunftSettingsMenu = ({ anchorEl, setAnchorEl }) => {
   const { userPersonOption } = dataState
 
   const { hk_kanton, hk_land, hk_bemerkungen, hk_geom_point } =
-    userPersonOption ?? {}
+      (userPersonOption ?? {}) as unknown as Record<string, unknown>
 
   const saveToDb = async (event: {
     target: { name?: string; value: unknown }
@@ -60,7 +69,10 @@ export const HerkunftSettingsMenu = ({ anchorEl, setAnchorEl }) => {
   }) => {
     const field = event.target.name
     const value = event.target.value === 'false'
-    userPersonOption.edit({ field, value })
+    const option = userPersonOption as unknown as {
+      edit?: (args: { field?: string; value?: unknown }) => void
+    }
+    option?.edit?.({ field, value })
   }
 
   const openSettingsDocs = () => {
@@ -100,7 +112,7 @@ export const HerkunftSettingsMenu = ({ anchorEl, setAnchorEl }) => {
           control={
             <Checkbox
               color="primary"
-              checked={hk_kanton}
+              checked={!!hk_kanton}
               onClick={
                   saveToDb as unknown as import('react').MouseEventHandler
                 }
@@ -117,7 +129,7 @@ export const HerkunftSettingsMenu = ({ anchorEl, setAnchorEl }) => {
           control={
             <Checkbox
               color="primary"
-              checked={hk_land}
+              checked={!!hk_land}
               onClick={
                   saveToDb as unknown as import('react').MouseEventHandler
                 }
@@ -134,7 +146,7 @@ export const HerkunftSettingsMenu = ({ anchorEl, setAnchorEl }) => {
           control={
             <Checkbox
               color="primary"
-              checked={hk_geom_point}
+              checked={!!hk_geom_point}
               onClick={
                   saveToDb as unknown as import('react').MouseEventHandler
                 }
@@ -151,7 +163,7 @@ export const HerkunftSettingsMenu = ({ anchorEl, setAnchorEl }) => {
           control={
             <Checkbox
               color="primary"
-              checked={hk_bemerkungen}
+              checked={!!hk_bemerkungen}
               onClick={
                   saveToDb as unknown as import('react').MouseEventHandler
                 }

@@ -13,18 +13,28 @@ import { constants } from '../../../../../utils/constants.ts'
 
 import styles from './Menu.module.css'
 
-export const TeilkulturSettingsMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
+export const TeilkulturSettingsMenu = ({
+  anchorEl,
+  setAnchorEl,
+  kulturId,
+}: {
+  anchorEl: HTMLElement | null | undefined
+  setAnchorEl: (el: HTMLElement | null) => void
+  kulturId?: string
+}) => {
   const db = useAtomValue(dbAtom)
 
-  const [dataState, setDataState] = useState({ kulturOption: undefined })
+  const [dataState, setDataState] = useState<{
+    kulturOption: import('../../../../../dbModel.ts').KulturOption | undefined
+  }>({ kulturOption: undefined })
   const { kulturOption } = dataState
-  const { tk_bemerkungen } = kulturOption ?? {}
+  const { tk_bemerkungen } = (kulturOption ?? {}) as unknown as Record<string, unknown>
 
   useEffect(() => {
     const kOObservable = kulturId
-      ? db?.get('kultur_option').findAndObserve(kulturId)
+      ? db?.get('kultur_option').findAndObserve(kulturId ?? '')
       : $of({})
-    const subscription = kOObservable?.subscribe((kulturOption) =>
+    const subscription = (kOObservable as unknown as import('rxjs').Observable<import('../../../../../dbModel.ts').KulturOption | undefined>)?.subscribe((kulturOption) =>
       setDataState({ kulturOption }),
     )
 
@@ -80,7 +90,7 @@ export const TeilkulturSettingsMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
           control={
             <Checkbox
               color="primary"
-              checked={tk_bemerkungen}
+              checked={!!tk_bemerkungen}
               onClick={
                   saveToDb as unknown as import('react').MouseEventHandler
                 }

@@ -15,17 +15,27 @@ import { ErrorBoundary } from '../../../../shared/ErrorBoundary.tsx'
 
 import styles from './Settings.module.css'
 
-export const TeilzaehlungenSettings = ({ kulturId }) => {
+export const TeilzaehlungenSettings = ({
+  kulturId,
+}: {
+  kulturId?: string
+}) => {
   const db = useAtomValue(dbAtom)
 
-  const [dataState, setDataState] = useState({
-    kulturOption: undefined,
-  })
+  const [dataState, setDataState] = useState<{
+    kulturOption: Record<string, unknown> | undefined
+  }>({ kulturOption: undefined })
   useEffect(() => {
     const kulturOptionObservable = kulturId
-      ? db?.get('kultur_option').findAndObserve(kulturId)
+      ? db
+          ?.get('kultur_option')
+          .findAndObserve(kulturId ?? '')
       : $of({})
-    const subscription = kulturOptionObservable?.subscribe(
+    const subscription = (
+      kulturOptionObservable as unknown as import('rxjs').Observable<
+        Record<string, unknown> | undefined
+      >
+    )?.subscribe(
       async (kulturOption) => {
         setDataState({ kulturOption })
       },
@@ -51,7 +61,9 @@ export const TeilzaehlungenSettings = ({ kulturId }) => {
   }) => {
     const field = event.target.name
     const value = event.target.value === 'false'
-    kulturOption?.edit({ field, value })
+    ;(kulturOption as unknown as {
+      edit?: (args: { field?: string; value?: unknown }) => void
+    })?.edit?.({ field, value })
   }
 
   const openSettingsDocs = () => {
@@ -77,10 +89,10 @@ export const TeilzaehlungenSettings = ({ kulturId }) => {
     <ErrorBoundary>
       <IconButton
         aria-label="Felder wählen"
-        aria-owns={anchorEl ? 'long-menu' : null}
+        aria-owns={anchorEl ? 'long-menu' : undefined}
         aria-haspopup="true"
         title="Felder wählen"
-        onClick={onClickConfig}
+        onClick={onClickConfig as unknown as import('react').MouseEventHandler<HTMLElement>}
         size="large"
       >
         <FaCog />
@@ -100,7 +112,7 @@ export const TeilzaehlungenSettings = ({ kulturId }) => {
               <IconButton
                 aria-label="Anleitung öffnen"
                 title="Anleitung öffnen"
-                onClick={openSettingsDocs}
+                onClick={openSettingsDocs as unknown as import('react').MouseEventHandler<HTMLElement>}
                 size="large"
               >
                 <IoMdInformationCircleOutline />
@@ -113,7 +125,7 @@ export const TeilzaehlungenSettings = ({ kulturId }) => {
               control={
                 <Checkbox
                   color="primary"
-                  checked={tz_teilkultur_id}
+                  checked={!!tz_teilkultur_id}
                   onClick={
                   saveToDb as unknown as import('react').MouseEventHandler
                 }
@@ -130,7 +142,7 @@ export const TeilzaehlungenSettings = ({ kulturId }) => {
               control={
                 <Checkbox
                   color="primary"
-                  checked={tz_andere_menge}
+                  checked={!!tz_andere_menge}
                   onClick={
                   saveToDb as unknown as import('react').MouseEventHandler
                 }
@@ -149,7 +161,7 @@ export const TeilzaehlungenSettings = ({ kulturId }) => {
               control={
                 <Checkbox
                   color="primary"
-                  checked={tz_auspflanzbereit_beschreibung}
+                  checked={!!tz_auspflanzbereit_beschreibung}
                   onClick={
                   saveToDb as unknown as import('react').MouseEventHandler
                 }
@@ -166,7 +178,7 @@ export const TeilzaehlungenSettings = ({ kulturId }) => {
               control={
                 <Checkbox
                   color="primary"
-                  checked={tz_bemerkungen}
+                  checked={!!tz_bemerkungen}
                   onClick={
                   saveToDb as unknown as import('react').MouseEventHandler
                 }
