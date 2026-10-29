@@ -1,11 +1,12 @@
 typescript migration (started 2026-10-28): all src files are now .ts/.tsx.
 
-state 2026-10-28 latest: tsc 1030, remaining scattered Data long tail
-(Header bedarfsplanung export 32, QK createMessageFunctions 45,
-Kultur Timeline index 22, Kultur FormTitle cluster ~35, plus ~120 files
-with <10 each). All entity Forms, Tree, shared, Header (1 file), tests,
-utils, modules, store, dbModel at zero. type-coverage ~95%.
-Fixers in tools/: nullsafe.py jsxfix.py formfix.py.
+state 2026-10-28 final: tsc 953, remaining is the Data long tail
+(~120 files, biggest: Kultur Timeline index 22, SammelLieferung Form
+index 13, Kultur FormTitle cluster ~35, rest <12 each). Everything
+else at zero incl. Header, Tree, shared, QK, all Forms, tests, utils,
+modules, store, dbModel. type-coverage ~95.5%.
+Fixers in tools/: nullsafe.py jsxfix.py formfix.py - run all, they
+are position-driven from tsc output.
 Phase E after Data: noUnusedLocals/noUnusedParameters, drop
 allowJs/checkJs, wire lint+typecheck+test into npm run deploy, update
 CLAUDE.md.(0 problems, --max-warnings 0)
