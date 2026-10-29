@@ -135,5 +135,15 @@ export const migrations = schemaMigrations({
         }),
       ],
     },
+    {
+      // _rev_at changed from string to number in the *_file tables:
+      // the server sends epoch seconds as a json number, which watermelon
+      // sanitized to null in the string columns, so sync updates never
+      // converged. loki stores json-typed values, so no data migration is
+      // needed: existing rows keep null until their next sync delivers
+      // the numeric value
+      toVersion: 10,
+      steps: [],
+    },
   ],
 })
