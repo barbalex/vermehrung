@@ -195,7 +195,7 @@ export const createMessageFunctions = async ({
   let teilzaehlungsOfArt: import('../../../../../../dbModel.ts').Teilzaehlung[] = []
   try {
     teilzaehlungsOfArt = (await db
-      ?.get<import('../../../../../../@nozbe/watermelondb').Model>('teilzaehlung')
+      ?.get<import('../../../../../../dbModel.ts').Teilzaehlung>('teilzaehlung')
       .query(
         Q.experimentalNestedJoin('zaehlung', 'kultur'),
         Q.experimentalNestedJoin('kultur', 'art'),
@@ -205,7 +205,7 @@ export const createMessageFunctions = async ({
       .fetch()) ?? []
   } catch {}
 
-  let teilkultursOfArt = []
+  let teilkultursOfArt: import('../../../../../../dbModel.ts').Teilkultur[] = []
   try {
     const delQuery =
       filter.teilkultur?._deleted === false
@@ -228,7 +228,7 @@ export const createMessageFunctions = async ({
   } catch {}
   const teilkultursOfArtSorted = teilkultursOfArt.sort(teilkulturSort)
 
-  let eventsOfArt = []
+  let eventsOfArt: import('../../../../../../dbModel.ts').Event[] = []
   try {
     const delQuery =
       filter.event?._deleted === false
@@ -274,7 +274,7 @@ export const createMessageFunctions = async ({
         )
     },
     herkunftsWithNonUniqueNr: async () => {
-      const hkGroupedByNr = groupBy(herkunftsSorted, (h) => h.nr)
+      const hkGroupedByNr = groupBy(herkunftsSorted, (h) => h.nr ?? '')
       return Object.values(hkGroupedByNr)
         .filter((v) => v.length > 1)
         .flatMap((vs) =>
@@ -473,12 +473,12 @@ export const createMessageFunctions = async ({
 
       const gartenIds = kulturs
         .filter(
-          (s: import('../../../../../../dbModel.ts').Sammlung) => !!s.garten_id,
+          (s) => !!(s as unknown as { garten_id?: string | null }).garten_id,
         )
-        .map((k: import('../../../../../../dbModel.ts').Kultur) => k.garten_id)
-      const uniqueGartenIds = [...new Set(gartenIds)]
+        .map((k) => (k as unknown as { garten_id?: string | null }).garten_id ?? '')
+      const uniqueGartenIds = [...new Set(gartenIds.filter(Boolean))]
 
-      let gartens = []
+      let gartens: import('../../../../../../dbModel.ts').Garten[] = []
       try {
         gartens = (await db
           ?.get<import('../../../../../../dbModel.ts').Garten>('garten')
@@ -490,14 +490,16 @@ export const createMessageFunctions = async ({
           .fetch()) ?? []
       } catch {}
       const gartensOfArt = await gartensSortedFromGartens(gartens)
-      const filterPromiseArray = gartensOfArt.map(async (g) => {
-        let kulturs: import('../../../../../../dbModel.ts').Kultur[] = []
-        try {
-          kulturs = await g.kulturs.extend(Q.where('_deleted', false)).fetch()
-        } catch {}
+      const filterPromiseArray = await Promise.all(
+        gartensOfArt.map(async (g) => {
+          let kulturs: import('../../../../../../dbModel.ts').Kultur[] = []
+          try {
+            kulturs = await g.kulturs.extend(Q.where('_deleted', false)).fetch()
+          } catch {}
 
-        return !!kulturs.length && kulturs.every((k) => !k.aktiv)
-      })
+          return !!kulturs.length && kulturs.every((k) => !k.aktiv)
+        }),
+      )
       const gartensFiltered = gartensOfArt.filter(
         (g, i) => filterPromiseArray[i] && g.aktiv,
       )
@@ -571,7 +573,9 @@ export const createMessageFunctions = async ({
               zaehlungsOfArt
                 .filter(
                   (z: import('../../../../../../dbModel.ts').Zaehlung) =>
-                    z.id === k.zaehlung_id,
+                    z.id ===
+                      (k as unknown as { zaehlung_id?: string | null })
+                        .zaehlung_id,
                 )
                 .filter(
                   (z: import('../../../../../../dbModel.ts').Zaehlung) =>
@@ -651,8 +655,7 @@ export const createMessageFunctions = async ({
         .fetch()
 
       return await Promise.all(
-        zaehlungs?.map(
-          async (z: import('../../../../../../dbModel.ts').Zaehlung) => {
+        (zaehlungs ?? []).map(async (z) => {
             let kultur
             try {
               kultur = await z.kultur?.fetch()
@@ -672,7 +675,7 @@ export const createMessageFunctions = async ({
       )
     },
     zaehlungsWithoutDatum: async () => {
-      let zaehlungs = []
+      let zaehlungs: import('../../../../../../dbModel.ts').Zaehlung[] = []
       try {
         const delQuery =
           filter.zaehlung?._deleted === false
@@ -871,7 +874,7 @@ export const createMessageFunctions = async ({
       ),
     zaehlungsWithTeilzaehlungsWithoutTeilkulturThoughTeilkulturIsChoosen:
       async () => {
-        let zaehlungsOfArt = []
+        let zaehlungsOfArt: import('../../../../../../dbModel.ts').Zaehlung[] = []
         try {
           const delQuery =
             filter.zaehlung?._deleted === false
@@ -1174,26 +1177,11 @@ export const createMessageFunctions = async ({
     eventsWithoutBeschreibung: async () =>
       await Promise.all(
         eventsOfArtSorted
-          .filter(
-            (e: {
-              target: { name?: string; value: unknown }
-              currentTarget?: HTMLElement
-              preventDefault?: () => void
-              stopPropagation?: () => void
-              key?: string
-            }) => !e.beschreibung,
-          )
-          .map(
-            async (e: {
-              target: { name?: string; value: unknown }
-              currentTarget?: HTMLElement
-              preventDefault?: () => void
-              stopPropagation?: () => void
-              key?: string
-            }) => {
-              let kultur
-              try {
-                kultur = await e.kultur?.fetch()
+          .filter((e) => !e.beschreibung)
+          .map(async (e) => {
+            let kultur
+            try {
+              kultur = await e.kultur?.fetch()
               } catch {}
               let kulturLabel
               try {
@@ -1211,26 +1199,11 @@ export const createMessageFunctions = async ({
     eventsWithoutDatum: async () =>
       await Promise.all(
         eventsOfArtSorted
-          .filter(
-            (e: {
-              target: { name?: string; value: unknown }
-              currentTarget?: HTMLElement
-              preventDefault?: () => void
-              stopPropagation?: () => void
-              key?: string
-            }) => !e.datum,
-          )
-          .map(
-            async (e: {
-              target: { name?: string; value: unknown }
-              currentTarget?: HTMLElement
-              preventDefault?: () => void
-              stopPropagation?: () => void
-              key?: string
-            }) => {
-              let kultur
-              try {
-                kultur = await e.kultur?.fetch()
+          .filter((e) => !e.datum)
+          .map(async (e) => {
+            let kultur
+            try {
+              kultur = await e.kultur?.fetch()
               } catch {}
               let kulturLabel
               try {
@@ -1239,7 +1212,7 @@ export const createMessageFunctions = async ({
               const text = `${kulturLabel ?? '(keine Kultur)'}, Event-ID: ${e.id}`
 
               return {
-                url: ['Arten', artId, 'Kulturen', kultur.id, 'Events', e.id],
+                url: ['Arten', artId, 'Kulturen', kultur?.id, 'Events', e.id],
                 text,
               }
             },

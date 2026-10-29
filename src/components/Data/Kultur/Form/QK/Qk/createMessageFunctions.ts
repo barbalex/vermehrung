@@ -11,7 +11,13 @@ import { teilkulturSort } from '../../../../../../utils/teilkulturSort.ts'
 import { zaehlungSort } from '../../../../../../utils/zaehlungSort.ts'
 import { store, filterTableAtoms } from '../../../../../../store/index.ts'
 
-export const createKulturMessageFunctions = async ({ kulturId, db }) => {
+export const createKulturMessageFunctions = async ({
+  kulturId,
+  db,
+}: {
+  kulturId: string
+  db: import('@nozbe/watermelondb').Database | null
+}) => {
   // snapshot of all table filters at call time
   const filter = Object.fromEntries(
     Object.keys(filterTableAtoms).map((table) => [
@@ -22,7 +28,7 @@ export const createKulturMessageFunctions = async ({ kulturId, db }) => {
   const year = +format(new Date(), 'yyyy')
   const startYear = `${year}-01-01`
   const startNextYear = `${year + 1}-01-01`
-  const now = new Date()
+  const now = new Date().getTime()
 
   let events: import('../../../../../../dbModel.ts').Event[] = []
   try {
@@ -116,10 +122,10 @@ export const createKulturMessageFunctions = async ({ kulturId, db }) => {
       ?.get<import('../../../../../../dbModel.ts').Zaehlung>('zaehlung').query(zaehlungDelQuery).fetch()) ?? []
   } catch {}
   const zaehlungsSorted = zaehlungs.sort(zaehlungSort)
-  let teilzaehlungs = []
+  let teilzaehlungs: import('../../../../../../dbModel.ts').Teilzaehlung[] = []
   try {
     teilzaehlungs = (await db
-      ?.get<import('../../../../../../@nozbe/watermelondb').Model>('teilzaehlung').query(notDeletedQuery).fetch()) ?? []
+      ?.get<import('../../../../../../dbModel.ts').Teilzaehlung>('teilzaehlung').query(notDeletedQuery).fetch()) ?? []
   } catch {}
 
   return {
@@ -248,7 +254,7 @@ export const createKulturMessageFunctions = async ({ kulturId, db }) => {
           )
           .filter(
             (z: import('../../../../../../dbModel.ts').Zaehlung) =>
-              new Date(z.datum).getTime() > now,
+              z.datum ? new Date(z.datum).getTime() > now : false,
           )
           .map(async (z: import('../../../../../../dbModel.ts').Zaehlung) => {
             let kultur
@@ -876,24 +882,8 @@ export const createKulturMessageFunctions = async ({ kulturId, db }) => {
     eventsWithoutBeschreibung: async () =>
       await Promise.all(
         eventsSorted
-          .filter(
-            (e: {
-              target: { name?: string; value: unknown }
-              currentTarget?: HTMLElement
-              preventDefault?: () => void
-              stopPropagation?: () => void
-              key?: string
-            }) => e.kultur_id === kulturId,
-          )
-          .filter(
-            (e: {
-              target: { name?: string; value: unknown }
-              currentTarget?: HTMLElement
-              preventDefault?: () => void
-              stopPropagation?: () => void
-              key?: string
-            }) => !e.beschreibung,
-          )
+          .filter((e) => e.kultur_id === kulturId)
+          .filter((e) => !e.beschreibung)
           .map(async (ev) => {
             let kultur
             try {
@@ -913,24 +903,8 @@ export const createKulturMessageFunctions = async ({ kulturId, db }) => {
     eventsWithoutDatum: async () =>
       await Promise.all(
         eventsSorted
-          .filter(
-            (e: {
-              target: { name?: string; value: unknown }
-              currentTarget?: HTMLElement
-              preventDefault?: () => void
-              stopPropagation?: () => void
-              key?: string
-            }) => e.kultur_id === kulturId,
-          )
-          .filter(
-            (e: {
-              target: { name?: string; value: unknown }
-              currentTarget?: HTMLElement
-              preventDefault?: () => void
-              stopPropagation?: () => void
-              key?: string
-            }) => !e.datum,
-          )
+          .filter((e) => e.kultur_id === kulturId)
+          .filter((e) => !e.datum)
           .map(async (ev) => {
             let kultur
             try {
