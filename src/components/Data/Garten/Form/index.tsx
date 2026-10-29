@@ -34,7 +34,7 @@ export const GartenForm = ({
   showFilter,
   id,
   row,
-  rawRow,
+  rawRow: _rawRow,
   activeConflict,
   setActiveConflict,
   showHistory,
@@ -42,7 +42,7 @@ export const GartenForm = ({
   showFilter: boolean
   id?: string | undefined
   row: import('../../../../dbModel.ts').Garten | null | undefined
-  rawRow: Record<string, unknown> | null | undefined
+  rawRow?: Record<string, unknown> | null | undefined
   activeConflict: string | null
   setActiveConflict: (val: unknown) => void
   showHistory: boolean
@@ -58,9 +58,13 @@ export const GartenForm = ({
     unsetError('garten')
   }, [id])
 
-  const [dataState, setDataState] = useState({
+  const [dataState, setDataState] = useState<{
+    personWerte: { value: string; label: string | undefined; link?: string[] }[]
+    userPersonOption: Record<string, unknown> | undefined
+    gvs: import('../../../../dbModel.ts').Gv[]
+  }>({
     personWerte: [],
-    userPersonOption: {},
+    userPersonOption: undefined,
     gvs: [],
   })
   useEffect(() => {
@@ -111,13 +115,16 @@ export const GartenForm = ({
       personObservable,
       gvsObservable,
     ])
-    const subscription = combinedObservables.subscribe(
-      async ([userPersonOptions, persons, person, gvs]: [
-          import('../../../../dbModel.ts').PersonOption[],
+    const subscription = (
+      combinedObservables as unknown as import('rxjs').Observable<
+        [
+          import('../../../../dbModel.ts').PersonOption[] | undefined,
           import('../../../../dbModel.ts').Person[],
-          Record<string, unknown> | undefined,
-          never[],
-        ]) => {
+          import('../../../../dbModel.ts').Person | undefined,
+          import('../../../../dbModel.ts').Gv[],
+        ]
+      >
+    ).subscribe(async ([userPersonOptions, persons, person, gvs]) => {
         // need to show a choosen person even if inactive but not if deleted
         const personsIncludingChoosen = uniqBy(
           [...persons, ...(person?.id && !showFilter ? [person] : [])],
@@ -133,8 +140,13 @@ export const GartenForm = ({
           }))
 
         setDataState({
-          personWerte,
-          userPersonOption: userPersonOptions?.[0],
+          personWerte: personWerte as {
+            value: string
+            label: string | undefined
+            link?: string[]
+          }[],
+          userPersonOption: userPersonOptions?.[0] as unknown as
+            Record<string, unknown>,
           gvs,
         })
       },
@@ -160,7 +172,7 @@ export const GartenForm = ({
     ga_geom_point,
     ga_aktiv,
     ga_bemerkungen,
-  } = userPersonOption ?? {}
+} = (userPersonOption ?? {}) as unknown as Record<string, unknown>
 
   // console.log('Garten, render, Form', { ga_aktiv })
 
@@ -191,7 +203,7 @@ export const GartenForm = ({
     if (field === 'person_id') {
       // only if not yet exists
       // do this in garten.edit?
-      if (!gvPersonIds.includes(value)) {
+      if (!gvPersonIds.includes(value as string)) {
         // console.log('Garten, will insert into gvRev:', {
         //   garten_id: row.id,
         //   person_id: value,
@@ -252,7 +264,7 @@ export const GartenForm = ({
         saveToDb={saveToDb}
         error={errors?.garten?.person_id as string | undefined}
       />
-      {ga_strasse && (
+      {!!ga_strasse && (
         <TextField
           key={`${row?.id}strasse`}
           name="strasse"
@@ -262,7 +274,7 @@ export const GartenForm = ({
           error={errors?.garten?.strasse as string | undefined}
         />
       )}
-      {ga_plz && (
+      {!!ga_plz && (
         <TextField
           key={`${row?.id}plz`}
           name="plz"
@@ -273,7 +285,7 @@ export const GartenForm = ({
           type="number"
         />
       )}
-      {ga_ort && (
+      {!!ga_ort && (
         <TextField
           key={`${row?.id}ort`}
           name="ort"
@@ -283,10 +295,21 @@ export const GartenForm = ({
           error={errors?.garten?.ort as string | undefined}
         />
       )}
-      {!showFilter && ga_geom_point && (
-        <Coordinates row={row} rawRow={rawRow} saveToDb={saveToDb} />
+      {!!ga_geom_point && (
+        <Coordinates
+          row={
+            row as unknown as {
+              id?: string
+              lv95_x?: string | number | null
+              lv95_y?: string | number | null
+              wgs84_lat?: string | number | null
+              wgs84_long?: string | number | null
+            }
+          }
+          saveToDb={saveToDb}
+        />
       )}
-      {ga_aktiv && (
+      {!!ga_aktiv && (
         <>
           {showFilter ? (
             <JesNo
@@ -309,7 +332,7 @@ export const GartenForm = ({
           )}
         </>
       )}
-      {ga_bemerkungen && (
+      {!!ga_bemerkungen && (
         <TextField
           key={`${row?.id}bemerkungen`}
           name="bemerkungen"
@@ -329,8 +352,13 @@ export const GartenForm = ({
       )}
       {!showFilter && (
         <>
-          <Personen gartenId={row?.id} garten={row} />{' '}
-          <Files parentTable="garten" parent={row} />
+          <Personen
+            garten={row as unknown as never}
+          />{' '}
+          <Files
+            parentTable="garten"
+            parent={row as unknown as never}
+          />
         </>
       )}
     </div>
