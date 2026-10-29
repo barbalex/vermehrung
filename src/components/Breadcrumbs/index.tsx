@@ -101,7 +101,7 @@ export const Breadcrumbs = () => {
   return (
     <div className={styles.container} ref={scrollRef}>
       <MuiBreadcrumbs
-        separator="›"
+        separator={<span className={styles.divider} />}
         className={styles.trail}
         aria-label="Pfad"
         // never collapse into the '...' element: the strip scrolls

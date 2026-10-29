@@ -26,13 +26,16 @@
   white-space: nowrap;
 }
 
-/* only the dividers between the nav links are tinted.
-   :global - css modules would mangle the mui class name */
-.trail ol > li:global(.MuiBreadcrumbs-separator) {
-  color: var(--icon-primary);
-  font-weight: 700;
-  font-size: 1rem;
-  margin: 0 1px;
+/* the dividers are solid chevrons as high as the strip, with padding
+   left and right - clearly visible next to long link texts */
+.divider {
+  display: block;
+  flex: 0 0 auto;
+  width: 13px;
+  height: calc(var(--breadcrumbs-height) - 1px);
+  margin: 0 6px;
+  background-color: var(--icon-primary);
+  clip-path: polygon(0 0, 45% 0, 100% 50%, 45% 100%, 0 100%, 55% 50%);
 }
 
 .trail ol > li > a,
