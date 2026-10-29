@@ -41,15 +41,26 @@ export const Herkunft = ({
   const observable = useMemo(
     () =>
       showFilter
-        ? $of(herkunftFilter)
+        ? $of(undefined)
         : initialDataQueried || !online
-          ? db?.get('herkunft').findAndObserve(id)
-          : $of({}),
-    [db, herkunftFilter, id, initialDataQueried, online, showFilter],
+          ? db
+              ?.get<import('../../../dbModel.ts').Herkunft>('herkunft')
+              .findAndObserve(id as string)
+          : $of(undefined),
+    [db, id, initialDataQueried, online, showFilter],
   )
-  const row = useObservable(observable)
+  const observedRow = useObservable(
+    observable as unknown as
+      | import('rxjs').Observable<
+          import('../../../dbModel.ts').Herkunft | undefined
+        >
+      | undefined,
+  )
+  const row = (showFilter ? herkunftFilter : observedRow) as
+    | import('../../../dbModel.ts').Herkunft
+    | undefined
 
-  const [activeConflict, setActiveConflict] = useState(null)
+  const [activeConflict, setActiveConflict] = useState<string | null>(null)
   const conflictDisposalCallback = () => setActiveConflict(null)
   const conflictSelectionCallback = async () => setActiveConflict(null)
   // ensure that activeConflict is reset

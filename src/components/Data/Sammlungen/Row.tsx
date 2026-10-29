@@ -16,15 +16,15 @@ export const SammlungRow = ({
   index,
   rows
 }: {
-  style: Record<string, unknown>
-  index: number
+  style?: Record<string, unknown>
+  index?: number
   rows: import('../../../dbModel.ts').Sammlung[]
 }) => {
   const herkunftIdInActiveNodeArray = useAtomValue(
     herkunftIdInActiveNodeArrayAtom,
   )
 
-  const row = rows[index]
+  const row = rows[index ?? 0]
 
   const [label, setLabel] = useState('')
   useEffect(() => {

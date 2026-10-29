@@ -32,13 +32,14 @@ export const Personen = ({ filter: showFilter = false }) => {
   const personFilter = useAtomValue(filterPersonAtom)
   const activeNodeArray = useAtomValue(activeNodeArrayAtom)
 
-  const [dataState, setDataState] = useState({
-    persons: [],
-    totalCount: 0,
-    userRole: undefined,
-  })
+  const [dataState, setDataState] = useState<{
+    persons: import('../../../dbModel.ts').Person[]
+    totalCount: number
+    userRole: import('../../../dbModel.ts').UserRole | undefined
+  }>({ persons: [], totalCount: 0, userRole: undefined })
   useEffect(() => {
     const collection = db?.get<import('../../../dbModel.ts').Person>('person')
+    if (!collection) return
     const personDelQuery =
       personFilter._deleted === false
         ? Q.where('_deleted', false)
@@ -74,10 +75,18 @@ export const Personen = ({ filter: showFilter = false }) => {
       dataObservable,
       userRoleObservable,
     ])
-    const subscription = combinedObservables.subscribe(
+    const subscription = (
+      combinedObservables as unknown as import('rxjs').Observable<
+        [
+          number,
+          import('../../../dbModel.ts').Person[],
+          import('../../../dbModel.ts').UserRole[],
+        ]
+      >
+    ).subscribe(
       async ([totalCount, persons, [userRole]]) => {
         setDataState({
-          persons: persons?.sort(personSort),
+          persons: [...persons].sort(personSort),
           totalCount,
           userRole,
         })

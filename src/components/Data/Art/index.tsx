@@ -41,15 +41,26 @@ export const Art = ({
   const observable = useMemo(
     () =>
       showFilter
-        ? $of(artFilter)
+        ? $of(undefined)
         : initialDataQueried || !online
-          ? db?.get('art').findAndObserve(id)
-          : $of({}),
-    [db, artFilter, id, initialDataQueried, online, showFilter],
+          ? db
+              ?.get<import('../../../dbModel.ts').Art>('art')
+              .findAndObserve(id as string)
+          : $of(undefined),
+    [db, id, initialDataQueried, online, showFilter],
   )
-  const row = useObservable(observable)
+  const observedRow = useObservable(
+    observable as unknown as
+      | import('rxjs').Observable<
+          import('../../../dbModel.ts').Art | undefined
+        >
+      | undefined,
+  )
+  const row = (showFilter ? artFilter : observedRow) as
+    | import('../../../dbModel.ts').Art
+    | undefined
 
-  const [activeConflict, setActiveConflict] = useState(null)
+  const [activeConflict, setActiveConflict] = useState<string | null>(null)
   const conflictDisposalCallback = () => setActiveConflict(null)
   const conflictSelectionCallback = () => setActiveConflict(null)
   // ensure that activeConflict is reset
@@ -96,7 +107,7 @@ export const Art = ({
                 }
               showHistory={showHistory}
             />
-            <Allotment.Pane visible={paneIsSplit}>
+            <Allotment.Pane visible={!!paneIsSplit}>
               {activeConflict ? (
                 <Conflict
                   rev={activeConflict}

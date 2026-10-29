@@ -4,7 +4,7 @@
 import { withObservables } from '@nozbe/watermelondb/react'
 import { withDatabase } from '@nozbe/watermelondb/react/DatabaseProvider'
 
-import Herkunft from './Herkunft/index.tsx'
+import { Herkunft } from './index.tsx'
 
 const enhance = withDatabase(
   withObservables(['id'], ({ id, filter, database }) => ({

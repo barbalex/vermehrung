@@ -47,10 +47,18 @@ export const Sammlung = ({
           : $of({}),
     [db, id, initialDataQueried, online, showFilter],
   )
-  const observedRow = useObservable(observable)
-  const row = showFilter ? sammlungFilter : observedRow
+  const observedRow = useObservable(
+    observable as unknown as
+      | import('rxjs').Observable<
+          import('../../../dbModel.ts').Sammlung | undefined
+        >
+      | undefined,
+  )
+  const row = (showFilter ? sammlungFilter : observedRow) as
+    | import('../../../dbModel.ts').Sammlung
+    | undefined
 
-  const [activeConflict, setActiveConflict] = useState(null)
+  const [activeConflict, setActiveConflict] = useState<string | null>(null)
   const conflictDisposalCallback = () => setActiveConflict(null)
   const conflictSelectionCallback = () => setActiveConflict(null)
 

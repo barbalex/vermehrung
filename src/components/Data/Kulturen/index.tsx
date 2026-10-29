@@ -38,7 +38,10 @@ export const Kulturen = ({ filter: showFilter = false }) => {
   const activeNodeArray = useAtomValue(activeNodeArrayAtom)
   const kulturFilter = useAtomValue(filterKulturAtom)
 
-  const [dataState, setDataState] = useState({ kulturs: [], totalCount: 0 })
+  const [dataState, setDataState] = useState<{
+    kulturs: import('../../../dbModel.ts').Kultur[]
+    totalCount: number
+  }>({ kulturs: [], totalCount: 0 })
   useEffect(() => {
     const hierarchyQuery = []
     if (gartenIdInActiveNodeArray) {
@@ -54,6 +57,7 @@ export const Kulturen = ({ filter: showFilter = false }) => {
       hierarchyQuery.push(Q.on('herkunft', 'id', herkunftIdInActiveNodeArray))
     }
     const collection = db?.get<import('../../../dbModel.ts').Kultur>('kultur')
+    if (!collection) return
     const kulturDelQuery =
       kulturFilter._deleted === false
         ? Q.where('_deleted', false)

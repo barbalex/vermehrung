@@ -51,10 +51,15 @@ export const TeilkulturForm = ({
     unsetError('teilkultur')
   }, [id])
 
-  const [dataState, setDataState] = useState({
-    kulturWerte: [],
-    kulturOption: undefined,
-  })
+  const [dataState, setDataState] = useState<{
+    kulturWerte: {
+      value: string
+      label: string | undefined
+      inaktiv: boolean
+      link: string[]
+    }[]
+    kulturOption: import('../../../../dbModel.ts').KulturOption | undefined
+  }>({ kulturWerte: [], kulturOption: undefined })
   useEffect(() => {
     const kulturDelQuery =
       kulturFilter._deleted === false
@@ -80,21 +85,27 @@ export const TeilkulturForm = ({
       ?.get<import('../../../../dbModel.ts').Kultur>('kultur')
       .query(kulturDelQuery, kulturAktivQuery)
       .observe()
-    const kulturObservable = row?.kultur ? row?.kultur.observe() : $of({})
+    const kulturObservable = row?.kultur ? row?.kultur.observe() : $of(undefined)
     const kulturOptionObservable = row?.kultur_id
-      ? db?.get('kultur_option').findAndObserve(row?.kultur_id)
-      : $of(null)
+      ? db
+          ?.get<import('../../../../dbModel.ts').KulturOption>('kultur_option')
+          .findAndObserve(row?.kultur_id as string)
+      : $of(undefined)
     const combinedObservables = combineLatest([
       kultursObservable,
       kulturObservable,
       kulturOptionObservable,
     ])
-    const subscription = combinedObservables.subscribe(
-      async ([kulturs, kultur, kulturOption]: [
+    const subscription = (
+      combinedObservables as unknown as import('rxjs').Observable<
+        [
+          import('../../../../dbModel.ts').Kultur[],
           import('../../../../dbModel.ts').Kultur | undefined,
           import('../../../../dbModel.ts').KulturOption | undefined,
-          import('../../../../dbModel.ts').KulturOption | undefined,
-        ]) => {
+        ]
+      >
+    ).subscribe(
+      async ([kulturs, kultur, kulturOption]) => {
         // need to show a choosen kultur even if inactive but not if deleted
         const kultursIncludingChoosen = uniqBy(
           [...kulturs, ...(kultur && !showFilter ? [kultur] : [])],
@@ -107,7 +118,7 @@ export const TeilkulturForm = ({
           kultursSorted.map(async (el) => {
             let label = ''
             try {
-              label = await el.label.pipe(first$()).toPromise()
+              label = (await el.label.pipe(first$()).toPromise()) ?? ''
             } catch {}
 
             return {
@@ -238,7 +249,7 @@ export const TeilkulturForm = ({
             value={row?.bemerkungen ?? null}
             saveToDb={saveToDb}
             error={errors?.teilkultur?.bemerkungen as string | undefined}
-            multiline
+            multiLine
           />
         )}
         {online && !showFilter && row?._conflicts?.map && (

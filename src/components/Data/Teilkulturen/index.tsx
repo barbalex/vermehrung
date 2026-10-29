@@ -32,10 +32,10 @@ export const Teilkulturen = ({ filter: showFilter = false }) => {
   const activeNodeArray = useAtomValue(activeNodeArrayAtom)
   const teilkulturFilter = useAtomValue(filterTeilkulturAtom)
 
-  const [dataState, setDataState] = useState({
-    teilkulturs: [],
-    totalCount: 0,
-  })
+  const [dataState, setDataState] = useState<{
+    teilkulturs: import('../../../dbModel.ts').Teilkultur[]
+    totalCount: number
+  }>({ teilkulturs: [], totalCount: 0 })
   useEffect(() => {
     const hierarchyQuery = kulturIdInActiveNodeArray
       ? [
@@ -45,6 +45,7 @@ export const Teilkulturen = ({ filter: showFilter = false }) => {
       : []
     const collection =
       db?.get<import('../../../dbModel.ts').Teilkultur>('teilkultur')
+    if (!collection) return
     const teilkulturDelQuery =
       teilkulturFilter._deleted === false
         ? Q.where('_deleted', false)

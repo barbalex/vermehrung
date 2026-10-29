@@ -32,7 +32,10 @@ export const Zaehlungen = ({ filter: showFilter = false }) => {
   const activeNodeArray = useAtomValue(activeNodeArrayAtom)
   const zaehlungFilter = useAtomValue(filterZaehlungAtom)
 
-  const [dataState, setDataState] = useState({ zaehlungs: [], totalCount: 0 })
+  const [dataState, setDataState] = useState<{
+    zaehlungs: import('../../../dbModel.ts').Zaehlung[]
+    totalCount: number
+  }>({ zaehlungs: [], totalCount: 0 })
   useEffect(() => {
     const hierarchyQuery = kulturIdInActiveNodeArray
       ? [
@@ -42,6 +45,7 @@ export const Zaehlungen = ({ filter: showFilter = false }) => {
       : []
     const collection =
       db?.get<import('../../../dbModel.ts').Zaehlung>('zaehlung')
+    if (!collection) return
     const zaehlungDelQuery =
       zaehlungFilter._deleted === false
         ? Q.where('_deleted', false)

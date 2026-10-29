@@ -38,7 +38,10 @@ export const Sammlungen = ({ filter: showFilter = false }) => {
   const activeNodeArray = useAtomValue(activeNodeArrayAtom)
   const sammlungFilter = useAtomValue(filterSammlungAtom)
 
-  const [dataState, setDataState] = useState({ sammlungs: [], totalCount: 0 })
+  const [dataState, setDataState] = useState<{
+    sammlungs: import('../../../dbModel.ts').Sammlung[]
+    totalCount: number
+  }>({ sammlungs: [], totalCount: 0 })
   useEffect(() => {
     const hierarchyQuery = []
     if (artIdInActiveNodeArray) {
@@ -55,6 +58,7 @@ export const Sammlungen = ({ filter: showFilter = false }) => {
     }
     const collection =
       db?.get<import('../../../dbModel.ts').Sammlung>('sammlung')
+    if (!collection) return
     const sammlungDelQuery =
       sammlungFilter._deleted === false
         ? Q.where('_deleted', false)

@@ -32,7 +32,10 @@ export const Events = ({ filter: showFilter = false }) => {
   const kulturIdInActiveNodeArray = useAtomValue(kulturIdInActiveNodeArrayAtom)
   const eventFilter = useAtomValue(filterEventAtom)
 
-  const [dataState, setDataState] = useState({ events: [], totalCount: 0 })
+  const [dataState, setDataState] = useState<{
+    events: import('../../../dbModel.ts').Event[]
+    totalCount: number
+  }>({ events: [], totalCount: 0 })
   useEffect(() => {
     const hierarchyQuery = kulturIdInActiveNodeArray
       ? [
@@ -41,6 +44,7 @@ export const Events = ({ filter: showFilter = false }) => {
         ]
       : []
     const collection = db?.get<import('../../../dbModel.ts').Event>('event')
+    if (!collection) return
     const delQuery =
       eventFilter._deleted === false
         ? Q.where('_deleted', false)

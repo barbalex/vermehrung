@@ -35,18 +35,24 @@ export const Person = ({
   const online = useAtomValue(onlineAtom)
   const db = useAtomValue(dbAtom)
   const initialDataQueried = useAtomValue(initialDataQueriedAtom)
-  const [dataState, setDataState] = useState({
-    row: undefined,
+  const [dataState, setDataState] = useState<{
+    row: import('../../../dbModel.ts').Person | undefined
     // need raw row because observable does not provoke rerendering of components
-    rawRow: undefined,
-  })
+    rawRow: string | undefined
+  }>({ row: undefined, rawRow: undefined })
   useEffect(() => {
     const personObservable = showFilter
-      ? $of(personFilter)
+      ? $of(undefined)
       : initialDataQueried || !online
-        ? db?.get('person').findAndObserve(id)
-        : $of({})
-    const subscription = personObservable?.subscribe((newRow) => {
+        ? db
+            ?.get<import('../../../dbModel.ts').Person>('person')
+            .findAndObserve(id as string)
+        : $of(undefined)
+    const subscription = (
+      personObservable as unknown as import('rxjs').Observable<
+        import('../../../dbModel.ts').Person | undefined
+      >
+    )?.subscribe((newRow) => {
       setDataState({
         row: newRow,
         rawRow: JSON.stringify(newRow?._raw ?? newRow),
@@ -57,7 +63,7 @@ export const Person = ({
   }, [db, personFilter, id, showFilter, initialDataQueried, online])
   const { row, rawRow } = dataState
 
-  const [activeConflict, setActiveConflict] = useState(null)
+  const [activeConflict, setActiveConflict] = useState<string | null>(null)
   const conflictDisposalCallback = () => setActiveConflict(null)
   const conflictSelectionCallback = () => setActiveConflict(null)
   // ensure that activeConflict is reset

@@ -17,14 +17,14 @@ export const KulturRow = ({
   index,
   rows
 }: {
-  style: Record<string, unknown>
-  index: number
+  style?: Record<string, unknown>
+  index?: number
   rows: import('../../../dbModel.ts').Kultur[]
 }) => {
   const artIdInActiveNodeArray = useAtomValue(artIdInActiveNodeArrayAtom)
   const gartenIdInActiveNodeArray = useAtomValue(gartenIdInActiveNodeArrayAtom)
 
-  const row = rows[index]
+  const row = rows[index ?? 0]
 
   const [label, setLabel] = useState('')
   useEffect(() => {

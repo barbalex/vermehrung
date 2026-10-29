@@ -12,11 +12,11 @@ export const TeilkulturRow = ({
   index,
   rows
 }: {
-  style: Record<string, unknown>
-  index: number
+  style?: Record<string, unknown>
+  index?: number
   rows: import('../../../dbModel.ts').Teilkultur[]
 }) => {
-  const row = rows[index]
+  const row = rows[index ?? 0]
 
   const onClickRow = () =>
     setActiveNodeArray([...store.get(activeNodeArrayAtom), row.id])

@@ -163,9 +163,14 @@ export const Personen = ({
         {open && (
           <>
             <div className={styles.aven}>
-              {avsSorted.map((av: import('../../../../../dbModel.ts').Av, index: number) => (
-                <Person key={`${av.art_id}/${av.person_id}/${index}`} av={av} />
-              ))}
+              {(avsSorted as import('../../../../../dbModel.ts').Av[]).map(
+                (av, index: number) => (
+                  <Person
+                    key={`${av.art_id}/${av.person_id}/${index}`}
+                    av={av}
+                  />
+                ),
+              )}
             </div>
             {!!personWerte.length && (
               <Select

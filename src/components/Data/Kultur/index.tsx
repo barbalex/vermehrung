@@ -41,15 +41,26 @@ export const Kultur = ({
   const observable = useMemo(
     () =>
       showFilter
-        ? $of(kulturFilter)
+        ? $of(undefined)
         : initialDataQueried || !online
-          ? db?.get('kultur').findAndObserve(id)
-          : $of({}),
-    [db, kulturFilter, id, initialDataQueried, online, showFilter],
+          ? db
+              ?.get<import('../../../dbModel.ts').Kultur>('kultur')
+              .findAndObserve(id as string)
+          : $of(undefined),
+    [db, id, initialDataQueried, online, showFilter],
   )
-  const row = useObservable(observable)
+  const observedRow = useObservable(
+    observable as unknown as
+      | import('rxjs').Observable<
+          import('../../../dbModel.ts').Kultur | undefined
+        >
+      | undefined,
+  )
+  const row = (showFilter ? kulturFilter : observedRow) as
+    | import('../../../dbModel.ts').Kultur
+    | undefined
 
-  const [activeConflict, setActiveConflict] = useState(null)
+  const [activeConflict, setActiveConflict] = useState<string | null>(null)
   const conflictDisposalCallback = () => setActiveConflict(null)
   const conflictSelectionCallback = () => setActiveConflict(null)
   // ensure that activeConflict is reset
@@ -78,13 +89,13 @@ export const Kultur = ({
       >
         <FormTitle
           row={row}
-          showFilter={showFilter}
+          showFilter={showFilter ?? false}
           showHistory={showHistory}
         />
         <div className={artStyles.splitPaneContainer}>
           <Allotment key={`${activeConflict}/${showHistory}`}>
             <Form
-              showFilter={showFilter}
+              showFilter={showFilter ?? false}
               id={id}
               row={row}
               activeConflict={activeConflict}

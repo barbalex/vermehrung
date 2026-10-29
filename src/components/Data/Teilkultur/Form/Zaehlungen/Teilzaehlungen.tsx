@@ -1,19 +1,27 @@
 import { useState, useEffect } from 'react'
-import format from 'date-fns/format'
+import { format } from 'date-fns/format'
 
 import { exists } from '../../../../../utils/exists.ts'
 
 import styles from './Teilzaehlungen.module.css'
 
-export const TeilkulturTeilzaehlung = ({ tz }) => {
-  const [zaehlung, setZaehlung] = useState([])
+export const TeilkulturTeilzaehlung = ({
+  tz,
+}: {
+  tz: import('../../../../../dbModel.ts').Teilzaehlung
+  last: boolean
+}) => {
+  const [zaehlung, setZaehlung] = useState<
+    import('../../../../../dbModel.ts').Zaehlung | undefined
+  >(undefined)
 
   useEffect(() => {
     const zaehlungObservable = tz.zaehlung.observe()
-    const subscription = zaehlungObservable.subscribe(
-      (zaehlung: import('../../../../../dbModel.ts').Zaehlung) =>
-        setZaehlung(zaehlung),
-    )
+    const subscription = (
+      zaehlungObservable as unknown as import('rxjs').Observable<
+        import('../../../../../dbModel.ts').Zaehlung
+      >
+    ).subscribe((zaehlung) => setZaehlung(zaehlung))
 
     return () => subscription?.unsubscribe?.()
   }, [tz.zaehlung])
@@ -26,7 +34,7 @@ export const TeilkulturTeilzaehlung = ({ tz }) => {
     <div className={styles.row}>
       <div className={styles.datumClass}>{datum}</div>
       <div className={styles.prognose}>
-        {zaehlung.prognose ? 'Bedarf' : ' '}
+        {zaehlung?.prognose ? 'Bedarf' : ' '}
       </div>
       <div className={styles.pflanzen}>
         {exists(tz.anzahl_pflanzen) ? `${tz.anzahl_pflanzen} Pflanzen` : ''}

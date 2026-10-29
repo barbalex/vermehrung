@@ -41,15 +41,26 @@ export const Teilkultur = ({
   const observable = useMemo(
     () =>
       showFilter
-        ? $of(teilkulturFilter)
+        ? $of(undefined)
         : initialDataQueried || !online
-          ? db?.get('teilkultur').findAndObserve(id)
-          : $of({}),
-    [db, teilkulturFilter, id, initialDataQueried, online, showFilter],
+          ? db
+              ?.get<import('../../../dbModel.ts').Teilkultur>('teilkultur')
+              .findAndObserve(id as string)
+          : $of(undefined),
+    [db, id, initialDataQueried, online, showFilter],
   )
-  const row = useObservable(observable)
+  const observedRow = useObservable(
+    observable as unknown as
+      | import('rxjs').Observable<
+          import('../../../dbModel.ts').Teilkultur | undefined
+        >
+      | undefined,
+  )
+  const row = (showFilter ? teilkulturFilter : observedRow) as
+    | import('../../../dbModel.ts').Teilkultur
+    | undefined
 
-  const [activeConflict, setActiveConflict] = useState(null)
+  const [activeConflict, setActiveConflict] = useState<string | null>(null)
   const conflictDisposalCallback = () => setActiveConflict(null)
   const conflictSelectionCallback = () => setActiveConflict(null)
 

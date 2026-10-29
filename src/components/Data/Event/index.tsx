@@ -41,15 +41,26 @@ export const Event = ({
   const observable = useMemo(
     () =>
       showFilter
-        ? $of(eventFilter)
+        ? $of(undefined)
         : initialDataQueried || !online
-          ? db?.get('event').findAndObserve(id)
-          : $of({}),
-    [db, eventFilter, id, initialDataQueried, online, showFilter],
+          ? db
+              ?.get<import('../../../dbModel.ts').Event>('event')
+              .findAndObserve(id as string)
+          : $of(undefined),
+    [db, id, initialDataQueried, online, showFilter],
   )
-  const row = useObservable(observable)
+  const observedRow = useObservable(
+    observable as unknown as
+      | import('rxjs').Observable<
+          import('../../../dbModel.ts').Event | undefined
+        >
+      | undefined,
+  )
+  const row = (showFilter ? eventFilter : observedRow) as
+    | import('../../../dbModel.ts').Event
+    | undefined
 
-  const [activeConflict, setActiveConflict] = useState(null)
+  const [activeConflict, setActiveConflict] = useState<string | null>(null)
   // TODO: should resync
   const conflictDisposalCallback = () => setActiveConflict(null)
   const conflictSelectionCallback = () => setActiveConflict(null)

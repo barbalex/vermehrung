@@ -14,11 +14,11 @@ export const ArtRow = ({
   index,
   rows
 }: {
-  style: Record<string, unknown>
-  index: number
+  style?: Record<string, unknown>
+  index?: number
   rows: import('../../../dbModel.ts').Art[]
 }) => {
-  const row = rows[index]
+  const row = rows[index ?? 0]
 
   const [label, setLabel] = useState('')
   useEffect(() => {

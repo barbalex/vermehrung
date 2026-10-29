@@ -31,7 +31,6 @@ export const ZaehlungForm = ({
   showFilter,
   id,
   row,
-  rawRow,
   activeConflict,
   setActiveConflict,
   showHistory,
@@ -39,7 +38,7 @@ export const ZaehlungForm = ({
   showFilter: boolean
   id?: string | undefined
   row: import('../../../../dbModel.ts').Zaehlung | null | undefined
-  rawRow: Record<string, unknown> | null | undefined
+  rawRow?: Record<string, unknown> | null | undefined
   activeConflict: string | null
   setActiveConflict: (val: unknown) => void
   showHistory: boolean
@@ -247,7 +246,7 @@ export const ZaehlungForm = ({
           />
         )}
         {!showFilter && (
-          <Teilzaehlungen zaehlungId={id} zaehlung={row} rawRow={rawRow} />
+          <Teilzaehlungen zaehlungId={id} zaehlung={row} />
         )}
       </div>
     </ErrorBoundary>

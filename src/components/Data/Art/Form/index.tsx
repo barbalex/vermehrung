@@ -189,12 +189,18 @@ export const ArtForm = ({
           key={`${row?.id}${row?.ae_id}ae_id`}
           art={row}
           saveToDb={saveToDb}
-          error={errors?.art?.ae_id as string | undefined}
-          modelFilter={aeArtsFilter}
+          error={
+            errors?.art?.ae_id as string | boolean | null | undefined
+          }
+          modelFilter={
+            aeArtsFilter as unknown as (
+              val: string,
+            ) => { value: string; label: string }[]
+          }
         />
         <SelectCreatable
           key={`${row?.id}${row?.set}set`}
-          row={row}
+          row={row as unknown as Record<string, unknown>}
           showFilter={showFilter}
           table="art"
           field="set"

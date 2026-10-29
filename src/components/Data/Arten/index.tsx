@@ -37,9 +37,13 @@ export const Arten = ({
   const apFilter = useAtomValue(apFilterAtom)
   const artFilter = useAtomValue(filterArtAtom)
 
-  const [dataState, setDataState] = useState({ arts: [], totalCount: 0 })
+  const [dataState, setDataState] = useState<{
+    arts: import('../../../dbModel.ts').Art[]
+    totalCount: number
+  }>({ arts: [], totalCount: 0 })
   useEffect(() => {
     const collection = db?.get<import('../../../dbModel.ts').Art>('art')
+    if (!collection) return
     const delQuery =
       artFilter._deleted === false
         ? Q.where('_deleted', false)

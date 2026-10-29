@@ -35,7 +35,7 @@ export const HerkunftForm = ({
   showFilter: boolean
   id?: string | undefined
   row: import('../../../../dbModel.ts').Herkunft | null | undefined
-  rawRow: Record<string, unknown> | null | undefined
+  rawRow?: Record<string, unknown> | null | undefined
   activeConflict: string | null
   setActiveConflict: (val: unknown) => void
   showHistory: boolean

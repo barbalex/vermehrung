@@ -35,7 +35,10 @@ export const Bedarfe = ({ filter: showFilter = false }) => {
   const kulturIdInActiveNodeArray = useAtomValue(kulturIdInActiveNodeArrayAtom)
   const bedarfFilter = useAtomValue(filterBedarfAtom)
 
-  const [dataState, setDataState] = useState({ bedarfe: [], totalCount: 0 })
+  const [dataState, setDataState] = useState<{
+    bedarfe: import('../../../dbModel.ts').Bedarf[]
+    totalCount: number
+  }>({ bedarfe: [], totalCount: 0 })
   useEffect(() => {
     const hierarchyQuery = kulturIdInActiveNodeArray
       ? [
@@ -44,6 +47,7 @@ export const Bedarfe = ({ filter: showFilter = false }) => {
         ]
       : []
     const collection = db?.get<import('../../../dbModel.ts').Bedarf>('bedarf')
+    if (!collection) return
     const delQuery =
       bedarfFilter._deleted === false
         ? Q.where('_deleted', false)

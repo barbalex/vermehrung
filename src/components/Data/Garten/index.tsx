@@ -44,7 +44,7 @@ export const Garten = ({
         ? $of(undefined)
         : initialDataQueried || !online
           ? db
-              ?.get<import('../../dbModel.ts').Garten>('garten')
+              ?.get<import('../../../dbModel.ts').Garten>('garten')
               .findAndObserve(id as string)
           : $of(undefined),
     [db, id, initialDataQueried, online, showFilter],
@@ -52,11 +52,13 @@ export const Garten = ({
   const observedRow = useObservable(
     observable as unknown as
       | import('rxjs').Observable<
-          import('../../dbModel.ts').Garten | undefined
+          import('../../../dbModel.ts').Garten | undefined
         >
       | undefined,
   )
-  const row = showFilter ? gartenFilter : observedRow
+  const row = (showFilter ? gartenFilter : observedRow) as
+    | import('../../../dbModel.ts').Garten
+    | undefined
 
   const [activeConflict, setActiveConflict] = useState(null)
   const conflictDisposalCallback = () => setActiveConflict(null)

@@ -43,7 +43,10 @@ export const Lieferungen = ({ filter: showFilter = false }) => {
   const lieferungFilter = useAtomValue(filterLieferungAtom)
   const activeNodeArray = useAtomValue(activeNodeArrayAtom)
 
-  const [dataState, setDataState] = useState({ lieferungs: [], totalCount: 0 })
+  const [dataState, setDataState] = useState<{
+    lieferungs: import('../../../dbModel.ts').Lieferung[]
+    totalCount: number
+  }>({ lieferungs: [], totalCount: 0 })
   useEffect(() => {
     let kulturOnField = 'von_kultur_id'
     const hierarchyQuery = []
@@ -71,6 +74,7 @@ export const Lieferungen = ({ filter: showFilter = false }) => {
     }
     const collection =
       db?.get<import('../../../dbModel.ts').Lieferung>('lieferung')
+    if (!collection) return
     const lieferungDelQuery =
       lieferungFilter._deleted === false
         ? Q.where('_deleted', false)

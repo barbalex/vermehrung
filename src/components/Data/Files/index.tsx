@@ -37,7 +37,7 @@ export const Files = ({
   parent,
 }: {
   parentTable: string
-  parent: { id?: string; files?: unknown }
+  parent: { id?: string; files?: unknown } | null | undefined
 }) => {
   const online = useAtomValue(onlineAtom)
 

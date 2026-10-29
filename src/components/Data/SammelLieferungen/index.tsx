@@ -30,13 +30,14 @@ export const SammelLieferungen = ({ filter: showFilter = false }) => {
   const sammelLieferungFilter = useAtomValue(filterSammelLieferungAtom)
   const activeNodeArray = useAtomValue(activeNodeArrayAtom)
 
-  const [dataState, setDataState] = useState({
-    sammelLieferungs: [],
-    totalCount: 0,
-  })
+  const [dataState, setDataState] = useState<{
+    sammelLieferungs: import('../../../dbModel.ts').SammelLieferung[]
+    totalCount: number
+  }>({ sammelLieferungs: [], totalCount: 0 })
   useEffect(() => {
     const collection =
       db?.get<import('../../../dbModel.ts').SammelLieferung>('sammel_lieferung')
+    if (!collection) return
     const sammelLieferungDelQuery =
       sammelLieferungFilter._deleted === false
         ? Q.where('_deleted', false)

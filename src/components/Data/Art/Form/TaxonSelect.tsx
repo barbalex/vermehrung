@@ -72,7 +72,7 @@ export const TaxonSelect = ({
   labelSize: string | number
   art: import('../../../../dbModel.ts').Art | null | undefined
   saveToDb: (event: { target: { name?: string; value: unknown } }) => void
-  error: string | boolean | null
+  error?: string | boolean | null | undefined
   modelFilter: (val: string) => { value: string; label: string }[]
 }) => {
   const db = useAtomValue(dbAtom)

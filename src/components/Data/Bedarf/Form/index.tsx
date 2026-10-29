@@ -128,11 +128,15 @@ export const BedarfForm = ({
       kultursObservable,
       personsObservable,
     ])
-    const subscription = combinedObservables.subscribe(
-      async ([kulturs, persons]: [
+    const subscription = (
+      combinedObservables as unknown as import('rxjs').Observable<
+        [
           import('../../../../dbModel.ts').Kultur[],
           import('../../../../dbModel.ts').Person[],
-        ]) => {
+        ]
+      >
+    ).subscribe(
+      async ([kulturs, persons]) => {
         // need to show a choosen kultur even if inactive but not if deleted
         let kultur
         try {
@@ -219,7 +223,10 @@ export const BedarfForm = ({
       return setFilterValue({ table: 'bedarf', key: field as string, value })
     }
 
-    const previousValue = ifIsNumericAsNumber((row as unknown as Record<string, unknown>)?.[field as string])
+    const previousValue = ifIsNumericAsNumber(
+      (row as unknown as Record<string, unknown>)?.[field as string] as
+        string | number,
+    )
     // only update if value has changed
     if (value === previousValue) return
     row?.edit({ field, value })
@@ -284,7 +291,7 @@ export const BedarfForm = ({
           value={row?.beschreibung ?? null}
           saveToDb={saveToDb}
           error={errors?.bedarf?.beschreibung as string | undefined}
-          multiline
+          multiLine
         />
         <TextField
           key={`${row?.id}bemerkungen`}
@@ -293,7 +300,7 @@ export const BedarfForm = ({
           value={row?.bemerkungen ?? null}
           saveToDb={saveToDb}
           error={errors?.bedarf?.bemerkungen as string | undefined}
-          multiline
+          multiLine
         />
         <TextField
           key={`${row?.id}neues_material`}
@@ -302,7 +309,7 @@ export const BedarfForm = ({
           value={row?.neues_material ?? null}
           saveToDb={saveToDb}
           error={errors?.bedarf?.neues_material as string | undefined}
-          multiline
+          multiLine
         />
         <Select
           key={`${row?.id}${row?.person_id}person_id`}

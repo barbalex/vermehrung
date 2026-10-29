@@ -40,7 +40,10 @@ export const Herkuenfte = ({
   const artIdInActiveNodeArray = useAtomValue(artIdInActiveNodeArrayAtom)
   const herkunftFilter = useAtomValue(filterHerkunftAtom)
 
-  const [dataState, setDataState] = useState({ herkunfts: [], totalCount: 0 })
+  const [dataState, setDataState] = useState<{
+    herkunfts: import('../../../dbModel.ts').Herkunft[]
+    totalCount: number
+  }>({ herkunfts: [], totalCount: 0 })
   useEffect(() => {
     const hierarchyQuery = sammlungIdInActiveNodeArray
       ? [
@@ -55,6 +58,7 @@ export const Herkuenfte = ({
         : []
     const collection =
       db?.get<import('../../../dbModel.ts').Herkunft>('herkunft')
+    if (!collection) return
     const delQuery =
       herkunftFilter._deleted === false
         ? Q.where('_deleted', false)

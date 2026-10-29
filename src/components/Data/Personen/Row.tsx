@@ -12,11 +12,11 @@ export const PersonRow = ({
   index,
   rows
 }: {
-  style: Record<string, unknown>
-  index: number
+  style?: Record<string, unknown>
+  index?: number
   rows: import('../../../dbModel.ts').Person[]
 }) => {
-  const row = rows[index]
+  const row = rows[index ?? 0]
 
   const onClickRow = () => {
     const activeNodeArray = store.get(activeNodeArrayAtom)

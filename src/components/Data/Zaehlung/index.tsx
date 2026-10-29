@@ -41,15 +41,26 @@ export const Zaehlung = ({
   const observable = useMemo(
     () =>
       showFilter
-        ? $of(zaehlungFilter)
+        ? $of(undefined)
         : initialDataQueried || !online
-          ? db?.get('zaehlung').findAndObserve(id)
-          : $of({}),
-    [db, zaehlungFilter, id, initialDataQueried, online, showFilter],
+          ? db
+              ?.get<import('../../../dbModel.ts').Zaehlung>('zaehlung')
+              .findAndObserve(id as string)
+          : $of(undefined),
+    [db, id, initialDataQueried, online, showFilter],
   )
-  const row = useObservable(observable)
+  const observedRow = useObservable(
+    observable as unknown as
+      | import('rxjs').Observable<
+          import('../../../dbModel.ts').Zaehlung | undefined
+        >
+      | undefined,
+  )
+  const row = (showFilter ? zaehlungFilter : observedRow) as
+    | import('../../../dbModel.ts').Zaehlung
+    | undefined
 
-  const [activeConflict, setActiveConflict] = useState(null)
+  const [activeConflict, setActiveConflict] = useState<string | null>(null)
   const conflictDisposalCallback = () => setActiveConflict(null)
   const conflictSelectionCallback = () => setActiveConflict(null)
 
