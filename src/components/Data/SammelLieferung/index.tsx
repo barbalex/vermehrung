@@ -33,7 +33,7 @@ export const SammelLieferung = ({
 }: {
   filter?: boolean
   id?: string | undefined
-  lieferung: import('../../../dbModel.ts').Lieferung | null | undefined
+  lieferung?: import('../../../dbModel.ts').Lieferung | null | undefined
 }) => {
   const isPrint = useAtomValue(isPrintAtom)
   const online = useAtomValue(onlineAtom)
@@ -122,7 +122,7 @@ export const SammelLieferung = ({
                 }
                 showHistory={showHistory}
               />
-              <Allotment.Pane visible={paneIsSplit}>
+              <Allotment.Pane visible={!!paneIsSplit}>
                 {activeConflict ? (
                   <Conflict
                     rev={activeConflict}

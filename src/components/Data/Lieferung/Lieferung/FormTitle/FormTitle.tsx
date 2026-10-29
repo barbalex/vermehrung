@@ -44,7 +44,7 @@ export const LieferungFormTitle = ({
     setActiveNodeArray([
       ...activeNodeArray.filter((n) => n !== 'Kulturen'),
       'Kulturen',
-      nachKulturId,
+      ...(nachKulturId ? [nachKulturId] : []),
     ])
   // to kulturen is not implemented in nodes, so turned off
   const toKulturenEnabled = false

@@ -39,7 +39,10 @@ export const SammlungConflict = ({
     data as import('../../shared/types.ts').RevRow[] | null
   )?.[0] ?? {}) as import('../../shared/types.ts').RevRow
 
-  const dataArray = createDataArray({ row, revRow })
+  const dataArray = createDataArray({
+    row: row as unknown as Record<string, unknown>,
+    revRow,
+  })
 
   const onClickAktuellUebernehmen = async () => {
     // build new object
@@ -89,7 +92,7 @@ export const SammlungConflict = ({
     try {
       const model = await store
         .get(dbAtom)
-        .get('sammlung')
+        ?.get<import('../../../dbModel.ts').Sammlung>('sammlung')
         .find(revRow.sammlung_id as string)
       await model?.removeConflict?.(revRow._rev ?? '')
     } catch {}

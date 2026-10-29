@@ -106,7 +106,7 @@ export const Zaehlung = ({
                 }
                 showHistory={showHistory}
               />
-              <Allotment.Pane visible={paneIsSplit}>
+              <Allotment.Pane visible={!!paneIsSplit}>
                 {activeConflict ? (
                   <Conflict
                     rev={activeConflict}

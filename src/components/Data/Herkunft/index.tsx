@@ -105,11 +105,10 @@ export const Herkunft = ({
                 }
               showHistory={showHistory}
             />
-            <Allotment.Pane visible={paneIsSplit}>
+            <Allotment.Pane visible={!!paneIsSplit}>
               {activeConflict ? (
                 <Conflict
                   rev={activeConflict}
-                  id={id}
                   row={row}
                   conflictDisposalCallback={conflictDisposalCallback}
                   conflictSelectionCallback={conflictSelectionCallback}

@@ -38,7 +38,10 @@ export const GartenConflict = ({
     data as import('../../shared/types.ts').RevRow[] | null
   )?.[0] ?? {}) as import('../../shared/types.ts').RevRow
 
-  const dataArray = createDataArrayForGartenRevComparison({ row, revRow })
+  const dataArray = createDataArrayForGartenRevComparison({
+    row: row as unknown as Record<string, unknown>,
+    revRow,
+  })
 
   const onClickAktuellUebernehmen = async () => {
     // build new object

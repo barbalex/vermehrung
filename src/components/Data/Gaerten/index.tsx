@@ -44,6 +44,7 @@ export const Gaerten = ({ filter: showFilter = false }) => {
         ]
       : []
     const collection = db?.get<import('../../../dbModel.ts').Garten>('garten')
+    if (!collection) return
     const delQuery =
       gartenFilter._deleted === false
         ? Q.where('_deleted', false)

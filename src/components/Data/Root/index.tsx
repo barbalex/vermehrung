@@ -19,7 +19,7 @@ import { getShowZaehlung } from '../../../utils/showZaehlung.ts'
 
 import styles from './index.module.css'
 
-export const Root = ({ filter: showFilter }) => {
+export const Root = ({ filter: showFilter }: { filter?: boolean }) => {
   const db = useAtomValue(dbAtom)
   const user = useAtomValue(userAtom)
   const activeNodeArray = useAtomValue(activeNodeArrayAtom)
@@ -62,7 +62,7 @@ export const Root = ({ filter: showFilter }) => {
               'tree_zaehlung',
               'tree_lieferung',
             ])
-        : $of([])
+        : $of([undefined])
       const userRoleObservable = user.uid
         ? db
             ?.get<import('../../../dbModel.ts').UserRole>('user_role')
@@ -73,11 +73,25 @@ export const Root = ({ filter: showFilter }) => {
         userPersonOptionsObservable,
         userRoleObservable,
       ])
-      const subscription = combinedObservables.subscribe(
+      const subscription = (
+        combinedObservables as unknown as import('rxjs').Observable<
+          [
+            [import('../../../dbModel.ts').PersonOption | undefined],
+            [import('../../../dbModel.ts').UserRole | undefined],
+          ]
+        >
+      ).subscribe(
         async ([[userPersonOption], [userRole]]) => {
-          const sArt = getShowArt({ userRole, activeNodeArray })
+          const sArt =
+            getShowArt({
+              userRole: userRole as unknown as string | null | undefined,
+              activeNodeArray,
+            })
           const sGarten = getShowGarten()
-          const sHerkunft = getShowHerkunft({ userRole, activeNodeArray })
+          const sHerkunft = getShowHerkunft({
+            userRole: userRole as unknown as string | null | undefined,
+            activeNodeArray,
+          })
           const sKultur = getShowKultur({ userPersonOption, activeNodeArray })
           const sLieferung = getShowLieferung({
             userPersonOption,
@@ -88,7 +102,10 @@ export const Root = ({ filter: showFilter }) => {
           //   userPersonOption,
           //   activeNodeArray,
           // })
-          const sSammlung = getShowSammlung({ userRole, activeNodeArray })
+          const sSammlung = getShowSammlung({
+            userRole: userRole as unknown as string | null | undefined,
+            activeNodeArray,
+          })
           const sTeilkultur = getShowTeilkultur({
             userPersonOption,
             activeNodeArray,
@@ -206,7 +223,7 @@ export const Root = ({ filter: showFilter }) => {
       >
         <div className={styles.fieldsContainer}>
           {rows.map((row) => (
-            <Row key={row.name} row={row} />
+            <Row key={row.name} row={row} style={{}} />
           ))}
         </div>
       </div>

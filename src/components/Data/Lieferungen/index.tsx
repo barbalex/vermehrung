@@ -132,11 +132,15 @@ export const Lieferungen = ({ filter: showFilter = false }) => {
       const slId = activeNodeArray[1]
       let sl
       try {
-        sl = await db?.get('sammel_lieferung').find(slId)
+        sl = await db
+          ?.get<import('../../../dbModel.ts').SammelLieferung>(
+            'sammel_lieferung',
+          )
+          .find(slId)
       } catch {}
-      const additionalValuesToSet = {}
+      const additionalValuesToSet: Record<string, unknown> = {}
 
-      const entries = Object.entries(sl)
+      const entries = Object.entries(sl ?? {})
         .filter(
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
           ([key, value]) =>
@@ -160,7 +164,7 @@ export const Lieferungen = ({ filter: showFilter = false }) => {
         values: additionalValuesToSet,
       })
     }
-    insertLieferungRev()
+    insertLieferungRev({ values: {} })
   }
 
   const onClickUp = () => {

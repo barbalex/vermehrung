@@ -353,7 +353,7 @@ export const EventForm = ({
         {(tk || showFilter) && (
           <SelectCreatable
             key={`${row?.id}${row?.teilkultur_id}teilkultur_id`}
-            row={row}
+            row={row as unknown as Record<string, unknown>}
             showFilter={showFilter}
             table="event"
             field="teilkultur_id"

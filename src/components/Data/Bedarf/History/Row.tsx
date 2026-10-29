@@ -24,7 +24,7 @@ export const BedarfHistoryRow = ({
   historyTakeoverCallback?: () => void
 }) => {
   const dataArray = createDataArrayForBedarfRevComparison({
-    row,
+    row: row as unknown as Record<string, unknown>,
     revRow,
   })
 
@@ -68,7 +68,7 @@ export const BedarfHistoryRow = ({
         message: (error as Error).message,
       })
     }
-    historyTakeoverCallback()
+    historyTakeoverCallback?.()
     // do not stringify revisions for store
     // as _that_ is a real array
     newObjectForStore._revisions = row?._revisions
@@ -80,14 +80,19 @@ export const BedarfHistoryRow = ({
     newObjectForStore.id = row?.id
     delete newObjectForStore.bedarf_id
     // optimistically update store
-    await store.get(dbAtom).write(async () => {
-      await row?.update((row: Record<string, unknown>) => {
-        Object.entries(newObjectForStore).forEach(([key, value]) => {
-          if (!isEqual(value, row[key])) {
-            row[key] = value
-          }
-        })
-      })
+    const db = store.get(dbAtom)
+    if (!db) return
+    await db.write(async () => {
+      await row?.update(
+        (row: unknown) => {
+          const mutableRow = row as Record<string, unknown>
+          Object.entries(newObjectForStore).forEach(([key, value]) => {
+            if (!isEqual(value, mutableRow[key])) {
+              mutableRow[key] = value
+            }
+          })
+        },
+      )
     })
   }
 

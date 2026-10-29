@@ -42,7 +42,7 @@ export const TeilkulturZaehlungen = ({
     )
 
     return () => subscription?.unsubscribe?.()
-  }, [db, teilkultur?.kultur_id, teilkultur?.zaehlung])
+  }, [db, teilkultur?.kultur_id])
 
   return (
     <ErrorBoundary>

@@ -25,7 +25,9 @@ export const NavigationSyncController = () => {
   // enable navigating in store > set this as store value
   // (can't be passed when creating store yet)
   useEffect(() => {
-    setNavigate(navigate)
+    setNavigate(
+      navigate as unknown as (to: string, options?: unknown) => void,
+    )
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 

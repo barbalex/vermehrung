@@ -46,10 +46,10 @@ export const PersonForm = ({
   const errors = useAtomValue(errorsAtom)
   const personFilter = useAtomValue(filterPersonAtom)
 
-  const [dataState, setDataState] = useState({
-    userRoleWerte: [],
-    userRole: undefined,
-  })
+  const [dataState, setDataState] = useState<{
+    userRoleWerte: { value: string; label: string | undefined }[]
+    userRole: import('../../../../dbModel.ts').UserRole | undefined
+  }>({ userRoleWerte: [], userRole: undefined })
   useEffect(() => {
     const personsNrCountObservable =
       showFilter || !exists(row?.nr)
@@ -58,21 +58,34 @@ export const PersonForm = ({
             ?.get<import('../../../../dbModel.ts').Person>('person')
             .query(Q.where('_deleted', false), Q.where('nr', row.nr))
             .observeCount()
-    const userRolesObservable = db?.get('user_role').query().observe()
+    const userRolesObservable = db
+      ?.get<import('../../../../dbModel.ts').UserRole>('user_role')
+      .query()
+      .observe()
     const userRoleObservable = row?.user_role
       ? row?.user_role.observe()
-      : $of(null)
+      : $of(undefined)
     const combinedObservables = combineLatest([
       userRolesObservable,
       personsNrCountObservable,
       userRoleObservable,
     ])
-    const subscription = combinedObservables.subscribe(
+    const subscription = (
+      combinedObservables as unknown as import('rxjs').Observable<
+        [
+          import('../../../../dbModel.ts').UserRole[] | undefined,
+          number,
+          import('../../../../dbModel.ts').UserRole | undefined,
+        ]
+      >
+    ).subscribe(
       async ([userRoles, nrCount, userRole]) => {
-        const userRoleWerte = userRoles?.sort(userRoleSort).map((el) => ({
-          value: el.id,
-          label: el.label,
-        }))
+        const userRoleWerte = [...(userRoles ?? [])]
+          .sort(userRoleSort)
+          .map((el) => ({
+            value: el.id,
+            label: el.label ?? undefined,
+          }))
         if (!showFilter && nrCount > 1) {
           setError({
             path: 'person.nr',
@@ -345,7 +358,7 @@ export const PersonForm = ({
         />
       )}
       {userRole?.name === 'artverantwortlich' && <Arten person={row} />}
-      {['gaertner', 'artverantwortlich'].includes(userRole?.name) && (
+      {['gaertner', 'artverantwortlich'].includes(userRole?.name ?? '') && (
         <Gaerten person={row} />
       )}
       {!showFilter && row?.id && <Files parentTable="person" parent={row} />}

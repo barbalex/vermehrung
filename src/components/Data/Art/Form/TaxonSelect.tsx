@@ -53,7 +53,9 @@ const StyledSelect = styled(AsyncSelect)`
   }
 `
 
-const taxonLabelFromAeArt = (ae_art) => {
+const taxonLabelFromAeArt = (
+  ae_art: import('../../../../dbModel.ts').AeArt | null | undefined,
+) => {
   if (!ae_art) return '(kein Name)'
 
   const name = ae_art.name ?? '(kein Name)'
@@ -69,11 +71,11 @@ export const TaxonSelect = ({
   error: saveToDbError,
   modelFilter,
 }: {
-  labelSize: string | number
+  labelSize?: string | number
   art: import('../../../../dbModel.ts').Art | null | undefined
   saveToDb: (event: { target: { name?: string; value: unknown } }) => void
   error?: string | boolean | null | undefined
-  modelFilter: (val: string) => { value: string; label: string }[]
+  modelFilter: (val: string) => import('../../../../dbModel.ts').AeArt[]
 }) => {
   const db = useAtomValue(dbAtom)
 
@@ -83,9 +85,13 @@ export const TaxonSelect = ({
   })
   useEffect(() => {
     const observable = art?.ae_id
-      ? db?.get('ae_art').findAndObserve(art?.ae_id)
-      : $of({})
-    const subscription = observable?.subscribe((record) =>
+      ? db?.get<import('../../../../dbModel.ts').AeArt>('ae_art').findAndObserve(art?.ae_id)
+      : $of(undefined)
+    const subscription = (
+      observable as unknown as import('rxjs').Observable<
+        import('../../../../dbModel.ts').AeArt | undefined
+      >
+    )?.subscribe((record) =>
       setStateValue({
         value: art?.ae_id || '',
         label: taxonLabelFromAeArt(record),
@@ -95,7 +101,7 @@ export const TaxonSelect = ({
     return () => subscription?.unsubscribe?.()
   }, [db, art])
 
-  const loadOptions = (inputValue, cb) => {
+  const loadOptions = (inputValue: string, cb: (options: unknown[]) => void) => {
     const data = modelFilter(inputValue).slice(0, 7)
     const options = data.map((o) => {
       return {
@@ -106,9 +112,9 @@ export const TaxonSelect = ({
     cb(options)
   }
 
-  const onChange = (option) => {
+  const onChange = (option: { value?: string } | null) => {
     const value = option && option.value ? option.value : null
-    setStateValue(value ?? '')
+    setStateValue({ value: value ?? '', label: '' })
     const fakeEvent = {
       target: {
         name: 'ae_id',
@@ -127,17 +133,22 @@ export const TaxonSelect = ({
         id="ae_id"
         defaultOptions
         name="ae_id"
-        onChange={onChange}
+        onChange={
+          onChange as unknown as (
+            newValue: unknown,
+            actionMeta: unknown,
+          ) => void
+        }
         value={stateValue}
         hideSelectedOptions
         placeholder=""
         isClearable
         isSearchable
         // remove as can't select without typing
-        nocaret
+        {...({ nocaret: true } as Record<string, unknown>)}
         // don't show a no options message if a value exists
         noOptionsMessage={() =>
-          stateValue.value ? null : '(Bitte Tippen für Vorschläge)'
+          stateValue ? null : '(Bitte Tippen für Vorschläge)'
         }
         // enable deleting typed values
         backspaceRemovesValue

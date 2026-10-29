@@ -136,7 +136,6 @@ export const ZaehlungForm = ({
   }, [
     db,
     kulturFilter,
-    row?.art_id,
     row?.kultur,
     row?.kultur_option,
     showFilter,
@@ -246,7 +245,7 @@ export const ZaehlungForm = ({
           />
         )}
         {!showFilter && (
-          <Teilzaehlungen zaehlungId={id} zaehlung={row} />
+          <Teilzaehlungen zaehlung={row} />
         )}
       </div>
     </ErrorBoundary>

@@ -15,13 +15,18 @@ export const RootRow = ({
   style,
   row
 }: {
-  style: Record<string, unknown>
-  row: Record<string, unknown> | null | undefined
+  style?: Record<string, unknown>
+  row: {
+    table?: string
+    url?: string[]
+    name?: string
+    id?: string
+  } | null | undefined
 }) => {
   const db = useAtomValue(dbAtom)
   const apFilter = useAtomValue(apFilterAtom)
   const filterAtom = useMemo(
-    () => filterTableAtoms[row?.table] ?? atom({}),
+    () => filterTableAtoms[row?.table ?? ''] ?? atom({}),
     [row?.table],
   )
   const filter = useAtomValue(filterAtom)
@@ -32,10 +37,10 @@ export const RootRow = ({
   const [count, setCount] = useState(0)
   useEffect(() => {
     const subscription = db
-      ?.get(row?.table)
+      ?.get(row?.table ?? 'art')
       .query(
         ...tableFilter({
-          table: row?.table,
+          table: (row?.table ?? 'art') as 'art',
           // like the tree and the art list view: the 'nur AP' filter
           // applies to art only (apflora_ap exists on no other table)
           apFilter: row?.table === 'art' && apFilter,
@@ -49,7 +54,7 @@ export const RootRow = ({
     return () => subscription?.unsubscribe?.()
   }, [db, row?.table, filter, apFilter])
 
-  const onClickRow = () => setActiveNodeArray(row?.url)
+  const onClickRow = () => setActiveNodeArray(row?.url ?? [])
 
   return (
     <div

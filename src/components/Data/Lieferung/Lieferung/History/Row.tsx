@@ -20,7 +20,7 @@ export const LieferungHistoryRow = ({
   historyTakeoverCallback,
 }: {
   row: import('../../../../../dbModel.ts').Lieferung | null | undefined
-  revRow: import('../../../../shared/types.ts').WmRow | null | undefined
+  revRow: import('../../../../shared/types.ts').RevRow | null | undefined
   historyTakeoverCallback: () => void
 }) => {
   const dataArray = createDataArray({
@@ -74,7 +74,7 @@ export const LieferungHistoryRow = ({
         message: (error as Error).message,
       })
     }
-    historyTakeoverCallback()
+    historyTakeoverCallback?.()
     // do not stringify revisions for store
     // as _that_ is a real array
     newObjectForStore._revisions = row?._revisions

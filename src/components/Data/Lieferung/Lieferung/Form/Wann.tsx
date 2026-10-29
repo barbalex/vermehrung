@@ -10,7 +10,17 @@ import { constants } from '../../../../../utils/constants.ts'
 
 import wannStyles from './Wann.module.css'
 
-export const LieferungWann = ({ showFilter, row, saveToDb, ifNeeded }) => {
+export const LieferungWann = ({
+  showFilter,
+  row,
+  saveToDb,
+  ifNeeded,
+}: {
+  showFilter: boolean
+  row: import('../../../../../dbModel.ts').Lieferung | null | undefined
+  saveToDb: (event: { target: { name?: string; value: unknown } }) => void
+  ifNeeded: (field: string) => boolean
+}) => {
   const errors = useAtomValue(errorsAtom)
 
   const openPlanenDocs = () => {
@@ -35,10 +45,10 @@ export const LieferungWann = ({ showFilter, row, saveToDb, ifNeeded }) => {
       </div>
       {ifNeeded('datum') && (
         <Date
-          key={`${row.id}datum`}
+          key={`${row?.id}datum`}
           name="datum"
           label="Datum"
-          value={row.datum}
+          value={row?.datum ?? null}
           saveToDb={saveToDb}
           error={errors?.lieferung?.datum as string | undefined}
         />
@@ -47,19 +57,19 @@ export const LieferungWann = ({ showFilter, row, saveToDb, ifNeeded }) => {
         <div className={wannStyles.fieldRow}>
           {showFilter ? (
             <JesNo
-              key={`${row.id}geplant`}
+              key={`${row?.id}geplant`}
               label="Geplant"
               name="geplant"
-              value={row.geplant}
+              value={row?.geplant}
               saveToDb={saveToDb}
               error={errors?.lieferung?.geplant as string | undefined}
             />
           ) : (
             <Checkbox2States
-              key={`${row.id}geplant`}
+              key={`${row?.id}geplant`}
               label="Geplant"
               name="geplant"
-              value={row.geplant}
+              value={row?.geplant}
               saveToDb={saveToDb}
               error={errors?.lieferung?.geplant as string | undefined}
             />

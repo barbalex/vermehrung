@@ -28,7 +28,6 @@ export const LierferungForm = ({
   showFilter,
   id,
   row,
-  rawRow,
   activeConflict,
   setActiveConflict,
   showHistory,
@@ -36,7 +35,6 @@ export const LierferungForm = ({
   showFilter: boolean
   id?: string | undefined
   row: import('../../../../../dbModel.ts').Lieferung | null | undefined
-  rawRow: string | null | undefined
   activeConflict: string | null
   setActiveConflict: (val: unknown) => void
   showHistory: boolean
@@ -246,18 +244,14 @@ export const LierferungForm = ({
         ]) && (
           <Was
             showFilter={showFilter}
-            id={id}
             row={row}
-            rawRow={rawRow}
             saveToDb={saveToDb}
             ifNeeded={ifNeeded}
           />
         )}
         <Von
           showFilter={showFilter}
-          id={id}
           row={row}
-          rawRow={rawRow}
           saveToDb={saveToDb}
           ifNeeded={ifNeeded}
           herkunft={herkunft}
@@ -265,9 +259,7 @@ export const LierferungForm = ({
         />
         <Nach
           showFilter={showFilter}
-          id={id}
           row={row}
-          rawRow={rawRow}
           saveToDb={saveToDb}
           ifNeeded={ifNeeded}
           herkunft={herkunft}
@@ -275,9 +267,7 @@ export const LierferungForm = ({
         {ifSomeNeeded(['datum', 'geplant']) && (
           <Wann
             showFilter={showFilter}
-            id={id}
             row={row}
-            rawRow={rawRow}
             saveToDb={saveToDb}
             ifNeeded={ifNeeded}
           />

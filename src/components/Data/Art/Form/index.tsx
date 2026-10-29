@@ -192,11 +192,7 @@ export const ArtForm = ({
           error={
             errors?.art?.ae_id as string | boolean | null | undefined
           }
-          modelFilter={
-            aeArtsFilter as unknown as (
-              val: string,
-            ) => { value: string; label: string }[]
-          }
+          modelFilter={aeArtsFilter}
         />
         <SelectCreatable
           key={`${row?.id}${row?.set}set`}

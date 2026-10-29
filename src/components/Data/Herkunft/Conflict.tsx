@@ -37,7 +37,7 @@ export const HerkunftConflict = ({
   )?.[0] ?? {}) as import('../../shared/types.ts').RevRow
 
   const dataArray = createDataArrayForHerkunftRevComparison({
-    row,
+    row: row as unknown as Record<string, unknown>,
     revRow,
   })
 

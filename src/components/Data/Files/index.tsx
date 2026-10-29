@@ -46,16 +46,16 @@ export const Files = ({
   // removing useMemo causes: Maximum update depth exceeded
   const observable = useMemo(
     () =>
-      parent.files
+      parent?.files
         ? (
-            parent.files as {
+            parent?.files as {
               observeWithColumns: (
                 columns: string[],
               ) => import('rxjs').Observable<FileRow[]>
             }
           ).observeWithColumns(['name'])
         : $of([] as FileRow[]),
-    [parent.files],
+    [parent?.files],
   )
   const files =
     useObservable(
@@ -81,7 +81,7 @@ export const Files = ({
       id: uuidv7(),
       file_id: info.uuid,
       file_mime_type: info.mimeType,
-      [`${parentTable}_id`]: parent.id,
+      [`${parentTable}_id`]: parent?.id,
       name: info.name,
     }
     await db?.write(async () => {

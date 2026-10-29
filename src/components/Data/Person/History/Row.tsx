@@ -24,7 +24,10 @@ export const PersonHistoryRow = ({
   historyTakeoverCallback?: () => void
 }) => {
   // need to extract raw value?
-  const dataArray = createDataArray({ row, revRow })
+  const dataArray = createDataArray({
+    row: row as unknown as { _raw?: Record<string, unknown> },
+    revRow: revRow as unknown as { _raw?: Record<string, unknown> } | null,
+  })
 
   const onClickWiderspruchUebernehmen = async () => {
     // need to attach to the winner, that is row
@@ -78,7 +81,7 @@ export const PersonHistoryRow = ({
         message: (error as Error).message,
       })
     }
-    historyTakeoverCallback()
+    historyTakeoverCallback?.()
     // do not stringify revisions for store
     // as _that_ is a real array
     newObjectForStore._revisions = row?._revisions
@@ -90,14 +93,19 @@ export const PersonHistoryRow = ({
     newObjectForStore.id = row?.id
     delete newObjectForStore.person_id
     // optimistically update store
-    await store.get(dbAtom).write(async () => {
-      await row?.update((row: Record<string, unknown>) => {
-        Object.entries(newObjectForStore).forEach(([key, value]) => {
-          if (!isEqual(value, row[key])) {
-            row[key] = value
-          }
-        })
-      })
+    const db = store.get(dbAtom)
+    if (!db) return
+    await db.write(async () => {
+      await row?.update(
+        (row: unknown) => {
+          const mutableRow = row as Record<string, unknown>
+          Object.entries(newObjectForStore).forEach(([key, value]) => {
+            if (!isEqual(value, mutableRow[key])) {
+              mutableRow[key] = value
+            }
+          })
+        },
+      )
     })
   }
 

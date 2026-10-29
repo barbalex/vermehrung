@@ -72,14 +72,13 @@ export const Lieferung = ({
               showFilter={showFilter ?? false}
               id={id}
               row={row}
-              rawRow={rawRow}
               activeConflict={activeConflict}
               setActiveConflict={
                   setActiveConflict as unknown as never
                 }
               showHistory={showHistory}
             />
-            <Allotment.Pane visible={paneIsSplit}>
+            <Allotment.Pane visible={!!paneIsSplit}>
               {activeConflict ? (
                 <Conflict
                   rev={activeConflict}

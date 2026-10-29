@@ -39,11 +39,14 @@ export const LieferungConflict = ({
     data as import('../../../shared/types.ts').RevRow[] | null
   )?.[0] ?? {}) as import('../../../shared/types.ts').RevRow
 
-  const dataArray = createDataArray({ row, revRow })
+  const dataArray = createDataArray({
+    row: row as unknown as Record<string, unknown>,
+    revRow,
+  })
 
   const onClickAktuellUebernehmen = async () => {
     // build new object
-    const newDepth = revRow?._depth + 1
+    const newDepth = (revRow?._depth ?? 0) + 1
     const newObject: Record<string, unknown> = {
       lieferung_id: revRow.lieferung_id,
       sammel_lieferung_id: revRow.sammel_lieferung_id,
@@ -90,11 +93,11 @@ export const LieferungConflict = ({
     }
     // update model: remove this conflict
     try {
-      const model = await store
-        .get(dbAtom)
-        .get('lieferung')
+      const db = store.get(dbAtom)
+      const model = await db
+        ?.get<import('../../../../dbModel.ts').Lieferung>('lieferung')
         .find(revRow.lieferung_id as string)
-      await model.removeConflict(revRow._rev)
+      await model?.removeConflict(revRow._rev as string)
     } catch {}
     conflictDisposalCallback()
   }
@@ -102,7 +105,7 @@ export const LieferungConflict = ({
   const onClickWiderspruchUebernehmen = async () => {
     // need to attach to the winner, that is row
     // otherwise risk to still have lower depth and thus loosing
-    const newDepth = row?._depth + 1
+    const newDepth = (row?._depth ?? 0) + 1
     const newObject: Record<string, unknown> = {
       lieferung_id: revRow.lieferung_id,
       sammel_lieferung_id: revRow.sammel_lieferung_id,

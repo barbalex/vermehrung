@@ -104,7 +104,7 @@ export const Kultur = ({
                 }
               showHistory={showHistory}
             />
-            <Allotment.Pane visible={paneIsSplit}>
+            <Allotment.Pane visible={!!paneIsSplit}>
               {activeConflict ? (
                 <Conflict
                   rev={activeConflict}

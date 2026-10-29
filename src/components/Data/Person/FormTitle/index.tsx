@@ -15,7 +15,6 @@ export const PersonFormTitleChooser = ({
 }: {
   showFilter: boolean
   row?: import('../../../../dbModel.ts').Person | null | undefined
-  rawRow: Record<string, unknown> | null | undefined
   showHistory: boolean
 }) => {
   const db = useAtomValue(dbAtom)

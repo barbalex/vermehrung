@@ -31,10 +31,10 @@ export const SammelLieferungRow = ({
     row.label
       .pipe(first$())
       .toPromise()
-      .then((label) => {
+      .then((label: unknown) => {
         if (!isActive) return
 
-        setLabel(label)
+        setLabel((label as string | undefined) ?? '')
       })
 
     return () => {

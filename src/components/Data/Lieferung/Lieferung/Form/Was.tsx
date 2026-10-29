@@ -18,12 +18,24 @@ import { artsSortedFromArts } from '../../../../../utils/artsSortedFromArts.ts'
 
 import wannStyles from './Wann.module.css'
 
-export const LieferungWas = ({ showFilter, row, saveToDb, ifNeeded }) => {
+export const LieferungWas = ({
+  showFilter,
+  row,
+  saveToDb,
+  ifNeeded,
+}: {
+  showFilter: boolean
+  row: import('../../../../../dbModel.ts').Lieferung | null | undefined
+  saveToDb: (event: { target: { name?: string; value: unknown } }) => void
+  ifNeeded: (field: string) => boolean
+}) => {
   const db = useAtomValue(dbAtom)
   const errors = useAtomValue(errorsAtom)
   const artFilter = useAtomValue(filterArtAtom)
 
-  const [artWerte, setArtWerte] = useState([])
+  const [artWerte, setArtWerte] = useState<
+    { value: string; label: string | undefined; link: string[] }[]
+  >([])
   useEffect(() => {
     const artDelQuery =
       artFilter._deleted === false
@@ -42,7 +54,7 @@ export const LieferungWas = ({ showFilter, row, saveToDb, ifNeeded }) => {
       .subscribe(async (arts) => {
         let art
         try {
-          art = await row.art.fetch()
+          art = await row?.art.fetch()
         } catch {}
         const artsIncludingChoosen = uniqBy(
           [...arts, ...(art && !showFilter ? [art] : [])],
@@ -92,9 +104,9 @@ export const LieferungWas = ({ showFilter, row, saveToDb, ifNeeded }) => {
       </div>
       {ifNeeded('art_id') && (
         <Select
-          key={`${row.id}art_id`}
+          key={`${row?.id}art_id`}
           name="art_id"
-          value={row.art_id}
+          value={row?.art_id ?? null}
           field="art_id"
           label="Art"
           options={artWerte}
@@ -105,10 +117,10 @@ export const LieferungWas = ({ showFilter, row, saveToDb, ifNeeded }) => {
       <div className={wannStyles.fieldRow}>
         {ifNeeded('anzahl_pflanzen') && (
           <TextField
-            key={`${row.id}anzahl_pflanzen`}
+            key={`${row?.id}anzahl_pflanzen`}
             name="anzahl_pflanzen"
             label="Anzahl Pflanzen"
-            value={row.anzahl_pflanzen}
+            value={row?.anzahl_pflanzen ?? null}
             saveToDb={saveToDb}
             error={errors?.lieferung?.anzahl_pflanzen as string | undefined}
             type="number"
@@ -116,10 +128,10 @@ export const LieferungWas = ({ showFilter, row, saveToDb, ifNeeded }) => {
         )}
         {ifNeeded('anzahl_auspflanzbereit') && (
           <TextField
-            key={`${row.id}anzahl_auspflanzbereit`}
+            key={`${row?.id}anzahl_auspflanzbereit`}
             name="anzahl_auspflanzbereit"
             label="Anzahl auspflanzbereit"
-            value={row.anzahl_auspflanzbereit}
+            value={row?.anzahl_auspflanzbereit ?? null}
             saveToDb={saveToDb}
             error={
               errors?.lieferung?.anzahl_auspflanzbereit as string | undefined
@@ -131,10 +143,10 @@ export const LieferungWas = ({ showFilter, row, saveToDb, ifNeeded }) => {
       <div className={wannStyles.fieldRow}>
         {ifNeeded('gramm_samen') && (
           <TextField
-            key={`${row.id}gramm_samen`}
+            key={`${row?.id}gramm_samen`}
             name="gramm_samen"
             label="Gramm Samen"
-            value={row.gramm_samen}
+            value={row?.gramm_samen ?? null}
             saveToDb={saveToDb}
             error={errors?.lieferung?.gramm_samen as string | undefined}
             type="number"
@@ -142,10 +154,10 @@ export const LieferungWas = ({ showFilter, row, saveToDb, ifNeeded }) => {
         )}
         {ifNeeded('andere_menge') && (
           <TextField
-            key={`${row.id}andere_menge`}
+            key={`${row?.id}andere_menge`}
             name="andere_menge"
             label={`Andere Menge (z.B. "3 Zwiebeln")`}
-            value={row.andere_menge}
+            value={row?.andere_menge ?? null}
             saveToDb={saveToDb}
             error={errors?.lieferung?.andere_menge as string | undefined}
             type="text"
@@ -155,10 +167,10 @@ export const LieferungWas = ({ showFilter, row, saveToDb, ifNeeded }) => {
       {ifNeeded('von_anzahl_individuen') && (
         <div className={wannStyles.fieldRow}>
           <TextField
-            key={`${row.id}von_anzahl_individuen`}
+            key={`${row?.id}von_anzahl_individuen`}
             name="von_anzahl_individuen"
             label="von Anzahl Individuen"
-            value={row.von_anzahl_individuen}
+            value={row?.von_anzahl_individuen ?? null}
             saveToDb={saveToDb}
             error={
               errors?.lieferung?.von_anzahl_individuen as string | undefined

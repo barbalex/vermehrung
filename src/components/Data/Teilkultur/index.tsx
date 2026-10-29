@@ -105,7 +105,7 @@ export const Teilkultur = ({
                 }
               showHistory={showHistory}
             />
-            <Allotment.Pane visible={paneIsSplit}>
+            <Allotment.Pane visible={!!paneIsSplit}>
               {activeConflict ? (
                 <Conflict
                   rev={activeConflict}

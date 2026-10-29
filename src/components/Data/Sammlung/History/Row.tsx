@@ -20,10 +20,13 @@ export const SammlungHistoryRow = ({
   historyTakeoverCallback,
 }: {
   row: import('../../../../dbModel.ts').Sammlung | null | undefined
-  revRow: import('../../../shared/types.ts').WmRow | null | undefined
-  historyTakeoverCallback: () => void
+  revRow: import('../../../shared/types.ts').RevRow | null | undefined
+  historyTakeoverCallback?: () => void
 }) => {
-  const dataArray = createDataArray({ row, revRow })
+  const dataArray = createDataArray({
+    row: row as unknown as Record<string, unknown>,
+    revRow,
+  })
 
   const onClickWiderspruchUebernehmen = async () => {
     // need to attach to the winner, that is row
@@ -71,7 +74,7 @@ export const SammlungHistoryRow = ({
         message: (error as Error).message,
       })
     }
-    historyTakeoverCallback()
+    historyTakeoverCallback?.()
     // do not stringify revisions for store
     // as _that_ is a real array
     newObjectForStore._revisions = row?._revisions
@@ -83,14 +86,19 @@ export const SammlungHistoryRow = ({
     newObjectForStore.id = row?.id
     delete newObjectForStore.sammlung_id
     // optimistically update store
-    await store.get(dbAtom).write(async () => {
-      await row?.update((row: Record<string, unknown>) => {
-        Object.entries(newObjectForStore).forEach(([key, value]) => {
-          if (!isEqual(value, row[key])) {
-            row[key] = value
-          }
-        })
-      })
+    const db = store.get(dbAtom)
+    if (!db) return
+    await db.write(async () => {
+      await row?.update(
+        (row: unknown) => {
+          const mutableRow = row as Record<string, unknown>
+          Object.entries(newObjectForStore).forEach(([key, value]) => {
+            if (!isEqual(value, mutableRow[key])) {
+              mutableRow[key] = value
+            }
+          })
+        },
+      )
     })
   }
 

@@ -7,7 +7,11 @@ import { withDatabase } from '@nozbe/watermelondb/react/DatabaseProvider'
 import { Herkunft } from './index.tsx'
 
 const enhance = withDatabase(
-  withObservables(['id'], ({ id, filter, database }) => ({
+  withObservables(['id'], ({ id, filter, database }: {
+    id: string
+    filter: unknown
+    database: import('@nozbe/watermelondb').Database
+  }) => ({
     row: database.collections.get('herkunft').findAndObserve(id),
     id,
     filter,

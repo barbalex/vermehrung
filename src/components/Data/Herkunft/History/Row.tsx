@@ -20,11 +20,11 @@ export const HerkunftHistoryRow = ({
   historyTakeoverCallback,
 }: {
   row: import('../../../../dbModel.ts').Herkunft | null | undefined
-  revRow: import('../../../shared/types.ts').WmRow | null | undefined
-  historyTakeoverCallback: () => void
+  revRow: import('../../../shared/types.ts').RevRow | null | undefined
+  historyTakeoverCallback?: () => void
 }) => {
   const dataArray = createDataArrayForHerkunftRevComparison({
-    row,
+    row: row as unknown as Record<string, unknown>,
     revRow,
   })
 
@@ -71,7 +71,7 @@ export const HerkunftHistoryRow = ({
         message: (error as Error).message,
       })
     }
-    historyTakeoverCallback()
+    historyTakeoverCallback?.()
     // do not stringify revisions for store
     // as _that_ is a real array
     newObjectForStore._revisions = row?._revisions
@@ -84,13 +84,16 @@ export const HerkunftHistoryRow = ({
     delete newObjectForStore.herkunft_id
     // optimistically update store
     await db?.write(async () => {
-      await row?.update((row: Record<string, unknown>) => {
-        Object.entries(newObjectForStore).forEach(([key, value]) => {
-          if (!isEqual(value, row[key])) {
-            row[key] = value
-          }
-        })
-      })
+      await row?.update(
+        (row: unknown) => {
+          const mutableRow = row as Record<string, unknown>
+          Object.entries(newObjectForStore).forEach(([key, value]) => {
+            if (!isEqual(value, mutableRow[key])) {
+              mutableRow[key] = value
+            }
+          })
+        },
+      )
     })
   }
 

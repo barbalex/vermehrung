@@ -41,9 +41,9 @@ export const LieferungHistory = ({
   const revRowsUnsorted = (data ?? []) as import('../../../../shared/types.ts').RevRow[]
   const revRows = revRowsUnsorted.sort(
     (
-      a: import('../../../../../dbModel.ts').Art,
-      b: import('../../../../../dbModel.ts').Bedarf,
-    ) => b?._depth - a?._depth,
+      a: import('../../../../shared/types.ts').RevRow,
+      b: import('../../../../shared/types.ts').RevRow,
+    ) => (b?._depth ?? 0) - (a?._depth ?? 0),
   )
 
   const historyRev = useAtomValue(historyRevAtom)
@@ -91,7 +91,6 @@ export const LieferungHistory = ({
             key={row?._rev}
             revRow={r}
             row={row}
-            rawRow={rawRow}
             historyTakeoverCallback={historyTakeoverCallback as () => void}
           />
         ))}

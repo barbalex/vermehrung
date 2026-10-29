@@ -53,8 +53,8 @@ export const TeilkulturTeilzaehlung = ({
         {exists(tz.andere_menge) ? tz.andere_menge : ''}
       </div>
       <div className={styles.other}>
-        {exists(tz.auspflanzebereit_beschreibung)
-          ? tz.auspflanzebereit_beschreibung
+        {exists(tz.auspflanzbereit_beschreibung)
+          ? tz.auspflanzbereit_beschreibung
           : ''}
       </div>
       <div className={styles.other}>{tz.bemerkungen ? tz.bemerkungen : ''}</div>

@@ -38,8 +38,7 @@ export const Person = ({
   const [dataState, setDataState] = useState<{
     row: import('../../../dbModel.ts').Person | undefined
     // need raw row because observable does not provoke rerendering of components
-    rawRow: string | undefined
-  }>({ row: undefined, rawRow: undefined })
+  }>({ row: undefined })
   useEffect(() => {
     const personObservable = showFilter
       ? $of(undefined)
@@ -53,15 +52,12 @@ export const Person = ({
         import('../../../dbModel.ts').Person | undefined
       >
     )?.subscribe((newRow) => {
-      setDataState({
-        row: newRow,
-        rawRow: JSON.stringify(newRow?._raw ?? newRow),
-      })
+      setDataState({ row: newRow })
     })
 
     return () => subscription?.unsubscribe?.()
   }, [db, personFilter, id, showFilter, initialDataQueried, online])
-  const { row, rawRow } = dataState
+  const { row } = dataState
 
   const [activeConflict, setActiveConflict] = useState<string | null>(null)
   const conflictDisposalCallback = () => setActiveConflict(null)
@@ -93,7 +89,6 @@ export const Person = ({
         <FormTitle
           showFilter={showFilter}
           row={row}
-          rawRow={rawRow}
           showHistory={showHistory}
         />
         <div className={artStyles.splitPaneContainer}>
@@ -102,21 +97,19 @@ export const Person = ({
               showFilter={showFilter}
               id={id}
               row={row}
-              rawRow={rawRow}
               activeConflict={activeConflict}
               setActiveConflict={
                   setActiveConflict as unknown as never
                 }
               showHistory={showHistory}
             />
-            <Allotment.Pane visible={paneIsSplit}>
+            <Allotment.Pane visible={!!paneIsSplit}>
               {activeConflict ? (
                 <Conflict
                   rev={activeConflict}
                   id={id}
                   row={row}
-                  rawRow={rawRow}
-                  conflictDisposalCallback={conflictDisposalCallback}
+                      conflictDisposalCallback={conflictDisposalCallback}
                   conflictSelectionCallback={conflictSelectionCallback}
                   setActiveConflict={
                   setActiveConflict as unknown as never
@@ -125,8 +118,7 @@ export const Person = ({
               ) : showHistory ? (
                 <History
                   row={row}
-                  rawRow={rawRow}
-                  historyTakeoverCallback={historyTakeoverCallback}
+                      historyTakeoverCallback={historyTakeoverCallback}
                 />
               ) : null}
             </Allotment.Pane>

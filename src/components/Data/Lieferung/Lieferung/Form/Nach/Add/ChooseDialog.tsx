@@ -22,8 +22,7 @@ export const LieferungAddChooseDialog = ({
   onClose: () => void
   onChange: (option: unknown, actionMeta: unknown) => void
   kulturType: string | undefined
-  lieferung:
-    import('../../../../../../shared/types.ts').WmRow | null | undefined
+  lieferung: import('../../../../../../../dbModel.ts').Lieferung
   herkunft:
     | import('../../../../../../../dbModel.ts').Herkunft
     | null

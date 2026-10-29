@@ -39,7 +39,10 @@ export const PersonConflict = ({
     data as import('../../shared/types.ts').RevRow[] | null
   )?.[0] ?? {}) as import('../../shared/types.ts').RevRow
 
-  const dataArray = createDataArray({ row, revRow })
+  const dataArray = createDataArray({
+    row: row as unknown as { _raw?: Record<string, unknown> },
+    revRow: revRow as unknown as { _raw?: Record<string, unknown> } | null,
+  })
 
   const onClickAktuellUebernehmen = async () => {
     const user = store.get(userAtom)

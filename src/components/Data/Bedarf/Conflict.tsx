@@ -39,7 +39,10 @@ export const BedarfConflict = ({
     data as import('../../shared/types.ts').RevRow[] | null
   )?.[0] ?? {}) as import('../../shared/types.ts').RevRow
 
-  const dataArray = createDataArrayForBedarfRevComparison({ row, revRow })
+  const dataArray = createDataArrayForBedarfRevComparison({
+    row: row as unknown as Record<string, unknown>,
+    revRow,
+  })
 
   const onClickAktuellUebernehmen = async () => {
     const user = store.get(userAtom)

@@ -138,7 +138,13 @@ export const SelectCreatable = ({
     value: string | number | null
     label: string
     link?: string[]
-  } = optionsToUse.find((o) => o.value === stateValue) || emptyValue
+  } =
+    (optionsToUse.find((o) => o.value === stateValue) ||
+      emptyValue) as {
+      value: string | number | null
+      label: string
+      link?: string[]
+    }
 
   return (
     <div className={styles.container}>

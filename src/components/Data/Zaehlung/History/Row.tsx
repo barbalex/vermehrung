@@ -20,10 +20,13 @@ export const ZaehlungHistoryRow = ({
   historyTakeoverCallback,
 }: {
   row: import('../../../../dbModel.ts').Zaehlung | null | undefined
-  revRow: import('../../../shared/types.ts').WmRow | null | undefined
-  historyTakeoverCallback: () => void
+  revRow: import('../../../shared/types.ts').RevRow | null | undefined
+  historyTakeoverCallback?: () => void
 }) => {
-  const dataArray = createDataArray({ row, revRow })
+  const dataArray = createDataArray({
+    row: row as unknown as Record<string, unknown>,
+    revRow,
+  })
 
   const onClickWiderspruchUebernehmen = async () => {
     const user = store.get(userAtom)
@@ -65,7 +68,7 @@ export const ZaehlungHistoryRow = ({
         message: (error as Error).message,
       })
     }
-    historyTakeoverCallback()
+    historyTakeoverCallback?.()
     // do not stringify revisions for store
     // as _that_ is a real array
     newObjectForStore._revisions = row?._revisions
@@ -78,13 +81,16 @@ export const ZaehlungHistoryRow = ({
     delete newObjectForStore.zaehlung_id
     // optimistically update store
     await db?.write(async () => {
-      await row?.update((row: Record<string, unknown>) => {
-        Object.entries(newObjectForStore).forEach(([key, value]) => {
-          if (!isEqual(value, row[key])) {
-            row[key] = value
-          }
-        })
-      })
+      await row?.update(
+        (row: unknown) => {
+          const mutableRow = row as Record<string, unknown>
+          Object.entries(newObjectForStore).forEach(([key, value]) => {
+            if (!isEqual(value, mutableRow[key])) {
+              mutableRow[key] = value
+            }
+          })
+        },
+      )
     })
   }
 
