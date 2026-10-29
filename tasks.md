@@ -14,6 +14,7 @@ Entity History/Row twins and Settings menus all follow identical
 patterns - check a done sibling before typing the next one.
 
 latent runtime bugs found while typing - ALL FIXED 2026-10-29:
+
 - SammelLieferung "Daten kopieren" was fully dead: containsData read
   Object.entries(model) (own props only -> always empty -> button
   always disabled); updateSammelLieferung/oldValues read the same way
@@ -65,7 +66,7 @@ CLAUDE.md.(0 problems, --max-warnings 0)
 
 ---
 
-get Sammel-Lieferung/lieferschein to work again
+get Sammel-Lieferung/lieferschein to work again?
 
 ---
 
@@ -73,11 +74,11 @@ get Sammel-Lieferung/lieferschein to work again
 
 ---
 
-lets implement: Breadcrumbs (as called in the ps project) / Bookmarks (as called in the apf2 project). These will replace the nav buttons currently used in form headers.
+lets implement: Breadcrumbs (as called in the ps project) / Bookmarks (as called in the apf2 project). These will replace the nav buttons currently used in form headers. But lets do it having an option to use either breadcrumbs or nav buttons. Just in case users do not like this new way of doing things. We can later remove nav buttons and the option if breadcrumbs are accepted well. Lets implement breadcrumbs like in ps (as opposed to apf2): they are always visible
 
 ---
 
-lets implement: dynamic menus: top menu's menus need to adapt to narrow windows by folding into a more menu. Currently the light/dark mode menu, the account menu and the online menu do not
+dynamic menus: top menu's menus adapt to narrow windows by folding into a more menu. Currently the light/dark mode menu, the account menu and the online menu do not
 
 ---
 
