@@ -1,5 +1,5 @@
 .container {
-  background-color: var(--title-row-bg);
+  background-color: var(--form-bg);
   flex-shrink: 0;
   display: flex;
   height: var(--title-row-height);
