@@ -24,7 +24,7 @@ export const HeaderHome = ({
 
   return (
     <ErrorBoundary>
-      <AppBar position="fixed" ref={ref}>
+      <AppBar position="fixed" elevation={0} ref={ref}>
         <Toolbar>
           {mobile ? (
             isHome ? (

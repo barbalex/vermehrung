@@ -18,7 +18,7 @@ const Header = () => {
 
   return (
     <ErrorBoundary>
-      <AppBar position="static" className={styles.appBar}>
+      <AppBar position="static" elevation={0} className={styles.appBar}>
         <Toolbar>
           {isHome ? (
             <Home location={location} />
