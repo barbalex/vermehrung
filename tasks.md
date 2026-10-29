@@ -10,6 +10,7 @@ are position-driven from tsc output.
 Phase E after Data: noUnusedLocals/noUnusedParameters, drop
 allowJs/checkJs, wire lint+typecheck+test into npm run deploy, update
 CLAUDE.md.(0 problems, --max-warnings 0)
+
 - `npm run typecheck` (tsc --noEmit): 6281 errors to burn down, bottom-up:
   utils -> dbSchema/dbModel -> store/modules -> components/shared,Header,Documentation
   -> components/Data -> components/Tree -> routes/Router/App/main
@@ -38,7 +39,11 @@ CLAUDE.md.(0 problems, --max-warnings 0)
 
 ---
 
+lets implement: Breadcrumbs (as called in the ps project) / Bookmarks (as called in the apf2 project). These will replace the nav buttons currently used in form headers.
+
 ---
+
+lets implement: dynamic menus: top menu's menus need to adapt to narrow windows by folding into a more menu. Currently the light/dark mode menu, the account menu and the online menu do not
 
 ---
 
