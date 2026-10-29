@@ -34,6 +34,8 @@
   --hover-overlay: rgba(0, 0, 0, 0.1);
   /* the home page cards sit on a photo */
   --card-overlay-bg: rgba(255, 255, 255, 0.65);
+  /* the app bar keeps purple[900] in both modes - see materialTheme.ts */
+  --header-bg: #4a148c;
   --scrollbar-thumb: #4a148c;
   --scrollbar-track: rgba(248, 243, 254, 1);
 }
@@ -54,7 +56,7 @@ html[data-theme='dark'] {
   --input-underline: rgba(255, 255, 255, 0.3);
   --hover-overlay: rgba(255, 255, 255, 0.12);
   --card-overlay-bg: rgba(30, 30, 30, 0.75);
-  --scrollbar-thumb: #9c4dcc;
+  --scrollbar-thumb: #4a148c;
   --scrollbar-track: #1c1c1c;
   /* the allotment separators are defined in the :root block above -
    * dark values need their own override block */

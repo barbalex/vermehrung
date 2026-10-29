@@ -34,7 +34,7 @@
   width: 13px;
   height: calc(var(--breadcrumbs-height) - 1px);
   margin: 0 6px;
-  background-color: var(--icon-primary);
+  background-color: var(--header-bg);
   clip-path: polygon(0 0, 45% 0, 100% 50%, 45% 100%, 0 100%, 55% 50%);
 }
 
