@@ -941,10 +941,15 @@ export class Teilzaehlung extends Model {
   @relation('zaehlung', 'zaehlung_id') zaehlung!: Relation<Zaehlung>
   @relation('teilkultur', 'teilkultur_id') teilkultur!: Relation<Teilkultur>
   @lazy label: Observable<string> = this.teilkultur.observe().pipe(
-    distinctUntilKeyChanged('teilkultur_id' as keyof Teilkultur),
-    map$((teilkultur) => teilkulturLabelFromTeilkultur({ teilkultur })),
+  distinctUntilKeyChanged('teilkultur_id' as keyof Teilkultur),
+  map$((teilkultur) => teilkulturLabelFromTeilkultur({ teilkultur })),
   )
 
+  @writer async removeConflict(_rev: string) {
+    await this.update((row) => {
+      row._conflicts = (this._conflicts ?? []).filter((r) => r !== _rev)
+    })
+  }
   // updates the row locally - ui and labels stay live.
   // the revision is created when the editing session on this row
   // ends (see modules/revAggregation.js), not per field change

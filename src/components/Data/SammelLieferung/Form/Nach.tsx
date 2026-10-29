@@ -30,7 +30,7 @@ export const SammelLieferungNach = ({
   row: import('../../../../dbModel.ts').SammelLieferung | null | undefined
   ifNeeded: (field: string) => boolean
   saveToDb: (event: { target: { name?: string; value: unknown } }) => void
-  herkunft: import('../../../shared/types.ts').WmRow | null | undefined
+  herkunft: import('../../../../dbModel.ts').Herkunft | null | undefined
 }) => {
   const db = useAtomValue(dbAtom)
   const errors = useAtomValue(errorsAtom)

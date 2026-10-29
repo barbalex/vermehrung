@@ -19,18 +19,21 @@ export const TeilzaehlungHistoryRow = ({
   revRow,
   historyTakeoverCallback,
 }: {
-  row: import('../../../../../../../dbModel.ts').Zaehlung | null | undefined
-  revRow: import('../../../../../../shared/types.ts').WmRow | null | undefined
+  row: import('../../../../../../../dbModel.ts').Teilzaehlung | null | undefined
+  revRow: import('../../../../../../shared/types.ts').RevRow | null | undefined
   historyTakeoverCallback: () => void
 }) => {
-  const dataArray = createDataArray({ row, revRow })
+  const dataArray = createDataArray({
+    row: row as unknown as Record<string, unknown>,
+    revRow,
+  })
 
   const onClickWiderspruchUebernehmen = async () => {
     const user = store.get(userAtom)
     const db = store.get(dbAtom)
     // need to attach to the winner, that is row
     // otherwise risk to still have lower depth and thus loosing
-    const newDepth = row?._depth + 1
+    const newDepth = (row?._depth ?? 0) + 1
     const newObject: Record<string, unknown> = {
       teilzaehlung_id: revRow?.teilzaehlung_id,
       zaehlung_id: revRow?.zaehlung_id,
@@ -80,13 +83,16 @@ export const TeilzaehlungHistoryRow = ({
     delete newObjectForStore.zaehlung_id
     // optimistically update store
     await db?.write(async () => {
-      await row?.update((row) => {
-        Object.entries(newObjectForStore).forEach(([key, value]) => {
-          if (!isEqual(value, row[key])) {
-            row[key] = value
-          }
-        })
-      })
+      await row?.update(
+        (row: unknown) => {
+          const mutableRow = row as Record<string, unknown>
+          Object.entries(newObjectForStore).forEach(([key, value]) => {
+            if (!isEqual(value, mutableRow[key])) {
+              mutableRow[key] = value
+            }
+          })
+        },
+      )
     })
   }
 

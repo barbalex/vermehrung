@@ -32,8 +32,8 @@ export const SammelLieferungVon = ({
   row: import('../../../../dbModel.ts').SammelLieferung | null | undefined
   ifNeeded: (field: string) => boolean
   saveToDb: (event: { target: { name?: string; value: unknown } }) => void
-  herkunft: import('../../../shared/types.ts').WmRow | null | undefined
-  herkunftQuelle: Record<string, unknown> | null | undefined
+  herkunft: import('../../../../dbModel.ts').Herkunft | null | undefined
+  herkunftQuelle: string | null | undefined
 }) => {
   const db = useAtomValue(dbAtom)
   const errors = useAtomValue(errorsAtom)

@@ -15,23 +15,39 @@ import { TeilzaehlungHistory as History } from './History/index.tsx'
 
 import styles from './index.module.css'
 
-export const Teilzaehlung = ({ id, kulturId, index }) => {
+export const Teilzaehlung = ({
+  id,
+  kulturId,
+  index,
+}: {
+  id: string
+  kulturId?: string | undefined
+  index: number
+}) => {
   const online = useAtomValue(onlineAtom)
   const db = useAtomValue(dbAtom)
   const initialDataQueried = useAtomValue(initialDataQueriedAtom)
 
   // TODO: should I subscribe to this row to rerender on updates of history?
 
-  const [dataState, setDataState] = useState({
-    row: undefined,
+  const [dataState, setDataState] = useState<{
+    row: import('../../../../../../dbModel.ts').Teilzaehlung | undefined
     // need raw row because observable does not provoke rerendering of components
-    rawRow: undefined,
-  })
+    rawRow: string | undefined
+  }>({ row: undefined, rawRow: undefined })
   useEffect(() => {
     const tzObservable = initialDataQueried
-      ? db?.get('teilzaehlung').findAndObserve(id)
-      : $of({})
-    const subscription = tzObservable?.subscribe((newRow) => {
+      ? db
+          ?.get<import('../../../../../../dbModel.ts').Teilzaehlung>(
+            'teilzaehlung',
+          )
+          .findAndObserve(id)
+      : $of(undefined)
+    const subscription = (
+      tzObservable as unknown as import('rxjs').Observable<
+        import('../../../../../../dbModel.ts').Teilzaehlung | undefined
+      >
+    )?.subscribe((newRow) => {
       setDataState({
         row: newRow,
         rawRow: JSON.stringify(newRow?._raw ?? newRow),
@@ -42,7 +58,7 @@ export const Teilzaehlung = ({ id, kulturId, index }) => {
   }, [db, id, initialDataQueried])
   const { row, rawRow } = dataState
 
-  const [activeConflict, setActiveConflict] = useState(null)
+  const [activeConflict, setActiveConflict] = useState<string | null>(null)
   const conflictDisposalCallback = () => setActiveConflict(null)
   const conflictSelectionCallback = () => setActiveConflict(null)
 
@@ -53,7 +69,7 @@ export const Teilzaehlung = ({ id, kulturId, index }) => {
   }, [id])
 
   const [showHistory, setShowHistory] = useState(false)
-  const historyTakeoverCallback = () => setShowHistory(null)
+  const historyTakeoverCallback = () => setShowHistory(false)
 
   const paneIsSplit = online && (activeConflict || showHistory)
 
@@ -72,15 +88,16 @@ export const Teilzaehlung = ({ id, kulturId, index }) => {
                   setActiveConflict as unknown as never
                 }
                 showHistory={showHistory}
-                setShowHistory={setShowHistory}
+                setShowHistory={
+                  setShowHistory as unknown as never
+                }
               />
-              <Allotment.Pane visible={paneIsSplit}>
+              <Allotment.Pane visible={!!paneIsSplit}>
                 {activeConflict ? (
                   <Conflict
                     rev={activeConflict}
                     id={id}
                     row={row}
-                    rawRow={rawRow}
                     conflictDisposalCallback={conflictDisposalCallback}
                     conflictSelectionCallback={conflictSelectionCallback}
                     setActiveConflict={
@@ -115,7 +132,9 @@ export const Teilzaehlung = ({ id, kulturId, index }) => {
                   setActiveConflict as unknown as never
                 }
             showHistory={showHistory}
-            setShowHistory={setShowHistory}
+            setShowHistory={
+                  setShowHistory as unknown as never
+                }
           />
         </div>
       </div>

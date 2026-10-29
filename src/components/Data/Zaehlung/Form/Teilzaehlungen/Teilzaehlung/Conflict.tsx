@@ -25,7 +25,7 @@ export const TeilzaehlungConflict = ({
 }: {
   id: string | undefined
   rev: string | boolean | null
-  row: import('../../../../../../dbModel.ts').Zaehlung | null | undefined
+  row: import('../../../../../../dbModel.ts').Teilzaehlung | null | undefined
   conflictDisposalCallback: () => void
   conflictSelectionCallback: () => void
   setActiveConflict: (val: unknown) => void
@@ -36,15 +36,20 @@ export const TeilzaehlungConflict = ({
   )
   if (error) checkForOnlineError({ error })
 
-  const revRow = data?.[0] ?? {}
+  const revRow = ((
+    data as import('../../../../../shared/types.ts').RevRow[] | null
+  )?.[0] ?? {}) as import('../../../../../shared/types.ts').RevRow
 
-  const dataArray = createDataArray({ row, revRow })
+  const dataArray = createDataArray({
+    row: row as unknown as Record<string, unknown>,
+    revRow,
+  })
 
   const onClickAktuellUebernehmen = async () => {
     const user = store.get(userAtom)
     const db = store.get(dbAtom)
     // build new object
-    const newDepth = revRow._depth + 1
+    const newDepth = (revRow?._depth ?? 0) + 1
     const newObject: Record<string, unknown> = {
       teilzaehlung_id: revRow.teilzaehlung_id,
       zaehlung_id: revRow.zaehlung_id,
@@ -86,9 +91,11 @@ export const TeilzaehlungConflict = ({
     // update model: remove this conflict
     try {
       const model = await db
-        ?.get('teilzaehlung')
+        ?.get<import('../../../../../../dbModel.ts').Teilzaehlung>(
+          'teilzaehlung',
+        )
         .find(revRow.teilzaehlung_id as string)
-      await model?.removeConflict(revRow._rev)
+      await model?.removeConflict(revRow._rev as string)
     } catch {}
     conflictDisposalCallback()
     window.location.reload()
@@ -98,7 +105,7 @@ export const TeilzaehlungConflict = ({
     const user = store.get(userAtom)
     // need to attach to the winner, that is row
     // otherwise risk to still have lower depth and thus loosing
-    const newDepth = row?._depth + 1
+    const newDepth = (row?._depth ?? 0) + 1
     const newObject: Record<string, unknown> = {
       teilzaehlung_id: revRow.teilzaehlung_id,
       zaehlung_id: revRow.zaehlung_id,
@@ -149,7 +156,7 @@ export const TeilzaehlungConflict = ({
       rev={rev}
       dataArray={dataArray}
       fetching={fetching}
-      error={error}
+      error={error as Error | null}
       onClickAktuellUebernehmen={onClickAktuellUebernehmen}
       onClickWiderspruchUebernehmen={onClickWiderspruchUebernehmen}
       onClickSchliessen={onClickSchliessen}

@@ -18,7 +18,7 @@ export const SammelLieferungWann = ({
 }: {
   showFilter: boolean
   row: import('../../../../dbModel.ts').SammelLieferung | null | undefined
-  ifNeeded: boolean
+  ifNeeded: (field: string) => boolean
   saveToDb: (event: { target: { name?: string; value: unknown } }) => void
 }) => {
   const errors = useAtomValue(errorsAtom)
@@ -48,7 +48,7 @@ export const SammelLieferungWann = ({
           key={`${row?.id}datum`}
           name="datum"
           label="Datum"
-          value={row?.datum}
+          value={row?.datum ?? null}
           saveToDb={saveToDb}
           error={errors?.sammel_lieferung?.datum as string | undefined}
         />

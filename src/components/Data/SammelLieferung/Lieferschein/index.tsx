@@ -22,15 +22,15 @@ import styles from './index.module.css'
 export const Lieferschein = ({
   row,
 }: {
-  row: import('../../../shared/types.ts').WmRow | null | undefined
+  row: import('../../../../dbModel.ts').SammelLieferung | null | undefined
 }) => {
   const db = useAtomValue(dbAtom)
 
-  const [dataState, setDataState] = useState({
-    lieferungs: [],
-    vonKulturGarten: undefined,
-    person: undefined,
-  })
+  const [dataState, setDataState] = useState<{
+    lieferungs: import('../../../../dbModel.ts').Lieferung[]
+    vonKulturGarten: import('../../../../dbModel.ts').Garten[] | undefined
+    person: import('../../../../dbModel.ts').Person | undefined
+  }>({ lieferungs: [], vonKulturGarten: undefined, person: undefined })
   useEffect(() => {
     const lieferungsObservable = row?.lieferungs.observe()
     const vonKulturGartenObservable = row?.von_kultur_id
@@ -49,7 +49,15 @@ export const Lieferschein = ({
       vonKulturGartenObservable,
       personObservable,
     ])
-    const subscription = combinedObservables.subscribe(
+    const subscription = (
+      combinedObservables as unknown as import('rxjs').Observable<
+        [
+          import('../../../../dbModel.ts').Lieferung[],
+          import('../../../../dbModel.ts').Garten[] | undefined,
+          import('../../../../dbModel.ts').Person | undefined,
+        ]
+      >
+    ).subscribe(
       async ([lieferungs, vonKulturGarten, person]) =>
         setDataState({
           lieferungs: lieferungs.sort(lieferungSort),
@@ -62,9 +70,10 @@ export const Lieferschein = ({
   }, [db, row?.lieferungs, row?.person, row?.von_kultur_id])
   const { lieferungs, vonKulturGarten, person } = dataState
 
+  const vonKulturGartenFirst = vonKulturGarten?.[0]
   const von = row?.von_kultur_id
-    ? `${vonKulturGarten?.name ?? '(kein Name)'} (${
-        vonKulturGarten?.ort ?? 'kein Ort'
+    ? `${vonKulturGartenFirst?.name ?? '(kein Name)'} (${
+        vonKulturGartenFirst?.ort ?? 'kein Ort'
       })`
     : '(keine von-Kultur erfasst)'
 
@@ -80,7 +89,7 @@ export const Lieferschein = ({
 
   return (
     <div className={styles.container}>
-      <div className={`querformat printer-content ${pageContainer}`}>
+      <div className={`querformat printer-content ${styles.pageContainer}`}>
         <ProgressiveImg
           src={image}
           placeholderSrc={image}

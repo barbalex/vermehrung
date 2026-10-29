@@ -18,8 +18,8 @@ export const TeilzaehlungHistory = ({
   rawRow: _rawRow,
   historyTakeoverCallback,
 }: {
-  row: import('../../../../../../../dbModel.ts').Zaehlung | null | undefined
-  rawRow: Record<string, unknown> | null | undefined
+  row: import('../../../../../../../dbModel.ts').Teilzaehlung | null | undefined
+  rawRow: string | null | undefined
   historyTakeoverCallback: () => void
 }) => {
   const priorRevisions = row?._revisions?.slice(1) ?? []
@@ -29,12 +29,13 @@ export const TeilzaehlungHistory = ({
   const { error, data, fetching } = useApiQuery(revPath)
   if (error) checkForOnlineError({ error })
 
-  const revRowsUnsorted = data ?? []
+  const revRowsUnsorted =
+    (data as import('../../../../../../shared/types.ts').RevRow[] | null) ?? []
   const revRows = revRowsUnsorted.sort(
     (
-      a: import('../../../../../../../dbModel.ts').Art,
-      b: import('../../../../../../../dbModel.ts').Bedarf,
-    ) => b?._depth - a?._depth,
+      a: import('../../../../../../shared/types.ts').RevRow,
+      b: import('../../../../../../shared/types.ts').RevRow,
+    ) => (b?._depth ?? 0) - (a?._depth ?? 0),
   )
 
   if (fetching) {
@@ -55,7 +56,6 @@ export const TeilzaehlungHistory = ({
             key={row?._rev}
             revRow={r}
             row={row}
-            rawRow={rawRow}
             historyTakeoverCallback={historyTakeoverCallback}
           />
         ))}

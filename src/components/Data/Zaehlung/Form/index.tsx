@@ -50,10 +50,15 @@ export const ZaehlungForm = ({
   const kulturFilter = useAtomValue(filterKulturAtom)
   const zaehlungFilter = useAtomValue(filterZaehlungAtom)
 
-  const [dataState, setDataState] = useState({
-    kulturWerte: [],
-    kulturOption: undefined,
-  })
+  const [dataState, setDataState] = useState<{
+    kulturWerte: {
+      value: string
+      label: string | undefined
+      inaktiv: boolean
+      link: string[]
+    }[]
+    kulturOption: import('../../../../dbModel.ts').KulturOption | undefined
+  }>({ kulturWerte: [], kulturOption: undefined })
   useEffect(() => {
     const kulturDelQuery =
       kulturFilter._deleted === false
@@ -80,7 +85,11 @@ export const ZaehlungForm = ({
       .query(kulturDelQuery, kulturAktivQuery)
       .observe()
     const combinedObservables = combineLatest([kultursObservable])
-    const subscription = combinedObservables.subscribe(async ([kulturs]) => {
+    const subscription = (
+      combinedObservables as unknown as import('rxjs').Observable<
+        [import('../../../../dbModel.ts').Kultur[]]
+      >
+    ).subscribe(async ([kulturs]) => {
       // need to show a choosen kultur even if inactive but not if deleted
       let kultur
       try {
@@ -96,13 +105,15 @@ export const ZaehlungForm = ({
       const kulturWerte = await Promise.all(
         kultursSorted
           .filter((k) => {
-            if (row?.art_id) return k.art_id === row?.art_id
+            const rowArtId = (row as unknown as Record<string, unknown>)
+              ?.art_id
+            if (rowArtId) return k.art_id === rowArtId
             return true
           })
           .map(async (el) => {
             let label = ''
             try {
-              label = await el.label.pipe(first$()).toPromise()
+              label = (await el.label.pipe(first$()).toPromise()) ?? ''
             } catch {}
 
             return {
@@ -122,6 +133,7 @@ export const ZaehlungForm = ({
     })
 
     return () => subscription?.unsubscribe?.()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     db,
     kulturFilter,
@@ -212,7 +224,7 @@ export const ZaehlungForm = ({
           key={`${row?.id}datum`}
           name="datum"
           label="Datum"
-          value={row?.datum}
+          value={row?.datum ?? null}
           saveToDb={saveToDb}
           error={errors?.zaehlung?.datum as string | undefined}
         />

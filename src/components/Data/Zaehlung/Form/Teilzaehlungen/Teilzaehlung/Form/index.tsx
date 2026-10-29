@@ -217,6 +217,7 @@ export const TeilzaehlungForm = ({
             <SelectCreatable
               key={`${row.id}${row.teilkultur_id}teilkultur_id`}
               row={row as unknown as Record<string, unknown>}
+              table="teilzaehlung"
               field="teilkultur_id"
               label="Teilkultur"
               options={teilkulturWerte}

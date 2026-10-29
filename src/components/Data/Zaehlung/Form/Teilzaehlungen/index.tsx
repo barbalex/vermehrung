@@ -17,28 +17,39 @@ import styles from './index.module.css'
 export const Teilzaehlungen = ({
   zaehlung,
 }: {
-  zaehlung: import('../../../../shared/types.ts').WmRow | null | undefined
+  zaehlung: import('../../../../../dbModel.ts').Zaehlung | null | undefined
 }) => {
   const db = useAtomValue(dbAtom)
 
   const kulturId = zaehlung?.kultur_id
 
-  const [dataState, setDataState] = useState({
-    teilzaehlungs: [],
-    kulturOption: undefined,
-  })
+  const [dataState, setDataState] = useState<{
+    teilzaehlungs: import('../../../../../dbModel.ts').Teilzaehlung[]
+    kulturOption: import('../../../../../dbModel.ts').KulturOption | undefined
+  }>({ teilzaehlungs: [], kulturOption: undefined })
   useEffect(() => {
     const teilzaehlungsObservable = zaehlung?.teilzaehlungs
       ? zaehlung?.teilzaehlungs.extend(Q.where('_deleted', false))?.observe()
       : $of([])
     const kulturOptionObservable = kulturId
-      ? db?.get('kultur_option').find(kulturId)
+      ? db
+          ?.get<import('../../../../../dbModel.ts').KulturOption>(
+            'kultur_option',
+          )
+          .find(kulturId)
       : $of({})
     const combinedObservables = combineLatest([
       teilzaehlungsObservable,
       kulturOptionObservable,
     ])
-    const subscription = combinedObservables.subscribe(
+    const subscription = (
+      combinedObservables as unknown as import('rxjs').Observable<
+        [
+          import('../../../../../dbModel.ts').Teilzaehlung[],
+          import('../../../../../dbModel.ts').KulturOption | undefined,
+        ]
+      >
+    ).subscribe(
       async ([tzs, kulturOption]) => {
         const teilzaehlungs = await teilzaehlungsSortByTk(tzs)
         setDataState({ teilzaehlungs, kulturOption })

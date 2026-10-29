@@ -44,7 +44,6 @@ export const SammlungForm = ({
   showFilter,
   id,
   row,
-  rawRow,
   activeConflict,
   setActiveConflict,
   showHistory,
@@ -52,7 +51,6 @@ export const SammlungForm = ({
   showFilter: boolean
   id?: string | undefined
   row: import('../../../../dbModel.ts').Sammlung | null | undefined
-  rawRow: Record<string, unknown> | null | undefined
   activeConflict: string | null
   setActiveConflict: (val: unknown) => void
   showHistory: boolean
@@ -161,7 +159,16 @@ export const SammlungForm = ({
       herkunftsObservable,
       artsObservable,
     ])
-    const subscription = combinedObservables.subscribe(
+    const subscription = (
+      combinedObservables as unknown as import('rxjs').Observable<
+        [
+          number,
+          import('../../../../dbModel.ts').Person[],
+          import('../../../../dbModel.ts').Herkunft[],
+          import('../../../../dbModel.ts').Art[],
+        ]
+      >
+    ).subscribe(
       async ([nrCount, persons, herkunfts, arts]) => {
         if (!showFilter && nrCount > 1) {
           setError({
@@ -213,7 +220,7 @@ export const SammlungForm = ({
           artsSorted.map(async (art) => {
             let label = ''
             try {
-              label = await art.label.pipe(first$()).toPromise()
+              label = (await art.label.pipe(first$()).toPromise()) ?? ''
             } catch {}
 
             return {
@@ -369,7 +376,7 @@ export const SammlungForm = ({
           key={`${row?.id}datum`}
           name="datum"
           label="Datum"
-          value={row?.datum}
+          value={row?.datum ?? null}
           saveToDb={saveToDb}
           error={errors?.sammlung?.datum as string | undefined}
         />
@@ -426,7 +433,18 @@ export const SammlungForm = ({
           </div>
         </div>
         {!showFilter && (
-          <Coordinates row={row} rawRow={rawRow} saveToDb={saveToDb} />
+          <Coordinates
+            row={
+              row as unknown as {
+                id?: string
+                lv95_x?: string | number | null
+                lv95_y?: string | number | null
+                wgs84_lat?: string | number | null
+                wgs84_long?: string | number | null
+              }
+            }
+            saveToDb={saveToDb}
+          />
         )}
         <div className={styles.fieldRow}>
           {showFilter ? (

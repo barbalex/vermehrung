@@ -32,7 +32,6 @@ export const SammelLieferungForm = ({
   showFilter,
   id,
   row,
-  rawRow,
   activeConflict,
   setActiveConflict,
   showHistory,
@@ -40,7 +39,6 @@ export const SammelLieferungForm = ({
   showFilter: boolean
   id?: string | undefined
   row: import('../../../../dbModel.ts').SammelLieferung | null | undefined
-  rawRow: Record<string, unknown> | null | undefined
   activeConflict: string | null
   setActiveConflict: (val: unknown) => void
   showHistory: boolean
@@ -109,7 +107,7 @@ export const SammelLieferungForm = ({
         let nachKultur
         try {
           nachKultur = await db
-            ?.get('kultur')
+            ?.get<import('../../../../dbModel.ts').Kultur>('kultur')
             .find(row?.nach_kultur_id as string)
         } catch {}
         let herkunftByNachKultur
@@ -129,7 +127,6 @@ export const SammelLieferungForm = ({
   }, [
     db,
     row?.nach_kultur_id,
-    row?.sammel_lieferung,
     row?.sammlung,
     row?.von_kultur_id,
     row?.von_sammlung_id,
@@ -169,7 +166,7 @@ export const SammelLieferungForm = ({
     if (showFilter) {
       return setFilterValue({
         table: 'sammel_lieferung',
-        key: field,
+        key: field as string,
         value,
       })
     }
@@ -182,13 +179,14 @@ export const SammelLieferungForm = ({
   const shownAsSammelLieferung =
     activeNodeArray.length === 2 && activeNodeArray[0] === 'Sammel-Lieferungen'
 
-  const ifNeeded = (field) => {
+  const ifNeeded = (field: string) => {
     if (sl_show_empty_when_next_to_li) return true
     if (shownAsSammelLieferung) return true
     if (
       id &&
       !sl_show_empty_when_next_to_li &&
-      (!exists(row[field]) || row[field] === false)
+      (!exists((row as unknown as Record<string, unknown>)?.[field]) ||
+        (row as unknown as Record<string, unknown>)?.[field] === false)
     )
       return false
     return true
@@ -241,7 +239,6 @@ export const SammelLieferungForm = ({
           <Was
             showFilter={showFilter}
             row={row}
-            rawRow={rawRow}
             ifNeeded={ifNeeded}
             saveToDb={saveToDb}
           />
@@ -250,7 +247,6 @@ export const SammelLieferungForm = ({
           <Von
             showFilter={showFilter}
             row={row}
-            rawRow={rawRow}
             ifNeeded={ifNeeded}
             saveToDb={saveToDb}
             herkunft={herkunft}
@@ -261,7 +257,6 @@ export const SammelLieferungForm = ({
           <Nach
             showFilter={showFilter}
             row={row}
-            rawRow={rawRow}
             ifNeeded={ifNeeded}
             saveToDb={saveToDb}
             herkunft={herkunft}
@@ -271,7 +266,6 @@ export const SammelLieferungForm = ({
           <Wann
             showFilter={showFilter}
             row={row}
-            rawRow={rawRow}
             ifNeeded={ifNeeded}
             saveToDb={saveToDb}
           />

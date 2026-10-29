@@ -11,18 +11,24 @@ import { herkunftLabelFromHerkunft } from '../../../../utils/herkunftLabelFromHe
 
 import styles from './Lieferung.module.css'
 
-const Zeile = ({ value }) => <div>{value}</div>
+const Zeile = ({ value }: { value: string }) => <div>{value}</div>
 
-export const LieferungForLieferschein = ({ lieferung: row }) => {
+export const LieferungForLieferschein = ({
+  lieferung: row,
+}: {
+  lieferung: import('../../../../dbModel.ts').Lieferung
+}) => {
   const db = useAtomValue(dbAtom)
 
-  const [dataState, setDataState] = useState({
-    artLabel: '',
-    herkunftLabel: '',
-  })
+  const [dataState, setDataState] = useState<{
+    artLabel: string | undefined
+    herkunftLabel: string
+  }>({ artLabel: '', herkunftLabel: '' })
   useEffect(() => {
     const artObservable = row.art_id
-      ? db?.get('art').findAndObserve(row.art_id)
+      ? db
+          ?.get<import('../../../../dbModel.ts').Art>('art')
+          .findAndObserve(row.art_id)
       : $of({})
     const vonKulturHerkunftObservable = row.von_kultur_id
       ? db
@@ -41,7 +47,15 @@ export const LieferungForLieferschein = ({ lieferung: row }) => {
       vonKulturHerkunftObservable,
       vonSammlungHerkunftObservable,
     ])
-    const subscription = combinedObservables.subscribe(
+    const subscription = (
+      combinedObservables as unknown as import('rxjs').Observable<
+        [
+          import('../../../../dbModel.ts').Art | undefined,
+          [import('../../../../dbModel.ts').Herkunft | undefined],
+          [import('../../../../dbModel.ts').Herkunft | undefined],
+        ]
+      >
+    ).subscribe(
       async ([art, [vonKulturHerkunft], [vonSammlungHerkunft]]) => {
         let artLabel
         try {
@@ -63,7 +77,7 @@ export const LieferungForLieferschein = ({ lieferung: row }) => {
   }, [db, row.art, row.art_id, row.von_kultur_id, row.von_sammlung_id])
   const { artLabel, herkunftLabel } = dataState
 
-  const wasArray = []
+  const wasArray: string[] = []
   if (row.anzahl_pflanzen) wasArray.push(`${row.anzahl_pflanzen} Pflanzen`)
   if (row.anzahl_auspflanzbereit)
     wasArray.push(`${row.anzahl_auspflanzbereit} Pflanzen auspflanzbereit`)
