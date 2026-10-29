@@ -12,6 +12,12 @@
   font-size: 0.85rem;
 }
 
+/* without the tree pane below (form or filter in full width) the strip
+   meets a colored title row - the separator line is redundant there */
+.containerWithoutSeparator {
+  border-bottom: none;
+}
+
 /* the trail hugs the right edge: no jump between fitting trails and
    overflowing ones, which are scrolled to their right end.
    an auto margin instead of justify-content: flex-end - alignment

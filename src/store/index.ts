@@ -717,6 +717,17 @@ export const updateModelValues = async ({
 export const activeFormAtom = atom((get) =>
   activeFormFromActiveNodeArray(get(activeNodeArrayAtom)),
 )
+// the nav tree pane is hidden: in single-column view whenever a form or the
+// filter takes the full width (unless the tree is pinned) and while printing.
+// Single source of truth for everything drawn next to the tree pane: the
+// allotment separator and the breadcrumbs' bottom border
+export const treePaneHiddenAtom = atom(
+  (get) =>
+    get(isPrintAtom) ||
+    (get(singleColumnViewAtom) &&
+      ((!get(showTreeInSingleColumnViewAtom) && get(activeFormAtom)) ||
+        get(filterShowAtom))),
+)
 export const artIdInActiveNodeArrayAtom = atom((get) =>
   artIdInUrl(get(activeNodeArrayAtom)),
 )
