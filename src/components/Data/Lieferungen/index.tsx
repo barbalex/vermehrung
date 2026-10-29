@@ -143,8 +143,7 @@ export const Lieferungen = ({ filter: showFilter = false }) => {
       // watermelon models keep field values in _raw
       const entries = Object.entries(sl?._raw ?? {})
         .filter(
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          ([key, value]) =>
+          ([key]) =>
             !key.startsWith('_') &&
             ![
               'lieferungs',
@@ -154,8 +153,7 @@ export const Lieferungen = ({ filter: showFilter = false }) => {
               'sammlung',
             ].includes(key),
         )
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        .filter(([key, value]) => exists(value))
+        .filter(([, value]) => exists(value))
       for (const [key, value] of entries) {
         const keyToUse = key === 'id' ? 'sammel_lieferung_id' : key
         additionalValuesToSet[keyToUse] = value

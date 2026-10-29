@@ -11,23 +11,24 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ```bash
 npm run dev              # Vite dev server on http://localhost:5175 (PWA, SW auto-update)
 npm run build            # vite build  (NOTE: skips tsc — does NOT type-check)
-npm run build_ts         # tsc && vite build  (run this to catch type errors)
+npm run build_ts         # tsc && vite build
 npm run serve            # vite preview (serve the production build locally)
-npm run deploy           # build + firebase deploy --only hosting  (production)
-npm run deploy_preview   # build + firebase hosting:channel:deploy preview
-npm test                 # vitest unit tests (CI runs these too)
+npm run deploy           # lint + typecheck + test + bump + build + firebase deploy --only hosting  (production)
+npm run deploy_preview   # lint + typecheck + test + build + firebase hosting:channel:deploy preview
+npm test                 # vitest unit tests
 npm run test:api         # api equivalence tests — needs the local backend + docker (NOT in CI)
 npm run test:e2e         # Playwright e2e: boot smoke + local-first scenario (no backend needed)
-npx eslint .             # lint (no npm script is defined for it)
+npm run lint             # eslint . --max-warnings 0
+npm run typecheck        # tsc --noEmit (strict, noUnusedLocals/noUnusedParameters — expect zero errors)
 ```
 
-- `npm test` runs the vitest suite under `src/**/__tests__/` (store persistence, queue observer, revision builders). CI (`npm ci && npm test && npm run build`) runs it on every PR/merge.
+- `npm test` runs the vitest suite under `src/**/__tests__/` (store persistence, queue observer, revision builders).
 - `npm run test:api` runs `api-tests/` against the **local backend**: it tests the sync rpc (row visibility per role, delta cursors, GeoJSON geodata, gaertner column exclusions) and the upsert write path. Start the backend with `docker compose -f backend-dev/docker-compose.yaml up` first. (The PostgREST-vs-Hasura equivalence oracle was removed with Hasura — see git history, `permissions.equivalence.test.ts`.)
 - `npm run test:e2e` runs `e2e/`: boot smoke tests plus `local-first.spec.ts`, a full browser scenario (login → initial sync → offline boot from cache → re-login) that pins the seams `test:api` cannot reach. It mocks firebase identity toolkit, the auth service `/token` and PostgREST via `page.route` — no backend and no real credentials are used. Offline is emulated by spoofing `navigator.onLine` and aborting backend routes (like production, where the service worker still serves assets).
-- `npm run build` deliberately skips `tsc`, so type errors do not fail the build. Run `npm run build_ts` (or `npx tsc`) to type-check. Note: `tsc` reports ~6.5k pre-existing errors (checkJs strict on plain JS) — compare against the baseline before/after your change rather than expecting zero.
+- The whole codebase is TypeScript (`strict`, `noUnusedLocals`/`noUnusedParameters`); `npm run typecheck` and `npm run lint` are both at zero. `npm run build` deliberately skips `tsc`, but the deploy scripts gate on lint + typecheck + test before building.
 - Dependencies are pinned to exact versions (`.npmrc`: `save-exact=true`, `force=true`, `allow-git=none`). Bump with `ncu -c 5 -i` (the `-c 5` cooldown avoids brand-new releases).
-- **Revision aggregation**: field edits update the local row immediately (labels stay live) but no longer create a revision per field change. One revision per row and editing session is queued by `src/modules/revAggregation.js` when it ends: ~5s after the last change, on navigation, on tab-hide/close, plus a boot heal that flushes rows left dirty by a crash (registry in localStorage, `vermehrung:unflushed-revs`) before the sync starts. The sync never overwrites rows with unflushed edits (`isUnflushedRev` guard in `processSubscriptionResult`). The rev-table field lists live in `src/modules/revTableFields.js` - keep them in sync with the schema.
-- The GitHub Actions in `.github/workflows/` auto-deploy Firebase Hosting on PR (preview channel) and on merge to `master`.
+- **Revision aggregation**: field edits update the local row immediately (labels stay live) but no longer create a revision per field change. One revision per row and editing session is queued by `src/modules/revAggregation.ts` when it ends: ~5s after the last change, on navigation, on tab-hide/close, plus a boot heal that flushes rows left dirty by a crash (registry in localStorage, `vermehrung:unflushed-revs`) before the sync starts. The sync never overwrites rows with unflushed edits (`isUnflushedRev` guard in `processSubscriptionResult`). The rev-table field lists live in `src/modules/revTableFields.ts` - keep them in sync with the schema.
+- Deploys are manual via `npm run deploy` / `npm run deploy_preview` (the former GitHub Actions auto-deploy was removed — see git history, `743acdbce`).
 
 ## Architecture
 
@@ -42,15 +43,15 @@ This is a **local-first** app. Three concerns are split across the repo:
 
 ### 2. Frontend (`src/` — this Vite app, hosted on Firebase Hosting)
 - **React 19** + **MUI 9** (Emotion; `jsxImportSource: '@emotion/react'`), **React Compiler** enabled, **jotai** for app/UI state.
-- **apiClient** (`src/utils/apiClient.js`): thin fetch wrapper over PostgREST (auth header from localStorage, `Prefer:` handling for upserts).
-- **WatermelonDB** is the local-first store: models in `src/dbModel.ts`, schema in `src/dbSchema/`, instantiated over LokiJS/IndexedDB in `src/utils/initiateDb.js`. Migrations in `src/utils/migrations.js` — bump the schema version there whenever you change `src/dbSchema/*`.
-- Entry chain: `src/main.jsx` → `src/App.jsx` (wires all providers: `DatabaseProvider` → MUI theme → `MobxStoreProvider` → `UrqlProvider`) → `src/Router.jsx`.
+- **apiClient** (`src/utils/apiClient.ts`): thin fetch wrapper over PostgREST (auth header from localStorage, `Prefer:` handling for upserts).
+- **WatermelonDB** is the local-first store: models in `src/dbModel.ts`, schema in `src/dbSchema/`, instantiated over LokiJS/IndexedDB in `src/utils/initiateDb.ts`. Migrations in `src/utils/migrations.ts` — bump the schema version there whenever you change `src/dbSchema/*`.
+- Entry chain: `src/main.tsx` → `src/App.tsx` (wires providers: `DatabaseProvider` → MUI theme) → `src/Router.tsx`.
 
 ### 3. The local-first data flow (the core of the app)
 The **UI reads from WatermelonDB, not from the api.** This is the most important thing to understand when debugging data:
 
-- **Reads:** `src/utils/syncPoller.js` polls `POST /rpc/sync` (every 5s, server-side watermark cursors in `lastUpdated`) and upserts changed rows into WatermelonDB via `processSubscriptionResult`. The poll doubles as the online check (`shortTermOnline`). The UI can therefore **lag or drift from the backend** — query the backend directly for ground truth rather than trusting what the UI shows.
-- **Writes:** go through `@writer` methods on each WatermelonDB model in `src/dbModel.ts` (`edit`, `delete`, `removeConflict`). A write (a) optimistically updates the local WDB row and (b) enqueues an upsert via `store.addQueuedQuery`. The queue (`src/modules/observeQueuedQueries.js`) drains to PostgREST (`POST /<table>_rev` with `Prefer: resolution=merge-duplicates`) when online; offline edits queue and replay on reconnect — replays of identical mutations are no-ops.
+- **Reads:** `src/utils/syncPoller.ts` polls `POST /rpc/sync` (every 5s, server-side watermark cursors in `lastUpdated`) and upserts changed rows into WatermelonDB via `processSubscriptionResult`. The poll doubles as the online check (`shortTermOnline`). The UI can therefore **lag or drift from the backend** — query the backend directly for ground truth rather than trusting what the UI shows.
+- **Writes:** go through `@writer` methods on each WatermelonDB model in `src/dbModel.ts` (`edit`, `delete`, `removeConflict`). A write (a) optimistically updates the local WDB row and (b) enqueues an upsert via `store.addQueuedQuery`. The queue (`src/modules/observeQueuedQueries.ts`) drains to PostgREST (`POST /<table>_rev` with `Prefer: resolution=merge-duplicates`) when online; offline edits queue and replay on reconnect — replays of identical mutations are no-ops.
 
 ### 4. Revision & conflict system
 Every editable row is versioned. Columns on each model: `_rev` (`"<depth>-<md5>"`), `_parent_rev`, `_revisions` (pg text array of ancestor revs), `_depth`, `_deleted`, `_conflicts`.
@@ -61,20 +62,20 @@ Every editable row is versioned. Columns on each model: `_rev` (`"<depth>-<md5>"
 
 ## Local backend & debugging
 
-When the app runs on `localhost`, it talks to a **local PostgREST at `http://localhost:8080`**, decided in [src/utils/constants.js](src/utils/constants.js) (`hostname === 'localhost'` → `:8080`, else `api.vermehrung.ch`). The backend secrets live in `backend-dev/.env` / `backend/.env` (note: mixed line endings — strip `\r` when parsing them in scripts). Bring the backend up with `docker compose -f backend-dev/docker-compose.yaml up`.
+When the app runs on `localhost`, it talks to a **local PostgREST at `http://localhost:8080`**, decided in [src/utils/constants.ts](src/utils/constants.ts) (`hostname === 'localhost'` → `:8080`, else `api.vermehrung.ch`). The backend secrets live in `backend-dev/.env` / `backend/.env` (note: mixed line endings — strip `\r` when parsing them in scripts). Bring the backend up with `docker compose -f backend-dev/docker-compose.yaml up`.
 
 ## Navigation & code layout
 
-- **Routing:** `react-router` v8 data router in `src/Router.jsx`. `/Vermehrung/*` is the app; `/Dokumentation/*` is in-app documentation. All routes are lazy-loaded.
-- **Tree navigation:** `src/store/Tree.js` holds `activeNodeArray` (bound to the URL path) and `openNodes`. `src/components/Tree/` renders it.
-- **Forms:** `src/components/Data/<Entity>/` — each data entity has a singular dir (the form, e.g. `Data/Sammlung/`) and a plural dir (the list, e.g. `Data/Sammlungen/`). `Data/index.jsx` dispatches to the right form from the active node.
-- **App state:** the MST root store is `src/store/index.js` (large). Per-entity filter defaults live in `src/store/Filter/`, validation errors in `src/store/Errors/`. Accessed via `useContext(MobxStoreContext)`.
-- **utils:** `src/utils/` holds many small helpers (label formatters, URL id extractors, sorts) plus the larger `initializeSubscriptions.js`, `mutations.js`, and `fragments.js`.
+- **Routing:** `react-router` v8 data router in `src/Router.tsx`. `/Vermehrung/*` is the app; `/Dokumentation/*` is in-app documentation. All routes are lazy-loaded.
+- **Tree navigation:** `src/store/index.ts` holds `activeNodeArray` (bound to the URL path) and `openNodes`. `src/components/Tree/` renders it.
+- **Forms:** `src/components/Data/<Entity>/` — each data entity has a singular dir (the form, e.g. `Data/Sammlung/`) and a plural dir (the list, e.g. `Data/Sammlungen/`). `Data/index.tsx` dispatches to the right form from the active node.
+- **App state:** `src/store/index.ts` holds a jotai store (atoms for db, filters, errors, navigation). Per-entity filter defaults live in `src/store/Filter/`, validation errors in `src/store/Errors/`. Accessed via `useAtomValue`/`store.get`.
+- **utils:** `src/utils/` holds many small helpers (label formatters, URL id extractors, sorts) plus the larger `initiateDb.ts`, `syncPoller.ts`, `processSubscriptionResult.ts`, and `apiClient.ts`.
 - App version (from `package.json`) is shown in the document title at runtime.
 
 ## Conventions
 
-- Imports carry explicit extensions (`.js`/`.jsx`/`.ts`) — enforced by the eslint `import/extensions` rule. Note that `src/dbModel.ts` (TypeScript) is imported into `.js` files.
+- Imports carry explicit extensions (`.ts`/`.tsx`) — enforced by the eslint `import/extensions` rule.
 - `src/dbModel.ts` is the one `.ts` src file; the rest of the app is JSX/JS (plus TypeScript in `api-tests/`). `tsconfig` is `strict` with `checkJs`.
 - CSS Modules use `camelCaseOnly` for class names (`vite.config.ts`).
 - `vite.config.ts` sets `legacy.inconsistentCjsInterop: true` to work around CJS-interop issues with `@nozbe/watermelondb/adapters/lokijs` under Vite 8.

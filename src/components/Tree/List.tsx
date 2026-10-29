@@ -17,15 +17,11 @@ import { TreeRow } from './Row.tsx'
 import type { TreeNode } from './nodes/index.ts'
 
 export const TreeList = ({
-  _scrollableNodeRef,
-  _contentNodeRef,
   width,
   height,
   nodes,
   userRole,
 }: {
-  _scrollableNodeRef?: unknown
-  _contentNodeRef?: unknown
   width?: number
   height?: number
   nodes: TreeNode[]

@@ -26,7 +26,7 @@ export const ArtQkWrapper = ({
   const user = useAtomValue(userAtom)
 
   const [tab, setTab] = useState('qk')
-  const onChangeTab = (event: unknown, value: string) => setTab(value)
+  const onChangeTab = (_event: unknown, value: string) => setTab(value)
 
   const [dataState, setDataState] = useState<{
     qks: import('../../../../../dbModel.ts').ArtQk[]

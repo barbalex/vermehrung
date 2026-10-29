@@ -61,13 +61,10 @@ export const SammelLieferungCopyMenu = ({
     Object.entries(sammelLieferung?._raw ?? {})
       .filter(
         // only accept lieferung's fields
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        ([key, value]) =>
-          sammelLieferungFields.filter((f) => f !== 'id').includes(key),
+        ([key]) => sammelLieferungFields.filter((f) => f !== 'id').includes(key),
       )
       // only update with existing values
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      .filter(([key, val]) => exists(val) && val !== (false as unknown)).length > 0
+      .filter(([, val]) => exists(val) && val !== (false as unknown)).length > 0
 
   const onClickActiveLieferung = async () => {
     setAnchorEl(null)

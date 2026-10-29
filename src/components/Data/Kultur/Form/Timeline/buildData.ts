@@ -237,8 +237,7 @@ export const buildKulturTimelineData = async ({
     (e) => e.datum,
   )
   const zaehlungenData = Object.entries(zaehlungenDataGroupedByDatum).map(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    ([key, value]) => Object.assign({}, ...value),
+    ([, value]) => Object.assign({}, ...value),
   )
 
   let anLieferungenDone: import('../../../../../dbModel.ts').Lieferung[] = []

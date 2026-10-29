@@ -40,9 +40,14 @@ latent runtime bugs found while typing - ALL FIXED 2026-10-29:
   esbuild) - fixed to useState(isPrint)
 - MUI 9: PaperProps -> slotProps.paper in all five delete menus
 
-Phase E next: noUnusedLocals/noUnusedParameters, drop
-allowJs/checkJs, wire lint+typecheck+test into npm run deploy, update
-CLAUDE.md.(0 problems, --max-warnings 0)
+Phase E COMPLETE 2026-10-29: noUnusedLocals/noUnusedParameters on
+(13 unused declarations cleaned: vestigial TreeList props, unused
+destructure elements + stale eslint-disables, unused callback params),
+allowJs/checkJs dropped (no .js/.jsx left in src), deploy + deploy_preview
+now gate on lint + typecheck + test before bump/build, CLAUDE.md updated
+(commands, tsc-at-zero, .ts file paths, jotai store, manual deploys).
+End state: tsc 0, lint 0 (--max-warnings 0), tests 54/54, build ok,
+type-coverage 97.99%. Migration DONE.
 
 - `npm run typecheck` (tsc --noEmit): 6281 errors to burn down, bottom-up:
   utils -> dbSchema/dbModel -> store/modules -> components/shared,Header,Documentation

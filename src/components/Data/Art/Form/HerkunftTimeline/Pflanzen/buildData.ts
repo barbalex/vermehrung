@@ -132,8 +132,7 @@ export const buildData = async ({
     ),
   )
   const lieferungsDoneOfThisHerkunft = allLieferungsDone.filter(
-    (p, i) =>
-      allLieferungsDonePromises[i],
+    (_, i) => allLieferungsDonePromises[i],
   )
 
   let allLieferungsPlanned: import('../../../../../../dbModel.ts').Lieferung[] = []
@@ -166,8 +165,7 @@ export const buildData = async ({
     ),
   )
   const lieferungsPlannedOfThisHerkunft = allLieferungsPlanned.filter(
-    (l: import('../../../../../../dbModel.ts').Lieferung, i: number) =>
-      allLieferungsPlannedPromises[i],
+    (_, i: number) => allLieferungsPlannedPromises[i],
   )
   const lieferungsPlannedIgnored = lieferungsPlannedOfThisHerkunft.filter(
     (zg) =>

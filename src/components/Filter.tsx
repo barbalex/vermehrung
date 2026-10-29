@@ -66,7 +66,7 @@ export const Filter = () => {
       'art'
   const [activeTab, setActiveTab] = useState(activeTabFromActiveForm)
 
-  const onChangeTab = (event: unknown, value: string) => setActiveTab(value)
+  const onChangeTab = (_event: unknown, value: string) => setActiveTab(value)
 
   const formObject: Record<string, import('react').ReactElement> = {
     art: <Art filter />,

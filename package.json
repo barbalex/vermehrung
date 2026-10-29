@@ -8,9 +8,9 @@
   "scripts": {
     "build": "vite build",
     "build_ts": "tsc && vite build",
-    "deploy": "npm run bump && npm run build && firebase deploy --only hosting",
+    "deploy": "npm run lint && npm run typecheck && npm test && npm run bump && npm run build && firebase deploy --only hosting",
     "deploy_only": "firebase deploy --only hosting",
-    "deploy_preview": "npm run build && firebase hosting:channel:deploy preview",
+    "deploy_preview": "npm run lint && npm run typecheck && npm test && npm run build && firebase hosting:channel:deploy preview",
     "dev": "vite",
     "firebase-login": "firebase login",
     "firebase-login-reauth": "firebase login --reauth",
