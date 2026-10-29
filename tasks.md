@@ -3,8 +3,6 @@
 
 ---
 
-search results link to what today is the list view of an object (when it has child tables). Should always link to the object's form
-
 ---
 
 ---
