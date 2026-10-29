@@ -22,7 +22,15 @@ const sliderSettings = {
   infinite: false,
 }
 
-export const LieferungHistory = ({ row, rawRow, historyTakeoverCallback }) => {
+export const LieferungHistory = ({
+  row,
+  rawRow: _rawRow,
+  historyTakeoverCallback,
+}: {
+  row: import('../../../../../dbModel.ts').Lieferung | null | undefined
+  rawRow?: unknown
+  historyTakeoverCallback?: () => void
+}) => {
   const priorRevisions = row?._revisions?.slice(1) ?? []
   const revPath = priorRevisions.length
     ? `/lieferung_rev?_rev=in.(${priorRevisions.join(',')})&select=id,lieferung_id,sammel_lieferung_id,art_id,person_id,von_sammlung_id,von_kultur_id,datum,nach_kultur_id,nach_ausgepflanzt,von_anzahl_individuen,anzahl_pflanzen,anzahl_auspflanzbereit,gramm_samen,andere_menge,geplant,bemerkungen,changed,changed_by,_rev,_parent_rev,_revisions,_depth,_deleted`
@@ -30,7 +38,7 @@ export const LieferungHistory = ({ row, rawRow, historyTakeoverCallback }) => {
   const { error, data, fetching } = useApiQuery(revPath)
   if (error) checkForOnlineError({ error })
 
-  const revRowsUnsorted = data ?? []
+  const revRowsUnsorted = (data ?? []) as import('../../../../shared/types.ts').RevRow[]
   const revRows = revRowsUnsorted.sort(
     (
       a: import('../../../../../dbModel.ts').Art,
@@ -41,7 +49,7 @@ export const LieferungHistory = ({ row, rawRow, historyTakeoverCallback }) => {
   const historyRev = useAtomValue(historyRevAtom)
 
   // replace: sliding should not create a browser history entry per revision
-  const navigateToRev = (rev) => {
+  const navigateToRev = (rev: string | true | null | undefined) => {
     const url = [...store.get(activeNodeArrayAtom), 'histories', rev]
     getNavigate()?.(`/Vermehrung/${url.join('/')}`, { replace: true })
   }
@@ -70,7 +78,7 @@ export const LieferungHistory = ({ row, rawRow, historyTakeoverCallback }) => {
           the slider is remounted at the right slide whenever the url changes,
           also when it was remounted after fetching */}
       <Slider
-        key={historyRev}
+        key={historyRev as string}
         initialSlide={indexOfRev > -1 ? indexOfRev : 0}
         afterChange={(index: number) => {
           const rev = revRows[index]?._rev
@@ -84,7 +92,7 @@ export const LieferungHistory = ({ row, rawRow, historyTakeoverCallback }) => {
             revRow={r}
             row={row}
             rawRow={rawRow}
-            historyTakeoverCallback={historyTakeoverCallback}
+            historyTakeoverCallback={historyTakeoverCallback as () => void}
           />
         ))}
       </Slider>

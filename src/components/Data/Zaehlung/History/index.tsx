@@ -24,7 +24,7 @@ const sliderSettings = {
 
 export const ZaehlungHistory = ({
   row,
-  rawRow,
+  rawRow: _rawRow,
   historyTakeoverCallback,
 }: {
   row: import('../../../../dbModel.ts').Zaehlung | null | undefined
@@ -32,7 +32,7 @@ export const ZaehlungHistory = ({
   historyTakeoverCallback?: () => void
 }) => {
   const priorRevisions =
-    (row?._revisions as { slice?: unknown } | undefined)?.slice(1) ?? []
+    ((row?._revisions ?? []) as string[]).slice(1) ?? []
   const revPath = priorRevisions.length
     ? `/zaehlung_rev?_rev=in.(${priorRevisions.join(',')})&select=id,zaehlung_id,kultur_id,datum,prognose,bemerkungen,changed,changed_by,_rev,_parent_rev,_revisions,_depth,_deleted`
     : null
@@ -77,7 +77,7 @@ export const ZaehlungHistory = ({
           the slider is remounted at the right slide whenever the url changes,
           also when it was remounted after fetching */}
       <Slider
-        key={historyRev}
+        key={historyRev as string}
         initialSlide={indexOfRev > -1 ? indexOfRev : 0}
         afterChange={(index: number) => {
           const rev = revRows[index]?._rev
@@ -86,11 +86,7 @@ export const ZaehlungHistory = ({
         {...sliderSettings}
       >
         {revRows.map((r) => (
-          <Row
-            key={r._rev}
-            revRow={r}
-            row={row}
-            rawRow={rawRow}
+          <Row key={r._rev} revRow={r} row={row}
             historyTakeoverCallback={historyTakeoverCallback}
           />
         ))}

@@ -23,12 +23,15 @@ export const LieferungHistoryRow = ({
   revRow: import('../../../../shared/types.ts').WmRow | null | undefined
   historyTakeoverCallback: () => void
 }) => {
-  const dataArray = createDataArray({ row, revRow })
+  const dataArray = createDataArray({
+    row: row as unknown as Record<string, unknown>,
+    revRow,
+  })
 
   const onClickWiderspruchUebernehmen = async () => {
     // need to attach to the winner, that is row
     // otherwise risk to still have lower depth and thus loosing
-    const newDepth = row?._depth + 1
+    const newDepth = (row?._depth ?? 0) + 1
     const newObject: Record<string, unknown> = {
       lieferung_id: revRow?.lieferung_id,
       sammel_lieferung_id: revRow?.sammel_lieferung_id,
@@ -83,11 +86,14 @@ export const LieferungHistoryRow = ({
     newObjectForStore.id = row?.id
     delete newObjectForStore.lieferung_id
     // optimistically update store
-    await store.get(dbAtom).write(async () => {
+    const db = store.get(dbAtom)
+    if (!db) return
+    await db.write(async () => {
       await row?.update((row) => {
+        const record = row as unknown as Record<string, unknown>
         Object.entries(newObjectForStore).forEach(([key, value]) => {
-          if (!isEqual(value, row[key])) {
-            row[key] = value
+          if (!isEqual(value, record[key])) {
+            record[key] = value
           }
         })
       })

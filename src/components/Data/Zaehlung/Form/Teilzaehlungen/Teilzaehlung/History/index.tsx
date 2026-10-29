@@ -15,7 +15,7 @@ const sliderSettings = {
 
 export const TeilzaehlungHistory = ({
   row,
-  rawRow,
+  rawRow: _rawRow,
   historyTakeoverCallback,
 }: {
   row: import('../../../../../../../dbModel.ts').Zaehlung | null | undefined
