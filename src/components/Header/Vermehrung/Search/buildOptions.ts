@@ -10,12 +10,13 @@ import { kultursSortedFromKulturs } from '../../../../utils/kultursSortedFromKul
 import { sammlungsSortedFromSammlungs } from '../../../../utils/sammlungsSortedFromSammlungs.ts'
 import { artsSortedFromArts } from '../../../../utils/artsSortedFromArts.ts'
 import { personFullname } from '../../../../utils/personFullname.ts'
-import { eventSort } from '../../../../utils/eventSort.ts'
+import { bedarfSort } from '../../../../utils/bedarfSort.ts'
 import { herkunftSort } from '../../../../utils/herkunftSort.ts'
 import { lieferungSort } from '../../../../utils/lieferungSort.ts'
 import { personSort } from '../../../../utils/personSort.ts'
 import { zaehlungSort } from '../../../../utils/zaehlungSort.ts'
 import { herkunftLabelFromHerkunft } from '../../../../utils/herkunftLabelFromHerkunft.ts'
+import { bedarfLabelFromBedarf } from '../../../../utils/bedarfLabelFromBedarf.ts'
 import { store, dbAtom } from '../../../../store/index.ts'
 
 const threshold = 0.2
@@ -43,15 +44,15 @@ export const buildOptions = async ({
   } catch {}
   const artsSorted = await artsSortedFromArts(arts)
 
-  let events: import('../../../../dbModel.ts').Event[] = []
+  let bedarfs: import('../../../../dbModel.ts').Bedarf[] = []
   try {
-    events =
+    bedarfs =
       (await db
-        ?.get<import('../../../../dbModel.ts').Event>('event')
-        .query(...tableFilter({ table: 'event' }))
+        ?.get<import('../../../../dbModel.ts').Bedarf>('bedarf')
+        .query(...tableFilter({ table: 'bedarf' }))
         .fetch()) ?? []
   } catch {}
-  const eventsSorted = events.sort(eventSort)
+  const bedarfsSorted = bedarfs.sort(bedarfSort)
 
   let gartens: import('../../../../dbModel.ts').Garten[] = []
   try {
@@ -270,59 +271,57 @@ export const buildOptions = async ({
       options: kulturSuggestions,
     })
   }
-  const searchEventSuggestions = eventsSorted.map(async (e) => {
-    let label
-    try {
-      label = (await e.label.pipe(first$()).toPromise()) ?? ''
-    } catch {}
-    let kultur
-    try {
-      kultur = await e.kultur?.fetch()
-    } catch {}
-    let art
-    try {
-      art = await kultur?.art?.fetch()
-    } catch {}
-    let artname = ''
-    try {
-      artname = (await art?.label?.pipe(first$()).toPromise()) ?? ''
-    } catch {}
-    let garten
-    try {
-      garten = await kultur?.garten?.fetch()
-    } catch {}
-    let gartenPerson
-    try {
-      gartenPerson = await garten?.person?.fetch()
-    } catch {}
+  const searchBedarfSuggestions = await Promise.all(
+    bedarfsSorted.map(async (b) => {
+      let kultur
+      try {
+        kultur = await b.kultur?.fetch()
+      } catch {}
+      let art
+      try {
+        art = await kultur?.art?.fetch()
+      } catch {}
+      let artname = ''
+      try {
+        artname = (await art?.label?.pipe(first$()).toPromise()) ?? ''
+      } catch {}
+      let person
+      try {
+        person = await b.person?.fetch()
+      } catch {}
 
-    return {
-      value: e.id,
-      label,
-      artname,
-      gartenname: garten?.name ?? '',
-      personname: personFullname(gartenPerson) ?? '',
-      geplant: e.geplant ? 'geplant' : 'ausgeführt',
-      parent: e.kultur_id,
-      type: 'Events',
-    }
-  })
-  const eventSuggestionsFuse = new Fuse(searchEventSuggestions, {
+      return {
+        value: b.id,
+        label: bedarfLabelFromBedarf({ bedarf: b }),
+        artname,
+        personname: personFullname(person) ?? '',
+        jahr: b.jahr ?? '',
+        beschreibung: b.beschreibung ?? '',
+        neues_material: b.neues_material ?? '',
+        bemerkungen: b.bemerkungen ?? '',
+        parent: b.kultur_id,
+        type: 'Bedarf',
+      }
+    }),
+  )
+  const bedarfSuggestionsFuse = new Fuse(searchBedarfSuggestions, {
     keys: [
-      { name: 'artname', weight: 0.7 },
-      { name: 'gartenname', weight: 0.7 },
-      { name: 'personname', weight: 0.7 },
       { name: 'label', weight: 1 },
-      { name: 'geplant', weight: 1 },
+      { name: 'jahr', weight: 1 },
+      { name: 'beschreibung', weight: 1 },
+      { name: 'artname', weight: 0.7 },
+      { name: 'personname', weight: 0.7 },
+      { name: 'neues_material', weight: 0.5 },
+      { name: 'bemerkungen', weight: 0.5 },
     ],
     threshold,
     distance,
   })
-  const eventSuggestions = eventSuggestionsFuse.search(val).map((o) => o.item)
-  if (eventSuggestions.length) {
+  const bedarfSuggestions = bedarfSuggestionsFuse.search(val).map((o) => o.item)
+  if (bedarfSuggestions.length) {
     options.push({
-      label: `Events (${eventSuggestions.length})`,
-      options: eventSuggestions,
+      label: `Bedarf (${bedarfSuggestions.length})`,
+      options: bedarfSuggestions,
     })
   }
   const searchLieferungSuggestions = await Promise.all(
