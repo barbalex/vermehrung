@@ -26,8 +26,11 @@ export const LieferungNach = ({
   showFilter: boolean
   row: import('../../../../../../dbModel.ts').Lieferung | null | undefined
   saveToDb: (event: { target: { name?: string; value: unknown } }) => void
-  ifNeeded: boolean
-  herkunft: import('../../../../../shared/types.ts').WmRow | null | undefined
+  ifNeeded: (field: string) => boolean
+  herkunft:
+    | import('../../../../../../dbModel.ts').Herkunft
+    | null
+    | undefined
 }) => {
   const db = useAtomValue(dbAtom)
   const errors = useAtomValue(errorsAtom)
@@ -76,7 +79,9 @@ export const LieferungNach = ({
           <Add
             disabled={!(row?.art_id && herkunft) || !row?.von_sammlung_id}
             herkunft={herkunft}
-            lieferung={row}
+            lieferung={
+              row as unknown as import('../../../../../../dbModel.ts').Lieferung
+            }
           />
         </div>
       )}

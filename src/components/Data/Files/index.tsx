@@ -21,24 +21,56 @@ import { useObservable } from '../../../utils/useObservable.ts'
 
 import styles from './index.module.css'
 
-export const Files = ({ parentTable, parent }) => {
+interface FileRow {
+  id: string
+  file_id: string
+  file_mime_type: string | null
+  name: string | null
+  beschreibung: string | null
+  delete?: () => void
+  edit?: (args: { field?: string; value: unknown }) => void
+}
+
+export const Files = ({
+  parentTable,
+  parent,
+}: {
+  parentTable: string
+  parent: { id?: string; files?: unknown }
+}) => {
   const online = useAtomValue(onlineAtom)
 
   const [lightboxIsOpen, setLightboxIsOpen] = useState(false)
 
   // removing useMemo causes: Maximum update depth exceeded
   const observable = useMemo(
-    () => (parent.files ? parent.files.observeWithColumns(['name']) : $of([])),
+    () =>
+      parent.files
+        ? (
+            parent.files as {
+              observeWithColumns: (
+                columns: string[],
+              ) => import('rxjs').Observable<FileRow[]>
+            }
+          ).observeWithColumns(['name'])
+        : $of([] as FileRow[]),
     [parent.files],
   )
-  const files = useObservable(observable) ?? []
+  const files =
+    useObservable(
+      observable as unknown as import('rxjs').Observable<FileRow[]>,
+    ) ?? []
   // sort a copy, not the observed array in place
   const sortedFiles = [...(files ?? [])].sort(fileSort)
 
   // the uploader fires the success event repeatedly for the same file
-  const uploadedUuids = useRef([])
+  const uploadedUuids = useRef<string[]>([])
 
-  const onFileUploadSuccess = async (info) => {
+  const onFileUploadSuccess = async (info: {
+    uuid: string
+    mimeType: string
+    name: string
+  }) => {
     if (!info) return
     if (uploadedUuids.current.includes(info.uuid)) return
     uploadedUuids.current.push(info.uuid)
@@ -73,7 +105,7 @@ export const Files = ({ parentTable, parent }) => {
     }
   }
 
-  const onFileUploadFailed = (info) => {
+  const onFileUploadFailed = (info: { name?: string }) => {
     addNotification({
       message: `Hochladen von ${info?.name ?? 'Datei'} fehlgeschlagen`,
     })
@@ -113,8 +145,12 @@ export const Files = ({ parentTable, parent }) => {
         <div className={styles.title}>Dateien</div>
         <div className={styles.buttons}>
           <Uploader
-            onFileUploadSuccess={onFileUploadSuccess}
-            onFileUploadFailed={onFileUploadFailed}
+            onFileUploadSuccess={
+              onFileUploadSuccess as unknown as (info: unknown) => void
+            }
+            onFileUploadFailed={
+              onFileUploadFailed as unknown as (info: unknown) => void
+            }
           />
           {!!images.length && (
             <Button

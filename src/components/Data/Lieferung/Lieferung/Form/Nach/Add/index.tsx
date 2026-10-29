@@ -10,8 +10,19 @@ import { LieferungAddChooseDialog as ChooseDialog } from './ChooseDialog.tsx'
 
 import styles from './index.module.css'
 
-export const LieferungAdd = ({ disabled, lieferung, herkunft }) => {
-  const [kulturType, setKulturType] = useState()
+export const LieferungAdd = ({
+  disabled,
+  lieferung,
+  herkunft,
+}: {
+  disabled?: boolean
+  lieferung: import('../../../../../../../dbModel.ts').Lieferung
+  herkunft:
+    | import('../../../../../../../dbModel.ts').Herkunft
+    | null
+    | undefined
+}) => {
+  const [kulturType, setKulturType] = useState<string | undefined>(undefined)
   const [typeDialogOpen, setTypeDialogOpen] = useState(false)
   const [gardenDialogOpen, setGardenDialogOpen] = useState(false)
 
@@ -25,12 +36,12 @@ export const LieferungAdd = ({ disabled, lieferung, herkunft }) => {
     stopPropagation?: () => void
     key?: string
   }) => {
-    setKulturType(event.target.value)
+    setKulturType(event.target.value as string | undefined)
     setTypeDialogOpen(false)
     setGardenDialogOpen(true)
   }
 
-  const onChangeGarden = async (option) => {
+  const onChangeGarden = async (option: { value: string }) => {
     const gartenId = option.value
     setGardenDialogOpen(false)
     // erstellt die Kultur (mit: Art, Herkunft, aktiv = ja, Zwischenlager wie gewählt)
@@ -75,7 +86,12 @@ export const LieferungAdd = ({ disabled, lieferung, herkunft }) => {
         <ChooseDialog
           open={gardenDialogOpen}
           onClose={onCloseGardenDialog}
-          onChange={onChangeGarden}
+          onChange={
+            onChangeGarden as unknown as (
+              option: unknown,
+              actionMeta: unknown,
+            ) => void
+          }
           kulturType={kulturType}
           lieferung={lieferung}
           herkunft={herkunft}

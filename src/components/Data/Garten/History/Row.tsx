@@ -24,7 +24,7 @@ export const GartenHistoryRow = ({
   historyTakeoverCallback?: () => void
 }) => {
   const dataArray = createDataArrayForGartenRevComparison({
-    row,
+    row: row as unknown as Record<string, unknown>,
     revRow,
   })
 
@@ -73,7 +73,7 @@ export const GartenHistoryRow = ({
         message: (error as Error).message,
       })
     }
-    historyTakeoverCallback()
+    historyTakeoverCallback?.()
     // do not stringify revisions for store
     // as _that_ is a real array
     newObjectForStore._revisions = row?._revisions
@@ -86,13 +86,16 @@ export const GartenHistoryRow = ({
     delete newObjectForStore.garten_id
     // optimistically update store
     await db?.write(async () => {
-      await row?.update((row: Record<string, unknown>) => {
-        Object.entries(newObjectForStore).forEach(([key, value]) => {
-          if (!isEqual(value, row[key])) {
-            row[key] = value
-          }
-        })
-      })
+      await row?.update(
+        (row: unknown) => {
+          const mutableRow = row as Record<string, unknown>
+          Object.entries(newObjectForStore).forEach(([key, value]) => {
+            if (!isEqual(value, mutableRow[key])) {
+              mutableRow[key] = value
+            }
+          })
+        },
+      )
     })
   }
 

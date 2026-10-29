@@ -12,7 +12,7 @@ import styles from './Person.module.css'
 export const GartenPerson = ({
   gv,
 }: {
-  gv: import('../../../../shared/types.ts').WmRow | null | undefined
+  gv: import('../../../../../dbModel.ts').Gv | null | undefined
 }) => {
   const [personLabel, setPersonLabel] = useState<string | null>(null)
   useEffect(() => {
@@ -55,10 +55,12 @@ export const GartenPerson = ({
           anchorEl={delMenuAnchorEl}
           open={delMenuOpen}
           onClose={() => setDelMenuAnchorEl(null)}
-          PaperProps={{
-            style: {
-              maxHeight: 48 * 4.5,
-              width: 120,
+          slotProps={{
+            paper: {
+              style: {
+                maxHeight: 48 * 4.5,
+                width: 120,
+              },
             },
           }}
         >

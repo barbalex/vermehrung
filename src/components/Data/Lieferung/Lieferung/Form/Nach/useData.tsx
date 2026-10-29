@@ -15,11 +15,24 @@ export const useLieferungNachData = ({
 }: {
   showFilter: boolean
   row: import('../../../../../../dbModel.ts').Lieferung | null | undefined
-  herkunft: import('../../../../../shared/types.ts').WmRow | null | undefined
+  herkunft:
+    | import('../../../../../../dbModel.ts').Herkunft
+    | null
+    | undefined
   db: import('@nozbe/watermelondb').Database | null
-  filter: boolean
+  filter: {
+    kultur: { _deleted?: boolean | null }
+    sammlung: { _deleted?: boolean | null }
+  }
 }) => {
-  const [dataState, setDataState] = useState({ nachKulturWerte: [] })
+  const [dataState, setDataState] = useState<{
+    nachKulturWerte: {
+      value: string
+      label: string | undefined
+      inaktiv: boolean
+      link: string[]
+    }[]
+  }>({ nachKulturWerte: [] })
 
   useEffect(() => {
     const kulturDelQuery =
@@ -33,7 +46,10 @@ export const useLieferungNachData = ({
               Q.where('_deleted', null),
             )
     // BEWARE: need to include inactive kulturs
-    const kultursObservable = db?.get('kultur').query(kulturDelQuery).observe()
+    const kultursObservable = db
+      ?.get<import('../../../../../../dbModel.ts').Kultur>('kultur')
+      .query(kulturDelQuery)
+      .observe()
     const sammlungDelQuery =
       filter.sammlung._deleted === false
         ? Q.where('_deleted', false)
@@ -52,8 +68,15 @@ export const useLieferungNachData = ({
       kultursObservable,
       sammlungsObservable,
     ])
-    const subscription = combinedObservables.subscribe(async ([kulturs]) => {
-      const kultursFiltered = kulturs
+    const subscription = (
+      combinedObservables as unknown as import('rxjs').Observable<
+        [
+          import('../../../../../../dbModel.ts').Kultur[] | undefined,
+          import('../../../../../../dbModel.ts').Sammlung[] | undefined,
+        ]
+      >
+    ).subscribe(async ([kulturs]) => {
+      const kultursFiltered = (kulturs ?? [])
         // show only kulturen of art_id
         .filter((k: import('../../../../../../dbModel.ts').Kultur) => {
           if (row?.art_id) return k.art_id === row.art_id
@@ -79,7 +102,14 @@ export const useLieferungNachData = ({
         kultur = await db?.get('kultur').find(row?.von_kultur_id as string)
       } catch {}
       const kultursIncludingChoosen = uniqBy(
-        [...kultursFiltered, ...(kultur && !showFilter ? [kultur] : [])],
+        [
+          ...kultursFiltered,
+          ...(kultur && !showFilter
+            ? [
+                kultur as import('../../../../../../dbModel.ts').Kultur,
+              ]
+            : []),
+        ],
         (e) => e.id,
       )
       const kultursSorted = await kultursSortedFromKulturs(
@@ -89,7 +119,7 @@ export const useLieferungNachData = ({
         kultursSorted.map(async (el) => {
           let label
           try {
-            label = await el.label.pipe(first$()).toPromise()
+            label = (await el.label.pipe(first$()).toPromise()) ?? ''
           } catch {}
 
           return {

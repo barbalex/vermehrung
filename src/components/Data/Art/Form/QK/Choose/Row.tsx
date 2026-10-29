@@ -11,15 +11,17 @@ import styles from './Row.module.css'
 export const Row = ({
   qk,
 }: {
-  qk: import('../../../../../shared/types.ts').WmRow | null | undefined
+  qk: import('../../../../../../dbModel.ts').ArtQk | null | undefined
 }) => {
   const db = useAtomValue(dbAtom)
   const user = useAtomValue(userAtom)
 
-  const [dataState, setDataState] = useState({
-    userPersonOption: undefined,
-    artQkChoosen: [],
-  })
+  const [dataState, setDataState] = useState<{
+    userPersonOption:
+      | import('../../../../../../dbModel.ts').PersonOption
+      | undefined
+    artQkChoosen: string[]
+  }>({ userPersonOption: undefined, artQkChoosen: [] })
   const { userPersonOption, artQkChoosen } = dataState
 
   useEffect(() => {
@@ -32,7 +34,13 @@ export const Row = ({
           .observeWithColumns(['art_qk_choosen'])
       : $of({})
     const combinedObservables = combineLatest([userPersonOptionsObservable])
-    const subscription = combinedObservables.subscribe(([userPersonOptions]) =>
+    const subscription = (
+      combinedObservables as unknown as import('rxjs').Observable<
+        [
+          import('../../../../../../dbModel.ts').PersonOption[] | undefined,
+        ]
+      >
+    ).subscribe(([userPersonOptions]) =>
       setDataState({
         userPersonOption: userPersonOptions?.[0],
         artQkChoosen: userPersonOptions?.[0]?.art_qk_choosen ?? [],
@@ -42,17 +50,17 @@ export const Row = ({
     return () => subscription?.unsubscribe?.()
   }, [db, user.uid])
 
-  const checked = artQkChoosen.includes(qk?.id)
+  const checked = artQkChoosen.includes(qk?.id ?? '')
 
   const onChange = (event: {
-    target: { name?: string; value: unknown }
+    target: { name?: string; value: unknown; checked?: boolean }
     currentTarget?: HTMLElement
     preventDefault?: () => void
     stopPropagation?: () => void
     key?: string
   }) => {
     const newValue = event.target.checked
-      ? [...artQkChoosen, qk?.id]
+      ? [...artQkChoosen, qk?.id ?? '']
       : artQkChoosen.filter((id) => id !== qk?.id)
 
     userPersonOption?.edit({

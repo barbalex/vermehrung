@@ -28,7 +28,6 @@ export const HerkunftForm = ({
   showFilter,
   id,
   row,
-  rawRow,
   activeConflict,
   setActiveConflict,
   showHistory,
@@ -47,9 +46,11 @@ export const HerkunftForm = ({
   const db = useAtomValue(dbAtom)
   const user = useAtomValue(userAtom)
 
-  const [dataState, setDataState] = useState({
-    userPersonOption: undefined,
-  })
+  const [dataState, setDataState] = useState<{
+    userPersonOption:
+      | import('../../../../dbModel.ts').PersonOption
+      | undefined
+  }>({ userPersonOption: undefined })
   useEffect(() => {
     const userPersonOptionsObservable = user.uid
       ? db
@@ -83,7 +84,14 @@ export const HerkunftForm = ({
       userPersonOptionsObservable,
       herkunftsNrCountObservable,
     ])
-    const subscription = combinedObservables.subscribe(
+    const subscription = (
+      combinedObservables as unknown as import('rxjs').Observable<
+        [
+          import('../../../../dbModel.ts').PersonOption[] | undefined,
+          number,
+        ]
+      >
+    ).subscribe(
       async ([userPersonOptions, nrCount]) => {
         if (!showFilter && nrCount > 1) {
           setError({
@@ -126,7 +134,9 @@ export const HerkunftForm = ({
       return setFilterValue({ table: 'herkunft', key: field as string, value })
     }
 
-    const previousValue = ifIsNumericAsNumber(row?._raw[field])
+    const previousValue = ifIsNumericAsNumber(
+      (row?._raw as unknown as Record<string, unknown>)[field as string] as string | number,
+    )
     // only update if value has changed
     if (value === previousValue) return
     await row?.edit({ field, value })
@@ -209,7 +219,18 @@ export const HerkunftForm = ({
         />
       )}
       {!showFilter && hk_geom_point && (
-        <Coordinates row={row} rawRow={rawRow} saveToDb={saveToDb} />
+        <Coordinates
+            row={
+              row as unknown as {
+                id?: string
+                lv95_x?: string | number | null
+                lv95_y?: string | number | null
+                wgs84_lat?: string | number | null
+                wgs84_long?: string | number | null
+              }
+            }
+            saveToDb={saveToDb}
+          />
       )}
       {hk_bemerkungen && (
         <TextField

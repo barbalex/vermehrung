@@ -32,7 +32,10 @@ export const Gaerten = ({ filter: showFilter = false }) => {
   const activeNodeArray = useAtomValue(activeNodeArrayAtom)
   const gartenFilter = useAtomValue(filterGartenAtom)
 
-  const [dataState, setDataState] = useState({ gartens: [], totalCount: 0 })
+  const [dataState, setDataState] = useState<{
+    gartens: import('../../../dbModel.ts').Garten[]
+    totalCount: number
+  }>({ gartens: [], totalCount: 0 })
   useEffect(() => {
     const hierarchyQuery = personIdInActiveNodeArray
       ? [

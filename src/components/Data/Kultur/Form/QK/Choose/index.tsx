@@ -3,7 +3,11 @@ import { ErrorBoundary } from '../../../../../shared/ErrorBoundary.tsx'
 
 import styles from './index.module.css'
 
-export const ChooseKulturQk = ({ qks }) => (
+export const ChooseKulturQk = ({
+  qks,
+}: {
+  qks: import('../../../../../../dbModel.ts').KulturQk[]
+}) => (
   <ErrorBoundary>
     <div className={styles.container}>
       <div className={styles.info}>Diese Wahl gilt für alle Kulturen</div>

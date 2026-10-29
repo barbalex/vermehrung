@@ -20,16 +20,21 @@ export const LieferungAddChooseDialog = ({
 }: {
   open: boolean
   onClose: () => void
-  onChange: (event: unknown) => void
-  kulturType: string
+  onChange: (option: unknown, actionMeta: unknown) => void
+  kulturType: string | undefined
   lieferung:
     import('../../../../../../shared/types.ts').WmRow | null | undefined
-  herkunft: import('../../../../../../shared/types.ts').WmRow | null | undefined
+  herkunft:
+    | import('../../../../../../../dbModel.ts').Herkunft
+    | null
+    | undefined
 }) => {
   const db = useAtomValue(dbAtom)
   const gartenFilter = useAtomValue(filterGartenAtom)
 
-  const [gartens, setGartens] = useState([])
+  const [gartens, setGartens] = useState<
+    { value: string; label: string | undefined; inaktiv: boolean; link: string[] }[]
+  >([])
 
   useEffect(() => {
     const gartenDelQuery =

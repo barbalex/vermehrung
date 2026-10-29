@@ -41,13 +41,21 @@ export const Garten = ({
   const observable = useMemo(
     () =>
       showFilter
-        ? $of({})
+        ? $of(undefined)
         : initialDataQueried || !online
-          ? db?.get('garten').findAndObserve(id)
-          : $of({}),
+          ? db
+              ?.get<import('../../dbModel.ts').Garten>('garten')
+              .findAndObserve(id as string)
+          : $of(undefined),
     [db, id, initialDataQueried, online, showFilter],
   )
-  const observedRow = useObservable(observable)
+  const observedRow = useObservable(
+    observable as unknown as
+      | import('rxjs').Observable<
+          import('../../dbModel.ts').Garten | undefined
+        >
+      | undefined,
+  )
   const row = showFilter ? gartenFilter : observedRow
 
   const [activeConflict, setActiveConflict] = useState(null)

@@ -20,7 +20,7 @@ import styles from './index.module.css'
 export const KulturQkRouter = ({
   kultur,
 }: {
-  kultur: import('../../../../shared/types.ts').WmRow | null | undefined
+  kultur: import('../../../../../dbModel.ts').Kultur | null | undefined
 }) => {
   const db = useAtomValue(dbAtom)
   const user = useAtomValue(userAtom)

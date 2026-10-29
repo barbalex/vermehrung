@@ -13,16 +13,32 @@ import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
 
 import styles from './File.module.css'
 
-export const File = ({ file, parent }) => {
+export const File = ({
+  file,
+  parent,
+}: {
+  file: {
+    id: string
+    file_id: string
+    file_mime_type: string | null
+    name: string | null
+    beschreibung: string | null
+    delete?: () => void
+    edit?: (args: { field?: string; value: unknown }) => void
+  }
+  parent: unknown
+}) => {
   const errors = useAtomValue(errorsAtom)
 
-  const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
+  const [delMenuAnchorEl, setDelMenuAnchorEl] = useState<
+    (EventTarget & HTMLButtonElement) | null
+  >(null)
   const delMenuOpen = Boolean(delMenuAnchorEl)
 
   useEffect(() => unsetError(`${parent}_file`), [file, parent])
 
   // TODO: need to add delete to all file models
-  const onClickDelete = () => file.delete()
+  const onClickDelete = () => file.delete?.()
   const onClickDownload = () =>
     window.open(`https://ucarecdn.com/${file.file_id}/-/inline/no/`)
 
@@ -36,7 +52,7 @@ export const File = ({ file, parent }) => {
     const field = event.target.name
     const value = event.target.value || null
     // TODO: need to add edit to all file models
-    await file.edit({ field, value })
+    await file.edit?.({ field, value })
     unsetError(`${parent}_file`)
   }
 
@@ -62,7 +78,9 @@ export const File = ({ file, parent }) => {
             label="Datei-Typ"
             value={file.file_mime_type}
             saveToDb={saveToDb}
-            error={errors[`${parent}_file`]?.file_mime_type}
+            error={
+              errors[`${parent}_file`]?.file_mime_type as string | undefined
+            }
             disabled
             schrinkLabel
           />
@@ -75,7 +93,7 @@ export const File = ({ file, parent }) => {
             label="Datei-Name"
             value={file.name}
             saveToDb={saveToDb}
-            error={errors[`${parent}_file`]?.name}
+            error={errors[`${parent}_file`]?.name as string | undefined}
             disabled
             schrinkLabel
           />
@@ -88,7 +106,9 @@ export const File = ({ file, parent }) => {
             label="Beschreibung"
             value={file.beschreibung}
             saveToDb={saveToDb}
-            error={errors[`${parent}_file`]?.beschreibung}
+            error={
+              errors[`${parent}_file`]?.beschreibung as string | undefined
+            }
             multiLine
             schrinkLabel
           />
@@ -105,7 +125,9 @@ export const File = ({ file, parent }) => {
           aria-label="löschen"
           aria-owns={delMenuOpen ? 'delMenu' : undefined}
           aria-haspopup="true"
-          onClick={(event) => setDelMenuAnchorEl(event.currentTarget)}
+          onClick={(event) =>
+            setDelMenuAnchorEl(event.currentTarget)
+          }
           className={styles.delIcon}
         >
           <FaTimes />
@@ -115,10 +137,12 @@ export const File = ({ file, parent }) => {
           anchorEl={delMenuAnchorEl}
           open={delMenuOpen}
           onClose={() => setDelMenuAnchorEl(null)}
-          PaperProps={{
-            style: {
-              maxHeight: 48 * 4.5,
-              width: 120,
+          slotProps={{
+            paper: {
+              style: {
+                maxHeight: 48 * 4.5,
+                width: 120,
+              },
             },
           }}
         >

@@ -10,15 +10,17 @@ import styles from './Row.module.css'
 export const ChooseKulturQkRow = ({
   qk,
 }: {
-  qk: import('../../../../../shared/types.ts').WmRow | null | undefined
+  qk: import('../../../../../../dbModel.ts').KulturQk | null | undefined
 }) => {
   const user = useAtomValue(userAtom)
   const db = useAtomValue(dbAtom)
 
-  const [dataState, setDataState] = useState({
-    userPersonOption: undefined,
-    kulturQkChoosen: [],
-  })
+  const [dataState, setDataState] = useState<{
+    userPersonOption:
+      | import('../../../../../../dbModel.ts').PersonOption
+      | undefined
+    kulturQkChoosen: string[]
+  }>({ userPersonOption: undefined, kulturQkChoosen: [] })
   const { userPersonOption, kulturQkChoosen } = dataState
 
   useEffect(() => {
@@ -31,7 +33,13 @@ export const ChooseKulturQkRow = ({
           .observeWithColumns(['kultur_qk_choosen'])
       : $of({})
     const combinedObservables = combineLatest([userPersonOptionsObservable])
-    const subscription = combinedObservables.subscribe(([userPersonOptions]) =>
+    const subscription = (
+      combinedObservables as unknown as import('rxjs').Observable<
+        [
+          import('../../../../../../dbModel.ts').PersonOption[] | undefined,
+        ]
+      >
+    ).subscribe(([userPersonOptions]) =>
       setDataState({
         userPersonOption: userPersonOptions?.[0],
         kulturQkChoosen: userPersonOptions?.[0]?.kultur_qk_choosen ?? [],
@@ -41,11 +49,17 @@ export const ChooseKulturQkRow = ({
     return () => subscription?.unsubscribe?.()
   }, [db, user])
 
-  const checked = kulturQkChoosen.includes(qk?.id)
+  const checked = kulturQkChoosen.includes(qk?.id ?? '')
 
-  const onChange = () => {
-    const newValue = event?.target.checked
-      ? [...kulturQkChoosen, qk?.id]
+  const onChange = (event?: {
+    target: { name?: string; value: unknown; checked?: boolean }
+    currentTarget?: HTMLElement
+    preventDefault?: () => void
+    stopPropagation?: () => void
+    key?: string
+  }) => {
+    const newValue = event?.target?.checked
+      ? [...kulturQkChoosen, qk?.id ?? '']
       : kulturQkChoosen.filter((id) => id !== qk?.id)
 
     userPersonOption?.edit({

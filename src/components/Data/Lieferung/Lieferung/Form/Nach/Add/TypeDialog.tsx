@@ -6,7 +6,15 @@ import RadioGroup from '@mui/material/RadioGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import FormControl from '@mui/material/FormControl'
 
-export const LieferungAddTypeDialog = ({ open, onClose, onChange }) => (
+export const LieferungAddTypeDialog = ({
+  open,
+  onClose,
+  onChange,
+}: {
+  open: boolean
+  onClose: () => void
+  onChange: (event: { target: { value: unknown } }) => void
+}) => (
   <Dialog open={open} onClose={onClose}>
     <DialogTitle>Typ der Kultur wählen:</DialogTitle>
     <DialogContent>

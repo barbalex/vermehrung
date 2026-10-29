@@ -20,12 +20,12 @@ import styles from './index.module.css'
 export const GartenPersonen = ({
   garten,
 }: {
-  garten: import('../../../../shared/types.ts').WmRow | null | undefined
+  garten: import('../../../../../dbModel.ts').Garten | null | undefined
 }) => {
   const db = useAtomValue(dbAtom)
   const personFilter = useAtomValue(filterPersonAtom)
 
-  const [errors, setErrors] = useState({})
+  const [errors, setErrors] = useState<Record<string, unknown>>({})
   useEffect(() => setErrors({}), [garten?.id])
 
   const [open, setOpen] = useState(false)
@@ -37,7 +37,7 @@ export const GartenPersonen = ({
     stopPropagation?: () => void
     key?: string
   }) => {
-    e.stopPropagation()
+    e.stopPropagation?.()
     if (open) {
       const was = open
       await anim.start({ opacity: 0 })
@@ -52,10 +52,10 @@ export const GartenPersonen = ({
     }
   }
 
-  const [dataState, setDataState] = useState({
-    gvsSorted: [],
-    personWerte: [],
-  })
+  const [dataState, setDataState] = useState<{
+    gvsSorted: import('../../../../../dbModel.ts').Gv[]
+    personWerte: { value: string; label: string; inaktiv: boolean }[]
+  }>({ gvsSorted: [], personWerte: [] })
   useEffect(() => {
     const delQuery =
       personFilter._deleted === false
@@ -83,20 +83,24 @@ export const GartenPersonen = ({
       .observe()
     const gvsObservable = garten?.gvs
       ? garten.gvs.extend(Q.where('_deleted', false)).observe()
-      : $of([])
+      : $of([] as import('../../../../../dbModel.ts').Gv[])
     const combinedObservables = combineLatest([
       gvsObservable,
       personsObservable,
     ])
-    const subscription = combinedObservables.subscribe(
+    const subscription = (
+      combinedObservables as unknown as import('rxjs').Observable<
+        [
+          import('../../../../../dbModel.ts').Gv[],
+          import('../../../../../dbModel.ts').Person[] | undefined,
+        ]
+      >
+    ).subscribe(
       async ([gvs, persons]) => {
         const gvsSorted = await gvsSortByPerson(gvs)
         const gvPersonIds = gvsSorted.map((v) => v.person_id)
-        const personWerte = persons
-          .filter(
-            (a: import('../../../../../dbModel.ts').Art) =>
-              !gvPersonIds.includes(a.id),
-          )
+        const personWerte = (persons ?? [])
+          .filter((a) => !gvPersonIds.includes(a.id))
           .sort(personSort)
           .map((el) => ({
             value: el.id,

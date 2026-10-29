@@ -43,7 +43,6 @@ export const KulturForm = ({
   showFilter,
   id,
   row,
-  rawRow,
   activeConflict,
   setActiveConflict,
   showHistory,
@@ -454,19 +453,21 @@ export const KulturForm = ({
     window.open(url)
   }
 
-  const zwischenlagerError = errors.kultur?.zwischenlager?.includes(
-    'Unique-Constraint',
-  )
+  const zwischenlagerError = (
+    errors.kultur?.zwischenlager as string | undefined
+  )?.includes('Unique-Constraint')
     ? 'Von einer Herkunft einer Art darf in einem Garten maximal ein aktives Zwischenlager existieren'
-    : errors.kultur?.zwischenlager
-  const artError = errors.kultur?.art_id?.includes('Unique-Constraint')
+    : (errors.kultur?.zwischenlager as string | undefined)
+  const artError = (
+    errors.kultur?.art_id as string | undefined
+  )?.includes('Unique-Constraint')
     ? 'Von einer Herkunft einer Art dürfen in einem Garten maximal zwei aktive Kulturen existieren: eine "normale" und ein Zwischenlager'
-    : errors.kultur?.art_id
-  const herkunftError = errors.kultur?.herkunft_id?.includes(
-    'Unique-Constraint',
-  )
+    : (errors.kultur?.art_id as string | undefined)
+  const herkunftError = (
+    errors.kultur?.herkunft_id as string | undefined
+  )?.includes('Unique-Constraint')
     ? 'Von einer Herkunft einer Art dürfen in einem Garten maximal zwei aktive Kulturen existieren: eine "normale" und ein Zwischenlager'
-    : errors.kultur?.herkunft_id
+    : (errors.kultur?.herkunft_id as string | undefined)
 
   const showDeleted = kulturFilter._deleted !== false || row?._deleted
 
@@ -637,7 +638,7 @@ export const KulturForm = ({
         )}
         {!showFilter && row?.id && (
           <>
-            <Timeline row={row} rawRow={rawRow} />
+            <Timeline row={row} />
             <QK kultur={row} />
             <Files parentTable="kultur" parent={row} />
           </>
