@@ -38,7 +38,6 @@
   --header-bg: #4a148c;
   --crumb-text: #4a148c;
   --scrollbar-thumb: #4a148c;
-  --crumb-text: #9272ba;
   --scrollbar-track: rgba(248, 243, 254, 1);
 }
 
@@ -60,6 +59,9 @@ html[data-theme='dark'] {
   --card-overlay-bg: rgba(30, 30, 30, 0.75);
   --scrollbar-thumb: #4a148c;
   --scrollbar-track: #1c1c1c;
+  /* the same purple, 40% lightened: the full header purple is not
+     readable as text on the dark strip */
+  --crumb-text: #9272ba;
   /* the allotment separators are defined in the :root block above -
    * dark values need their own override block */
   --focus-border: rgba(186, 104, 200, 0.6);
