@@ -5,7 +5,7 @@
 }
 
 .titleContainer {
-  background-color: rgba(74, 20, 140, 0.1);
+  background-color: var(--title-row-bg);
   flex-shrink: 0;
   display: flex;
   @media print {

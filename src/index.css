@@ -36,6 +36,8 @@
   --card-overlay-bg: rgba(255, 255, 255, 0.65);
   /* the app bar keeps purple[900] in both modes - see materialTheme.ts */
   --header-bg: #4a148c;
+  /* form and list title rows */
+  --title-row-bg: rgba(74, 20, 140, 0.1);
   --crumb-text: #4a148c;
   --scrollbar-thumb: #4a148c;
   --scrollbar-track: rgba(248, 243, 254, 1);
@@ -62,6 +64,9 @@ html[data-theme='dark'] {
   /* the same purple, 40% lightened: the full header purple is not
      readable as text on the dark strip */
   --crumb-text: #9272ba;
+  /* same tint as in light mode but stronger: 10% of the dark purple
+     is invisible on the dark background */
+  --title-row-bg: rgba(74, 20, 140, 0.45);
   /* the allotment separators are defined in the :root block above -
    * dark values need their own override block */
   --focus-border: rgba(186, 104, 200, 0.6);
