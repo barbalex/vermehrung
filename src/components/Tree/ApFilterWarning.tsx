@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useAtomValue } from 'jotai'
+import { Q } from '@nozbe/watermelondb'
 import IconButton from '@mui/material/IconButton'
 import { IoMdClose } from 'react-icons/io'
 
@@ -24,10 +25,13 @@ export const ApFilterWarning = () => {
       setArtIsNoAp(false)
       return
     }
+    // query().observe() emits [] while the row is not loaded yet -
+    // findAndObserve would throw a dev-mode diagnostic on slow boots
     const subscription = db
       ?.get<import('../../dbModel.ts').Art>('art')
-      .findAndObserve(artIdInActiveNodeArray)
-      .subscribe((art) => setArtIsNoAp(art?.apflora_ap === false))
+      .query(Q.where('id', artIdInActiveNodeArray))
+      .observe()
+      .subscribe((arts) => setArtIsNoAp(arts[0]?.apflora_ap === false))
 
     return () => subscription?.unsubscribe?.()
   }, [apFilter, artIdInActiveNodeArray, db])

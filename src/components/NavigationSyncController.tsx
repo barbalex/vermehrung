@@ -6,6 +6,7 @@ import { useLocation, useNavigate } from 'react-router'
 import {
   activeNodeArrayAtom,
   setHistoryRev,
+  setObjectName,
   setNavigate,
   setActiveNodeArray,
   setLastActiveNodeArray,
@@ -13,6 +14,8 @@ import {
 } from '../store/index.ts'
 import { getActiveNodeArrayFromPathname } from '../utils/getActiveNodeArrayFromPathname.ts'
 import { splitHistoriesFromActiveNodeArray } from '../utils/splitHistoriesFromActiveNodeArray.ts'
+import { splitObjectNameFromActiveNodeArray } from '../utils/splitObjectNameFromActiveNodeArray.ts'
+import { breadcrumbsEnabled } from '../utils/breadcrumbsEnabled.ts'
 
 // syncs activeNodeArray with browser navigation
 export const NavigationSyncController = () => {
@@ -51,11 +54,19 @@ export const NavigationSyncController = () => {
     const { activeNodeArray: activeNodeArrayFromUrl, historyRev } =
       splitHistoriesFromActiveNodeArray(urlWithHistory as string[])
     setHistoryRev(historyRev)
+    // reset/set the object name unconditionally (like historyRev):
+    // setActiveNodeArray below only runs when the node array changed,
+    // which it does not when only the object name suffix appears/disappears
+    const { activeNodeArray: activeNodeArray, objectName } =
+      breadcrumbsEnabled
+        ? splitObjectNameFromActiveNodeArray(activeNodeArrayFromUrl as string[])
+        : { activeNodeArray: activeNodeArrayFromUrl, objectName: undefined }
+    if (breadcrumbsEnabled) setObjectName(objectName)
 
-    if (!isEqual(activeNodeArrayFromUrl, aNA)) {
+    if (!isEqual(activeNodeArray, aNA)) {
       // when the url contains a histories suffix, do not navigate:
       // navigating from the stripped activeNodeArray would remove it
-      setActiveNodeArray(activeNodeArrayFromUrl, !!historyRev)
+      setActiveNodeArray(activeNodeArray, !!historyRev)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname])

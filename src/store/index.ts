@@ -27,6 +27,8 @@ import { sammlungIdInUrl } from '../utils/sammlungIdInUrl.ts'
 import { kulturIdOfAnLieferungInUrl } from '../utils/kulturIdOfAnLieferungInUrl.ts'
 import { kulturIdOfAusLieferungInUrl } from '../utils/kulturIdOfAusLieferungInUrl.ts'
 import { zaehlungIdInUrl } from '../utils/zaehlungIdInUrl.ts'
+import { splitObjectNameFromActiveNodeArray } from '../utils/splitObjectNameFromActiveNodeArray.ts'
+import { breadcrumbsEnabled } from '../utils/breadcrumbsEnabled.ts'
 import type { ApiClient } from '../utils/apiTypes.ts'
 
 /** the user as the app uses it: the firebase auth user, loosely */
@@ -280,11 +282,29 @@ export const removeOpenNodeWithChildren = (url: string[]) => {
   )
 }
 
+// === object name in url ===
+// with breadcrumbs enabled, an object's form url ends with its name
+// ('/Arten/{artId}/Art'). like the histories suffix it is kept out of
+// activeNodeArray. undefined: no object name in url (list or folder url)
+export const activeObjectNameAtom = atom<string | undefined>(undefined)
+export const setObjectName = (val: string | undefined) =>
+  store.set(activeObjectNameAtom, val)
+
 export const setActiveNodeArray = (val: string[], nonavigate?: boolean) => {
-  store.set(activeNodeArrayAtom, val)
+  // with breadcrumbs enabled, an object's form url ends with its name
+  // ('/Arten/{artId}/Art'). like the histories suffix it is deliberately
+  // NOT part of activeNodeArray (read positionally in many places) but
+  // kept in the url
+  let activeNodeArray = val
+  if (breadcrumbsEnabled) {
+    const split = splitObjectNameFromActiveNodeArray(val)
+    activeNodeArray = split.activeNodeArray
+    setObjectName(split.objectName)
+  }
+  store.set(activeNodeArrayAtom, activeNodeArray)
   if (!nonavigate) {
     getNavigate()?.(`/Vermehrung/${val.join('/')}`)
-    addOpenNode(val)
+    addOpenNode(activeNodeArray)
   }
 }
 

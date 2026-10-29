@@ -1,6 +1,8 @@
 import { v7 as uuidv7 } from 'uuid'
 import md5 from 'blueimp-md5'
 import { isId } from '../utils/isId.ts'
+import { breadcrumbsEnabled } from '../utils/breadcrumbsEnabled.ts'
+import { singularOfFolder } from '../utils/singularOfFolder.ts'
 
 import {
   store,
@@ -316,10 +318,16 @@ export const insertRev = async (
   if (shouldNavigate) {
     const activeNodeArray = store.get(activeNodeArrayAtom)
     setTimeout(() => {
-      const newActiveNodeArray = isId(activeNodeArray.at(-1))
+      let newActiveNodeArray = isId(activeNodeArray.at(-1))
         ? // slice if last is uuid
           [...activeNodeArray.slice(0, -1), id]
         : [...activeNodeArray, id]
+      // with breadcrumbs enabled, open a new dataset's form directly,
+      // not its object list
+      if (breadcrumbsEnabled) {
+        const objectName = singularOfFolder[newActiveNodeArray.at(-2) as string]
+        if (objectName) newActiveNodeArray = [...newActiveNodeArray, objectName]
+      }
       // update tree status
       setActiveNodeArray(newActiveNodeArray)
     })

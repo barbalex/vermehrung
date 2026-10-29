@@ -12,6 +12,14 @@
   font-size: 0.85rem;
 }
 
+/* the trail hugs the right edge: no jump between fitting trails and
+   overflowing ones, which are scrolled to their right end.
+   an auto margin instead of justify-content: flex-end - alignment
+   overflow to the left is not scrollable in browsers */
+.trail {
+  margin-left: auto;
+}
+
 /* the trail is a single line: overflow scrolls horizontally */
 .trail ol {
   flex-wrap: nowrap;

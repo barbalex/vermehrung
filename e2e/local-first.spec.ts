@@ -281,9 +281,13 @@ test('local-first: login, sync, offline boot, re-login resets cursors', async ({
       timeout: 20_000,
     })
     // ...and the dataset opens: data forms must not wait for the
-    // initial query while offline
+    // initial query while offline.
+    // with breadcrumbs enabled the tree row opens the form directly
+    // (url suffix '/Art')
     await page.getByText(ARTNAME).first().click()
-    await expect(page).toHaveURL(new RegExp(`/Vermehrung/Arten/${ART_ID}$`))
+    await expect(page).toHaveURL(
+      new RegExp(`/Vermehrung/Arten/${ART_ID}/Art$`),
+    )
     await expect(page.getByText('Art', { exact: true }).first()).toBeVisible({
       timeout: 20_000,
     })

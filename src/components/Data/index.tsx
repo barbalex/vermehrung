@@ -1,6 +1,9 @@
-import { lazy } from 'react'
+import { lazy, type ReactNode } from 'react'
 import { useAtomValue } from 'jotai'
 import { isId } from '../../utils/isId.ts'
+import { ObjectList } from './ObjectList.tsx'
+import { breadcrumbsEnabled } from '../../utils/breadcrumbsEnabled.ts'
+import { activeFormAtom, activeNodeArrayAtom, activeObjectNameAtom } from '../../store/index.ts'
 
 const Art = lazy(async () => ({
   default: (await import('./Art/index.tsx')).Art,
@@ -80,7 +83,26 @@ const Root = lazy(async () => ({
 const FourOhFour = lazy(async () => ({
   default: (await import('../../routes/404.tsx')).FourOhFour,
 }))
-import { activeFormAtom, activeNodeArrayAtom } from '../../store/index.ts'
+
+// with breadcrumbs enabled, an object url first renders the object's list
+// (the object itself + its child tables, replacing the removed form header
+// down-navigation). the object's form renders when its name is in the url
+// (.../{id}/{Name}). objects without child tables render their form directly
+const WithObjectList = ({
+  table,
+  id,
+  children,
+}: {
+  table: string
+  id?: string
+  children: ReactNode
+}) => {
+  const objectName = useAtomValue(activeObjectNameAtom)
+  if (breadcrumbsEnabled && !objectName) {
+    return <ObjectList table={table} id={id} />
+  }
+  return children
+}
 
 export const Data = () => {
   const activeForm = useAtomValue(activeFormAtom)
@@ -92,7 +114,11 @@ export const Data = () => {
     case 'root':
       return <Root />
     case 'art':
-      return <Art id={id} />
+      return (
+        <WithObjectList table="art" id={id}>
+          <Art id={id} />
+        </WithObjectList>
+      )
     case 'arten':
       return <Arten />
     case 'bedarf':
@@ -104,19 +130,35 @@ export const Data = () => {
     case 'events':
       return <Events />
     case 'garten':
-      return <Garten id={id} />
+      return (
+        <WithObjectList table="garten" id={id}>
+          <Garten id={id} />
+        </WithObjectList>
+      )
     case 'gaerten':
       return <Gaerten />
     case 'herkunft':
-      return <Herkunft id={id} />
+      return (
+        <WithObjectList table="herkunft" id={id}>
+          <Herkunft id={id} />
+        </WithObjectList>
+      )
     case 'herkuenfte':
       return <Herkuenfte />
     case 'kultur':
-      return <Kultur id={id} />
+      return (
+        <WithObjectList table="kultur" id={id}>
+          <Kultur id={id} />
+        </WithObjectList>
+      )
     case 'kulturen':
       return <Kulturen />
     case 'sammel_lieferung':
-      return <SammelLieferung id={id} />
+      return (
+        <WithObjectList table="sammel_lieferung" id={id}>
+          <SammelLieferung id={id} />
+        </WithObjectList>
+      )
     case 'sammelLieferungen':
       return <SammelLieferungen />
     case 'lieferung':
@@ -124,11 +166,19 @@ export const Data = () => {
     case 'lieferungen':
       return <Lieferungen />
     case 'person':
-      return <Person id={id} />
+      return (
+        <WithObjectList table="person" id={id}>
+          <Person id={id} />
+        </WithObjectList>
+      )
     case 'personen':
       return <Personen />
     case 'sammlung':
-      return <Sammlung id={id} />
+      return (
+        <WithObjectList table="sammlung" id={id}>
+          <Sammlung id={id} />
+        </WithObjectList>
+      )
     case 'sammlungen':
       return <Sammlungen />
     case 'teilkultur':

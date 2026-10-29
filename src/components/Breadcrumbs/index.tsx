@@ -4,7 +4,8 @@ import MuiBreadcrumbs from '@mui/material/Breadcrumbs'
 import Link from '@mui/material/Link'
 import { Link as RouterLink } from 'react-router'
 
-import { activeNodeArrayAtom } from '../../store/index.ts'
+import { activeNodeArrayAtom, activeObjectNameAtom } from '../../store/index.ts'
+import { labelOfSingular } from '../../utils/singularOfFolder.ts'
 import { RowCrumb } from './RowCrumb.tsx'
 
 import styles from './index.module.css'
@@ -38,13 +39,30 @@ interface Crumb {
 // src/utils/breadcrumbsEnabled.ts
 export const Breadcrumbs = () => {
   const activeNodeArray = useAtomValue(activeNodeArrayAtom)
+  const objectName = useAtomValue(activeObjectNameAtom)
   const scrollRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    // keep the current node visible when the trail overflows
     const element = scrollRef.current
-    element?.scrollTo({ left: element.scrollWidth })
-  }, [activeNodeArray])
+    if (!element) return
+    // always show the trail's end (the current node): scroll right on
+    // every trail change (navigation, labels resolving asynchronously)
+    // and on strip resizes
+    const scrollToRight = () => element.scrollTo({ left: element.scrollWidth })
+    scrollToRight()
+    const resizeObserver = new ResizeObserver(scrollToRight)
+    resizeObserver.observe(element)
+    const mutationObserver = new MutationObserver(scrollToRight)
+    mutationObserver.observe(element, {
+      childList: true,
+      subtree: true,
+      characterData: true,
+    })
+    return () => {
+      resizeObserver.disconnect()
+      mutationObserver.disconnect()
+    }
+  }, [])
 
   const crumbs: Crumb[] = [{ key: 'root', label: 'Vermehrung', url: [] }]
   for (let i = 0; i < activeNodeArray.length; i += 2) {
@@ -69,6 +87,15 @@ export const Breadcrumbs = () => {
         url: activeNodeArray.slice(0, i + 2),
       })
     }
+  }
+  // an open object form adds its name as the last crumb
+  // (the object's own crumb then links to its list)
+  if (objectName) {
+    crumbs.push({
+      key: 'object',
+      label: labelOfSingular[objectName] ?? objectName,
+      url: [],
+    })
   }
 
   return (

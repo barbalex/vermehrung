@@ -12,6 +12,16 @@ import {
   setFilterShow,
 } from '../../store/index.ts'
 import { isNodeOpen } from './isNodeOpen.ts'
+import { breadcrumbsEnabled } from '../../utils/breadcrumbsEnabled.ts'
+import { singularOfFolder } from '../../utils/singularOfFolder.ts'
+
+// with breadcrumbs enabled, activating an object node opens its form
+// directly (the url gets the object name suffix)
+const urlToActivate = (node: TreeNode) => {
+  if (!breadcrumbsEnabled || node.nodeType !== 'table') return [...node.url]
+  const objectName = singularOfFolder[node.url.at(-2) as string]
+  return objectName ? [...node.url, objectName] : [...node.url]
+}
 
 export const toggleNode = ({
   node,
@@ -34,7 +44,7 @@ export const toggleNode = ({
     // node is closed
     // open it and make it the active node
     addOpenNode(node.url)
-    const newActiveNodeArray = [...node.url]
+    const newActiveNodeArray = urlToActivate(node)
     setActiveNodeArray(newActiveNodeArray)
     setLastActiveNodeArray(node.url)
   } else if (node.id === activeNode?.id) {
@@ -49,7 +59,7 @@ export const toggleNode = ({
     // the node is open
     // but not the active node
     // make it the new active node
-    const newActiveNodeArray = [...node.url]
+    const newActiveNodeArray = urlToActivate(node)
     setActiveNodeArray(newActiveNodeArray)
     setLastActiveNodeArray(node.url)
   }

@@ -198,6 +198,16 @@ test('breadcrumbs strip replaces the form header nav buttons', async ({
     // the trail first renders the persisted path, then corrects to the url
     await expect(trail.locator('a')).toHaveCount(0, { timeout: 60_000 })
     await expect(trail.getByText('Vermehrung')).toBeVisible()
+    // a short trail hugs the strip's right edge
+    const rightAligned = await page.evaluate(() => {
+      const trail = document.querySelector('nav[aria-label="Pfad"]')
+      const strip = trail?.parentElement
+      if (!(trail instanceof HTMLElement) || !(strip instanceof HTMLElement)) {
+        return null
+      }
+      return strip.getBoundingClientRect().right - trail.getBoundingClientRect().right
+    })
+    expect(rightAligned).toBeLessThanOrEqual(12)
   })
 
   await test.step('list: the folder is the last crumb', async () => {
@@ -241,6 +251,30 @@ test('breadcrumbs strip replaces the form header nav buttons', async ({
     await expect(page).toHaveURL(/\/Vermehrung\/Arten$/)
     await trail.getByRole('link', { name: 'Vermehrung' }).click()
     await expect(page).toHaveURL(/\/Vermehrung\/?$/)
+  })
+
+  await test.step('narrow: the trail is scrolled to the current node', async () => {
+    await page.setViewportSize({ width: 500, height: 800 })
+    await page.goto(
+      `/Vermehrung/Arten/${ART_ID}/Kulturen/${KULTUR_ID}/Zaehlungen/${ZAEHLUNG_ID}`,
+    )
+    // wait for the row labels to resolve - they widen the trail
+    await expect(trail.getByText(/2023\.06\.12/, { exact: false })).toBeVisible(
+      { timeout: 60_000 },
+    )
+    const scrollState = await page.evaluate(() => {
+      const trail = document.querySelector('nav[aria-label="Pfad"]')
+      const el = trail?.parentElement
+      if (!(el instanceof HTMLElement)) return null
+      return {
+        overflows: el.scrollWidth > el.clientWidth,
+        scrolledToEnd: el.scrollLeft >= el.scrollWidth - el.clientWidth - 1,
+      }
+    })
+    // the deep trail must overflow the narrow strip...
+    expect(scrollState?.overflows).toBe(true)
+    // ...and be scrolled to its right end
+    expect(scrollState?.scrolledToEnd).toBe(true)
   })
 
   await expect(page.locator('#dev-error-overlay')).toHaveCount(0)
