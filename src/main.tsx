@@ -2,6 +2,15 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { registerSW } from 'virtual:pwa-register'
 import { Provider } from 'jotai'
+import { config as rxjsConfig } from 'rxjs'
+
+// subscribers without an error handler (e.g. bare .subscribe(next)) make
+// rxjs rethrow observable errors as uncaught exceptions - e.g. when
+// findAndObserve hits a record missing locally (fresh browser before the
+// initial sync, remotely deleted row). log instead: the subscription
+// ends, components recover when their observable dependencies change
+rxjsConfig.onUnhandledError = (error) => console.error(error)
+
 
 import { registerLocale, setDefaultLocale } from 'react-datepicker'
 import { de } from 'date-fns/locale'
