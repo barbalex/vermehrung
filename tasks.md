@@ -1,12 +1,18 @@
 typescript migration (started 2026-10-28): all src files are now .ts/.tsx.
 
-state 2026-10-28 final: tsc 953, remaining is the Data long tail
-(~120 files, biggest: Kultur Timeline index 22, SammelLieferung Form
-index 13, Kultur FormTitle cluster ~35, rest <12 each). Everything
-else at zero incl. Header, Tree, shared, QK, all Forms, tests, utils,
-modules, store, dbModel. type-coverage ~95.5%.
-Fixers in tools/: nullsafe.py jsxfix.py formfix.py - run all, they
-are position-driven from tsc output.
+state 2026-10-29: tsc 683 (from 6746). ALL of Data's entity stacks are
+typed except scattered long tail (~130 files, <12 errors each; biggest:
+SammelLieferung Form 13, Kultur FormTitle buildExceljsWorksheets 13,
+Kultur FormTitle FormTitle 12, Sammlung Form 11, Lieferschein 11).
+Working recipe per file: type dataState useState with entity model
+types, cast combinedObservables to Observable<[ModelA[], ModelB[]]>,
+db?.get<Entity>('table'), Record casts for dynamic-column props
+(tk_/ga_/hk_/ev_/tz_/ku_ prefixes), handler casts to
+MouseEventHandler<HTMLElement>, errors-atom reads cast to string.
+Fixers: tools/nullsafe.py tools/jsxfix.py tools/formfix.py (position
+driven, run to fixpoint after each batch). Entity History/Row twins
+and Settings menus all follow identical patterns - check a done
+sibling before typing the next one.
 Phase E after Data: noUnusedLocals/noUnusedParameters, drop
 allowJs/checkJs, wire lint+typecheck+test into npm run deploy, update
 CLAUDE.md.(0 problems, --max-warnings 0)
