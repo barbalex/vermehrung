@@ -18,6 +18,9 @@ const ARTNAME = 'E2E-Sumpf-Distel'
 const ROLE_ID = '0174bb08-6d26-7332-8a52-7a5cef62f310'
 const KULTUR_ID = '0174bb08-6d26-7333-8a52-7a5cef62f310'
 const ZAEHLUNG_ID = '0174bb08-6d26-7334-8a52-7a5cef62f310'
+const GARTEN_ID = '0174bb08-6d26-7335-8a52-7a5cef62f310'
+const KULTUR2_ID = '0174bb08-6d26-7336-8a52-7a5cef62f310'
+const ZAEHLUNG2_ID = '0174bb08-6d26-7337-8a52-7a5cef62f310'
 
 const b64 = (payload: object) =>
   Buffer.from(JSON.stringify(payload)).toString('base64url')
@@ -70,10 +73,37 @@ const fullSync = () => ({
       _conflicts: null,
       _revisions: null,
     },
+    {
+      id: KULTUR2_ID,
+      art_id: null,
+      garten_id: GARTEN_ID,
+      herkunft_id: null,
+      zwischenlager: false,
+      _deleted: false,
+      _conflicts: null,
+      _revisions: null,
+    },
+  ],
+  garten: [
+    {
+      id: GARTEN_ID,
+      name: 'E2e-Garten',
+      person_id: PERSON_ID,
+      _deleted: false,
+      _conflicts: null,
+      _revisions: null,
+    },
   ],
   kultur_option: [
     {
       id: KULTUR_ID,
+      tk: false,
+      _deleted: false,
+      _conflicts: null,
+      _revisions: null,
+    },
+    {
+      id: KULTUR2_ID,
       tk: false,
       _deleted: false,
       _conflicts: null,
@@ -85,6 +115,15 @@ const fullSync = () => ({
       id: ZAEHLUNG_ID,
       kultur_id: KULTUR_ID,
       datum: '2023-06-12',
+      prognose: false,
+      _deleted: false,
+      _conflicts: null,
+      _revisions: null,
+    },
+    {
+      id: ZAEHLUNG2_ID,
+      kultur_id: KULTUR2_ID,
+      datum: '2024-03-02',
       prognose: false,
       _deleted: false,
       _conflicts: null,
@@ -258,6 +297,22 @@ test('object urls render apf2-style object lists', async ({ page }) => {
       page.getByText('Zählung', { exact: true }).first(),
     ).toBeVisible({ timeout: 60_000 })
     await expect(page.getByTitle('Zählungen')).toHaveCount(0)
+  })
+
+  await test.step('deep trail renders fully, no collapse element', async () => {
+    await page.goto(
+      `/Vermehrung/Personen/${PERSON_ID}/Gaerten/${GARTEN_ID}/Kulturen/${KULTUR2_ID}/Zaehlungen/${ZAEHLUNG2_ID}`,
+    )
+    // 9 crumbs: 8 links + the current node - more than mui's default
+    // maxItems of 8, so this pins that no '...' collapse appears
+    await expect(trail.getByRole('link', { name: 'Zählungen' })).toBeVisible({
+      timeout: 60_000,
+    })
+    await expect(trail.getByText(/2024\.03\.02/, { exact: false })).toBeVisible(
+      { timeout: 60_000 },
+    )
+    await expect(trail.locator('a')).toHaveCount(8)
+    await expect(trail.getByLabel('Show path')).toHaveCount(0)
   })
 
   await test.step('tree click opens the form directly', async () => {

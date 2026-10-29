@@ -100,7 +100,14 @@ export const Breadcrumbs = () => {
 
   return (
     <div className={styles.container} ref={scrollRef}>
-      <MuiBreadcrumbs separator="›" className={styles.trail} aria-label="Pfad">
+      <MuiBreadcrumbs
+        separator="›"
+        className={styles.trail}
+        aria-label="Pfad"
+        // never collapse into the '...' element: the strip scrolls
+        // horizontally and is pinned to the current node
+        maxItems={100}
+      >
         {crumbs.map((crumb, index) =>
           index === crumbs.length - 1 ? (
             <span key={crumb.key} className={styles.current}>
