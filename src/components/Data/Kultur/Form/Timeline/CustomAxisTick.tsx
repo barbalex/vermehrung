@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 
-export const KulturCustomAxisTick = ({ x, y, payload }) => (
+export const KulturCustomAxisTick = ({ x, y, payload }: { x?: number; y?: number; payload?: Record<string, unknown> }) => (
   <g transform={`translate(${x},${y})`}>
     <text
       x={0}
@@ -11,7 +11,7 @@ export const KulturCustomAxisTick = ({ x, y, payload }) => (
       transform="rotate(-35)"
       style={{ fontSize: 12 }}
     >
-      {DateTime.fromMillis(payload.value).toFormat('yyyy.LL.dd')}
+      {DateTime.fromMillis(Number((payload ?? { value: 0 }).value)).toFormat('yyyy.LL.dd')}
     </text>
   </g>
 )

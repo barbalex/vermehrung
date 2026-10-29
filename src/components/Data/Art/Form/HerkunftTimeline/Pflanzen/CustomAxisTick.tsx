@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 
-export const CustomAxisTick = ({ x, y, payload }) => (
+export const CustomAxisTick = ({ x, y, payload }: { x?: number; y?: number; payload?: Record<string, unknown> }) => (
   <g transform={`translate(${x},${y})`}>
     <text
       x={0}

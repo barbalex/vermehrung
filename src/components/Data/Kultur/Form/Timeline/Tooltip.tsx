@@ -9,16 +9,16 @@ export const KulturTooltip = ({
   label,
   active,
 }: {
-  payload: Record<string, unknown>
-  label: string
-  active: boolean
+  payload?: { payload: Record<string, unknown>; dataKey?: string }[]
+  label?: string
+  active?: boolean
 }) => {
   // filter out zählung information if ereignis is not zählung
   const payload = [
-    ...payloadPassed.filter((p: import('../../../../../dbModel.ts').Person) => {
+    ...payloadPassed.filter((p) => {
       if (
-        p.payload.ereignis !== 'Zählung' &&
-        p.dataKey.includes('Zählung Pflanzen')
+        (p.payload?.ereignis ?? '') !== 'Zählung' &&
+        (p.dataKey ?? '').includes('Zählung Pflanzen')
       ) {
         return false
       }
@@ -28,17 +28,17 @@ export const KulturTooltip = ({
 
   if (active && label && payloadPassed) {
     const ereignis = payload?.[0]?.payload?.ereignis ?? ''
-    const title = DateTime.fromMillis(label).toFormat('yyyy.LL.dd')
+    const title = DateTime.fromMillis(Number(label)).toFormat('yyyy.LL.dd')
 
     return (
       <div className={styles.popup}>
         <div className={styles.pTitle}>
           {title}
-          <div className={styles.ereignisClass}>{ereignis}</div>
+          <div className={styles.ereignisClass}>{String(ereignis)}</div>
         </div>
         {payload?.map((o, i) => {
           // do not repeat Zählung/Lieferung all over the place
-          const label = o.dataKey
+          const label = (o.dataKey ?? '')
             .replace('Zählung ', '')
             .replace('Lieferung ', '')
           // if this payload is last non summable values
@@ -48,7 +48,9 @@ export const KulturTooltip = ({
                 <div
                   className={styles.pRow}
                   key={o.dataKey}
-                >{`${label}: ${o.value}`}</div>
+                >{`${label}: ${
+                  (o as unknown as { value?: unknown }).value ?? ''
+                }`}</div>
                 {exists(o.payload['Lieferung Gramm Samen']) && (
                   <div
                     className={styles.pRow}
@@ -114,7 +116,9 @@ export const KulturTooltip = ({
             <div
               className={styles.pRow}
               key={o.dataKey}
-            >{`${label}: ${o.value}`}</div>
+            >{`${label}: ${
+              (o as unknown as { value?: unknown }).value ?? ''
+            }`}</div>
           )
         })}
       </div>

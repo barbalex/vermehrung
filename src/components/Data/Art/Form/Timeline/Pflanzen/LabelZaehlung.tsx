@@ -5,11 +5,11 @@ export const LabelZaehlung = ({ x, y, stroke, value }) => {
   return (
     <Text
       x={x}
-      y={y}
+      y={y ?? 0}
       dy={-20}
       dx={3}
       angle={-90}
-      fill={stroke}
+      fill={stroke ?? ''}
       fontSize={10}
       fontWeight={700}
       textAnchor="middle"

@@ -31,15 +31,15 @@ import styles from './index.module.css'
 export const KulturTimeline = ({
   row,
 }: {
-  row: import('../../../../shared/types.ts').WmRow | null | undefined
+  row: import('../../../../../dbModel.ts').Kultur | null | undefined
 }) => {
   const { width, ref } = useResizeDetector()
   // TODO: calc runs on every render of kultur
   // need to only run when open
-  const [allData, setAllData] = useState([])
+  const [allData, setAllData] = useState<Record<string, unknown>[]>([])
   useEffect(() => {
     let isActive = true
-    buildData({ row }).then((data) => {
+    if (row) buildData({ row }).then((data) => {
       if (!isActive) return
 
       setAllData(data)
@@ -58,7 +58,7 @@ export const KulturTimeline = ({
     window.open(url)
   }
 
-  const isNarrow = width < 1100
+  const isNarrow = (width ?? 0) < 1100
 
   const [open, setOpen] = useState(false)
   const anim = useAnimation()
@@ -69,7 +69,7 @@ export const KulturTimeline = ({
     stopPropagation?: () => void
     key?: string
   }) => {
-    e.stopPropagation()
+    e.stopPropagation?.()
     if (open) {
       const was = open
       await anim.start({ opacity: 0 })
@@ -84,7 +84,7 @@ export const KulturTimeline = ({
     }
   }
 
-  const showCategory = (category) =>
+  const showCategory = (category: string) =>
     !!allData.map((d) => d[category]).filter((d) => exists(d)).length
 
   // need to disable animation or labels will not show on first render
@@ -121,7 +121,9 @@ export const KulturTimeline = ({
               <IconButton
                 aria-label={open ? 'schliessen' : 'öffnen'}
                 title={open ? 'schliessen' : 'öffnen'}
-                onClick={onClickToggle}
+                onClick={
+                  onClickToggle as unknown as import('react').MouseEventHandler<HTMLButtonElement>
+                }
                 size="large"
               >
                 {open ? <FaChevronUp /> : <FaChevronDown />}
@@ -139,7 +141,16 @@ export const KulturTimeline = ({
                   margin={{ top: 15, right: 0, left: 0, bottom: 45 }}
                 >
                   <CartesianGrid strokeDasharray="3 3" horizontal={false} />
-                  <XAxis dataKey="datum" tick={AxisTick} interval={0} />
+                  <XAxis
+                    dataKey="datum"
+                    tick={
+                    AxisTick as unknown as {
+                      value: unknown
+                      fill: string
+                    }
+                  }
+                    interval={0}
+                  />
                   <YAxis
                     label={{
                       value: 'Anzahl',

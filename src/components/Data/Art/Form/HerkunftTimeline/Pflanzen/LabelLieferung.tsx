@@ -5,10 +5,10 @@ export const LabelLieferung = ({ x, y, stroke, value }) => {
   return (
     <Text
       x={x}
-      y={y}
-      dy={value > 0 ? -3 : 12}
+      y={y ?? 0}
+      dy={(value ?? 0) > 0 ? -3 : 12}
       dx={5}
-      fill={stroke}
+      fill={stroke ?? ''}
       fontSize={10}
       fontWeight={700}
       textAnchor="middle"
