@@ -1,6 +1,6 @@
 import { sum } from 'es-toolkit'
 import { store, dbAtom } from '../../../../store/index.ts'
-import { Q } from '@nozbe/watermelondb'
+import { Q } from 'nitromelondb'
 import { first as first$ } from 'rxjs/operators'
 
 import { addWorksheetToExceljsWorkbook } from '../../../../utils/addWorksheetToExceljsWorkbook.ts'

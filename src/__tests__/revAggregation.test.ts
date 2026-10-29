@@ -47,7 +47,7 @@ beforeEach(() => {
     dbAtom,
     {
       get: () => ({ find: () => ({ fetch: async () => undefined }) }),
-    } as unknown as import('@nozbe/watermelondb').Database,
+    } as unknown as import('nitromelondb').Database,
   )
   storageMap.clear()
   __resetRevAggregationForTests()
@@ -79,7 +79,7 @@ describe('revAggregation', () => {
     }
     store.set(
       dbAtom,
-      buildDbForRow(row) as unknown as import('@nozbe/watermelondb').Database,
+      buildDbForRow(row) as unknown as import('nitromelondb').Database,
     )
 
     await (
@@ -129,7 +129,7 @@ describe('revAggregation', () => {
     }
     store.set(
       dbAtom,
-      buildDbForRow(row) as unknown as import('@nozbe/watermelondb').Database,
+      buildDbForRow(row) as unknown as import('nitromelondb').Database,
     )
     await (
       Herkunft.prototype.edit as unknown as (
@@ -169,7 +169,7 @@ describe('revAggregation', () => {
     }
     store.set(
       dbAtom,
-      buildDbForRow(row) as unknown as import('@nozbe/watermelondb').Database,
+      buildDbForRow(row) as unknown as import('nitromelondb').Database,
     )
 
     initRevAggregation()
@@ -211,7 +211,7 @@ describe('revAggregation', () => {
     }
     store.set(
       dbAtom,
-      db as unknown as import('@nozbe/watermelondb').Database,
+      db as unknown as import('nitromelondb').Database,
     )
     for (const row of rows) {
       await (
@@ -243,7 +243,7 @@ describe('revAggregation', () => {
         get: () => ({
           find: () => Promise.reject(new Error('not found')),
         }),
-      } as unknown as import('@nozbe/watermelondb').Database,
+      } as unknown as import('nitromelondb').Database,
     )
     await flushRow('herkunft', 'gone-1')
     expect(store.get(queuedQueriesAtom)).toHaveLength(0)

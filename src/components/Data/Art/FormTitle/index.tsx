@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useAtomValue } from 'jotai'
 import { combineLatest } from 'rxjs'
-import { Q } from '@nozbe/watermelondb'
+import { Q } from 'nitromelondb'
 
 import { dbAtom, filterArtAtom } from '../../../../store/index.ts'
 import { FilterTitle } from '../../../shared/FilterTitle.tsx'

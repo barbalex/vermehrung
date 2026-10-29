@@ -1,4 +1,4 @@
-import { tableSchema } from '@nozbe/watermelondb'
+import { tableSchema } from 'nitromelondb'
 
 export const apflora_ap = tableSchema({
   name: 'apflora_ap',

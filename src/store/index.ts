@@ -3,7 +3,7 @@ import { atomWithStorage } from 'jotai/utils'
 import { sortBy, isEqual } from 'es-toolkit'
 import localForage from 'localforage'
 import { v7 as uuidv7 } from 'uuid'
-import type { Database, Model } from '@nozbe/watermelondb'
+import type { Database, Model } from 'nitromelondb'
 import type { Auth } from 'firebase/auth'
 
 import { initialFilterValues } from './Filter/initialValues.ts'
@@ -716,6 +716,17 @@ export const updateModelValues = async ({
 // === derived from activeNodeArray ===
 export const activeFormAtom = atom((get) =>
   activeFormFromActiveNodeArray(get(activeNodeArrayAtom)),
+)
+// the nav tree pane is hidden: in single-column view whenever a form or the
+// filter takes the full width (unless the tree is pinned) and while printing.
+// Single source of truth for everything drawn next to the tree pane: the
+// allotment separator and the breadcrumbs' bottom border
+export const treePaneHiddenAtom = atom(
+  (get) =>
+    get(isPrintAtom) ||
+    (get(singleColumnViewAtom) &&
+      ((!get(showTreeInSingleColumnViewAtom) && get(activeFormAtom)) ||
+        get(filterShowAtom))),
 )
 export const artIdInActiveNodeArrayAtom = atom((get) =>
   artIdInUrl(get(activeNodeArrayAtom)),

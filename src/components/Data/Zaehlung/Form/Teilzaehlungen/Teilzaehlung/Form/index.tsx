@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useAtomValue } from 'jotai'
 import IconButton from '@mui/material/IconButton'
 import { FaRegTrashAlt } from 'react-icons/fa'
-import { Q } from '@nozbe/watermelondb'
+import { Q } from 'nitromelondb'
 import { combineLatest, of as $of } from 'rxjs'
 import { uniqBy } from 'es-toolkit'
 

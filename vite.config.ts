@@ -97,7 +97,7 @@ export default defineConfig({
     // Vite 8 changed CJS interop: with "type":"module" in package.json,
     // default imports from CJS modules now return module.exports directly,
     // ignoring __esModule:true. Restore the old behavior until dependencies
-    // (e.g. @nozbe/watermelondb/adapters/lokijs) are updated.
+    // (e.g. nitromelondb/adapters/lokijs) are updated.
     //
     // output from claude:
     //     The module exports { __esModule: true, default: [Function] }. With Vite 8's new Rolldown CJS interop, because the project has "type": "module" in package.json, the default import now returns the whole module.exports object instead of module.exports.default — so LokiJSAdapter is the object, not the class.
@@ -108,7 +108,7 @@ export default defineConfig({
     // vite.config.ts+7-0
     // This is a deprecated option that will be removed in a future Vite version. The proper long-term fix would be to either:
 
-    // Wait for @nozbe/watermelondb to publish proper ESM exports
+    // Wait for nitromelondb to publish proper ESM exports
     // Or change the import to import _mod from '...'; const LokiJSAdapter = _mod.default ?? _mod
     // But inconsistentCjsInterop: true covers any other CJS packages in your dependencies that may have the same issue
     inconsistentCjsInterop: true,
@@ -128,7 +128,7 @@ export default defineConfig({
             id.includes('node_modules/mst-persist')
           )
             return 'vendor-mobx'
-          if (id.includes('node_modules/@nozbe/watermelondb'))
+          if (id.includes('node_modules/nitromelondb'))
             return 'vendor-watermelondb'
           if (
             id.includes('node_modules/urql') ||

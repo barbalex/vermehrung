@@ -7,7 +7,7 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import { combineLatest, of as $of } from 'rxjs'
-import { Q } from '@nozbe/watermelondb'
+import { Q } from 'nitromelondb'
 
 import { dbAtom, userAtom } from '../../../../../../store/index.ts'
 import { constants } from '../../../../../../utils/constants.ts'

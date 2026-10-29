@@ -8,7 +8,7 @@ import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import Paper from '@mui/material/Paper'
 import { combineLatest, of as $of } from 'rxjs'
-import { Q } from '@nozbe/watermelondb'
+import { Q } from 'nitromelondb'
 
 import { dbAtom } from '../../../../store/index.ts'
 import { LieferungForLieferschein as Lieferung } from './Lieferung.tsx'

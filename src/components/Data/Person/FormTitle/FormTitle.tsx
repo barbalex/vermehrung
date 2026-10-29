@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useAtomValue } from 'jotai'
 import { useResizeDetector } from 'react-resize-detector'
-import { Q } from '@nozbe/watermelondb'
+import { Q } from 'nitromelondb'
 
 import { dbAtom, userAtom } from '../../../../store/index.ts'
 import { PersonAddButton as AddButton } from './AddButton.tsx'

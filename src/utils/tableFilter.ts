@@ -1,4 +1,4 @@
-import { Q } from '@nozbe/watermelondb'
+import { Q } from 'nitromelondb'
 import { camelCase } from 'es-toolkit'
 
 import {

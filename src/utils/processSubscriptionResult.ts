@@ -1,5 +1,5 @@
-import { Q } from '@nozbe/watermelondb'
-import type { Model } from '@nozbe/watermelondb'
+import { Q } from 'nitromelondb'
+import type { Model } from 'nitromelondb'
 import { isEqual } from 'es-toolkit'
 
 import {

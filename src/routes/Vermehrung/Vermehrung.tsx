@@ -3,12 +3,10 @@ import { Allotment } from 'allotment'
 import { useAtomValue } from 'jotai'
 
 import {
-  activeFormAtom,
-  isPrintAtom,
   singleColumnViewAtom,
-  showTreeInSingleColumnViewAtom,
   widthInPercentOfScreenAtom,
   filterShowAtom,
+  treePaneHiddenAtom,
 } from '../../store/index.ts'
 import { Tree } from '../../components/Tree/index.tsx'
 import { Data } from '../../components/Data/index.tsx'
@@ -20,32 +18,23 @@ import { breadcrumbsEnabled } from '../../utils/breadcrumbsEnabled.ts'
 import styles from './Vermehrung.module.css'
 
 export const Vermehrung = () => {
-  const activeForm = useAtomValue(activeFormAtom)
-  const isPrint = useAtomValue(isPrintAtom)
   const singleColumnView = useAtomValue(singleColumnViewAtom)
-  const showTreeInSingleColumnView = useAtomValue(
-    showTreeInSingleColumnViewAtom,
-  )
   const widthInPercentOfScreen = useAtomValue(widthInPercentOfScreenAtom)
   const showFilter = useAtomValue(filterShowAtom)
+  const treePaneHidden = useAtomValue(treePaneHiddenAtom)
 
-  let treeWidth = singleColumnView
-    ? (!showTreeInSingleColumnView && activeForm) || showFilter
-      ? 0
-      : // if no form is active, show only tree
+  const treeWidth = treePaneHidden
+    ? 0
+    : singleColumnView
+      ? // if no form is active, show only tree
         '100%'
-    : `${widthInPercentOfScreen}%`
+      : `${widthInPercentOfScreen}%`
 
   const formWidth = singleColumnView
-    ? (!showTreeInSingleColumnView && activeForm) || showFilter
+    ? treePaneHidden
       ? '100%'
       : 0
     : `${100 - widthInPercentOfScreen}%`
-  // ensure tree is invisible when printing but still exists
-  // (caused errors to render form without tree while printing)
-  if (isPrint) {
-    treeWidth = 0
-  }
   const minSizeTree = Number(treeWidth) < 30 ? Number(treeWidth) : 30
   const minSizeForm = Number(formWidth) < 30 ? Number(formWidth) : 30
 

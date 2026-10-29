@@ -1,6 +1,6 @@
 import { format } from 'date-fns/format'
 import { first as first$ } from 'rxjs/operators'
-import { Q } from '@nozbe/watermelondb'
+import { Q } from 'nitromelondb'
 
 import { exists } from '../../../../../../utils/exists.ts'
 import { notDeletedQuery } from '../../../../../../utils/notDeletedQuery.ts'
@@ -16,7 +16,7 @@ export const createKulturMessageFunctions = async ({
   db,
 }: {
   kulturId: string
-  db: import('@nozbe/watermelondb').Database | null
+  db: import('nitromelondb').Database | null
 }) => {
   // snapshot of all table filters at call time
   const filter = Object.fromEntries(

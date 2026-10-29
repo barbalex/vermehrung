@@ -3,7 +3,7 @@ import { useAtomValue } from 'jotai'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import { motion, useAnimation } from 'framer-motion'
-import { Q } from '@nozbe/watermelondb'
+import { Q } from 'nitromelondb'
 import { combineLatest, of as $of } from 'rxjs'
 
 import { dbAtom, filterPersonAtom } from '../../../../../store/index.ts'

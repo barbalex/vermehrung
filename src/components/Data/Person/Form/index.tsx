@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useAtomValue } from 'jotai'
 import { combineLatest, of as $of } from 'rxjs'
-import { Q } from '@nozbe/watermelondb'
+import { Q } from 'nitromelondb'
 
 import {
   dbAtom,

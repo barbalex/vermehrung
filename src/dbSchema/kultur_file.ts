@@ -1,4 +1,4 @@
-import { tableSchema } from '@nozbe/watermelondb'
+import { tableSchema } from 'nitromelondb'
 
 export const kultur_file = tableSchema({
   name: 'kultur_file',

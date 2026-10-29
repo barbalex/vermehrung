@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from 'vitest'
-import type { Database } from '@nozbe/watermelondb'
+import type { Database } from 'nitromelondb'
 
 import {
   store,

@@ -1,6 +1,6 @@
-import { Q } from '@nozbe/watermelondb'
+import { Q } from 'nitromelondb'
 
-import type { Database, Model } from '@nozbe/watermelondb'
+import type { Database, Model } from 'nitromelondb'
 
 export const removeOrtsangaben = async ({ db }: { db: Database }) => {
   // need to remove some data for gaertner in case they had synced them earlier

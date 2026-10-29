@@ -4,7 +4,11 @@ import MuiBreadcrumbs from '@mui/material/Breadcrumbs'
 import Link from '@mui/material/Link'
 import { Link as RouterLink } from 'react-router'
 
-import { activeNodeArrayAtom, activeObjectNameAtom } from '../../store/index.ts'
+import {
+  activeNodeArrayAtom,
+  activeObjectNameAtom,
+  treePaneHiddenAtom,
+} from '../../store/index.ts'
 import { labelOfSingular } from '../../utils/singularOfFolder.ts'
 import { RowCrumb } from './RowCrumb.tsx'
 
@@ -40,6 +44,7 @@ interface Crumb {
 export const Breadcrumbs = () => {
   const activeNodeArray = useAtomValue(activeNodeArrayAtom)
   const objectName = useAtomValue(activeObjectNameAtom)
+  const treePaneHidden = useAtomValue(treePaneHiddenAtom)
   const scrollRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -99,7 +104,14 @@ export const Breadcrumbs = () => {
   }
 
   return (
-    <div className={styles.container} ref={scrollRef}>
+    <div
+      className={
+        treePaneHidden
+          ? `${styles.container} ${styles.containerWithoutSeparator}`
+          : styles.container
+      }
+      ref={scrollRef}
+    >
       <MuiBreadcrumbs
         separator={<span className={styles.divider} />}
         className={styles.trail}

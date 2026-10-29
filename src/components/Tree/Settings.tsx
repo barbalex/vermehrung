@@ -8,7 +8,7 @@ import Checkbox from '@mui/material/Checkbox'
 import { FaCog } from 'react-icons/fa'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import { of as $of } from 'rxjs'
-import { Q } from '@nozbe/watermelondb'
+import { Q } from 'nitromelondb'
 
 import { userAtom, dbAtom } from '../../store/index.ts'
 import { constants } from '../../utils/constants.ts'

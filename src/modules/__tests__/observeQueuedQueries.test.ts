@@ -52,7 +52,7 @@ describe('observeQueuedQueries', () => {
     store.set(shortTermOnlineAtom, true)
     store.set(
       dbAtom,
-      dbMock as unknown as import('@nozbe/watermelondb').Database,
+      dbMock as unknown as import('nitromelondb').Database,
     )
 
     // executeQueuedQuery awaits apiClient.post and normalizes thrown

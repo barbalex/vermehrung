@@ -1,7 +1,7 @@
 {
   "name": "vermehrung.ch",
   "description": "breeding endangered plant species",
-  "version": "1.25.2",
+  "version": "1.25.3",
   "versionDate": "29.10.2026",
   "license": "ISC",
   "type": "module",
@@ -31,7 +31,6 @@
     "@emotion/react": "11.14.0",
     "@emotion/styled": "11.14.1",
     "@mui/material": "9.5.0",
-    "@nozbe/watermelondb": "0.28.0",
     "@uploadcare/react-uploader": "1.17.0",
     "allotment": "1.20.6",
     "blueimp-md5": "2.19.0",
@@ -50,6 +49,7 @@
     "jotai-effect": "2.4.2",
     "localforage": "1.10.0",
     "luxon": "3.7.2",
+    "nitromelondb": "0.31.1",
     "proj4": "2.22.0",
     "react": "19.3.1",
     "react-datepicker": "9.1.0",
@@ -113,5 +113,5 @@
     "none": "right now",
     "typescript": "6.0.3: stay until typescript-eslint supports TS 7.1's new API (typescript-eslint#10940); TS 7.0 lacks a programmatic API and breaks our eslint setup. tsconfig already prepared (esModuleInterop deprecation removed 9/2026)"
   },
-  "deployedVersion": "1.25.2"
+  "deployedVersion": "1.25.3"
 }

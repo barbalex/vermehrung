@@ -9,7 +9,7 @@ import { FaGlobeEurope } from 'react-icons/fa'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { combineLatest, of as $of, type Observable } from 'rxjs'
-import { Q } from '@nozbe/watermelondb'
+import { Q } from 'nitromelondb'
 
 import { ifIsNumericAsNumber } from '../../utils/ifIsNumericAsNumber.ts'
 import { epsg2056to4326 } from '../../utils/epsg2056to4326.ts'

@@ -1,5 +1,5 @@
-import { Model, type Query, type Relation } from '@nozbe/watermelondb'
-import type { Associations } from '@nozbe/watermelondb/Model'
+import { Model, type Query, type Relation } from 'nitromelondb'
+import type { Associations } from 'nitromelondb/Model'
 import {
   writer,
   children,
@@ -7,8 +7,8 @@ import {
   json,
   lazy,
   relation,
-} from '@nozbe/watermelondb/decorators'
-import { Q } from '@nozbe/watermelondb'
+} from 'nitromelondb/decorators'
+import { Q } from 'nitromelondb'
 import {
   distinctUntilChanged,
   distinctUntilKeyChanged,

@@ -4,7 +4,7 @@ import TableCell from '@mui/material/TableCell'
 import TableRow from '@mui/material/TableRow'
 import { combineLatest, of as $of } from 'rxjs'
 import { first as first$ } from 'rxjs/operators'
-import { Q } from '@nozbe/watermelondb'
+import { Q } from 'nitromelondb'
 
 import { dbAtom } from '../../../../store/index.ts'
 import { herkunftLabelFromHerkunft } from '../../../../utils/herkunftLabelFromHerkunft.ts'

@@ -5,7 +5,7 @@ import IconButton from '@mui/material/IconButton'
 import { uniq } from 'es-toolkit'
 import { motion, useAnimation } from 'framer-motion'
 import { combineLatest } from 'rxjs'
-import { Q } from '@nozbe/watermelondb'
+import { Q } from 'nitromelondb'
 
 import { Pflanzen } from './Pflanzen/index.tsx'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.tsx'

@@ -11,7 +11,7 @@ import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
 import { FaUserCircle as UserIcon, FaExclamationCircle } from 'react-icons/fa'
 import { of as $of } from 'rxjs'
-import { Q } from '@nozbe/watermelondb'
+import { Q } from 'nitromelondb'
 import { sendPasswordResetEmail } from 'firebase/auth'
 
 import {

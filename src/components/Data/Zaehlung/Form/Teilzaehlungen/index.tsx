@@ -3,7 +3,7 @@ import { useAtomValue } from 'jotai'
 import IconButton from '@mui/material/IconButton'
 import { FaPlus } from 'react-icons/fa'
 import { combineLatest, of as $of } from 'rxjs'
-import { Q } from '@nozbe/watermelondb'
+import { Q } from 'nitromelondb'
 
 import { dbAtom } from '../../../../../store/index.ts'
 import { insertTeilzaehlungRev } from '../../../../../modules/insertRev.ts'

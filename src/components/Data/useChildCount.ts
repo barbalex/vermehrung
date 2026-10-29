@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useAtomValue } from 'jotai'
-import { Q, type Query, type Model } from '@nozbe/watermelondb'
+import { Q, type Query, type Model } from 'nitromelondb'
 import { of } from 'rxjs'
 import { switchMap } from 'rxjs/operators'
 

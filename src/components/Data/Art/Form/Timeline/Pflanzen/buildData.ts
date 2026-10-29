@@ -1,11 +1,11 @@
 import { uniq, sum } from 'es-toolkit'
-import { Q } from '@nozbe/watermelondb'
+import { Q } from 'nitromelondb'
 
 export const buildData = async ({
   artId, db,
 }: {
   artId: string | undefined
-  db: import('@nozbe/watermelondb').Database | null
+  db: import('nitromelondb').Database | null
 }) => {
   let zaehlungsDone: import('../../../../../../dbModel.ts').Zaehlung[] = []
   try {

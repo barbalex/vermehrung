@@ -196,7 +196,7 @@ let dbMock: ReturnType<typeof createDbMock>
 
 beforeEach(() => {
   dbMock = createDbMock()
-  store.set(dbAtom, dbMock as unknown as import('@nozbe/watermelondb').Database)
+  store.set(dbAtom, dbMock as unknown as import('nitromelondb').Database)
   store.set(userAtom, { uid: 'test-uid', email: 'test@example.com' })
   store.set(queuedQueriesAtom, [])
   store.set(queueSizeAtom, 0)
