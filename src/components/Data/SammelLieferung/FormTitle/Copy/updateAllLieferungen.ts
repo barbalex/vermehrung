@@ -4,10 +4,13 @@ import { updateSammelLieferung } from './updateLieferung.ts'
 export const updateAllSammelLieferungen = async ({
   sammelLieferung,
   field,
+}: {
+  sammelLieferung: import('../../../../../dbModel.ts').SammelLieferung
+  field?: string
 }) => {
   // pass field to mark which field should be updated
   // even if it has value null
-  const lieferungs = sammelLieferung.lieferungs ?? []
+  const lieferungs = (sammelLieferung.lieferungs ?? []) as unknown as import('../../../../../dbModel.ts').Lieferung[]
   //console.log('updateAllLieferungen', { sammelLieferung, lieferungs })
   let error = null
   for (const lieferung of lieferungs) {

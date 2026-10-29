@@ -44,7 +44,7 @@ export const BedarfFormTitle = ({
         </IconButton>
         <AddButton />
         <DeleteButton row={row} />
-        {width < 520 ? (
+        {(width ?? 0) < 520 ? (
           <Menu white={false}>
             <HistoryButton
               table="bedarf"

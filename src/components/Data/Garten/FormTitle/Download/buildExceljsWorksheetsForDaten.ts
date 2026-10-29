@@ -15,6 +15,10 @@ export const buildExceljsWorksheetsForDaten = async ({
   garten_id,
   workbook,
   calledFromHigherUp,
+}: {
+  garten_id: string
+  workbook: import('exceljs').Workbook
+  calledFromHigherUp: boolean
 }) => {
   const db = store.get(dbAtom)
 
@@ -55,16 +59,17 @@ export const buildExceljsWorksheetsForDaten = async ({
     data: [newGarten],
   })
   // 2. Get Kulturen
-  let kultursOfGarten = []
+  let kultursOfGarten: import('../../../../../dbModel.ts').Kultur[] = []
   try {
-    kultursOfGarten = await db
-      .get<import('../../../../../dbModel.ts').Kultur>('kultur')
-      .query(
-        Q.where('_deleted', false),
-        Q.where('aktiv', true),
-        Q.where('garten_id', garten_id),
-      )
-      .fetch()
+    kultursOfGarten =
+      (await db
+        ?.get<import('../../../../../dbModel.ts').Kultur>('kultur')
+        .query(
+          Q.where('_deleted', false),
+          Q.where('aktiv', true),
+          Q.where('garten_id', garten_id),
+        )
+        .fetch()) ?? []
   } catch {}
   const kultursOfGartenSorted = await kultursSortedFromKulturs(kultursOfGarten)
   const kulturData = await Promise.all(

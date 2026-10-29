@@ -30,7 +30,9 @@ export const PersonFormTitle = ({
 
   const { width, ref } = useResizeDetector()
 
-  const [userRole, setUserRole] = useState(undefined)
+  const [userRole, setUserRole] = useState<
+    import('../../../../dbModel.ts').UserRole | undefined
+  >(undefined)
   useEffect(() => {
     const userRoleObservable = db
       ?.get<import('../../../../dbModel.ts').UserRole>('user_role')
@@ -56,7 +58,7 @@ export const PersonFormTitle = ({
             <DeleteButton row={row} />
           </>
         )}
-        {width < 568 ? (
+        {(width ?? 0) < 568 ? (
           <Menu white={false}>
             <HistoryButton
               table="person"

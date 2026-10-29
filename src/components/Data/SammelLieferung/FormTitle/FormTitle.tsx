@@ -37,7 +37,7 @@ export const SammelLieferungFormTitle = ({
   row?: import('../../../../dbModel.ts').SammelLieferung | null | undefined
   totalCount: number
   filteredCount: number
-  lieferung: import('../../../shared/types.ts').WmRow | null | undefined
+  lieferung: import('../../../../dbModel.ts').Lieferung | null | undefined
   printPreview: boolean
   setPrintPreview: (val: unknown) => void
   showHistory: boolean
@@ -49,17 +49,21 @@ export const SammelLieferungFormTitle = ({
 
   const { width, ref } = useResizeDetector()
 
-  const [userPersonOption, setUserPersonOption] = useState()
+  const [userPersonOption, setUserPersonOption] = useState<
+    import('../../../../dbModel.ts').PersonOption | undefined
+  >(undefined)
   useEffect(() => {
     const userPersonOptionsObservable = user.uid
       ? db
           ?.get<import('../../../../dbModel.ts').PersonOption>('person_option')
           .query(Q.on('person', Q.where('account_id', user.uid)))
           .observeWithColumns(['sl_auto_copy_edits'])
-      : $of({})
-    const subscription = userPersonOptionsObservable?.subscribe(
-      ([userPersonOption]) => setUserPersonOption(userPersonOption),
-    )
+      : $of([undefined])
+    const subscription = (
+      userPersonOptionsObservable as unknown as import('rxjs').Observable<
+        [import('../../../../dbModel.ts').PersonOption | undefined]
+      >
+    )?.subscribe(([userPersonOption]) => setUserPersonOption(userPersonOption))
 
     return () => subscription?.unsubscribe?.()
   }, [db, user])
@@ -82,10 +86,10 @@ export const SammelLieferungFormTitle = ({
           </>
         )}
         {!sl_auto_copy_edits && (
-          <Copy sammelLieferung={row} lieferung={lieferung} asMenu />
+          <Copy sammelLieferung={row} lieferung={lieferung} />
         )}
         <>
-          {width < 515 ? (
+          {(width ?? 0) < 515 ? (
             <Menu white={false}>
               <PrintButtons
                 printPreview={printPreview}
@@ -108,7 +112,7 @@ export const SammelLieferungFormTitle = ({
                 />
               )}
             </Menu>
-          ) : width < 563 ? (
+          ) : (width ?? 0) < 563 ? (
             <>
               <PrintButtons
                 printPreview={printPreview}
@@ -132,7 +136,7 @@ export const SammelLieferungFormTitle = ({
                 )}
               </Menu>
             </>
-          ) : width < 610 ? (
+          ) : (width ?? 0) < 610 ? (
             <>
               <PrintButtons
                 printPreview={printPreview}
@@ -157,7 +161,7 @@ export const SammelLieferungFormTitle = ({
                 </Menu>
               </>
             </>
-          ) : width < 657 ? (
+          ) : (width ?? 0) < 657 ? (
             <>
               <HistoryButton
                 table="sammel_lieferung"

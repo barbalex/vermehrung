@@ -93,7 +93,9 @@ export const HerkunftTimeline = ({
           <IconButton
             aria-label={open ? 'schliessen' : 'öffnen'}
             title={open ? 'schliessen' : 'öffnen'}
-            onClick={onClickToggle}
+            onClick={
+                  onClickToggle as unknown as import('react').MouseEventHandler
+                }
             size="large"
           >
             {open ? <FaChevronUp /> : <FaChevronDown />}

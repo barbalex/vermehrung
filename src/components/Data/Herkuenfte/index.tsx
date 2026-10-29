@@ -124,7 +124,9 @@ export const Herkuenfte = ({
                 <IconButton
                   aria-label="neue Herkunft"
                   title="neue Herkunft"
-                  onClick={insertHerkunftRev}
+                  onClick={
+                  insertHerkunftRev as unknown as import('react').MouseEventHandler
+                }
                   size="large"
                 >
                   <FaPlus />

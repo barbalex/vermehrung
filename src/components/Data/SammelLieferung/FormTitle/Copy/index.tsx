@@ -41,8 +41,8 @@ export const SammelLieferungCopyMenu = ({
   lieferung,
 }: {
   sammelLieferung:
-    import('../../../../shared/types.ts').WmRow | null | undefined
-  lieferung: import('../../../../shared/types.ts').WmRow | null | undefined
+    import('../../../../../dbModel.ts').SammelLieferung | null | undefined
+  lieferung: import('../../../../../dbModel.ts').Lieferung | null | undefined
 }) => {
   //console.log('CopySammelLieferungMenu', { sammelLieferung, lieferung })
 
@@ -57,7 +57,7 @@ export const SammelLieferungCopyMenu = ({
   }) => setAnchorEl(event.currentTarget)
 
   const containsData =
-    Object.entries(sammelLieferung)
+    Object.entries(sammelLieferung ?? {})
       .filter(
         // only accept lieferung's fields
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -72,8 +72,8 @@ export const SammelLieferungCopyMenu = ({
     setAnchorEl(null)
     try {
       await updateSammelLieferung({
-        lieferung,
-        sammelLieferung,
+        lieferung: lieferung as import('../../../../../dbModel.ts').Lieferung,
+        sammelLieferung: sammelLieferung as import('../../../../../dbModel.ts').SammelLieferung,
       })
     } catch {
       return
@@ -87,7 +87,7 @@ export const SammelLieferungCopyMenu = ({
   const onClickAllLieferung = () => {
     setAnchorEl(null)
     updateAllSammelLieferungen({
-      sammelLieferung,
+      sammelLieferung: sammelLieferung as import('../../../../../dbModel.ts').SammelLieferung,
     })
   }
 
@@ -95,10 +95,12 @@ export const SammelLieferungCopyMenu = ({
     <ErrorBoundary>
       <IconButton
         aria-label="Daten kopieren"
-        aria-owns={anchorEl ? 'long-menu' : null}
+        aria-owns={anchorEl ? 'long-menu' : undefined}
         aria-haspopup="true"
         title="Daten kopieren"
-        onClick={onClickConfig}
+        onClick={
+                  onClickConfig as unknown as import('react').MouseEventHandler
+                }
         disabled={!containsData}
         size="large"
       >

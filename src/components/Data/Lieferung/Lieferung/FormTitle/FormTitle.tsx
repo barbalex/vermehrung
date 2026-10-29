@@ -39,7 +39,7 @@ export const LieferungFormTitle = ({
     setActiveNodeArray(activeNodeArray.slice(0, -1))
   }
 
-  const nachKulturId = row?.nach_kultur_id
+  const nachKulturId = row?.nach_kultur_id ?? undefined
   const onClickToKultur = () =>
     setActiveNodeArray([
       ...activeNodeArray.filter((n) => n !== 'Kulturen'),
@@ -64,7 +64,7 @@ export const LieferungFormTitle = ({
         )}
         <AddButton />
         <DeleteButton row={row} />
-        {width < 520 ? (
+        {(width ?? 0) < 520 ? (
           <Menu white={false}>
             <HistoryButton
               table="lieferung"

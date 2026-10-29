@@ -46,7 +46,7 @@ export const TeilkulturFormTitle = ({
         </IconButton>
         <AddButton />
         <DeleteButton row={row} />
-        {width < 520 ? (
+        {(width ?? 0) < 520 ? (
           <Menu white={false}>
             <HistoryButton
               table="teilkultur"
@@ -54,7 +54,7 @@ export const TeilkulturFormTitle = ({
               showHistory={showHistory}
               asMenu
             />
-            <Settings kulturId={row?.kultur_id} asMenu />
+            <Settings kulturId={row?.kultur_id ?? undefined} asMenu />
             <Anleitung asMenu />
             <FilterNumbers
               filteredCount={filteredCount}
@@ -69,7 +69,7 @@ export const TeilkulturFormTitle = ({
               id={row?.id}
               showHistory={showHistory}
             />
-            <Settings kulturId={row?.kultur_id} />
+            <Settings kulturId={row?.kultur_id ?? undefined} />
             <Anleitung />
             <FilterNumbers
               filteredCount={filteredCount}

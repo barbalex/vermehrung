@@ -69,7 +69,9 @@ export const Timeline = ({
           <IconButton
             aria-label="Anleitung öffnen"
             title="Anleitung öffnen"
-            onClick={openDocs}
+            onClick={
+                  openDocs as unknown as import('react').MouseEventHandler
+                }
             size="large"
           >
             <IoMdInformationCircleOutline />
@@ -77,7 +79,9 @@ export const Timeline = ({
           <IconButton
             aria-label={open ? 'schliessen' : 'öffnen'}
             title={open ? 'schliessen' : 'öffnen'}
-            onClick={onClickToggle}
+            onClick={
+                  onClickToggle as unknown as import('react').MouseEventHandler
+                }
             size="large"
           >
             {open ? <FaChevronUp /> : <FaChevronDown />}

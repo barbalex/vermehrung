@@ -5,13 +5,21 @@ import MenuItem from '@mui/material/MenuItem'
 import { buildExceljsWorksheetsForKultur } from './buildExceljsWorksheets.ts'
 import { downloadExceljsWorkbook } from '../../../../utils/downloadExceljsWorkbook.ts'
 
-export const KulturDownload = ({ row, asMenu }: { row?: Record<string, unknown> | null; asMenu?: boolean }) => {
+export const KulturDownload = ({
+  row,
+  asMenu,
+}: {
+  row?: import('../../../../dbModel.ts').Kultur | null | undefined
+  asMenu?: boolean
+}) => {
   const onClickDownload = async () => {
     const { Workbook } = await import('exceljs/dist/exceljs.min.js')
     const workbook = new Workbook()
     await buildExceljsWorksheetsForKultur({
-      kultur_id: row?.id,
+      kultur_id: row?.id ?? '',
+      kultur_name: undefined,
       workbook,
+      calledFromHigherUp: false,
     })
     downloadExceljsWorkbook({ fileName: `Kultur_${row?.id}`, workbook })
   }

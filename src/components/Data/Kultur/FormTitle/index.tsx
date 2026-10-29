@@ -15,12 +15,10 @@ import { tableFilter } from '../../../../utils/tableFilter.ts'
 
 export const KulturFormTitleChooser = ({
   row,
-  rawRow,
   showFilter,
   showHistory,
 }: {
   row?: import('../../../../dbModel.ts').Kultur | null | undefined
-  rawRow: Record<string, unknown> | null | undefined
   showFilter: boolean
   showHistory: boolean
 }) => {
@@ -48,6 +46,7 @@ export const KulturFormTitleChooser = ({
         : []
     const collection =
       db?.get<import('../../../../dbModel.ts').Kultur>('kultur')
+    if (!collection) return
     const kulturDelQuery =
       kulturFilter._deleted === false
         ? Q.where('_deleted', false)
@@ -108,7 +107,6 @@ export const KulturFormTitleChooser = ({
   return (
     <FormTitle
       row={row}
-      rawRow={rawRow}
       totalCount={totalCount}
       filteredCount={filteredCount}
       showHistory={showHistory}

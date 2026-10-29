@@ -11,7 +11,6 @@ import { tableFilter } from '../../../../utils/tableFilter.ts'
 export const PersonFormTitleChooser = ({
   showFilter,
   row,
-  rawRow,
   showHistory,
 }: {
   showFilter: boolean
@@ -29,6 +28,7 @@ export const PersonFormTitleChooser = ({
   useEffect(() => {
     const collection =
       db?.get<import('../../../../dbModel.ts').Person>('person')
+    if (!collection) return
     const personDelQuery =
       personFilter._deleted === false
         ? Q.where('_deleted', false)
@@ -87,7 +87,6 @@ export const PersonFormTitleChooser = ({
   return (
     <FormTitle
       row={row}
-      rawRow={rawRow}
       totalCount={totalCount}
       filteredCount={filteredCount}
       showHistory={showHistory}

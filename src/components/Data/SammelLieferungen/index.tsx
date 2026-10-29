@@ -111,7 +111,9 @@ export const SammelLieferungen = ({ filter: showFilter = false }) => {
               <IconButton
                 aria-label="neue Sammel-Lieferung"
                 title="neue Sammel-Lieferung"
-                onClick={insertSammelLieferungRev}
+                onClick={
+                  insertSammelLieferungRev as unknown as import('react').MouseEventHandler
+                }
                 size="large"
               >
                 <FaPlus />

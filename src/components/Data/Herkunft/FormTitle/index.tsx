@@ -14,13 +14,11 @@ import { tableFilter } from '../../../../utils/tableFilter.ts'
 
 export const HerkunftFormTitleChooser = ({
   row,
-  rawRow,
   showFilter,
   showHistory,
   activeConflict,
 }: {
   row?: import('../../../../dbModel.ts').Herkunft | null | undefined
-  rawRow: Record<string, unknown> | null | undefined
   showFilter: boolean
   showHistory: boolean
   activeConflict: string | null
@@ -44,6 +42,7 @@ export const HerkunftFormTitleChooser = ({
       : []
     const collection =
       db?.get<import('../../../../dbModel.ts').Herkunft>('herkunft')
+    if (!collection) return
     const delQuery =
       herkunftFilter._deleted === false
         ? Q.where('_deleted', false)
@@ -93,7 +92,6 @@ export const HerkunftFormTitleChooser = ({
   return (
     <FormTitle
       row={row}
-      rawRow={rawRow}
       totalCount={totalCount}
       filteredCount={filteredCount}
       showHistory={showHistory}

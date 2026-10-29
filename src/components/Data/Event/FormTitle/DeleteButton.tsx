@@ -48,7 +48,9 @@ export const EventDeleteButton = ({
         aria-haspopup="true"
         aria-label="Event löschen"
         title="Event löschen"
-        onClick={onClickButton}
+        onClick={
+                  onClickButton as unknown as import('react').MouseEventHandler
+                }
         disabled={!!row?._deleted}
         size="large"
       >

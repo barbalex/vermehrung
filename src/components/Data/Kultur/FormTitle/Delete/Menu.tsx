@@ -16,14 +16,14 @@ export const KulturDeleteMenu = ({
   anchorEl,
   setAnchorEl,
 }: {
-  row: import('../../../../dbModel.ts').Kultur | null | undefined
+  row: import('../../../../../dbModel.ts').Kultur | null | undefined
   anchorEl: HTMLElement | null | undefined
   setAnchorEl: (el: HTMLElement | null) => void
 }) => {
   const closeMenu = () => setAnchorEl(null)
 
   const remove = async () => {
-    await row.delete()
+    await row?.delete()
     setAnchorEl(null)
     const kulturFilter = store.get(filterKulturAtom)
     if (kulturFilter.delete === false) {

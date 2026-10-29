@@ -69,6 +69,10 @@ export const updateSammelLieferung = async ({
   lieferung,
   sammelLieferung,
   field,
+}: {
+  lieferung: import('../../../../../dbModel.ts').Lieferung
+  sammelLieferung: import('../../../../../dbModel.ts').SammelLieferung
+  field?: string
 }) => {
   const user = jotaiStore.get(userAtom)
   const db = jotaiStore.get(dbAtom)
@@ -107,7 +111,7 @@ export const updateSammelLieferung = async ({
   }
   delete newObject._conflicts
   delete newObject.__typename
-  const depth = lfLastVersion._depth + 1
+  const depth = (lfLastVersion._depth ?? 0) + 1
   newObject.changed = DateTime.local().toFormat('yyyy.LL.dd')
   newObject.changed_by = user?.email
   newObject._parent_rev = lfLastVersion._rev
@@ -141,12 +145,15 @@ export const updateSammelLieferung = async ({
   newObjectForStore.id = lfLastVersion.id
   delete newObjectForStore.lieferung_id
   await db?.write(async () => {
-    await lieferung.update((row) => {
-      Object.entries(newObjectForStore).forEach(([key, value]) => {
-        if (!isEqual(value, row[key])) {
-          row[key] = value
-        }
-      })
-    })
+    await lieferung.update(
+      (row: unknown) => {
+        const mutableRow = row as Record<string, unknown>
+        Object.entries(newObjectForStore).forEach(([key, value]) => {
+          if (!isEqual(value, mutableRow[key])) {
+            mutableRow[key] = value
+          }
+        })
+      },
+    )
   })
 }

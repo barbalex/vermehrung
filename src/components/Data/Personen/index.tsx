@@ -126,7 +126,9 @@ export const Personen = ({ filter: showFilter = false }) => {
                 <IconButton
                   aria-label="neue Person"
                   title="neue Person"
-                  onClick={insertPersonRev}
+                  onClick={
+                  insertPersonRev as unknown as import('react').MouseEventHandler
+                }
                   size="large"
                 >
                   <FaPlus />

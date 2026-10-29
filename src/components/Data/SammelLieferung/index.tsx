@@ -33,7 +33,7 @@ export const SammelLieferung = ({
 }: {
   filter?: boolean
   id?: string | undefined
-  lieferung: import('../../shared/types.ts').WmRow | null | undefined
+  lieferung: import('../../dbModel.ts').Lieferung | null | undefined
 }) => {
   const isPrint = useAtomValue(isPrintAtom)
   const online = useAtomValue(onlineAtom)

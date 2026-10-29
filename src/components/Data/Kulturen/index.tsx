@@ -148,7 +148,9 @@ export const Kulturen = ({ filter: showFilter = false }) => {
               <IconButton
                 aria-label="neue Kultur"
                 title="neue Kultur"
-                onClick={insertKulturRev}
+                onClick={
+                  insertKulturRev as unknown as import('react').MouseEventHandler
+                }
                 size="large"
               >
                 <FaPlus />

@@ -12,7 +12,15 @@ import { FilterTitle } from '../../../shared/FilterTitle.tsx'
 import { BedarfFormTitle as FormTitle } from './FormTitle.tsx'
 import { tableFilter } from '../../../../utils/tableFilter.ts'
 
-export const BedarfFormTitle = ({ row, rawRow, showFilter, showHistory }) => {
+export const BedarfFormTitle = ({
+  row,
+  showFilter,
+  showHistory,
+}: {
+  row?: import('../../../../dbModel.ts').Bedarf | null | undefined
+  showFilter: boolean
+  showHistory: boolean
+}) => {
   const db = useAtomValue(dbAtom)
   const kulturIdInActiveNodeArray = useAtomValue(kulturIdInActiveNodeArrayAtom)
   const bedarfFilter = useAtomValue(filterBedarfAtom)
@@ -30,6 +38,7 @@ export const BedarfFormTitle = ({ row, rawRow, showFilter, showHistory }) => {
       : []
     const collection =
       db?.get<import('../../../../dbModel.ts').Bedarf>('bedarf')
+    if (!collection) return
     const delQuery =
       bedarfFilter._deleted === false
         ? Q.where('_deleted', false)
@@ -79,7 +88,6 @@ export const BedarfFormTitle = ({ row, rawRow, showFilter, showHistory }) => {
   return (
     <FormTitle
       row={row}
-      rawRow={rawRow}
       totalCount={totalCount}
       filteredCount={filteredCount}
       showHistory={showHistory}

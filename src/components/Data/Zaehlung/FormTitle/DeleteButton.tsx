@@ -50,7 +50,9 @@ export const ZaehlungDeleteButton = ({
         aria-haspopup="true"
         aria-label="Zählung löschen"
         title="Zählung löschen"
-        onClick={onClickButton}
+        onClick={
+                  onClickButton as unknown as import('react').MouseEventHandler
+                }
         disabled={!!row?._deleted}
         size="large"
       >

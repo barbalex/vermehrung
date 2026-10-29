@@ -14,12 +14,10 @@ import { tableFilter } from '../../../../utils/tableFilter.ts'
 
 export const TeilkulturFormTitleChooser = ({
   row,
-  rawRow,
   showFilter,
   showHistory,
 }: {
   row?: import('../../../../dbModel.ts').Teilkultur | null | undefined
-  rawRow: Record<string, unknown> | null | undefined
   showFilter: boolean
   showHistory: boolean
 }) => {
@@ -40,6 +38,7 @@ export const TeilkulturFormTitleChooser = ({
       : []
     const collection =
       db?.get<import('../../../../dbModel.ts').Teilkultur>('teilkultur')
+    if (!collection) return
     const teilkulturDelQuery =
       teilkulturFilter._deleted === false
         ? Q.where('_deleted', false)
@@ -89,7 +88,6 @@ export const TeilkulturFormTitleChooser = ({
   return (
     <FormTitle
       row={row}
-      rawRow={rawRow}
       totalCount={totalCount}
       filteredCount={filteredCount}
       showHistory={showHistory}

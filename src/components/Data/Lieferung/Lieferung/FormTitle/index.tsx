@@ -18,7 +18,6 @@ import { tableFilter } from '../../../../../utils/tableFilter.ts'
 
 export const LieferungTitleChooser = ({
   row,
-  rawRow,
   showFilter,
   showHistory,
 }: {
@@ -72,6 +71,7 @@ export const LieferungTitleChooser = ({
                 : []
     const collection =
       db?.get<import('../../../../../dbModel.ts').Lieferung>('lieferung')
+    if (!collection) return
     const lieferungDelQuery =
       lieferungFilter._deleted === false
         ? Q.where('_deleted', false)
@@ -146,7 +146,6 @@ export const LieferungTitleChooser = ({
   return (
     <FormTitle
       row={row}
-      rawRow={rawRow}
       totalCount={totalCount}
       filteredCount={filteredCount}
       showHistory={showHistory}

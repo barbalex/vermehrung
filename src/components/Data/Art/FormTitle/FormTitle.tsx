@@ -9,7 +9,17 @@ import { HistoryButton } from '../../../shared/HistoryButton.tsx'
 
 import styles from './FormTitle.module.css'
 
-export const FormTitle = ({ row, totalCount, filteredCount, showHistory }) => {
+export const FormTitle = ({
+  row,
+  totalCount,
+  filteredCount,
+  showHistory,
+}: {
+  row?: import('../../../../dbModel.ts').Art | null | undefined
+  totalCount: number
+  filteredCount: number
+  showHistory: boolean
+}) => {
   const { width, ref } = useResizeDetector()
 
   return (
@@ -19,11 +29,11 @@ export const FormTitle = ({ row, totalCount, filteredCount, showHistory }) => {
         <NavButtons />
         <AddButton />
         <DeleteButton row={row} />
-        {width < 520 ? (
+        {(width ?? 0) < 520 ? (
           <Menu white={false}>
             <HistoryButton
               table="art"
-              id={row.id}
+              id={row?.id}
               showHistory={showHistory}
               asMenu
             />
@@ -35,7 +45,7 @@ export const FormTitle = ({ row, totalCount, filteredCount, showHistory }) => {
           </Menu>
         ) : (
           <>
-            <HistoryButton table="art" id={row.id} showHistory={showHistory} />
+            <HistoryButton table="art" id={row?.id} showHistory={showHistory} />
             <FilterNumbers
               filteredCount={filteredCount}
               totalCount={totalCount}

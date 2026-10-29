@@ -21,13 +21,11 @@ import artStyles from '../../Art/FormTitle/FormTitle.module.css'
 
 export const GartenFormTitle = ({
   row,
-  rawRow,
   showHistory,
   totalCount,
   filteredCount,
 }: {
   row?: import('../../../../dbModel.ts').Garten | null | undefined
-  rawRow: Record<string, unknown> | null | undefined
   showHistory: boolean
   totalCount: number
   filteredCount: number
@@ -60,9 +58,9 @@ export const GartenFormTitle = ({
           <KuDownSvg />
         </IconButton>
         <AddButton />
-        <DeleteButton row={row} rawRow={rawRow} />
+        <DeleteButton row={row} />
         <Download gartenId={row?.id} />
-        {width < 520 ? (
+        {(width ?? 0) < 520 ? (
           <Menu white={false}>
             <HistoryButton
               table="garten"

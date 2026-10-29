@@ -118,7 +118,9 @@ export const Teilkulturen = ({ filter: showFilter = false }) => {
               <IconButton
                 aria-label="neue Teilkultur"
                 title="neue Teilkultur"
-                onClick={insertTeilkulturRev}
+                onClick={
+                  insertTeilkulturRev as unknown as import('react').MouseEventHandler
+                }
                 size="large"
               >
                 <FaPlus />

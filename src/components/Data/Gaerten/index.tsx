@@ -129,7 +129,9 @@ export const Gaerten = ({ filter: showFilter = false }) => {
               <IconButton
                 aria-label="neuer Garten"
                 title="neuer Garten"
-                onClick={insertGartenRev}
+                onClick={
+                  insertGartenRev as unknown as import('react').MouseEventHandler
+                }
                 size="large"
               >
                 <FaPlus />

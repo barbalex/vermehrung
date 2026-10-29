@@ -16,12 +16,10 @@ import { tableFilter } from '../../../../utils/tableFilter.ts'
 
 export const SammlungFormTitleChooser = ({
   row,
-  rawRow,
   showFilter,
   showHistory,
 }: {
   row?: import('../../../../dbModel.ts').Sammlung | null | undefined
-  rawRow: Record<string, unknown> | null | undefined
   showFilter: boolean
   showHistory: boolean
 }) => {
@@ -56,6 +54,7 @@ export const SammlungFormTitleChooser = ({
           : []
     const collection =
       db?.get<import('../../../../dbModel.ts').Sammlung>('sammlung')
+    if (!collection) return
     const sammlungDelQuery =
       sammlungFilter._deleted === false
         ? Q.where('_deleted', false)
@@ -107,7 +106,6 @@ export const SammlungFormTitleChooser = ({
   return (
     <FormTitle
       row={row}
-      rawRow={rawRow}
       totalCount={totalCount}
       filteredCount={filteredCount}
       showHistory={showHistory}

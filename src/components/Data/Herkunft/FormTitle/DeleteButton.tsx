@@ -49,7 +49,9 @@ export const HerkunftDeleteButton = ({
         aria-haspopup="true"
         aria-label="Herkunft löschen"
         title="Herkunft löschen"
-        onClick={onClickButton}
+        onClick={
+                  onClickButton as unknown as import('react').MouseEventHandler
+                }
         disabled={!!row?._deleted}
         size="large"
       >

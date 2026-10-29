@@ -18,12 +18,12 @@ export const PersonKontoMenu = ({
   const menuOpen = Boolean(menuAnchorEl)
 
   const onClickResetPassword = () => {
-    setPassword({ person: row })
+    setPassword({ person: row ?? null })
     setMenuAnchorEl(null)
   }
 
   const onClickDeleteAccount = () => {
-    deleteAccount({ person: row })
+    deleteAccount({ person: row ?? null })
     setMenuAnchorEl(null)
   }
 

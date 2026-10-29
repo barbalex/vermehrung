@@ -8,7 +8,15 @@ import { FilterTitle } from '../../../shared/FilterTitle.tsx'
 import { FormTitle } from './FormTitle.tsx'
 import { tableFilter } from '../../../../utils/tableFilter.ts'
 
-export const ArtFormTitle = ({ row, rawRow, showFilter, showHistory }) => {
+export const ArtFormTitle = ({
+  row,
+  showFilter,
+  showHistory,
+}: {
+  row?: import('../../../../dbModel.ts').Art | null | undefined
+  showFilter: boolean
+  showHistory: boolean
+}) => {
   const db = useAtomValue(dbAtom)
   const artFilter = useAtomValue(filterArtAtom)
 
@@ -18,6 +26,7 @@ export const ArtFormTitle = ({ row, rawRow, showFilter, showHistory }) => {
   })
   useEffect(() => {
     const collection = db?.get<import('../../../../dbModel.ts').Art>('art')
+    if (!collection) return
     const delQuery =
       artFilter._deleted === false
         ? Q.where('_deleted', false)
@@ -28,7 +37,7 @@ export const ArtFormTitle = ({ row, rawRow, showFilter, showHistory }) => {
               Q.where('_deleted', true),
               Q.where('_deleted', null),
             )
-    const totalCountObservable = collection?.query(delQuery).observeCount()
+    const totalCountObservable = collection.query(delQuery).observeCount()
     const filteredCountObservable = collection
       .query(...tableFilter({ table: 'art' }))
       .observeCount()
@@ -64,7 +73,6 @@ export const ArtFormTitle = ({ row, rawRow, showFilter, showHistory }) => {
   return (
     <FormTitle
       row={row}
-      rawRow={rawRow}
       totalCount={totalCount}
       filteredCount={filteredCount}
       showHistory={showHistory}

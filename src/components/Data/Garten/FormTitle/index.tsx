@@ -12,7 +12,15 @@ import { FilterTitle } from '../../../shared/FilterTitle.tsx'
 import { GartenFormTitle as FormTitle } from './FormTitle.tsx'
 import { tableFilter } from '../../../../utils/tableFilter.ts'
 
-export const GartenFormTitle = ({ showFilter, row, rawRow, showHistory }) => {
+export const GartenFormTitle = ({
+  row,
+  showFilter,
+  showHistory,
+}: {
+  row?: import('../../../../dbModel.ts').Garten | null | undefined
+  showFilter: boolean
+  showHistory: boolean
+}) => {
   const db = useAtomValue(dbAtom)
   const personIdInActiveNodeArray = useAtomValue(personIdInActiveNodeArrayAtom)
   const gartenFilter = useAtomValue(filterGartenAtom)
@@ -30,6 +38,7 @@ export const GartenFormTitle = ({ showFilter, row, rawRow, showHistory }) => {
       : []
     const collection =
       db?.get<import('../../../../dbModel.ts').Garten>('garten')
+    if (!collection) return
     const delQuery =
       gartenFilter._deleted === false
         ? Q.where('_deleted', false)
@@ -90,7 +99,6 @@ export const GartenFormTitle = ({ showFilter, row, rawRow, showHistory }) => {
   return (
     <FormTitle
       row={row}
-      rawRow={rawRow}
       showHistory={showHistory}
       totalCount={totalCount}
       filteredCount={filteredCount}

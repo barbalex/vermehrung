@@ -110,7 +110,9 @@ export const Events = ({ filter: showFilter = false }) => {
               <IconButton
                 aria-label="neuer Event"
                 title="neuer Event"
-                onClick={insertEventRev}
+                onClick={
+                  insertEventRev as unknown as import('react').MouseEventHandler
+                }
                 size="large"
               >
                 <FaPlus />

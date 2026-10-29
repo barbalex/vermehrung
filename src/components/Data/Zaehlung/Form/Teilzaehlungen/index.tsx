@@ -70,7 +70,9 @@ export const Teilzaehlungen = ({
             <IconButton
               aria-label="Neu"
               title="Neue Teil-Zählung"
-              onClick={insertTeilzaehlungRev}
+              onClick={
+                  insertTeilzaehlungRev as unknown as import('react').MouseEventHandler
+                }
               size="large"
             >
               <FaPlus />

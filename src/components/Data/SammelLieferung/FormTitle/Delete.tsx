@@ -18,7 +18,7 @@ import artStyles from '../../Art/FormTitle/DeleteButton.module.css'
 export const SammelLieferungDeleteButton = ({
   row,
 }: {
-  row?: import('../../../shared/types.ts').WmRow | null | undefined
+  row?: import('../../../../dbModel.ts').SammelLieferung | null | undefined
 }) => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | undefined | null>(null)
   const closeMenu = () => setAnchorEl(null)
@@ -48,7 +48,9 @@ export const SammelLieferungDeleteButton = ({
         aria-haspopup="true"
         aria-label="Sammel-Lieferung löschen"
         title="Sammel-Lieferung löschen"
-        onClick={onClickButton}
+        onClick={
+                  onClickButton as unknown as import('react').MouseEventHandler
+                }
         disabled={!!row?._deleted}
         size="large"
       >

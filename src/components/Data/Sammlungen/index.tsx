@@ -140,7 +140,9 @@ export const Sammlungen = ({ filter: showFilter = false }) => {
               <IconButton
                 aria-label="neue Sammlung"
                 title="neue Sammlung"
-                onClick={insertSammlungRev}
+                onClick={
+                  insertSammlungRev as unknown as import('react').MouseEventHandler
+                }
                 size="large"
               >
                 <FaPlus />

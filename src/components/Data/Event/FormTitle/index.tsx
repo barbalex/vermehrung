@@ -12,7 +12,15 @@ import { FilterTitle } from '../../../shared/FilterTitle.tsx'
 import { EventFormTitle as FormTitle } from './FormTitle.tsx'
 import { tableFilter } from '../../../../utils/tableFilter.ts'
 
-export const EventFormTitle = ({ row, rawRow, showFilter, showHistory }) => {
+export const EventFormTitle = ({
+  row,
+  showFilter,
+  showHistory,
+}: {
+  row?: import('../../../../dbModel.ts').Event | null | undefined
+  showFilter: boolean
+  showHistory: boolean
+}) => {
   const db = useAtomValue(dbAtom)
   const kulturIdInActiveNodeArray = useAtomValue(kulturIdInActiveNodeArrayAtom)
   const eventFilter = useAtomValue(filterEventAtom)
@@ -29,6 +37,7 @@ export const EventFormTitle = ({ row, rawRow, showFilter, showHistory }) => {
         ]
       : []
     const collection = db?.get<import('../../../../dbModel.ts').Event>('event')
+    if (!collection) return
     const dventDelQuery =
       eventFilter._deleted === false
         ? Q.where('_deleted', false)
@@ -78,7 +87,6 @@ export const EventFormTitle = ({ row, rawRow, showFilter, showHistory }) => {
   return (
     <FormTitle
       row={row}
-      rawRow={rawRow}
       totalCount={totalCount}
       filteredCount={filteredCount}
       showHistory={showHistory}

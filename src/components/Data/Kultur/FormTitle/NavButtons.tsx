@@ -41,16 +41,20 @@ export const KulturNavButtons = ({
   const onClickToTks = () =>
     setActiveNodeArray([...store.get(activeNodeArrayAtom), 'Teilkulturen'])
 
-  const [dataState, setDataState] = useState({ kulturOption: undefined })
+  const [dataState, setDataState] = useState<{
+    kulturOption: import('../../../../dbModel.ts').KulturOption | undefined
+  }>({ kulturOption: undefined })
   const { kulturOption } = dataState
 
   useEffect(() => {
     const kOObservable = row?.kultur_option
       ? row?.kultur_option.observe()
       : $of({})
-    const subscription = kOObservable.subscribe((kulturOption) =>
-      setDataState({ kulturOption }),
-    )
+    const subscription = (
+      kOObservable as unknown as import('rxjs').Observable<
+        import('../../../../dbModel.ts').KulturOption | undefined
+      >
+    ).subscribe((kulturOption) => setDataState({ kulturOption }))
 
     return () => subscription?.unsubscribe?.()
   }, [row?.kultur_option])

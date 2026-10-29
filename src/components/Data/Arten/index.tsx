@@ -109,7 +109,9 @@ export const Arten = ({
               <IconButton
                 aria-label="neue Art"
                 title="neue Art"
-                onClick={insertArtRev}
+                onClick={
+                  insertArtRev as unknown as import('react').MouseEventHandler
+                }
                 size="large"
               >
                 <FaPlus />

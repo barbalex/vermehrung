@@ -11,13 +11,18 @@ import { ErrorBoundary } from '../../../../shared/ErrorBoundary.tsx'
 
 import styles from './index.module.css'
 
-export const GartenDownload = ({ gartenId }) => {
+export const GartenDownload = ({
+  gartenId,
+}: {
+  gartenId: string | undefined
+}) => {
   const onClickData = async () => {
     const { Workbook } = await import('exceljs/dist/exceljs.min.js')
     const workbook = new Workbook()
     await buildExceljsWorksheetsForDaten({
-      garten_id: gartenId,
+      garten_id: gartenId ?? '',
       workbook,
+      calledFromHigherUp: false,
     })
     downloadExceljsWorkbook({
       fileName: `Garten_${gartenId}_rohdaten`,
@@ -30,7 +35,7 @@ export const GartenDownload = ({ gartenId }) => {
     const { Workbook } = await import('exceljs/dist/exceljs.min.js')
     const workbook = new Workbook()
     await buildExceljsWorksheetsForTzSums({
-      garten_id: gartenId,
+      garten_id: gartenId ?? '',
       workbook,
     })
     downloadExceljsWorkbook({
@@ -54,10 +59,12 @@ export const GartenDownload = ({ gartenId }) => {
     <ErrorBoundary>
       <IconButton
         aria-label="Daten herunterladen"
-        aria-owns={anchorEl ? 'long-menu' : null}
+        aria-owns={anchorEl ? 'long-menu' : undefined}
         aria-haspopup="true"
         title="Daten herunterladen"
-        onClick={onClickOpenMenu}
+        onClick={
+                  onClickOpenMenu as unknown as import('react').MouseEventHandler
+                }
         size="large"
       >
         <FaDownload />

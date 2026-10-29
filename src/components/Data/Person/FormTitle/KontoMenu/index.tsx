@@ -7,11 +7,17 @@ import { PersonKontoMenu as Menu } from './Menu.tsx'
 
 import styles from './index.module.css'
 
-export const PersonKonto = ({ row, asMenu }: { row?: Record<string, unknown> | null; asMenu?: boolean }) => {
-  const [menuAnchorEl, setMenuAnchorEl] = useState(null)
+export const PersonKonto = ({
+  row,
+  asMenu,
+}: {
+  row?: import('../../../../../dbModel.ts').Person | null | undefined
+  asMenu?: boolean
+}) => {
+  const [menuAnchorEl, setMenuAnchorEl] = useState<HTMLElement | null>(null)
 
   const createNewAccount = () => {
-    signup({ person: row })
+    signup({ person: row ?? null })
     setMenuAnchorEl(null)
   }
 

@@ -121,7 +121,9 @@ export const Zaehlungen = ({ filter: showFilter = false }) => {
               <IconButton
                 aria-label="neue Zählung"
                 title="neue Zählung"
-                onClick={insertZaehlungRev}
+                onClick={
+                  insertZaehlungRev as unknown as import('react').MouseEventHandler
+                }
                 size="large"
               >
                 <FaPlus />

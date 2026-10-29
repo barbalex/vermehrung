@@ -16,15 +16,13 @@ export const SammelLieferungFormTitleChooser = ({
   lieferung,
   printPreview,
   row,
-  rawRow,
   setPrintPreview,
   showFilter,
   showHistory,
 }: {
-  lieferung: import('../../../shared/types.ts').WmRow | null | undefined
+  lieferung: import('../../../../dbModel.ts').Lieferung | null | undefined
   printPreview: boolean
   row?: import('../../../../dbModel.ts').SammelLieferung | null | undefined
-  rawRow: Record<string, unknown> | null | undefined
   setPrintPreview: (val: unknown) => void
   showFilter: boolean
   showHistory: boolean
@@ -42,6 +40,7 @@ export const SammelLieferungFormTitleChooser = ({
       db?.get<import('../../../../dbModel.ts').SammelLieferung>(
         'sammel_lieferung',
       )
+    if (!collection) return
     const sammelLieferungDelQuery =
       sammelLieferungFilter._deleted === false
         ? Q.where('_deleted', false)
@@ -93,7 +92,6 @@ export const SammelLieferungFormTitleChooser = ({
   return (
     <FormTitle
       row={row}
-      rawRow={rawRow}
       totalCount={totalCount}
       filteredCount={filteredCount}
       showFilter={showFilter}
