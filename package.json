@@ -1,7 +1,7 @@
 {
   "name": "vermehrung.ch",
   "description": "breeding endangered plant species",
-  "version": "1.25.4",
+  "version": "1.25.5",
   "versionDate": "29.10.2026",
   "license": "ISC",
   "type": "module",
@@ -113,5 +113,5 @@
     "none": "right now",
     "typescript": "6.0.3: stay until typescript-eslint supports TS 7.1's new API (typescript-eslint#10940); TS 7.0 lacks a programmatic API and breaks our eslint setup. tsconfig already prepared (esModuleInterop deprecation removed 9/2026)"
   },
-  "deployedVersion": "1.25.4"
+  "deployedVersion": "1.25.5"
 }
