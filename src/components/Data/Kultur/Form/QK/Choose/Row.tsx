@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useAtomValue } from 'jotai'
 import Checkbox from '@mui/material/Checkbox'
 import { combineLatest, of as $of } from 'rxjs'
-import { Q } from '@nozbe/watermelondb'
+import { Q } from 'nitromelondb'
 
 import { userAtom, dbAtom } from '../../../../../../store/index.ts'
 import styles from './Row.module.css'

@@ -6,7 +6,7 @@ import IconButton from '@mui/material/IconButton'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import { motion, useAnimation } from 'framer-motion'
-import { Q } from '@nozbe/watermelondb'
+import { Q } from 'nitromelondb'
 import { combineLatest, of as $of } from 'rxjs'
 
 import { dbAtom, userAtom } from '../../../../../store/index.ts'

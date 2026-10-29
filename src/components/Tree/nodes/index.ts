@@ -1,4 +1,4 @@
-import { Q } from '@nozbe/watermelondb'
+import { Q } from 'nitromelondb'
 
 import { buildArtSammlungFolder } from './art/sammlung/folder.ts'
 import { buildArtSammlung } from './art/sammlung/index.ts'

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useAtomValue } from 'jotai'
-import { Q } from '@nozbe/watermelondb'
+import { Q } from 'nitromelondb'
 
 import { dbAtom } from '../../../../../store/index.ts'
 import { teilzaehlungsSortByZaehlungTk } from '../../../../../utils/teilzaehlungsSortByZaehlungTk.ts'

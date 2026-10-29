@@ -3,7 +3,7 @@ import { atomWithStorage } from 'jotai/utils'
 import { sortBy, isEqual } from 'es-toolkit'
 import localForage from 'localforage'
 import { v7 as uuidv7 } from 'uuid'
-import type { Database, Model } from '@nozbe/watermelondb'
+import type { Database, Model } from 'nitromelondb'
 import type { Auth } from 'firebase/auth'
 
 import { initialFilterValues } from './Filter/initialValues.ts'

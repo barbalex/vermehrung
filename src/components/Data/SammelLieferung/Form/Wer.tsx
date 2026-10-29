@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useAtomValue } from 'jotai'
-import { Q } from '@nozbe/watermelondb'
+import { Q } from 'nitromelondb'
 import { combineLatest, of as $of } from 'rxjs'
 import { uniqBy } from 'es-toolkit'
 

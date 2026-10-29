@@ -6,7 +6,7 @@ import { List } from 'react-window'
 import UpSvg from '../../../svg/to_up.svg?react'
 import { breadcrumbsEnabled } from '../../../utils/breadcrumbsEnabled.ts'
 import { combineLatest } from 'rxjs'
-import { Q } from '@nozbe/watermelondb'
+import { Q } from 'nitromelondb'
 
 import {
   dbAtom,

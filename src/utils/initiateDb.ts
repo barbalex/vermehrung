@@ -1,5 +1,5 @@
-import { Database } from '@nozbe/watermelondb'
-import LokiJSAdapter from '@nozbe/watermelondb/adapters/lokijs'
+import { Database } from 'nitromelondb'
+import LokiJSAdapter from 'nitromelondb/adapters/lokijs'
 
 import { addNotification } from '../store/index.ts'
 import { schema } from '../dbSchema/schema.ts'

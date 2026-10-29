@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import type { Database } from '@nozbe/watermelondb'
+import type { Database } from 'nitromelondb'
 
 // in-memory localforage; prefilled per test to simulate a previous session
 const storageData = new Map<string, unknown>()

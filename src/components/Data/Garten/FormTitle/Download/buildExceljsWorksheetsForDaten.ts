@@ -1,4 +1,4 @@
-import { Q } from '@nozbe/watermelondb'
+import { Q } from 'nitromelondb'
 import { store, dbAtom } from '../../../../../store/index.ts'
 import { first as first$ } from 'rxjs/operators'
 

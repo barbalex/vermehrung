@@ -7,7 +7,7 @@ import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import { motion, useAnimation } from 'framer-motion'
 import { combineLatest, of as $of } from 'rxjs'
-import { Q } from '@nozbe/watermelondb'
+import { Q } from 'nitromelondb'
 
 import { ArtQk as Qk } from './Qk/index.tsx'
 import { Choose } from './Choose/index.tsx'

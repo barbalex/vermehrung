@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Q } from '@nozbe/watermelondb'
+import { Q } from 'nitromelondb'
 import { first as first$ } from 'rxjs/operators'
 import { combineLatest } from 'rxjs'
 import { uniqBy } from 'es-toolkit'
@@ -19,7 +19,7 @@ export const useLieferungNachData = ({
     | import('../../../../../../dbModel.ts').Herkunft
     | null
     | undefined
-  db: import('@nozbe/watermelondb').Database | null
+  db: import('nitromelondb').Database | null
   filter: {
     kultur: { _deleted?: boolean | null }
     sammlung: { _deleted?: boolean | null }

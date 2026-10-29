@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useAtomValue } from 'jotai'
-import { Q } from '@nozbe/watermelondb'
+import { Q } from 'nitromelondb'
 import IconButton from '@mui/material/IconButton'
 import { IoMdClose } from 'react-icons/io'
 

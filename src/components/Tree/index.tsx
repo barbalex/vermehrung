@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useAtomValue } from 'jotai'
 import { interval, combineLatest } from 'rxjs'
-import { Q } from '@nozbe/watermelondb'
+import { Q } from 'nitromelondb'
 import { throttle } from 'rxjs/operators'
 import { useDebouncedCallback } from 'use-debounce'
 

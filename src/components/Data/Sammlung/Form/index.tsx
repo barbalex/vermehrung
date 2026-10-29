@@ -4,7 +4,7 @@ import IconButton from '@mui/material/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import { combineLatest, of as $of } from 'rxjs'
 import { first as first$ } from 'rxjs/operators'
-import { Q } from '@nozbe/watermelondb'
+import { Q } from 'nitromelondb'
 import { uniqBy } from 'es-toolkit'
 
 import {

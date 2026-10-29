@@ -1,5 +1,5 @@
 import { useEffect, useState, Suspense } from 'react'
-import DatabaseProvider from '@nozbe/watermelondb/react/DatabaseProvider'
+import { DatabaseProvider } from 'nitromelondb/react'
 import { useAtomValue } from 'jotai'
 import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles'
 

@@ -3,7 +3,7 @@ import { useAtomValue } from 'jotai'
 import { Allotment } from 'allotment'
 import { isId } from '../../../utils/isId.ts'
 import { combineLatest, of as $of } from 'rxjs'
-import { Q } from '@nozbe/watermelondb'
+import { Q } from 'nitromelondb'
 
 import {
   dbAtom,

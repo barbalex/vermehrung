@@ -4,7 +4,7 @@ import Dialog from '@mui/material/Dialog'
 import DialogTitle from '@mui/material/DialogTitle'
 import DialogContent from '@mui/material/DialogContent'
 import { first as first$ } from 'rxjs/operators'
-import { Q } from '@nozbe/watermelondb'
+import { Q } from 'nitromelondb'
 
 import { dbAtom, filterGartenAtom } from '../../../../../../../store/index.ts'
 import { gartensSortedFromGartens } from '../../../../../../../utils/gartensSortedFromGartens.ts'

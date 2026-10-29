@@ -8,7 +8,7 @@ import {
   addQueuedQuery,
   activeNodeArrayAtom,
 } from '../store/index.ts'
-import type { Model } from '@nozbe/watermelondb'
+import type { Model } from 'nitromelondb'
 import { toPgArray } from '../utils/toPgArray.ts'
 import { revTableFields } from './revTableFields.ts'
 

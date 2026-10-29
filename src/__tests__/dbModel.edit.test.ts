@@ -1,4 +1,4 @@
-import type { Database } from '@nozbe/watermelondb'
+import type { Database } from 'nitromelondb'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 // window stub with a localStorage mock, set before module imports

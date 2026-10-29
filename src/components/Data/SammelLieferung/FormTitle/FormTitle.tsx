@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useAtomValue } from 'jotai'
 import { useResizeDetector } from 'react-resize-detector'
 import { of as $of } from 'rxjs'
-import { Q } from '@nozbe/watermelondb'
+import { Q } from 'nitromelondb'
 
 import {
   activeNodeArrayAtom,

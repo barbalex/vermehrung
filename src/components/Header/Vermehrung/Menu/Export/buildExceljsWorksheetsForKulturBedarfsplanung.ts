@@ -1,7 +1,7 @@
 import { format } from 'date-fns/format'
 import { store, dbAtom } from '../../../../../store/index.ts'
 import { sumBy } from 'es-toolkit'
-import { Q } from '@nozbe/watermelondb'
+import { Q } from 'nitromelondb'
 import { first as first$ } from 'rxjs/operators'
 
 import { addWorksheetToExceljsWorkbook } from '../../../../../utils/addWorksheetToExceljsWorkbook.ts'

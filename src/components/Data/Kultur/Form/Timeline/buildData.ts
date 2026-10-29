@@ -1,5 +1,5 @@
 import { sortBy, sumBy, groupBy } from 'es-toolkit'
-import { Q } from '@nozbe/watermelondb'
+import { Q } from 'nitromelondb'
 import { format } from 'date-fns/format'
 
 import { exists } from '../../../../../utils/exists.ts'

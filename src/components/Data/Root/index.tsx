@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useAtomValue } from 'jotai'
 import { combineLatest, of as $of } from 'rxjs'
-import { Q } from '@nozbe/watermelondb'
+import { Q } from 'nitromelondb'
 
 import { RootRow as Row } from './Row.tsx'
 import { dbAtom, userAtom, activeNodeArrayAtom } from '../../../store/index.ts'

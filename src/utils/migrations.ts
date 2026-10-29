@@ -2,7 +2,7 @@ import {
   schemaMigrations,
   addColumns,
   createTable,
-} from '@nozbe/watermelondb/Schema/migrations'
+} from 'nitromelondb/Schema/migrations'
 
 export const migrations = schemaMigrations({
   migrations: [

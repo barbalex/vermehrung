@@ -1,4 +1,4 @@
-import { appSchema } from '@nozbe/watermelondb'
+import { appSchema } from 'nitromelondb'
 
 import { ae_art } from './ae_art.ts'
 import { apflora_ap } from './apflora_ap.ts'
