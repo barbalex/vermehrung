@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useAtomValue } from 'jotai'
+import { Q } from 'nitromelondb'
 import { from, of, type Observable } from 'rxjs'
 import { map, switchMap, catchError } from 'rxjs/operators'
 
@@ -7,6 +8,7 @@ import { dbAtom } from '../../store/index.ts'
 import { herkunftLabelFromHerkunft } from '../../utils/herkunftLabelFromHerkunft.ts'
 import { personLabelFromPerson } from '../../utils/personLabelFromPerson.ts'
 import { teilkulturLabelFromTeilkultur } from '../../utils/teilkulturLabelFromTeilkultur.ts'
+import { zaehlungLabelFromZaehlung } from '../../utils/zaehlungLabelFromZaehlung.ts'
 
 import type {
   Art,
@@ -19,6 +21,7 @@ import type {
   SammelLieferung,
   Sammlung,
   Teilkultur,
+  Teilzaehlung,
   Zaehlung,
 } from '../../dbModel.ts'
 
@@ -149,11 +152,32 @@ export const useRowLabel = ({
             )
           break
         case 'zaehlung':
+          // the label sums the teilzaehlungs' numbers - observe them too,
+          // editing a teilzaehlung must refresh the crumb
           observable = db
             .get<Zaehlung>('zaehlung')
             .findAndObserveOrNull(idString)
             .pipe(
-              switchMap((row) => (row ? row.label : of(undefined))),
+              switchMap((row) =>
+                row
+                  ? db
+                      .get<Teilzaehlung>('teilzaehlung')
+                      .query(Q.where('zaehlung_id', row.id))
+                      .observeWithColumns([
+                        'anzahl_pflanzen',
+                        'anzahl_auspflanzbereit',
+                        'anzahl_mutterpflanzen',
+                      ])
+                      .pipe(
+                        map((teilzaehlungs) =>
+                          zaehlungLabelFromZaehlung({
+                            zaehlung: row,
+                            teilzaehlungs,
+                          }),
+                        ),
+                      )
+                  : of(undefined),
+              ),
             )
           break
         case 'lieferung':

@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test'
+import { expect, test, type Page } from '@playwright/test'
 import { createHmac } from 'node:crypto'
 
 // Pins live label updates: editing a row's label-relevant columns must
@@ -17,9 +17,13 @@ const ARTNAME = 'E2E-Sumpf-Distel'
 const ROLE_ID = '0174bb08-6d26-7332-8a52-7a5cef62f310'
 const KULTUR_ID = '0174bb08-6d26-7333-8a52-7a5cef62f310'
 const BEDARF_ID = '0174bb08-6d26-7340-8a52-7a5cef62f310'
+const ZAEHLUNG_ID = '0174bb08-6d26-7341-8a52-7a5cef62f310'
+const TEILZAEHLUNG_ID = '0174bb08-6d26-7342-8a52-7a5cef62f310'
 const INITIAL_LABEL = '2024: Anfang'
 const NEW_JAHR_LABEL = '2026: Anfang'
 const NEW_BESCHREIBUNG_LABEL = '2026: Ende'
+const ZAEHLUNG_LABEL = (anzahlPflanzen: number) =>
+  `2023.06.12; ${String(anzahlPflanzen).padStart(3, '_')}/___/___`
 
 const b64 = (payload: object) =>
   Buffer.from(JSON.stringify(payload)).toString('base64url')
@@ -48,7 +52,7 @@ const idToken = () =>
 const apiToken = () =>
   mint({ role: 'benutzer', user_id: PERSON_ID, sub: UID, exp: nowEpoch() + 3600 })
 
-const fullSync = () => ({
+const baseSync = () => ({
   synced_at: nowEpoch(),
   ae_art: [{ id: AE_ART_ID, name: ARTNAME, _conflicts: null, _revisions: null }],
   art: [
@@ -73,13 +77,10 @@ const fullSync = () => ({
       _revisions: null,
     },
   ],
-  bedarf: [
+  kultur_option: [
     {
-      id: BEDARF_ID,
-      kultur_id: KULTUR_ID,
-      person_id: null,
-      jahr: 2024,
-      beschreibung: 'Anfang',
+      id: KULTUR_ID,
+      tk: false,
       _deleted: false,
       _conflicts: null,
       _revisions: null,
@@ -101,11 +102,10 @@ const fullSync = () => ({
   user_role: [{ id: ROLE_ID, name: 'benutzer', sort: 1 }],
 })
 
-test('editing label columns updates tree row and breadcrumb live', async ({
-  page,
-}) => {
-  test.setTimeout(120_000)
-
+// mocks auth + api and logs in; the first sync delivers the payload,
+// later polls return an empty delta - otherwise they would clobber the
+// local edit once its revision flushed
+const loginWithSync = async (page: Page, payload: () => object) => {
   await page.route('**/identitytoolkit.googleapis.com/**', (route) => {
     const { pathname } = new URL(route.request().url())
     if (pathname.endsWith('accounts:signInWithPassword')) {
@@ -148,8 +148,6 @@ test('editing label columns updates tree row and breadcrumb live', async ({
       body: JSON.stringify({ token: apiToken() }),
     }),
   )
-  // the first sync delivers all rows, later polls return an empty delta -
-  // otherwise they would clobber the local edit once its revision flushed
   let syncCalls = 0
   await page.route('http://localhost:8090/**', (route) => {
     const url = new URL(route.request().url())
@@ -157,13 +155,17 @@ test('editing label columns updates tree row and breadcrumb live', async ({
       syncCalls += 1
       return route.fulfill({
         contentType: 'application/json',
-        body: JSON.stringify(syncCalls === 1 ? fullSync() : { synced_at: nowEpoch() }),
+        body: JSON.stringify(
+          syncCalls === 1 ? payload() : { synced_at: nowEpoch() },
+        ),
       })
     }
     if (url.pathname === '/person') {
       return route.fulfill({
         contentType: 'application/json',
-        body: JSON.stringify([{ id: PERSON_ID, user_role: { name: 'benutzer' } }]),
+        body: JSON.stringify([
+          { id: PERSON_ID, user_role: { name: 'benutzer' } },
+        ]),
       })
     }
     return route.fulfill({ status: 404, body: 'unmocked' })
@@ -180,6 +182,28 @@ test('editing label columns updates tree row and breadcrumb live', async ({
   await expect
     .poll(() => syncCalls, { timeout: 30_000 })
     .toBeGreaterThan(0)
+}
+
+test('editing label columns updates tree row and breadcrumb live', async ({
+  page,
+}) => {
+  test.setTimeout(120_000)
+
+  await loginWithSync(page, () => ({
+    ...baseSync(),
+    bedarf: [
+      {
+        id: BEDARF_ID,
+        kultur_id: KULTUR_ID,
+        person_id: null,
+        jahr: 2024,
+        beschreibung: 'Anfang',
+        _deleted: false,
+        _conflicts: null,
+        _revisions: null,
+      },
+    ],
+  }))
 
   // open the bedarf form; the url path opens the tree nodes along it
   await page.goto(
@@ -213,6 +237,70 @@ test('editing label columns updates tree row and breadcrumb live', async ({
     // the stale label is gone from both places
     await expect(trail.getByText(INITIAL_LABEL)).toHaveCount(0)
     await expect(tree.getByText(INITIAL_LABEL)).toHaveCount(0)
+  })
+
+  await expect(page.locator('#dev-error-overlay')).toHaveCount(0)
+})
+
+test('editing a teilzaehlung updates the zaehlung label live', async ({
+  page,
+}) => {
+  test.setTimeout(120_000)
+
+  await loginWithSync(page, () => ({
+    ...baseSync(),
+    zaehlung: [
+      {
+        id: ZAEHLUNG_ID,
+        kultur_id: KULTUR_ID,
+        datum: '2023-06-12',
+        prognose: false,
+        _deleted: false,
+        _conflicts: null,
+        _revisions: null,
+      },
+    ],
+    teilzaehlung: [
+      {
+        id: TEILZAEHLUNG_ID,
+        zaehlung_id: ZAEHLUNG_ID,
+        teilkultur_id: null,
+        anzahl_pflanzen: 100,
+        anzahl_auspflanzbereit: null,
+        anzahl_mutterpflanzen: null,
+        andere_menge: null,
+        auspflanzbereit_beschreibung: null,
+        bemerkungen: null,
+        prognose_von_tz: null,
+        _deleted: false,
+        _conflicts: null,
+        _revisions: null,
+      },
+    ],
+  }))
+
+  // the zaehlung label sums its teilzaehlungs' numbers
+  await page.goto(
+    `/Vermehrung/Arten/${ART_ID}/Kulturen/${KULTUR_ID}/Zaehlungen/${ZAEHLUNG_ID}`,
+  )
+  const trail = page.locator('nav[aria-label="Pfad"]')
+  const tree = page.locator('.tree-root')
+  await expect(trail.getByText(ZAEHLUNG_LABEL(100))).toBeVisible({
+    timeout: 60_000,
+  })
+  await expect(tree.getByText(ZAEHLUNG_LABEL(100))).toBeVisible({
+    timeout: 60_000,
+  })
+
+  // editing the teilzaehlung's anzahl must refresh the zaehlung label
+  const anzahlPflanzenInput = page.getByLabel('Anzahl Pflanzen')
+  await anzahlPflanzenInput.fill('250')
+  await anzahlPflanzenInput.press('Tab')
+  await expect(trail.getByText(ZAEHLUNG_LABEL(250))).toBeVisible({
+    timeout: 15_000,
+  })
+  await expect(tree.getByText(ZAEHLUNG_LABEL(250))).toBeVisible({
+    timeout: 15_000,
   })
 
   await expect(page.locator('#dev-error-overlay')).toHaveCount(0)
