@@ -1,6 +1,13 @@
 {
-  "cSpell.words": [
-    "ereignis",
-    "zählung"
-  ]
+  "cSpell.words": ["ereignis", "zählung"],
+  "chat.tools.terminal.autoApprove": {
+    "/^ls -la node_modules/\\.vite/deps \\| sed -n '1,200p'; if \\[\\[ -f node_modules/\\.vite/deps/_metadata\\.json \\]\\]; then cat node_modules/\\.vite/deps/_metadata\\.json \\| sed -n '1,260p'; fi; ls node_modules/\\.vite/deps \\| rg 'workerRuntime\\|sqlite\\|nitromelondb' \\|\\| true$/": {
+      "approve": true,
+      "matchCommandLine": true
+    },
+    "/^if \\[\\[ -f node_modules/\\.vite/deps/_metadata\\.json \\]\\]; then rg -n -C 3 'workerRuntime\\|sqlite\\|nitromelondb' node_modules/\\.vite/deps/_metadata\\.json \\|\\| true; else echo 'NO_METADATA'; fi; echo 'FILES:'; ls node_modules/\\.vite/deps \\| rg 'workerRuntime\\|sqlite\\|nitromelondb' \\|\\| true$/": {
+      "approve": true,
+      "matchCommandLine": true
+    }
+  }
 }

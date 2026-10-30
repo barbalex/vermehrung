@@ -1,6 +1,6 @@
 import babel from '@rolldown/plugin-babel'
 import react, { reactCompilerPreset } from '@vitejs/plugin-react'
-import { readFileSync } from 'node:fs'
+import { existsSync, readFileSync } from 'node:fs'
 import { dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { defineConfig, type Plugin } from 'vite'
@@ -52,7 +52,8 @@ const sqliteWasmStub = (): Plugin => ({
 // in dev, the sqlite worker entry's relative import of workerRuntime.js
 // would be served as raw CommonJS (only bare imports are rewritten to
 // optimized deps). Resolve it to the optimizer's prebundled file instead.
-// The dep is registered under its file path via optimizeDeps.include below.
+// Return a filesystem id (not a /node_modules URL) so Vite 8 can load it
+// reliably in the pre-transform pipeline.
 const sqliteWorkerDepUrl = (): Plugin => ({
   name: 'sqlite-worker-dep-url',
   enforce: 'pre',
@@ -71,7 +72,10 @@ const sqliteWorkerDepUrl = (): Plugin => ({
       )
       const info = metadata.optimized[sqliteWorkerRuntimeFile]
       if (info?.file) {
-        return `/node_modules/.vite/deps/${info.file}?v=${metadata.browserHash}`
+        const optimizedFile = `${rootDir}/node_modules/.vite/deps/${info.file}`
+        if (existsSync(optimizedFile)) {
+          return optimizedFile
+        }
       }
     } catch {
       // metadata not written yet (first optimization still running)
