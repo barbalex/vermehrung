@@ -17,12 +17,6 @@ const Bedarf = lazy(async () => ({
 const Bedarfe = lazy(async () => ({
   default: (await import('./Bedarfe/index.tsx')).Bedarfe,
 }))
-const Event = lazy(async () => ({
-  default: (await import('./Event/index.tsx')).Event,
-}))
-const Events = lazy(async () => ({
-  default: (await import('./Events/index.tsx')).Events,
-}))
 const Herkunft = lazy(async () => ({
   default: (await import('./Herkunft/index.tsx')).Herkunft,
 }))
@@ -125,10 +119,6 @@ export const Data = () => {
       return <Bedarf id={id} />
     case 'bedarfe':
       return <Bedarfe />
-    case 'event':
-      return <Event id={id} />
-    case 'events':
-      return <Events />
     case 'garten':
       return (
         <WithObjectList table="garten" id={id}>

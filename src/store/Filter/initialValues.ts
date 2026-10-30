@@ -1,6 +1,5 @@
 import { initial as art } from './art.ts'
 import { initial as bedarf } from './bedarf.ts'
-import { initial as event } from './event.ts'
 import { initial as garten } from './garten.ts'
 import { initial as herkunft } from './herkunft.ts'
 import { initial as kultur } from './kultur.ts'
@@ -16,7 +15,6 @@ import { initial as teilzaehlung } from './teilzaehlung.ts'
 export const initialFilterValues: Record<string, Record<string, unknown>> = {
   art,
   bedarf,
-  event,
   garten,
   herkunft,
   kultur,

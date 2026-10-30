@@ -30,15 +30,6 @@ const expectedFields = {
     'bemerkungen',
     'neues_material',
   ],
-  event: [
-    'event_id',
-    'kultur_id',
-    'teilkultur_id',
-    'person_id',
-    'beschreibung',
-    'geplant',
-    'datum',
-  ],
   garten: [
     'garten_id',
     'name',

@@ -28,7 +28,6 @@ export const HeaderHamburgerMenu = ({
   const db = useAtomValue(dbAtom)
   const user = useAtomValue(userAtom)
   const artFilter = useAtomValue(filterTableAtoms.art)
-  const eventFilter = useAtomValue(filterTableAtoms.event)
   const gartenFilter = useAtomValue(filterTableAtoms.garten)
   const herkunftFilter = useAtomValue(filterTableAtoms.herkunft)
   const kulturFilter = useAtomValue(filterTableAtoms.kultur)
@@ -60,7 +59,6 @@ export const HeaderHamburgerMenu = ({
   }) => {
     const value = event.target.checked ? false : null
     setFilterValue({ table: 'art', key: '_deleted', value })
-    setFilterValue({ table: 'event', key: '_deleted', value })
     setFilterValue({ table: 'garten', key: '_deleted', value })
     setFilterValue({ table: 'herkunft', key: '_deleted', value })
     setFilterValue({ table: 'kultur', key: '_deleted', value })
@@ -88,7 +86,6 @@ export const HeaderHamburgerMenu = ({
     personFilter.aktiv === true
   const deletedValue =
     artFilter._deleted === false &&
-    eventFilter._deleted === false &&
     gartenFilter._deleted === false &&
     herkunftFilter._deleted === false &&
     kulturFilter._deleted === false &&

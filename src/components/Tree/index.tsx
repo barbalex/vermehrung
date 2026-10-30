@@ -19,7 +19,6 @@ import {
   filterTeilkulturAtom,
   filterZaehlungAtom,
   filterLieferungAtom,
-  filterEventAtom,
   filterPersonAtom,
 } from '../../store/index.ts'
 import { TreeSettings as Settings } from './Settings.tsx'
@@ -48,7 +47,6 @@ export const Tree = () => {
   const teilkulturFilter = useAtomValue(filterTeilkulturAtom)
   const zaehlungFilter = useAtomValue(filterZaehlungAtom)
   const lieferungFilter = useAtomValue(filterLieferungAtom)
-  const eventFilter = useAtomValue(filterEventAtom)
   const personFilter = useAtomValue(filterPersonAtom)
 
   const [nodes, setNodes] = useState<import('./nodes/index.ts').TreeNode[]>([])
@@ -160,10 +158,6 @@ export const Tree = () => {
     //   .get('sammel_lieferung')
     //   .query(...tableFilter({ table: 'sammel_lieferung' }))
     //   .observeWithColumns(['datum', 'anzahl_pflanzen'])
-    const eventsObservable = db
-      ?.get('event')
-      .query(...tableFilter({ table: 'event' }))
-      .observeWithColumns(['datum', 'beschreibung'])
     const personsObservable = db
       ?.get('person')
       .query(...tableFilter({ table: 'person' }))
@@ -176,7 +170,6 @@ export const Tree = () => {
       userPersonOptionsObservable,
       userRoleObservable,
       artsObservable,
-      eventsObservable,
       gartensObservable,
       herkunftsObservable,
       kultursObservable,
@@ -194,7 +187,6 @@ export const Tree = () => {
       import('../../dbModel.ts').PersonOption[],
       import('../../dbModel.ts').UserRole[],
       import('../../dbModel.ts').Art[],
-      import('../../dbModel.ts').Event[],
       import('../../dbModel.ts').Garten[],
       import('../../dbModel.ts').Herkunft[],
       import('../../dbModel.ts').Kultur[],
@@ -232,7 +224,6 @@ export const Tree = () => {
     teilkulturFilter,
     zaehlungFilter,
     lieferungFilter,
-    eventFilter,
     personFilter,
     // need to rebuild tree on activeNodeArray changes
     aNA,

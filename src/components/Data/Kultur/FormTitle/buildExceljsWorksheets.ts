@@ -9,7 +9,6 @@ import { exists } from '../../../../utils/exists.ts'
 import { teilzaehlungsSortByTk } from '../../../../utils/teilzaehlungsSortByTk.ts'
 import { zaehlungSort } from '../../../../utils/zaehlungSort.ts'
 import { lieferungSort } from '../../../../utils/lieferungSort.ts'
-import { eventSort } from '../../../../utils/eventSort.ts'
 import { personFullname } from '../../../../utils/personFullname.ts'
 
 /**
@@ -518,58 +517,6 @@ export const buildExceljsWorksheetsForKultur = async ({
         ? `Kultur_${kultur_name}_Auslieferungen`
         : 'Auslieferungen',
       data: auslieferungen,
-    })
-  }
-  // 6. Get Events
-  let events: import('../../../../dbModel.ts').Event[] = []
-  try {
-    events =
-      (await db
-        ?.get<import('../../../../dbModel.ts').Event>('event')
-        .query(Q.where('_deleted', false), Q.where('kultur_id', kultur_id))
-        .fetch()) ?? []
-  } catch {}
-  const eventsSorted = events.sort(eventSort)
-  const eventsData = await Promise.all(
-    eventsSorted.map(async (e) => {
-      let teilkultur: import('../../../../dbModel.ts').Teilkultur | undefined
-      try {
-        teilkultur = await db?.get<import('../../../../dbModel.ts').Teilkultur>('teilkultur').find(e.teilkultur_id as string)
-      } catch {}
-      let person
-      try {
-        person = await e.person.fetch()
-      } catch {}
-
-      const newZ = {
-        id: e.id,
-        kultur_id: e.kultur_id,
-        teilkultur_id: e.teilkultur_id,
-        teilkultur_name: teilkultur?.name,
-        teilkultur_rohdaten: removeMetadataFromDataset({
-          dataset: teilkultur?._raw,
-          foreignKeys: [],
-        }),
-        person_id: e.person_id,
-        person_name: personFullname(person),
-        person_rohdaten: removeMetadataFromDataset({
-          dataset: person?._raw,
-          foreignKeys: [],
-        }),
-        beschreibung: e.beschreibung,
-        geplant: e.geplant,
-        datum: e.datum,
-        changed: e.changed,
-        changed_by: e.changed_by,
-      }
-      return newZ
-    }),
-  )
-  if (eventsData.length) {
-    addWorksheetToExceljsWorkbook({
-      workbook,
-      title: calledFromHigherUp ? `Kultur_${kultur_name}_Events` : 'Events',
-      data: eventsData,
     })
   }
   return

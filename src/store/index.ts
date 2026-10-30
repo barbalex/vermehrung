@@ -17,7 +17,6 @@ import { gartenIdInUrl } from '../utils/gartenIdInUrl.ts'
 import { kulturIdInUrl } from '../utils/kulturIdInUrl.ts'
 import { anLieferungIdInUrl } from '../utils/anLieferungIdInUrl.ts'
 import { bedarfIdInUrl } from '../utils/bedarfIdInUrl.ts'
-import { eventIdInUrl } from '../utils/eventIdInUrl.ts'
 import { ausLieferungIdInUrl } from '../utils/ausLieferungIdInUrl.ts'
 import { lieferungIdInUrl } from '../utils/lieferungIdInUrl.ts'
 import { teilkulturIdInUrl } from '../utils/teilkulturIdInUrl.ts'
@@ -138,7 +137,6 @@ export const tables = [
   'art_qk',
   'av',
   'bedarf',
-  'event',
   'garten',
   'garten_file',
   'gv',
@@ -331,7 +329,6 @@ export const setWidthInPercentOfScreen = (val: number) => {
 const filterTableNames = [
   'art',
   'bedarf',
-  'event',
   'garten',
   'herkunft',
   'kultur',
@@ -358,7 +355,6 @@ export const filterTableAtoms: Record<
 )
 export const filterArtAtom = filterTableAtoms.art
 export const filterBedarfAtom = filterTableAtoms.bedarf
-export const filterEventAtom = filterTableAtoms.event
 export const filterGartenAtom = filterTableAtoms.garten
 export const filterHerkunftAtom = filterTableAtoms.herkunft
 export const filterKulturAtom = filterTableAtoms.kultur
@@ -418,7 +414,6 @@ export const defaultErrors = Object.fromEntries(
   [
     'art',
     'bedarf',
-    'event',
     'garten',
     'herkunft',
     'kultur',
@@ -752,9 +747,6 @@ export const lieferungIdInActiveNodeArrayAtom = atom((get) =>
 export const bedarfIdInActiveNodeArrayAtom = atom((get) =>
   bedarfIdInUrl(get(activeNodeArrayAtom)),
 )
-export const eventIdInActiveNodeArrayAtom = atom((get) =>
-  eventIdInUrl(get(activeNodeArrayAtom)),
-)
 export const teilkulturIdInActiveNodeArrayAtom = atom((get) =>
   teilkulturIdInUrl(get(activeNodeArrayAtom)),
 )
@@ -789,7 +781,6 @@ export const xxxIdInActiveNodeArrayAtoms: Record<
   ausLieferungIdInActiveNodeArray: ausLieferungIdInActiveNodeArrayAtom,
   lieferungIdInActiveNodeArray: lieferungIdInActiveNodeArrayAtom,
   bedarfIdInActiveNodeArray: bedarfIdInActiveNodeArrayAtom,
-  eventIdInActiveNodeArray: eventIdInActiveNodeArrayAtom,
   teilkulturIdInActiveNodeArray: teilkulturIdInActiveNodeArrayAtom,
   personIdInActiveNodeArray: personIdInActiveNodeArrayAtom,
   sammelLieferungIdInActiveNodeArray: sammelLieferungIdInActiveNodeArrayAtom,

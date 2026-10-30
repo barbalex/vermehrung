@@ -20,7 +20,6 @@ import type { Observable } from 'rxjs'
 
 import { personLabelFromPerson } from './utils/personLabelFromPerson.ts'
 import { gartenLabelFromGarten } from './utils/gartenLabelFromGarten.ts'
-import { eventLabelFromEvent } from './utils/eventLabelFromEvent.ts'
 import { bedarfLabelFromBedarf } from './utils/bedarfLabelFromBedarf.ts'
 import { artLabelFromAeArt } from './utils/artLabelFromAeArt.ts'
 import { lieferungLabelFromLieferung } from './utils/lieferungLabelFromLieferung.ts'
@@ -578,7 +577,6 @@ export class Kultur extends Model {
     //auslieferung: { type: 'has_many', foreignKey: 'nach_kultur_id' },
     teilkultur: { type: 'has_many', foreignKey: 'kultur_id' },
     zaehlung: { type: 'has_many', foreignKey: 'kultur_id' },
-    event: { type: 'has_many', foreignKey: 'kultur_id' },
     bedarf: { type: 'has_many', foreignKey: 'kultur_id' },
     kultur_option: { type: 'belongs_to', key: 'id' },
     kultur_file: { type: 'has_many', foreignKey: 'kultur_id' },
@@ -603,7 +601,6 @@ export class Kultur extends Model {
 
   @children('teilkultur') teilkulturs!: Query<Teilkultur>
   @children('zaehlung') zaehlungs!: Query<Zaehlung>
-  @children('event') events!: Query<Event>
   @children('bedarf') bedarfs!: Query<Bedarf>
   @children('kultur_file') files!: Query<KulturFile>
   @relation('kultur_option', 'id') kultur_option!: Relation<KulturOption>
@@ -742,7 +739,6 @@ export class Teilkultur extends Model {
   static table = 'teilkultur'
   static associations: Associations = {
     kultur: { type: 'belongs_to', key: 'kultur_id' },
-    event: { type: 'has_many', foreignKey: 'teilkultur_id' },
     teilzaehlung: { type: 'has_many', foreignKey: 'teilkultur_id' },
   }
 
@@ -762,7 +758,6 @@ export class Teilkultur extends Model {
   @json('_conflicts', dontSanitize) _conflicts!: string[] | null
 
   @relation('kultur', 'kultur_id') kultur!: Relation<Kultur>
-  @children('event') events!: Query<Event>
   @children('teilzaehlung') teilzaehlungs!: Query<Teilzaehlung>
 
   @writer async removeConflict(_rev: string) {
@@ -993,7 +988,6 @@ export class Person extends Model {
     sammlung: { type: 'has_many', foreignKey: 'person_id' },
     lieferung: { type: 'has_many', foreignKey: 'person_id' },
     garten: { type: 'has_many', foreignKey: 'person_id' },
-    event: { type: 'has_many', foreignKey: 'person_id' },
     bedarf: { type: 'has_many', foreignKey: 'person_id' },
     person_file: { type: 'has_many', foreignKey: 'person_id' },
   }
@@ -1049,7 +1043,6 @@ export class Person extends Model {
   @children('sammlung') sammlungs!: Query<Sammlung>
   @children('lieferung') lieferungs!: Query<Lieferung>
   @children('garten') gartens!: Query<Garten>
-  @children('event') events!: Query<Event>
   @children('bedarf') bedarfs!: Query<Bedarf>
   @children('person_file') files!: Query<PersonFile>
 
@@ -1263,83 +1256,6 @@ export class Bedarf extends Model {
     unsetError(`bedarf.${field}`)
     const changes = values ?? { [field as string]: value }
     registerDirtyRev('bedarf', this.id, field, this)
-    // optimistically update store
-    await this.update((row) => {
-      Object.entries(changes).forEach(([key, val]) => {
-        ;(row as unknown as Record<string, unknown>)[key] = val
-      })
-      row.changed = new Date().toISOString()
-      row.changed_by = store.get(userAtom)?.email ?? null
-    })
-  }
-  @writer async delete() {
-    await this.callWriter(() => this.edit({ field: '_deleted', value: true }))
-  }
-}
-
-export class Event extends Model {
-  static table = 'event'
-  static associations: Associations = {
-    kultur: { type: 'belongs_to', key: 'kultur_id' },
-    person: { type: 'belongs_to', key: 'person_id' },
-  }
-
-  @field('kultur_id') kultur_id!: string | null
-  @field('teilkultur_id') teilkultur_id!: string | null
-  @field('person_id') person_id!: string | null
-  @field('beschreibung') beschreibung!: string | null
-  @field('geplant') geplant!: boolean | null
-  @field('datum') datum!: string | null
-  @field('changed') changed!: string | null
-  @field('changed_by') changed_by!: string | null
-  @field('_rev') _rev!: string | null
-  @field('_parent_rev') _parent_rev!: string | null
-  @json('_revisions', dontSanitize) _revisions!: string[] | null
-  @field('_depth') _depth!: number | null
-  @field('_deleted') _deleted!: boolean | null
-  @json('_conflicts', dontSanitize) _conflicts!: string[] | null
-
-  @relation('kultur', 'kultur_id') kultur!: Relation<Kultur>
-  @relation('teilkultur', 'teilkultur_id') teilkultur!: Relation<Teilkultur>
-  @relation('person', 'person_id') person!: Relation<Person>
-
-  @lazy label: Observable<string> = this.observe().pipe(
-    distinctUntilChanged(
-      (a, b) =>
-        a.datum === b.datum &&
-        a.geplant === b.geplant &&
-        a.beschreibung === b.beschreibung,
-    ),
-    map$((event) =>
-      eventLabelFromEvent({
-        event,
-      }),
-    ),
-  )
-
-  @writer async removeConflict(_rev: string) {
-    await this.update((row) => {
-      row._conflicts = (this._conflicts ?? []).filter((r) => r !== _rev)
-    })
-  }
-  // updates the row locally - ui and labels stay live.
-  // the revision is created when the editing session on this row
-  // ends (see modules/revAggregation.js), not per field change
-  @writer async edit({
-    field,
-    value,
-    values,
-  }: {
-    field?: string
-    value?: unknown
-    values?: Record<string, unknown>
-  }) {
-    if (!field && !values) {
-      throw new Error('field or values must be passed')
-    }
-    unsetError(`event.${field}`)
-    const changes = values ?? { [field as string]: value }
-    registerDirtyRev('event', this.id, field, this)
     // optimistically update store
     await this.update((row) => {
       Object.entries(changes).forEach(([key, val]) => {

@@ -1,6 +1,5 @@
 import { empty as art } from './art.ts'
 import { empty as bedarf } from './bedarf.ts'
-import { empty as event } from './event.ts'
 import { empty as garten } from './garten.ts'
 import { empty as herkunft } from './herkunft.ts'
 import { empty as kultur } from './kultur.ts'
@@ -16,7 +15,6 @@ import { empty as teilzaehlung } from './teilzaehlung.ts'
 const emptyValues: Record<string, Record<string, unknown>> = {
   art,
   bedarf,
-  event,
   garten,
   herkunft,
   kultur,

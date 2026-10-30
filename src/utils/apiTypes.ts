@@ -4,7 +4,6 @@ import type ArtFile from '../models/public/ArtFile.ts'
 import type ArtQk from '../models/public/ArtQk.ts'
 import type Av from '../models/public/Av.ts'
 import type Bedarf from '../models/public/Bedarf.ts'
-import type Event from '../models/public/Event.ts'
 import type Garten from '../models/public/Garten.ts'
 import type GartenFile from '../models/public/GartenFile.ts'
 import type Gv from '../models/public/Gv.ts'
@@ -50,7 +49,6 @@ export interface SyncResult {
   art_qk?: ArtQk[]
   av?: Av[]
   bedarf?: Bedarf[]
-  event?: Event[]
   garten?: Garten[]
   garten_file?: GartenFile[]
   gv?: Gv[]

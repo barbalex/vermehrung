@@ -54,18 +54,6 @@ const configs: Record<string, InsertRevConfig> = {
       ['neues_material'],
     ],
   },
-  event: {
-    idField: 'event_id',
-    fields: [
-      ['event_id'],
-      ['kultur_id', 'kulturIdInActiveNodeArray'],
-      ['teilkultur_id', 'teilkulturIdInActiveNodeArray'],
-      ['person_id'],
-      ['beschreibung'],
-      ['geplant'],
-      ['datum'],
-    ],
-  },
   garten: {
     idField: 'garten_id',
     fields: [
@@ -342,8 +330,6 @@ export const insertAvRev = (args: Record<string, unknown>) =>
   insertRev('av', args)
 export const insertBedarfRev = (args: Record<string, unknown>) =>
   insertRev('bedarf', args)
-export const insertEventRev = (args: Record<string, unknown>) =>
-  insertRev('event', args)
 export const insertGartenRev = (args: Record<string, unknown>) =>
   insertRev('garten', args)
 export const insertGvRev = (args: Record<string, unknown>) =>

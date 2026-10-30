@@ -5,7 +5,6 @@ import { Q } from 'nitromelondb'
 import { exists } from '../../../../../../utils/exists.ts'
 import { notDeletedQuery } from '../../../../../../utils/notDeletedQuery.ts'
 import { kultursSortedFromKulturs } from '../../../../../../utils/kultursSortedFromKulturs.ts'
-import { eventSort } from '../../../../../../utils/eventSort.ts'
 import { lieferungSort } from '../../../../../../utils/lieferungSort.ts'
 import { teilkulturSort } from '../../../../../../utils/teilkulturSort.ts'
 import { zaehlungSort } from '../../../../../../utils/zaehlungSort.ts'
@@ -30,22 +29,6 @@ export const createKulturMessageFunctions = async ({
   const startNextYear = `${year + 1}-01-01`
   const now = new Date().getTime()
 
-  let events: import('../../../../../../dbModel.ts').Event[] = []
-  try {
-    const eventDelQuery =
-      filter.event._deleted === false
-        ? Q.where('_deleted', false)
-        : filter.event._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
-    events = (await db
-      ?.get<import('../../../../../../dbModel.ts').Event>('event').query(eventDelQuery).fetch()) ?? []
-  } catch {}
-  const eventsSorted = events.sort(eventSort)
   let kulturs: import('../../../../../../dbModel.ts').Kultur[] = []
   try {
     const kulturDelQuery =
@@ -879,47 +862,5 @@ export const createKulturMessageFunctions = async ({
             text,
           }
         }),
-    eventsWithoutBeschreibung: async () =>
-      await Promise.all(
-        eventsSorted
-          .filter((e) => e.kultur_id === kulturId)
-          .filter((e) => !e.beschreibung)
-          .map(async (ev) => {
-            let kultur
-            try {
-              kultur = await ev.kultur.fetch()
-            } catch {}
-            let kulturLabel
-            try {
-              kulturLabel = await kultur?.label.pipe(first$()).toPromise()
-            } catch {}
-
-            return {
-              url: ['Kulturen', kulturId, 'Events', ev.id],
-              text: `${kulturLabel ?? '(keine Kultur)'}, Event-ID: ${ev.id}`,
-            }
-          }),
-      ),
-    eventsWithoutDatum: async () =>
-      await Promise.all(
-        eventsSorted
-          .filter((e) => e.kultur_id === kulturId)
-          .filter((e) => !e.datum)
-          .map(async (ev) => {
-            let kultur
-            try {
-              kultur = await ev.kultur.fetch()
-            } catch {}
-            let kulturLabel
-            try {
-              kulturLabel = await kultur?.label.pipe(first$()).toPromise()
-            } catch {}
-
-            return {
-              url: ['Kulturen', kulturId, 'Events', ev.id],
-              text: `${kulturLabel ?? '(keine Kultur)'}, Event-ID: ${ev.id}`,
-            }
-          }),
-      ),
   }
 }

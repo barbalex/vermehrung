@@ -225,21 +225,6 @@ export const revTableFields: Record<
       '_deleted',
     ],
   },
-  event: {
-    idField: 'event_id',
-    fields: [
-      'event_id',
-      'kultur_id',
-      'teilkultur_id',
-      'person_id',
-      'beschreibung',
-      'geplant',
-      'datum',
-      '_parent_rev',
-      '_depth',
-      '_deleted',
-    ],
-  },
   av: {
     idField: 'av_id',
     fields: [

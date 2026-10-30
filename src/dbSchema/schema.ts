@@ -7,7 +7,6 @@ import { art_file } from './art_file.ts'
 import { art_qk } from './art_qk.ts'
 import { av } from './av.ts'
 import { bedarf } from './bedarf.ts'
-import { event } from './event.ts'
 import { garten } from './garten.ts'
 import { garten_file } from './garten_file.ts'
 import { gv } from './gv.ts'
@@ -38,7 +37,6 @@ export const tables = [
   art_qk,
   av,
   bedarf,
-  event,
   garten,
   garten_file,
   gv,
@@ -63,6 +61,6 @@ export const tables = [
 ]
 
 export const schema = appSchema({
-  version: 10,
+  version: 11,
   tables,
 })

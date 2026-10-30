@@ -6,9 +6,6 @@ import Tab from '@mui/material/Tab'
 const Art = lazy(async () => ({
   default: (await import('./Data/Art/index.tsx')).Art,
 }))
-const Event = lazy(async () => ({
-  default: (await import('./Data/Event/index.tsx')).Event,
-}))
 const Garten = lazy(async () => ({
   default: (await import('./Data/Garten/index.tsx')).Garten,
 }))
@@ -51,7 +48,6 @@ export const Filter = () => {
   // see: https://stackoverflow.com/a/447258/712005
   const activeTabFromActiveForm = activeForm
     ? activeForm
-        .replace(/^events$/, 'event')
         .replace(/^herkuenfte$/, 'herkunft')
         .replace(/^gaerten$/, 'garten')
         .replace(/^arten$/, 'art')
@@ -70,7 +66,6 @@ export const Filter = () => {
 
   const formObject: Record<string, import('react').ReactElement> = {
     art: <Art filter />,
-    event: <Event filter />,
     herkunft: <Herkunft filter />,
     garten: <Garten filter />,
     kultur: <Kultur filter />,
@@ -84,7 +79,6 @@ export const Filter = () => {
   const form = formObject[activeTab]
   const titleObject: Record<string, string> = {
     art: 'Art Filter',
-    event: 'Event Filter',
     garten: 'Garten Filter',
     herkunft: 'Herkunft Filter',
     kultur: 'Kultur Filter',
@@ -160,12 +154,6 @@ export const Filter = () => {
               label="Sammel-Lieferung"
               value="sammel_lieferung"
               data-id="sammel_lieferung"
-            />
-            <Tab
-              className={styles.tab}
-              label="Event"
-              value="event"
-              data-id="event"
             />
             <Tab
               className={styles.tab}

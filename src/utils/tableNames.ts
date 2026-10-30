@@ -5,7 +5,6 @@ const dictionary = {
   art_qk: 'Arten (Qualitätskontrollen)',
   av: 'Arten (Mitarbeitende)',
   bedarf: 'Bedarf',
-  event: 'Events',
   garten: 'Gärten',
   garten_file: 'Gärten (Dateien)',
   gv: 'Gärten (Mitarbeitende)',

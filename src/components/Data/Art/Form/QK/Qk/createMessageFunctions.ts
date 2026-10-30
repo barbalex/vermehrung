@@ -9,7 +9,6 @@ import { artsSortedFromArts } from '../../../../../../utils/artsSortedFromArts.t
 import { gartensSortedFromGartens } from '../../../../../../utils/gartensSortedFromGartens.ts'
 import { kultursSortedFromKulturs } from '../../../../../../utils/kultursSortedFromKulturs.ts'
 import { sammlungsSortedFromSammlungs } from '../../../../../../utils/sammlungsSortedFromSammlungs.ts'
-import { eventSort } from '../../../../../../utils/eventSort.ts'
 import { herkunftSort } from '../../../../../../utils/herkunftSort.ts'
 import { lieferungSort } from '../../../../../../utils/lieferungSort.ts'
 import { personSort } from '../../../../../../utils/personSort.ts'
@@ -227,29 +226,6 @@ export const createMessageFunctions = async ({
       .fetch()) ?? []
   } catch {}
   const teilkultursOfArtSorted = teilkultursOfArt.sort(teilkulturSort)
-
-  let eventsOfArt: import('../../../../../../dbModel.ts').Event[] = []
-  try {
-    const delQuery =
-      filter.event?._deleted === false
-        ? Q.where('_deleted', false)
-        : filter.event?._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
-    eventsOfArt = (await db
-      ?.get<import('../../../../../../dbModel.ts').Event>('event')
-      .query(
-        Q.experimentalNestedJoin('kultur', 'art'),
-        Q.on('kultur', Q.on('art', 'id', artId)),
-        delQuery,
-      )
-      .fetch()) ?? []
-  } catch {}
-  const eventsOfArtSorted = eventsOfArt.sort(eventSort)
 
   // TODO: check if some of this could be optimized using watermelon queries
   return {
@@ -1174,49 +1150,5 @@ export const createMessageFunctions = async ({
             text,
           }
         }),
-    eventsWithoutBeschreibung: async () =>
-      await Promise.all(
-        eventsOfArtSorted
-          .filter((e) => !e.beschreibung)
-          .map(async (e) => {
-            let kultur
-            try {
-              kultur = await e.kultur?.fetch()
-              } catch {}
-              let kulturLabel
-              try {
-                kulturLabel = await kultur?.label.pipe(first$()).toPromise()
-              } catch {}
-              const text = `${kulturLabel ?? '(keine Kultur)'}, Event-ID: ${e.id}`
-
-              return {
-                url: ['Arten', artId, 'Kulturen', kultur?.id, 'Events', e.id],
-                text,
-              }
-            },
-          ),
-      ),
-    eventsWithoutDatum: async () =>
-      await Promise.all(
-        eventsOfArtSorted
-          .filter((e) => !e.datum)
-          .map(async (e) => {
-            let kultur
-            try {
-              kultur = await e.kultur?.fetch()
-              } catch {}
-              let kulturLabel
-              try {
-                kulturLabel = await kultur?.label.pipe(first$()).toPromise()
-              } catch {}
-              const text = `${kulturLabel ?? '(keine Kultur)'}, Event-ID: ${e.id}`
-
-              return {
-                url: ['Arten', artId, 'Kulturen', kultur?.id, 'Events', e.id],
-                text,
-              }
-            },
-          ),
-      ),
   }
 }

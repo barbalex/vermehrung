@@ -2,6 +2,7 @@ import {
   schemaMigrations,
   addColumns,
   createTable,
+  unsafeExecuteSql,
 } from 'nitromelondb/Schema/migrations'
 
 export const migrations = schemaMigrations({
@@ -144,6 +145,13 @@ export const migrations = schemaMigrations({
       // the numeric value
       toVersion: 10,
       steps: [],
+    },
+    {
+      // events were migrated to apf2 - the table is gone from the schema
+      // and dropped from existing local databases. indexes go down with
+      // the table
+      toVersion: 11,
+      steps: [unsafeExecuteSql('drop table if exists "event";')],
     },
   ],
 })
