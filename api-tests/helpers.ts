@@ -26,7 +26,7 @@ const parseEnv = (file: string): Record<string, string> => {
 const devEnv = parseEnv(DEV_ENV_PATH)
 
 export const config = {
-  pgrstUri: process.env.PGRST_URI ?? 'http://localhost:8080',
+  pgrstUri: process.env.PGRST_URI ?? 'http://localhost:8090',
   jwtSecret: devEnv.PGRST_JWT_SECRET,
   postgresPassword: devEnv.POSTGRES_PASSWORD,
 }

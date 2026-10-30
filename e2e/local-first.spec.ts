@@ -177,7 +177,7 @@ test('local-first: login, sync, offline boot, re-login resets cursors', async ({
   })
 
   // the auth service: exchanges the firebase id token for the api jwt
-  await page.route('http://localhost:7000/token', async (route) => {
+  await page.route('http://localhost:7010/token', async (route) => {
     if (await guard(route)) return
     return route.fulfill({
       contentType: 'application/json',
@@ -186,7 +186,7 @@ test('local-first: login, sync, offline boot, re-login resets cursors', async ({
   })
 
   // PostgREST
-  await page.route('http://localhost:8080/**', async (route) => {
+  await page.route('http://localhost:8090/**', async (route) => {
     if (await guard(route)) return
     const url = new URL(route.request().url())
 

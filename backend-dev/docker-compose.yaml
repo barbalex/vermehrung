@@ -12,8 +12,10 @@ services:
     env_file:
       - ./.env
     ports:
-      # make the Postgres database accessible from outside the Docker container on port 5432
-      - "5432:5432"
+      # host port 5434 (not 5432): this stack must coexist with other local
+      # projects claiming 5432/5433 (apf2, ae3). Update kanel.config.mjs
+      # when changing this.
+      - "5434:5432"
     volumes:
       - db_data:/var/lib/postgresql
       - sik_data:/sik_data
@@ -41,7 +43,10 @@ services:
     image: "postgrest/postgrest:v16.5"
     container_name: v_api
     ports:
-      - "8080:3000"
+      # host port 8090 (dev port block: 5434/8090/7010) to avoid conflicts
+      # with other local projects. Update src/utils/constants.ts,
+      # e2e/*.spec.ts and api-tests/helpers.ts when changing this.
+      - "8090:3000"
     depends_on:
       db:
         condition: service_healthy
@@ -67,7 +72,10 @@ services:
     env_file:
       - ./.env
     ports:
-      - "7000:7000"
+      # host port 7010 (dev port block: 5434/8090/7010) to avoid conflicts
+      # with other local projects. Update src/utils/constants.ts and
+      # e2e/*.spec.ts when changing this.
+      - "7010:7000"
     depends_on:
       db:
         condition: service_healthy

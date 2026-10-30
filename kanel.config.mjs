@@ -16,8 +16,12 @@ const databaseUrl =
         'Missing DATABASE_URL in backend-dev/.env. Or set KANEL_DATABASE_URL.',
       )
     }
-    // the compose hostname db is only reachable inside the docker network
-    return url.slice('DATABASE_URL='.length).trim().replace('@db:', '@localhost:')
+    // the compose hostname db is only reachable inside the docker network;
+    // map it to the host port from backend-dev/docker-compose.yaml (5434)
+    return url
+      .slice('DATABASE_URL='.length)
+      .trim()
+      .replace('@db:5432', '@localhost:5434')
   })()
 
 /** @type {import("kanel").Config} */

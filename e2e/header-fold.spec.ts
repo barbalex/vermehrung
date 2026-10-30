@@ -122,13 +122,13 @@ test('header folds ThemeChooser, Account and Online into the more-menu', async (
       }),
     }),
   )
-  await page.route('http://localhost:7000/token', (route) =>
+  await page.route('http://localhost:7010/token', (route) =>
     route.fulfill({
       contentType: 'application/json',
       body: JSON.stringify({ token: apiToken() }),
     }),
   )
-  await page.route('http://localhost:8080/**', async (route: Route) => {
+  await page.route('http://localhost:8090/**', async (route: Route) => {
     const url = new URL(route.request().url())
     if (url.pathname === '/rpc/sync') {
       return route.fulfill({

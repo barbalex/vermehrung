@@ -147,14 +147,14 @@ test('breadcrumbs strip replaces the form header nav buttons', async ({
       }),
     }),
   )
-  await page.route('http://localhost:7000/token', (route) =>
+  await page.route('http://localhost:7010/token', (route) =>
     route.fulfill({
       contentType: 'application/json',
       body: JSON.stringify({ token: apiToken() }),
     }),
   )
   const syncCalls: number[] = []
-  await page.route('http://localhost:8080/**', (route) => {
+  await page.route('http://localhost:8090/**', (route) => {
     const url = new URL(route.request().url())
     if (url.pathname === '/rpc/sync') {
       syncCalls.push(Date.now())
