@@ -2,20 +2,22 @@ import { useEffect } from 'react'
 
 // trying to persist indexedDB
 // https://dexie.org/docs/StorageManager#controlling-persistence
-// TODO: consider calling this only if user choose it in settings
-// or pop own window to explain as shown in above link
-// because it pops a request window
+// browsers grant this by engagement heuristics (installed pwa, bookmarks,
+// usage) - on localhost dev it is typically not granted, which is fine
 async function persist() {
-  return (
-    (await navigator.storage) &&
-    navigator.storage.persist &&
-    navigator.storage.persist()
-  )
+  if (!navigator.storage?.persist) return
+  await navigator.storage.persist()
+  // the request result is true if storage was ALREADY persistent,
+  // so it says nothing about whether this request changed anything.
+  // only a final persisted() of false means eviction risk remains.
+  if (!(await navigator.storage.persisted())) {
+    console.warn('storage is not persisted safely')
+  }
 }
 
 export const StoragePersister = () => {
   useEffect(() => {
-    persist().then((val) => console.log('storage is persisted safely:', val))
+    persist()
   }, [])
 
   return null
