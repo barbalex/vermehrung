@@ -17,6 +17,10 @@ services:
     volumes:
       - db_data:/var/lib/postgresql
       - sik_data:/sik_data
+      # applied on first init by init/04_api_access.sh (not in
+      # /docker-entrypoint-initdb.d: createApiAccess.sql needs app.password)
+      - ../src/sql/createApiAccess.sql:/api_sql/createApiAccess.sql:ro
+      - ../src/sql/createSyncFunction.sql:/api_sql/createSyncFunction.sql:ro
     command: postgres -c max_locks_per_transaction=2000
     logging:
       options:

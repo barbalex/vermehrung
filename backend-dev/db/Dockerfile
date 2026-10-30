@@ -6,6 +6,7 @@ COPY ./init/ /docker-entrypoint-initdb.d/
 COPY ./vermehrung.backup /sik_data/vermehrung.backup
 
 RUN chmod +x /docker-entrypoint-initdb.d/02_restore.sh
+RUN chmod +x /docker-entrypoint-initdb.d/04_api_access.sh
 
 # Install some helpful stuff
 RUN apt-get -qq update

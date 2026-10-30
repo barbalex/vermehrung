@@ -8,6 +8,7 @@ COPY ./init/ /docker-entrypoint-initdb.d/
 COPY ./vermehrung.backup /sik_data/vermehrung.backup
 
 RUN chmod +x /docker-entrypoint-initdb.d/02_restore.sh
+RUN chmod +x /docker-entrypoint-initdb.d/04_api_access.sh
 
 # for using cron, see https://www.cloudsavvyit.com/9033/how-to-use-cron-with-your-docker-containers/
 

@@ -62,7 +62,7 @@ Every editable row is versioned. Columns on each model: `_rev` (`"<depth>-<md5>"
 
 ## Local backend & debugging
 
-When the app runs on `localhost`, it talks to a **local PostgREST at `http://localhost:8080`**, decided in [src/utils/constants.ts](src/utils/constants.ts) (`hostname === 'localhost'` → `:8080`, else `api.vermehrung.ch`). The backend secrets live in `backend-dev/.env` / `backend/.env` (note: mixed line endings — strip `\r` when parsing them in scripts). Bring the backend up with `docker compose -f backend-dev/docker-compose.yaml up`.
+When the app runs on `localhost`, it talks to a **local PostgREST at `http://localhost:8080`**, decided in [src/utils/constants.ts](src/utils/constants.ts) (`hostname === 'localhost'` → `:8080`, else `api.vermehrung.ch`). The backend secrets live in `backend-dev/.env` / `backend/.env` (note: mixed line endings — strip `\r` when parsing them in scripts). Bring the backend up with `docker compose -f backend-dev/docker-compose.yaml up`. A fresh `db_data` volume initializes from `vermehrung.backup`, then `backend-dev/db/init/04_api_access.sh` applies `src/sql/createApiAccess.sql` + `createSyncFunction.sql` (mounted at `/api_sql`) — a pg_dump contains no cluster-level roles, so without that step PostgREST crash-loops with `password authentication failed for user "authenticator"`. `backend/` (production) has the same hook for building a new server from a backup.
 
 ## Navigation & code layout
 
