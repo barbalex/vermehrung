@@ -1,5 +1,7 @@
 {
-  "semi": false,
   "singleQuote": true,
-  "trailingComma": "all"
+  "trailingComma": "all",
+  "semi": false,
+  "experimentalTernaries": true,
+  "singleAttributePerLine": true
 }
