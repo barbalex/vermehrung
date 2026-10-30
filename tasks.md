@@ -3,8 +3,6 @@
 
 ---
 
-you mentioned: "the fork's maintained web path is SQLiteAdapter with wa-sqlite in a worker, which would be the proper long-term migration if you ever want it (it needs a data-migration story, since LokiJS browser data isn't carried over)". lets implement this and use a new branch 'wa-sqlite' for it
-
 ---
 
 when clicking on a way down element (example: zählung) in a list view the nav tree's corresponding element should scroll into view. Happens on reload but not on clicking in a list view
