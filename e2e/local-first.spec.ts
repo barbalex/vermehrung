@@ -285,9 +285,11 @@ test('local-first: login, sync, offline boot, re-login resets cursors', async ({
     // with breadcrumbs enabled the tree row opens the form directly
     // (url suffix '/Art')
     await page.getByText(ARTNAME).first().click()
-    await expect(page).toHaveURL(
-      new RegExp(`/Vermehrung/Arten/${ART_ID}/Art$`),
-    )
+    await expect(page).toHaveURL(new RegExp(`/Vermehrung/Arten/${ART_ID}/Art$`), {
+      // the form opens from cached data, but under parallel test load the
+      // sqlite worker's cold boot can take longer than the 5s default
+      timeout: 20_000,
+    })
     await expect(page.getByText('Art', { exact: true }).first()).toBeVisible({
       timeout: 20_000,
     })

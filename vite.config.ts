@@ -9,43 +9,67 @@ import svgrPlugin from 'vite-plugin-svgr'
 
 const rootDir = dirname(fileURLToPath(import.meta.url))
 
-const lokiWorkerFile = `${rootDir}/node_modules/nitromelondb/adapters/lokijs/worker/loki.worker.js`
+const sqliteWorkerRuntimeFile = `${rootDir}/node_modules/nitromelondb/adapters/sqlite/sqlite-wasm/workerRuntime.js`
 
-// nitromelondb's LokiJS web-worker mode expects webpack's worker-loader
-// (`new (require('./worker/loki.worker'))()`), which no bundler provides.
-// Swap the dispatcher for an ESM version that creates a real worker
-// (src/utils/lokiDispatcher.ts).
-const lokiDispatcherRedirect = (): Plugin => ({
-  name: 'loki-dispatcher-redirect',
+// the sqlite adapter's makeDispatcher entry unconditionally requires the
+// Node dispatcher (better-sqlite3); the web variant is only selected via
+// metro's platform resolution (.web.js), which Vite does not do. Redirect
+// to it - must run in the optimizer (where the adapter is prebundled) and
+// in the build.
+const sqliteWebDispatcher = (): Plugin => ({
+  name: 'sqlite-web-dispatcher',
   enforce: 'pre',
   resolveId(source, importer) {
     if (
-      importer?.endsWith('nitromelondb/adapters/lokijs/index.js') &&
-      source === './dispatcher'
+      importer?.endsWith('nitromelondb/adapters/sqlite/index.js') &&
+      source === './makeDispatcher'
     ) {
-      return `${rootDir}/src/utils/lokiDispatcher.ts`
+      return `${rootDir}/node_modules/nitromelondb/adapters/sqlite/makeDispatcher/index.web.js`
     }
     return null
   },
 })
 
-// in dev, the worker entry's relative import of loki.worker.js would be
-// served as raw CommonJS (only bare imports are rewritten to optimized
-// deps). Resolve it to the optimizer's prebundled file instead. The dep is
-// registered under its file path via optimizeDeps.include below.
-const lokiWorkerDepUrl = (): Plugin => ({
-  name: 'loki-worker-dep-url',
+// the web dispatcher requires the wasm module at load time purely to derive
+// its default URL; under Vite that require becomes a ?import request the
+// dev server cannot serve. initiateDb always passes web.wasmUrl explicitly,
+// so resolve the wasm module to an empty stub instead.
+const sqliteWasmStub = (): Plugin => ({
+  name: 'sqlite-wasm-stub',
+  enforce: 'pre',
+  resolveId(source) {
+    if (source.endsWith('sqlite-wasm/wa-sqlite-async.wasm')) {
+      return '\0sqlite-wasm-stub'
+    }
+    return null
+  },
+  load(id) {
+    if (id === '\0sqlite-wasm-stub') return 'export default ""'
+    return null
+  },
+})
+
+// in dev, the sqlite worker entry's relative import of workerRuntime.js
+// would be served as raw CommonJS (only bare imports are rewritten to
+// optimized deps). Resolve it to the optimizer's prebundled file instead.
+// The dep is registered under its file path via optimizeDeps.include below.
+const sqliteWorkerDepUrl = (): Plugin => ({
+  name: 'sqlite-worker-dep-url',
   enforce: 'pre',
   apply: 'serve',
   resolveId(source) {
-    if (!source.endsWith('node_modules/nitromelondb/adapters/lokijs/worker/loki.worker.js')) {
+    if (
+      !source.endsWith(
+        'nitromelondb/adapters/sqlite/sqlite-wasm/workerRuntime.js',
+      )
+    ) {
       return null
     }
     try {
       const metadata = JSON.parse(
         readFileSync(`${rootDir}/node_modules/.vite/deps/_metadata.json`, 'utf8'),
       )
-      const info = metadata.optimized[lokiWorkerFile]
+      const info = metadata.optimized[sqliteWorkerRuntimeFile]
       if (info?.file) {
         return `/node_modules/.vite/deps/${info.file}?v=${metadata.browserHash}`
       }
@@ -59,13 +83,13 @@ const lokiWorkerDepUrl = (): Plugin => ({
 // https://vitejs.dev/config/
 export default defineConfig({
   server: { port: 5175 },
-  // the adapter's CJS graph must run through the dep optimizer in dev. The
-  // worker module itself cannot be named by its bare id (the package
-  // exports map hides it), so include its file path.
+  // the sqlite adapter's CJS worker graph must run through the dep
+  // optimizer in dev; it cannot be named by its bare id (the package
+  // exports map hides it), so include its file path
   optimizeDeps: {
-    include: [lokiWorkerFile],
+    include: [sqliteWorkerRuntimeFile],
     rolldownOptions: {
-      plugins: [lokiDispatcherRedirect()],
+      plugins: [sqliteWebDispatcher(), sqliteWasmStub()],
     },
   },
   // e2e/ contains Playwright tests, api-tests/ needs the local backend
@@ -74,8 +98,9 @@ export default defineConfig({
     exclude: ['**/node_modules/**', '**/dist/**', 'e2e/**', 'api-tests/**'],
   },
   plugins: [
-    lokiDispatcherRedirect(),
-    lokiWorkerDepUrl(),
+    sqliteWebDispatcher(),
+    sqliteWasmStub(),
+    sqliteWorkerDepUrl(),
     svgrPlugin({
       svgrOptions: {
         icon: true,
@@ -86,7 +111,7 @@ export default defineConfig({
       workbox: {
         sourcemap: true,
         globPatterns: [
-          '**/*.{js,jsx,ts,tsx,css,html,ico,png,svg,webp,json,woff2,woff}',
+          '**/*.{js,jsx,ts,tsx,css,html,ico,png,svg,webp,json,woff2,woff,wasm}',
         ],
         maximumFileSizeToCacheInBytes: 1000000000,
       },
@@ -191,13 +216,11 @@ export default defineConfig({
             id.includes('node_modules/mst-persist')
           )
             return 'vendor-mobx'
-          // keep the loki worker's module graph inside the emitted worker
-          // chunk - a manual chunk would hollow out the worker entry into an
-          // empty facade (and worker-only code would land in a main chunk)
-          if (
-            id.includes('nitromelondb/adapters/lokijs/worker') ||
-            id.includes('node_modules/lokijs')
-          )
+          // keep the wa-sqlite worker's module graph inside the emitted
+          // worker chunk - a manual chunk would hollow out the worker entry
+          // into an empty facade (and worker-only code would land in a
+          // main chunk)
+          if (id.includes('nitromelondb/adapters/sqlite/sqlite-wasm'))
             return undefined
           if (id.includes('node_modules/nitromelondb'))
             return 'vendor-watermelondb'

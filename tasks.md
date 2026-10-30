@@ -3,7 +3,7 @@
 
 ---
 
-the fork's maintained web path is SQLiteAdapter with wa-sqlite in a worker, which would be the proper long-term migration if you ever want it (it needs a data-migration story, since LokiJS browser data isn't carried over)
+you mentioned: "the fork's maintained web path is SQLiteAdapter with wa-sqlite in a worker, which would be the proper long-term migration if you ever want it (it needs a data-migration story, since LokiJS browser data isn't carried over)". lets implement this and use a new branch 'wa-sqlite' for it
 
 ---
 
@@ -42,3 +42,7 @@ get Sammel-Lieferung/lieferschein to work again?
 ---
 
 exceljs replacement that is up to date? @e965/xlsx?
+
+---
+
+e2e local-first flaky under parallel load (also pre-wa-sqlite): clicking a tree row right after offline reload can navigate without the object-name url suffix (`/Art`) - the row text renders before the node is fully typed (`nodeType === 'table'`), so `urlToActivate` in src/components/Tree/toggleNode.ts skips the suffix. Fixed symptom-wise with one local playwright retry; the node-typing race in the tree build is still there.

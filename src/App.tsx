@@ -64,11 +64,11 @@ export const App = () => {
     let unregister: (() => void) | undefined
     // console.log('App initiating')
     initiateApp()
-      .then(({ unregister: unregisterReturned }) => {
+      .then(async ({ unregister: unregisterReturned }) => {
         if (!isActive) return
 
         unregister = unregisterReturned
-        const db = initiateDb()
+        const db = await initiateDb()
         setDb(db)
         // flush revisions that never made it into one (crash, closed
         // tab) before the sync starts pulling server state

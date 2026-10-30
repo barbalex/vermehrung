@@ -43,7 +43,32 @@ export const Login = () => {
 
   // callbacks pass email or password
   // because state is not up to date yet
+  const loggingInRef = useRef(false)
+
   const fetchLogin = async ({
+    email: emailPassed,
+    password: passwordPassed,
+  }: {
+    email?: string
+    password?: string
+  }) => {
+    // blur handlers and the button click can all fire fetchLogin for one
+    // login. With the async sqlite adapter, concurrent runs race their
+    // unsafeResetDatabase calls against the tree mounting on sign-in -
+    // WatermelonDB forbids queries while a reset is in flight
+    if (loggingInRef.current) return
+    loggingInRef.current = true
+    try {
+      await doFetchLogin({
+        email: emailPassed,
+        password: passwordPassed,
+      })
+    } finally {
+      loggingInRef.current = false
+    }
+  }
+
+  const doFetchLogin = async ({
     email: emailPassed,
     password: passwordPassed,
   }: {
@@ -59,27 +84,25 @@ export const Login = () => {
     const emailToUse = emailPassed || email || emailInput.current?.value || ''
     const passwordToUse =
       passwordPassed || password || passwordInput.current?.value || ''
-    // do everything to clean up so no data is left
+    // do everything to clean up so no data is left.
+    // reset the database FIRST, on an idle app: the reset is async with the
+    // sqlite adapter, and any state churn (signOut below) causes query
+    // subscriptions to fire into the reset window, which WatermelonDB
+    // forbids (ErrorAdapter: "while the database is being reset")
+    if (db) await db?.write(async () => db.unsafeResetDatabase())
     if (firebaseAuth) await signOut(firebaseAuth)
     await localForage.clear()
     window.localStorage.removeItem('token')
     resetSyncState()
-    if (db) await db?.write(async () => db.unsafeResetDatabase())
-    setTimeout(async () => {
-      try {
-        if (!firebaseAuth) return
-        await signInWithEmailAndPassword(
-          firebaseAuth,
-          emailToUse,
-          passwordToUse,
-        )
-      } catch (error) {
-        setEmailErrorText((error as Error).message)
-        return setPasswordErrorText((error as Error).message)
-      }
-      // 2020.12.19 trying to go without reloading
-      //setTimeout(() => window.location.reload(true))
-    })
+    // previously deferred via setTimeout so the click handler would not
+    // await the sign-in; the latch above now covers the whole login
+    if (!firebaseAuth) return
+    try {
+      await signInWithEmailAndPassword(firebaseAuth, emailToUse, passwordToUse)
+    } catch (error) {
+      setEmailErrorText((error as Error).message)
+      setPasswordErrorText((error as Error).message)
+    }
   }
   const onBlurEmail = (e: { target: { value: string } }) => {
     setEmailErrorText('')

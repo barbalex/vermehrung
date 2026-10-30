@@ -1,6 +1,7 @@
 import { Database } from 'nitromelondb'
-import LokiJSAdapter from 'nitromelondb/adapters/lokijs'
+import SQLiteAdapter from 'nitromelondb/adapters/sqlite'
 
+import wasmUrl from '../../node_modules/nitromelondb/adapters/sqlite/sqlite-wasm/wa-sqlite-async.wasm?url'
 import { addNotification } from '../store/index.ts'
 import { schema } from '../dbSchema/schema.ts'
 import {
@@ -35,30 +36,50 @@ import {
   Zaehlung,
 } from '../dbModel.ts'
 import { migrations } from './migrations.ts'
+import { migrateLokiToSqliteIfNeeded } from './migrateLokiToSqlite.ts'
 
-export const initiateDb = () => {
-  const adapter = new LokiJSAdapter({
+export const modelClasses = [
+  AeArt,
+  ApfloraAp,
+  Art,
+  ArtFile,
+  ArtQk,
+  Av,
+  Bedarf,
+  Event,
+  Garten,
+  GartenFile,
+  Gv,
+  Herkunft,
+  HerkunftFile,
+  Kultur,
+  KulturFile,
+  KulturOption,
+  KulturQk,
+  Lieferung,
+  LieferungFile,
+  Person,
+  PersonFile,
+  PersonOption,
+  SammelLieferung,
+  Sammlung,
+  SammlungFile,
+  Teilkultur,
+  Teilzaehlung,
+  UserRole,
+  Zaehlung,
+]
+
+export const initiateDb = async () => {
+  // wa-sqlite runs in a dedicated worker (Asyncify build) and persists to
+  // IndexedDB via IDBBatchAtomicVFS - the database work never touches the
+  // main thread. workerFactory + wasmUrl are the adapter's supported
+  // bundler overrides (see its README): the defaults assume an unbundled
+  // setup that does not work under Vite.
+  const adapter = new SQLiteAdapter({
     schema,
     migrations, // optional migrations
-    useWebWorker: true,
-    useIncrementalIndexedDB: true,
-    // dbName: 'myapp', // optional db name
-    // It's recommended you implement this method:
-    // onIndexedDBVersionChange: () => {
-    //   // database was deleted in another browser tab (user logged out), so we must make sure we delete
-    //   // it in this tab as well
-    //   if (checkIfUserIsLoggedIn()) {
-    //     window.location.reload()
-    //   }
-    // },
-    // Optional:
-    onQuotaExceededError: () => {
-      console.log('the browser ran out of disk space')
-      addNotification({
-        message:
-          'Es gibt nicht genug Speicherplatz auf der Festplatte bzw. dem Browser steht nicht genug zur Verfügung.',
-      })
-    },
+    dbName: 'vermehrung',
     onSetUpError: () => {
       // Database failed to load -- offer the user to reload the app or log out
       addNotification({
@@ -66,42 +87,23 @@ export const initiateDb = () => {
           'Die lokale Datenbank wurde nicht richtig initialisiert. Bitte laden Sie die App neu.',
       })
     },
+    web: {
+      wasmUrl,
+      workerFactory: () =>
+        new Worker(new URL('./sqliteWorkerEntry.ts', import.meta.url), {
+          type: 'module',
+        }),
+    },
   })
 
   const database = new Database({
     adapter,
-    modelClasses: [
-      AeArt,
-      ApfloraAp,
-      Art,
-      ArtFile,
-      ArtQk,
-      Av,
-      Bedarf,
-      Event,
-      Garten,
-      GartenFile,
-      Gv,
-      Herkunft,
-      HerkunftFile,
-      Kultur,
-      KulturFile,
-      KulturOption,
-      KulturQk,
-      Lieferung,
-      LieferungFile,
-      Person,
-      PersonFile,
-      PersonOption,
-      SammelLieferung,
-      Sammlung,
-      SammlungFile,
-      Teilkultur,
-      Teilzaehlung,
-      UserRole,
-      Zaehlung,
-    ],
+    modelClasses,
   })
+
+  // migrate legacy LokiJS data into the empty SQLite store before the
+  // database reaches the app, so no query can race the inserts
+  await migrateLokiToSqliteIfNeeded(database)
 
   return database
 }
