@@ -40,7 +40,7 @@ export const initiateDb = () => {
   const adapter = new LokiJSAdapter({
     schema,
     migrations, // optional migrations
-    useWebWorker: false,
+    useWebWorker: true,
     useIncrementalIndexedDB: true,
     // dbName: 'myapp', // optional db name
     // It's recommended you implement this method:

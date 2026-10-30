@@ -1,18 +1,81 @@
 import babel from '@rolldown/plugin-babel'
 import react, { reactCompilerPreset } from '@vitejs/plugin-react'
-import { defineConfig } from 'vite'
+import { readFileSync } from 'node:fs'
+import { dirname } from 'node:path'
+import { fileURLToPath } from 'node:url'
+import { defineConfig, type Plugin } from 'vite'
 import { VitePWA } from 'vite-plugin-pwa'
 import svgrPlugin from 'vite-plugin-svgr'
+
+const rootDir = dirname(fileURLToPath(import.meta.url))
+
+const lokiWorkerFile = `${rootDir}/node_modules/nitromelondb/adapters/lokijs/worker/loki.worker.js`
+
+// nitromelondb's LokiJS web-worker mode expects webpack's worker-loader
+// (`new (require('./worker/loki.worker'))()`), which no bundler provides.
+// Swap the dispatcher for an ESM version that creates a real worker
+// (src/utils/lokiDispatcher.ts).
+const lokiDispatcherRedirect = (): Plugin => ({
+  name: 'loki-dispatcher-redirect',
+  enforce: 'pre',
+  resolveId(source, importer) {
+    if (
+      importer?.endsWith('nitromelondb/adapters/lokijs/index.js') &&
+      source === './dispatcher'
+    ) {
+      return `${rootDir}/src/utils/lokiDispatcher.ts`
+    }
+    return null
+  },
+})
+
+// in dev, the worker entry's relative import of loki.worker.js would be
+// served as raw CommonJS (only bare imports are rewritten to optimized
+// deps). Resolve it to the optimizer's prebundled file instead. The dep is
+// registered under its file path via optimizeDeps.include below.
+const lokiWorkerDepUrl = (): Plugin => ({
+  name: 'loki-worker-dep-url',
+  enforce: 'pre',
+  apply: 'serve',
+  resolveId(source) {
+    if (!source.endsWith('node_modules/nitromelondb/adapters/lokijs/worker/loki.worker.js')) {
+      return null
+    }
+    try {
+      const metadata = JSON.parse(
+        readFileSync(`${rootDir}/node_modules/.vite/deps/_metadata.json`, 'utf8'),
+      )
+      const info = metadata.optimized[lokiWorkerFile]
+      if (info?.file) {
+        return `/node_modules/.vite/deps/${info.file}?v=${metadata.browserHash}`
+      }
+    } catch {
+      // metadata not written yet (first optimization still running)
+    }
+    return null
+  },
+})
 
 // https://vitejs.dev/config/
 export default defineConfig({
   server: { port: 5175 },
+  // the adapter's CJS graph must run through the dep optimizer in dev. The
+  // worker module itself cannot be named by its bare id (the package
+  // exports map hides it), so include its file path.
+  optimizeDeps: {
+    include: [lokiWorkerFile],
+    rolldownOptions: {
+      plugins: [lokiDispatcherRedirect()],
+    },
+  },
   // e2e/ contains Playwright tests, api-tests/ needs the local backend
   // (npm run test:api) - neither runs in the default vitest run
   test: {
     exclude: ['**/node_modules/**', '**/dist/**', 'e2e/**', 'api-tests/**'],
   },
   plugins: [
+    lokiDispatcherRedirect(),
+    lokiWorkerDepUrl(),
     svgrPlugin({
       svgrOptions: {
         icon: true,
@@ -128,6 +191,14 @@ export default defineConfig({
             id.includes('node_modules/mst-persist')
           )
             return 'vendor-mobx'
+          // keep the loki worker's module graph inside the emitted worker
+          // chunk - a manual chunk would hollow out the worker entry into an
+          // empty facade (and worker-only code would land in a main chunk)
+          if (
+            id.includes('nitromelondb/adapters/lokijs/worker') ||
+            id.includes('node_modules/lokijs')
+          )
+            return undefined
           if (id.includes('node_modules/nitromelondb'))
             return 'vendor-watermelondb'
           if (
