@@ -5,8 +5,6 @@
 
 ---
 
-when clicking on a way down element (example: zählung) in a list view the nav tree's corresponding element should scroll into view. Happens on reload but not on clicking in a list view
-
 ---
 
 ---

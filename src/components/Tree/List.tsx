@@ -38,21 +38,40 @@ export const TreeList = ({
   const urlToFocus = lastActiveNodeArray.length ? lastActiveNodeArray : aNA
   const nodeIndex = nodes.findIndex((node) => isEqual(node.url, urlToFocus))
 
-  // Only scroll once on initial mount, not on every click
+  // center the focused node once, on initial mount. When loading on a
+  // url, nodes are built after this list has mounted: the effect waits
+  // for the row to exist. Dynamic row heights make the position an
+  // estimate, hence align: 'center'
   const hasScrolledRef = useRef(false)
 
   useEffect(() => {
     if (!hasScrolledRef.current && nodeIndex > -1) {
       hasScrolledRef.current = true
-      // when loading on a url, nodes are built after this list has mounted:
-      // scroll the focused node into view as soon as it exists.
-      // center: rows have dynamic heights, so the position is only estimated
       listRef.current?.scrollToRow({
         index: nodeIndex,
         align: 'center',
       })
     }
   }, [nodeIndex, listRef])
+
+  // follow later navigation (e.g. clicking a way-down element in a list
+  // view): scroll the active node's row into view once it exists. align:
+  // 'auto' scrolls only when the row is not visible, so clicking around
+  // inside the tree itself does not jump. nodes is a dep because the row
+  // appears only after the newly opened ancestors have loaded; the
+  // per-navigation latch keeps later tree rebuilds from snapping a
+  // manually scrolled position back to the active row
+  const lastScrolledUrlRef = useRef<string | null>(null)
+
+  useEffect(() => {
+    if (!hasScrolledRef.current) return
+    const url = aNA.join('/')
+    if (lastScrolledUrlRef.current === url) return
+    const index = nodes.findIndex((node) => isEqual(node.url, aNA))
+    if (index === -1) return
+    lastScrolledUrlRef.current = url
+    listRef.current?.scrollToRow({ index, align: 'auto' })
+  }, [aNA, nodes, listRef])
 
   return (
     <List
