@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import LokiJSAdapter from '@nozbe/watermelondb/adapters/lokijs'
-import { Database } from '@nozbe/watermelondb'
+import LokiJSAdapter from 'nitromelondb/adapters/lokijs'
+import { Database } from 'nitromelondb'
 
 import { Art, ArtFile } from '../src/dbModel.ts'
 import { schema } from '../src/dbSchema/schema.ts'

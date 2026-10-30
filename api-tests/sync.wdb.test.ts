@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs'
 import path from 'node:path'
-import LokiJSAdapter from '@nozbe/watermelondb/adapters/lokijs'
-import { Database, Model, Q } from '@nozbe/watermelondb'
+import LokiJSAdapter from 'nitromelondb/adapters/lokijs'
+import { Database, Model, Q } from 'nitromelondb'
 import { beforeEach, describe, expect, it } from 'vitest'
 
 import { store, dbAtom, lastUpdatedAtom, initiallyQueriedAtom } from '../src/store/index.ts'
