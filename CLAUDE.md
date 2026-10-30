@@ -13,7 +13,7 @@ npm run dev              # Vite dev server on http://localhost:5175 (PWA, SW aut
 npm run build            # vite build  (NOTE: skips tsc — does NOT type-check)
 npm run build_ts         # tsc && vite build
 npm run serve            # vite preview (serve the production build locally)
-npm run deploy           # lint + typecheck + test + bump + build + firebase deploy --only hosting  (production)
+npm run deploy           # lint + typecheck + test + bump + build + firebase deploy --only hosting  (production; optional bump type arg: npm run deploy [patch|minor|major], default patch)
 npm run deploy_preview   # lint + typecheck + test + build + firebase hosting:channel:deploy preview
 npm test                 # vitest unit tests
 npm run test:api         # api equivalence tests — needs the local backend + docker (NOT in CI)

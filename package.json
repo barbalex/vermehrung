@@ -8,7 +8,7 @@
   "scripts": {
     "build": "vite build",
     "build_ts": "tsc && vite build",
-    "deploy": "npm run lint && npm run typecheck && npm test && npm run bump && npm run build && firebase deploy --only hosting",
+    "deploy": "node scripts/deploy.mjs",
     "deploy_only": "firebase deploy --only hosting",
     "deploy_preview": "npm run lint && npm run typecheck && npm test && npm run build && firebase hosting:channel:deploy preview",
     "dev": "vite",
@@ -112,6 +112,5 @@
   "dev-comments": {
     "none": "right now",
     "typescript": "6.0.3: stay until typescript-eslint supports TS 7.1's new API (typescript-eslint#10940); TS 7.0 lacks a programmatic API and breaks our eslint setup. tsconfig already prepared (esModuleInterop deprecation removed 9/2026)"
-  },
-  "deployedVersion": "1.25.5"
+  }
 }
