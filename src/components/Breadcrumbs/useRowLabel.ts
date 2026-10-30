@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { useAtomValue } from 'jotai'
-import { Q } from 'nitromelondb'
 import { from, of, type Observable } from 'rxjs'
 import { map, switchMap, catchError } from 'rxjs/operators'
 
@@ -57,6 +56,9 @@ const resolveLabel = (
 
 // resolves the label of the row id'd in the url after the given folder,
 // reactively from the local db.
+// the row is observed itself (not via a by-id query): plain query
+// observation only re-emits when the result set changes, so field edits
+// would never refresh the crumb.
 // parentFolder selects the context-dependent label variants
 // (kultur under art/garten, sammlung under herkunft)
 export const useRowLabel = ({
@@ -81,36 +83,31 @@ export const useRowLabel = ({
         case 'art':
           observable = db
             .get<Art>('art')
-            .query(Q.where('id', idString))
-            .observe()
+            .findAndObserveOrNull(idString)
             .pipe(
-              switchMap((rows) => (rows.length ? rows[0].label : of(undefined))),
+              switchMap((row) => (row ? row.label : of(undefined))),
             )
           break
         case 'herkunft':
           observable = db
             .get<Herkunft>('herkunft')
-            .query(Q.where('id', idString))
-            .observe()
+            .findAndObserveOrNull(idString)
             .pipe(
-              map((rows) =>
-                rows.length
-                  ? herkunftLabelFromHerkunft({ herkunft: rows[0] })
-                  : undefined,
+              map((row) =>
+                row ? herkunftLabelFromHerkunft({ herkunft: row }) : undefined,
               ),
             )
           break
         case 'sammlung':
           observable = db
             .get<Sammlung>('sammlung')
-            .query(Q.where('id', idString))
-            .observe()
+            .findAndObserveOrNull(idString)
             .pipe(
-              switchMap((rows) =>
-                rows.length
+              switchMap((row) =>
+                row
                   ? parentFolder === 'Herkuenfte'
-                    ? rows[0].labelUnderHerkunft
-                    : rows[0].label
+                    ? row.labelUnderHerkunft
+                    : row.label
                   : of(undefined),
               ),
             )
@@ -118,25 +115,23 @@ export const useRowLabel = ({
         case 'garten':
           observable = db
             .get<Garten>('garten')
-            .query(Q.where('id', idString))
-            .observe()
+            .findAndObserveOrNull(idString)
             .pipe(
-              switchMap((rows) => (rows.length ? rows[0].label : of(undefined))),
+              switchMap((row) => (row ? row.label : of(undefined))),
             )
           break
         case 'kultur':
           observable = db
             .get<Kultur>('kultur')
-            .query(Q.where('id', idString))
-            .observe()
+            .findAndObserveOrNull(idString)
             .pipe(
-              switchMap((rows) =>
-                rows.length
+              switchMap((row) =>
+                row
                   ? parentFolder === 'Arten'
-                    ? rows[0].labelUnderArt
+                    ? row.labelUnderArt
                     : parentFolder === 'Gaerten'
-                      ? rows[0].labelUnderGarten
-                      : rows[0].label
+                      ? row.labelUnderGarten
+                      : row.label
                   : of(undefined),
               ),
             )
@@ -144,12 +139,11 @@ export const useRowLabel = ({
         case 'teilkultur':
           observable = db
             .get<Teilkultur>('teilkultur')
-            .query(Q.where('id', idString))
-            .observe()
+            .findAndObserveOrNull(idString)
             .pipe(
-              map((rows) =>
-                rows.length
-                  ? teilkulturLabelFromTeilkultur({ teilkultur: rows[0] })
+              map((row) =>
+                row
+                  ? teilkulturLabelFromTeilkultur({ teilkultur: row })
                   : undefined,
               ),
             )
@@ -157,48 +151,43 @@ export const useRowLabel = ({
         case 'zaehlung':
           observable = db
             .get<Zaehlung>('zaehlung')
-            .query(Q.where('id', idString))
-            .observe()
+            .findAndObserveOrNull(idString)
             .pipe(
-              switchMap((rows) => (rows.length ? rows[0].label : of(undefined))),
+              switchMap((row) => (row ? row.label : of(undefined))),
             )
           break
         case 'lieferung':
           observable = db
             .get<Lieferung>('lieferung')
-            .query(Q.where('id', idString))
-            .observe()
+            .findAndObserveOrNull(idString)
             .pipe(
-              switchMap((rows) => (rows.length ? rows[0].label : of(undefined))),
+              switchMap((row) => (row ? row.label : of(undefined))),
             )
           break
         case 'sammel_lieferung':
           observable = db
             .get<SammelLieferung>('sammel_lieferung')
-            .query(Q.where('id', idString))
-            .observe()
+            .findAndObserveOrNull(idString)
             .pipe(
-              switchMap((rows) => (rows.length ? rows[0].label : of(undefined))),
+              switchMap((row) => (row ? row.label : of(undefined))),
             )
           break
         case 'person':
           observable = db
             .get<Person>('person')
-            .query(Q.where('id', idString))
-            .observe()
+            .findAndObserveOrNull(idString)
             .pipe(
-              map((rows) =>
-                rows.length ? personLabelFromPerson({ person: rows[0] }) : undefined,
+              map((row) =>
+                row ? personLabelFromPerson({ person: row }) : undefined,
               ),
             )
           break
         case 'bedarf':
           observable = db
             .get<Bedarf>('bedarf')
-            .query(Q.where('id', idString))
-            .observe()
+            .findAndObserveOrNull(idString)
             .pipe(
-              switchMap((rows) => (rows.length ? rows[0].label : of(undefined))),
+              switchMap((row) => (row ? row.label : of(undefined))),
             )
           break
       }

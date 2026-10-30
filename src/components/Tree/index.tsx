@@ -134,6 +134,10 @@ export const Tree = () => {
       ?.get('zaehlung')
       .query(...tableFilter({ table: 'zaehlung' }))
       .observeWithColumns(['datum', 'prognose'])
+    const bedarfsObservable = db
+      ?.get('bedarf')
+      .query(...tableFilter({ table: 'bedarf' }))
+      .observeWithColumns(['jahr', 'beschreibung'])
     const lieferungsObservable = db
       ?.get('lieferung')
       .query(...tableFilter({ table: 'lieferung' }))
@@ -141,6 +145,7 @@ export const Tree = () => {
         'datum',
         'anzahl_pflanzen',
         'anzahl_auspflanzbereit',
+        'geplant',
       ])
     // const sammelLieferungsObservable = db
     //   .get('sammel_lieferung')
@@ -173,6 +178,7 @@ export const Tree = () => {
       teilkultursObservable,
       zaehlungsObservable,
       kulturOptionsObservable,
+      bedarfsObservable,
     ]).pipe(throttle(() => interval(100)))
     type Observed = [
       import('../../dbModel.ts').PersonOption[],
@@ -188,6 +194,7 @@ export const Tree = () => {
       import('../../dbModel.ts').Teilkultur[],
       import('../../dbModel.ts').Zaehlung[],
       import('../../dbModel.ts').KulturOption[],
+      import('../../dbModel.ts').Bedarf[],
     ]
     const subscription = (
       combinedObservables as unknown as import('rxjs').Observable<Observed>
