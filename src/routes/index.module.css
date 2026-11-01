@@ -76,6 +76,9 @@
 }
 
 .pageTitle {
+  /* the photo behind does not change with the theme -
+     keep the light-mode text color in dark mode too */
+  color: rgba(0, 0, 0, 0.87);
   font-size: 2em !important;
   padding-bottom: 15px;
   font-weight: 700 !important;

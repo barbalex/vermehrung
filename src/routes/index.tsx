@@ -18,7 +18,6 @@ export const Home = () => (
             <Typography
               align="center"
               variant="h6"
-              color="inherit"
               className={styles.pageTitle}
             >
               Bedrohte Pflanzen vermehren
