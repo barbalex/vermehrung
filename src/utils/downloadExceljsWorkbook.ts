@@ -1,4 +1,4 @@
-import { format } from 'date-fns/format'
+import { DateTime } from 'luxon'
 import type { Workbook } from 'exceljs'
 
 import { addNotification } from '../store/index.ts'
@@ -22,7 +22,7 @@ export const downloadExceljsWorkbook = async ({
       message: (error as Error).message,
     })
   }
-  const file = `${fileName}_${format(new Date(), 'yyyy-MM-dd_HH-mm-ss')}`
+  const file = `${fileName}_${DateTime.now().toFormat('yyyy-LL-dd_HH-mm-ss')}`
   const blob = new Blob([buffer], { type: 'application/octet-stream' })
   const url = URL.createObjectURL(blob)
   const anchor = document.createElement('a')

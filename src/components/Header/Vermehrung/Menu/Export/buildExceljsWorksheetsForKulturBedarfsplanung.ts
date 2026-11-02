@@ -1,4 +1,4 @@
-import { format } from 'date-fns/format'
+import { DateTime } from 'luxon'
 import { store, dbAtom } from '../../../../../store/index.ts'
 import { sumBy } from 'es-toolkit'
 import { Q } from 'nitromelondb'
@@ -340,11 +340,15 @@ export const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
         bemerkungen: kultur.bemerkungen,
         aktiv: kultur.aktiv,
         zaehlungen_daten: ownZaehlungenSorted
-          .map((z) => format(new Date(z.datum ?? ''), 'yyyy.MM.dd'))
+          .map((z) =>
+            DateTime.fromJSDate(new Date(z.datum ?? '')).toFormat('yyyy.LL.dd'),
+          )
           .join(', '),
         letzte_zaehlung_datum:
           lastZaehlung ?
-            format(new Date(lastZaehlung.datum ?? ''), 'yyyy.MM.dd')
+            DateTime.fromJSDate(new Date(lastZaehlung.datum ?? '')).toFormat(
+              'yyyy.LL.dd',
+            )
           : '',
         letzte_zaehlung_bemerkungen: lastZaehlung?.bemerkungen ?? '',
         letzte_zaehlung_anzahl_pflanzen: anzahl_pflanzen,
@@ -354,14 +358,18 @@ export const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
         letzte_zaehlung_andere_mengen: andere_mengen,
         letzte_lieferung_datum:
           lastAusLieferung ?
-            format(new Date(lastAusLieferung.datum ?? ''), 'yyyy.MM.dd')
+            DateTime.fromJSDate(
+              new Date(lastAusLieferung.datum ?? ''),
+            ).toFormat('yyyy.LL.dd')
           : '',
         letzte_lieferung_anzahl_pflanzen,
         letzte_lieferung_anzahl_auspflanzbereit,
         letzte_lieferung_anzahl_mutterpflanzen,
         letzte_lieferung_anzahl_jungpflanzen,
         auslieferungen_seit_letzter_zaehlung_daten: auslSinceLastZaehlung
-          .map((l) => format(new Date(l.datum ?? ''), 'yyyy.MM.dd'))
+          .map((l) =>
+            DateTime.fromJSDate(new Date(l.datum ?? '')).toFormat('yyyy.LL.dd'),
+          )
           .join(', '),
         auslieferungen_seit_letzter_zaehlung_anzahl_pflanzen:
           auslSinceAnzahlPflanzen,
@@ -372,7 +380,9 @@ export const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
         auslieferungen_seit_letzter_zaehlung_anzahl_jungpflanzen:
           auslSinceAnzahlJungpflanzen,
         anlieferungen_seit_letzter_zaehlung_daten: anlSinceLastZaehlung
-          .map((l) => format(new Date(l.datum ?? ''), 'yyyy.MM.dd'))
+          .map((l) =>
+            DateTime.fromJSDate(new Date(l.datum ?? '')).toFormat('yyyy.LL.dd'),
+          )
           .join(', '),
         anlieferungen_seit_letzter_zaehlung_anzahl_pflanzen:
           anlSinceAnzahlPflanzen,
@@ -416,7 +426,7 @@ export const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
             if (exists(l.gramm_samen))
               mengen.push(`${l.gramm_samen} Gramm Samen`)
             if (exists(l.andere_menge)) mengen.push(l.andere_menge)
-            return `${format(new Date(l.datum ?? ''), 'yyyy.MM.dd')}: ${mengen.join(', ')}`
+            return `${DateTime.fromJSDate(new Date(l.datum ?? '')).toFormat('yyyy.LL.dd')}: ${mengen.join(', ')}`
           })
           .join('; '),
         bedarf_vorjahr,

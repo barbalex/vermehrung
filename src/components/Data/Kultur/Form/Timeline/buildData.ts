@@ -1,6 +1,6 @@
 import { sortBy, sumBy, groupBy } from 'es-toolkit'
 import { Q } from 'nitromelondb'
-import { format } from 'date-fns/format'
+import { DateTime } from 'luxon'
 
 import { exists } from '../../../../../utils/exists.ts'
 
@@ -16,7 +16,7 @@ export const buildKulturTimelineData = async ({
         Q.experimentalJoinTables(['teilzaehlung']),
         Q.where('prognose', false),
         Q.where('datum', Q.notEq(null)),
-        Q.where('datum', Q.lte(format(new Date(), 'yyyy-mm-dd'))),
+        Q.where('datum', Q.lte(DateTime.now().toFormat('yyyy-LL-dd'))),
         Q.where('_deleted', false),
         // following was not included before refactoring but seems a good idea
         //Q.on('teilzaehlung', Q.where('anzahl_pflanzen', Q.notEq(null))),
@@ -257,7 +257,7 @@ export const buildKulturTimelineData = async ({
       .extend(
         Q.where('geplant', false),
         Q.where('datum', Q.notEq(null)),
-        Q.where('datum', Q.lte(format(new Date(), 'yyyy-mm-dd'))),
+        Q.where('datum', Q.lte(DateTime.now().toFormat('yyyy-LL-dd'))),
         Q.where('_deleted', false),
       )
       .fetch()
@@ -290,7 +290,7 @@ export const buildKulturTimelineData = async ({
       .extend(
         Q.where('geplant', false),
         Q.where('datum', Q.notEq(null)),
-        Q.where('datum', Q.lte(format(new Date(), 'yyyy-mm-dd'))),
+        Q.where('datum', Q.lte(DateTime.now().toFormat('yyyy-LL-dd'))),
         Q.where('_deleted', false),
       )
       .fetch()

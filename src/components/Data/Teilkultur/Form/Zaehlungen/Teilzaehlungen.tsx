@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { format } from 'date-fns/format'
+import { DateTime } from 'luxon'
 
 import { exists } from '../../../../../utils/exists.ts'
 
@@ -28,7 +28,7 @@ export const TeilkulturTeilzaehlung = ({
 
   const datum =
     zaehlung?.datum ?
-      format(new Date(zaehlung?.datum), 'yyyy.MM.dd')
+      DateTime.fromJSDate(new Date(zaehlung?.datum)).toFormat('yyyy.LL.dd')
     : 'Kein Datum'
 
   return (

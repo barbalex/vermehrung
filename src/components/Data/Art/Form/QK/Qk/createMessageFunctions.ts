@@ -1,4 +1,4 @@
-import { format } from 'date-fns/format'
+import { DateTime } from 'luxon'
 import { groupBy } from 'es-toolkit'
 import { first as first$ } from 'rxjs/operators'
 import { Q } from 'nitromelondb'
@@ -31,7 +31,7 @@ export const createMessageFunctions = async ({
       store.get(filterTableAtoms[table]),
     ]),
   )
-  const year = +format(new Date(), 'yyyy')
+  const year = DateTime.now().year
   const startYear = `${year}-01-01`
   const startNextYear = `${year + 1}-01-01`
 
@@ -632,7 +632,7 @@ export const createMessageFunctions = async ({
           Q.on('kultur', Q.on('art', 'id', artId)),
           delQuery,
           Q.where('datum', Q.notEq(null)),
-          Q.where('datum', Q.gte(format(new Date(), 'yyyy-mm-dd'))),
+          Q.where('datum', Q.gte(DateTime.now().toFormat('yyyy-LL-dd'))),
         )
         .fetch()
 
@@ -729,7 +729,7 @@ export const createMessageFunctions = async ({
             } catch {}
             const zaehlung =
               z.datum ?
-                `Zählung vom ${format(new Date(z.datum), 'yyyy.MM.dd')}`
+                `Zählung vom ${DateTime.fromJSDate(new Date(z.datum)).toFormat('yyyy.LL.dd')}`
               : `Zählung-ID: ${z.id}`
             const anzTz = teilzaehlungsOfArt
               .filter(
@@ -781,7 +781,7 @@ export const createMessageFunctions = async ({
             } catch {}
             const zaehlung =
               z.datum ?
-                `Zählung vom ${format(new Date(z.datum), 'yyyy.MM.dd')}`
+                `Zählung vom ${DateTime.fromJSDate(new Date(z.datum)).toFormat('yyyy.LL.dd')}`
               : `Zählung-ID: ${z.id}`
             const anzTz = teilzaehlungsOfArt
               .filter(
@@ -833,7 +833,7 @@ export const createMessageFunctions = async ({
             } catch {}
             const zaehlung =
               z.datum ?
-                `Zählung vom ${format(new Date(z.datum), 'yyyy.MM.dd')}`
+                `Zählung vom ${DateTime.fromJSDate(new Date(z.datum)).toFormat('yyyy.LL.dd')}`
               : `Zählung-ID: ${z.id}`
             const anzTz = teilzaehlungsOfArt
               .filter(
@@ -912,7 +912,7 @@ export const createMessageFunctions = async ({
               } catch {}
               const zaehlung =
                 z.datum ?
-                  `Zählung vom ${format(new Date(z.datum), 'yyyy.MM.dd')}`
+                  `Zählung vom ${DateTime.fromJSDate(new Date(z.datum)).toFormat('yyyy.LL.dd')}`
                 : `Zählung-ID: ${z.id}`
               const anzTz = teilzaehlungsOfArt
                 .filter(
@@ -958,7 +958,9 @@ export const createMessageFunctions = async ({
         )
         .map((l: import('../../../../../../dbModel.ts').Lieferung) => {
           const datum =
-            l.datum ? format(new Date(l.datum), 'yyyy.MM.dd') : `kein Datum`
+            l.datum ?
+              DateTime.fromJSDate(new Date(l.datum)).toFormat('yyyy.LL.dd')
+            : `kein Datum`
           const geplant = l.geplant ? ', (geplant)' : ''
           const text = `${datum}, ID: ${l.id}${geplant}`
 
@@ -983,7 +985,9 @@ export const createMessageFunctions = async ({
         )
         .map((l: import('../../../../../../dbModel.ts').Lieferung) => {
           const datum =
-            l.datum ? format(new Date(l.datum), 'yyyy.MM.dd') : `kein Datum`
+            l.datum ?
+              DateTime.fromJSDate(new Date(l.datum)).toFormat('yyyy.LL.dd')
+            : `kein Datum`
           const geplant = l.geplant ? ', (geplant)' : ''
           const text = `${datum}, ID: ${l.id}${geplant}`
 
@@ -1004,7 +1008,9 @@ export const createMessageFunctions = async ({
         )
         .map((l: import('../../../../../../dbModel.ts').Lieferung) => {
           const datum =
-            l.datum ? format(new Date(l.datum), 'yyyy.MM.dd') : `kein Datum`
+            l.datum ?
+              DateTime.fromJSDate(new Date(l.datum)).toFormat('yyyy.LL.dd')
+            : `kein Datum`
           const geplant = l.geplant ? ', (geplant)' : ''
           const text = `${datum}, ID: ${l.id}${geplant}`
 
@@ -1025,7 +1031,9 @@ export const createMessageFunctions = async ({
         )
         .map((l: import('../../../../../../dbModel.ts').Lieferung) => {
           const datum =
-            l.datum ? format(new Date(l.datum), 'yyyy.MM.dd') : `kein Datum`
+            l.datum ?
+              DateTime.fromJSDate(new Date(l.datum)).toFormat('yyyy.LL.dd')
+            : `kein Datum`
           const geplant = l.geplant ? ', (geplant)' : ''
           const text = `${datum}, ID: ${l.id}${geplant}`
 
@@ -1046,7 +1054,9 @@ export const createMessageFunctions = async ({
         )
         .map((l: import('../../../../../../dbModel.ts').Lieferung) => {
           const datum =
-            l.datum ? format(new Date(l.datum), 'yyyy.MM.dd') : `kein Datum`
+            l.datum ?
+              DateTime.fromJSDate(new Date(l.datum)).toFormat('yyyy.LL.dd')
+            : `kein Datum`
           const geplant = l.geplant ? ', (geplant)' : ''
           const text = `${datum}, ID: ${l.id}${geplant}`
 
@@ -1071,7 +1081,9 @@ export const createMessageFunctions = async ({
         )
         .map((l: import('../../../../../../dbModel.ts').Lieferung) => {
           const datum =
-            l.datum ? format(new Date(l.datum), 'yyyy.MM.dd') : `kein Datum`
+            l.datum ?
+              DateTime.fromJSDate(new Date(l.datum)).toFormat('yyyy.LL.dd')
+            : `kein Datum`
           const geplant = l.geplant ? ', (geplant)' : ''
           const text = `${datum}, ID: ${l.id}${geplant}`
 
@@ -1100,7 +1112,9 @@ export const createMessageFunctions = async ({
         )
         .map((l: import('../../../../../../dbModel.ts').Lieferung) => {
           const datum =
-            l.datum ? format(new Date(l.datum), 'yyyy.MM.dd') : `kein Datum`
+            l.datum ?
+              DateTime.fromJSDate(new Date(l.datum)).toFormat('yyyy.LL.dd')
+            : `kein Datum`
           const geplant = l.geplant ? ', (geplant)' : ''
           const text = `${datum}, ID: ${l.id}${geplant}`
 
@@ -1120,7 +1134,9 @@ export const createMessageFunctions = async ({
         )
         .map((l: import('../../../../../../dbModel.ts').Lieferung) => {
           const datum =
-            l.datum ? format(new Date(l.datum), 'yyyy.MM.dd') : `kein Datum`
+            l.datum ?
+              DateTime.fromJSDate(new Date(l.datum)).toFormat('yyyy.LL.dd')
+            : `kein Datum`
           const geplant = l.geplant ? ', (geplant)' : ''
           const text = `${datum}, ID: ${l.id}${geplant}`
 
@@ -1140,7 +1156,9 @@ export const createMessageFunctions = async ({
         )
         .map((l: import('../../../../../../dbModel.ts').Lieferung) => {
           const datum =
-            l.datum ? format(new Date(l.datum), 'yyyy.MM.dd') : `kein Datum`
+            l.datum ?
+              DateTime.fromJSDate(new Date(l.datum)).toFormat('yyyy.LL.dd')
+            : `kein Datum`
           const geplant = l.geplant ? ', (geplant)' : ''
           const text = `${datum}, ID: ${l.id}${geplant}`
 

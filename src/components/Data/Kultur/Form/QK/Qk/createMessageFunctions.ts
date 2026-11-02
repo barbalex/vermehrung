@@ -1,4 +1,4 @@
-import { format } from 'date-fns/format'
+import { DateTime } from 'luxon'
 import { first as first$ } from 'rxjs/operators'
 import { Q } from 'nitromelondb'
 
@@ -24,7 +24,7 @@ export const createKulturMessageFunctions = async ({
       store.get(filterTableAtoms[table]),
     ]),
   )
-  const year = +format(new Date(), 'yyyy')
+  const year = DateTime.now().year
   const startYear = `${year}-01-01`
   const startNextYear = `${year + 1}-01-01`
   const now = new Date().getTime()
@@ -333,7 +333,7 @@ export const createKulturMessageFunctions = async ({
             } catch {}
             const zaehlungLabel =
               z.datum ?
-                `Zählung am ${format(new Date(z.datum), 'yyyy.MM.dd')}`
+                `Zählung am ${DateTime.fromJSDate(new Date(z.datum)).toFormat('yyyy.LL.dd')}`
               : `Zählung-ID: ${z.id}`
             const tzs =
               z.teilzaehlungs ?
@@ -392,7 +392,7 @@ export const createKulturMessageFunctions = async ({
             } catch {}
             const zaehlung =
               z.datum ?
-                `Zählung am ${format(new Date(z.datum), 'yyyy.MM.dd')}`
+                `Zählung am ${DateTime.fromJSDate(new Date(z.datum)).toFormat('yyyy.LL.dd')}`
               : `Zählung-ID: ${z.id}`
             const anzTz = teilzaehlungs
               .filter(
@@ -455,7 +455,7 @@ export const createKulturMessageFunctions = async ({
             } catch {}
             const zaehlung =
               z.datum ?
-                `Zählung am ${format(new Date(z.datum), 'yyyy.MM.dd')}`
+                `Zählung am ${DateTime.fromJSDate(new Date(z.datum)).toFormat('yyyy.LL.dd')}`
               : `Zählung-ID: ${z.id}`
             const anzTz = teilzaehlungs
               .filter(
@@ -531,7 +531,7 @@ export const createKulturMessageFunctions = async ({
               } catch {}
               const zaehlung =
                 z.datum ?
-                  `Zählung am ${format(new Date(z.datum), 'yyyy.MM.dd')}`
+                  `Zählung am ${DateTime.fromJSDate(new Date(z.datum)).toFormat('yyyy.LL.dd')}`
                 : `Zählung-ID: ${z.id}`
               const anzTz = teilzaehlungs
                 .filter(
@@ -571,7 +571,9 @@ export const createKulturMessageFunctions = async ({
         )
         .map((l: import('../../../../../../dbModel.ts').Lieferung) => {
           const datum =
-            l.datum ? format(new Date(l.datum), 'yyyy.MM.dd') : `kein Datum`
+            l.datum ?
+              DateTime.fromJSDate(new Date(l.datum)).toFormat('yyyy.LL.dd')
+            : `kein Datum`
           const geplant = l.geplant ? ', (geplant)' : ''
           const text = `${datum}, ID: ${l.id}${geplant}`
 
@@ -592,7 +594,9 @@ export const createKulturMessageFunctions = async ({
         )
         .map((l: import('../../../../../../dbModel.ts').Lieferung) => {
           const datum =
-            l.datum ? format(new Date(l.datum), 'yyyy.MM.dd') : `kein Datum`
+            l.datum ?
+              DateTime.fromJSDate(new Date(l.datum)).toFormat('yyyy.LL.dd')
+            : `kein Datum`
           const geplant = l.geplant ? ', (geplant)' : ''
           const text = `${datum}, ID: ${l.id}${geplant}`
 
@@ -613,7 +617,9 @@ export const createKulturMessageFunctions = async ({
         )
         .map((l: import('../../../../../../dbModel.ts').Lieferung) => {
           const datum =
-            l.datum ? format(new Date(l.datum), 'yyyy.MM.dd') : `kein Datum`
+            l.datum ?
+              DateTime.fromJSDate(new Date(l.datum)).toFormat('yyyy.LL.dd')
+            : `kein Datum`
           const geplant = l.geplant ? ', (geplant)' : ''
           const text = `${datum}, ID: ${l.id}${geplant}`
 
@@ -634,7 +640,9 @@ export const createKulturMessageFunctions = async ({
         )
         .map((l: import('../../../../../../dbModel.ts').Lieferung) => {
           const datum =
-            l.datum ? format(new Date(l.datum), 'yyyy.MM.dd') : `kein Datum`
+            l.datum ?
+              DateTime.fromJSDate(new Date(l.datum)).toFormat('yyyy.LL.dd')
+            : `kein Datum`
           const geplant = l.geplant ? ', (geplant)' : ''
           const text = `${datum}, ID: ${l.id}${geplant}`
 
@@ -655,7 +663,9 @@ export const createKulturMessageFunctions = async ({
         )
         .map((l: import('../../../../../../dbModel.ts').Lieferung) => {
           const datum =
-            l.datum ? format(new Date(l.datum), 'yyyy.MM.dd') : `kein Datum`
+            l.datum ?
+              DateTime.fromJSDate(new Date(l.datum)).toFormat('yyyy.LL.dd')
+            : `kein Datum`
           const geplant = l.geplant ? ', (geplant)' : ''
           const text = `${datum}, ID: ${l.id}${geplant}`
 
@@ -676,7 +686,9 @@ export const createKulturMessageFunctions = async ({
         )
         .map((l: import('../../../../../../dbModel.ts').Lieferung) => {
           const datum =
-            l.datum ? format(new Date(l.datum), 'yyyy.MM.dd') : `kein Datum`
+            l.datum ?
+              DateTime.fromJSDate(new Date(l.datum)).toFormat('yyyy.LL.dd')
+            : `kein Datum`
           const geplant = l.geplant ? ', (geplant)' : ''
           const text = `${datum}, ID: ${l.id}${geplant}`
 
@@ -697,7 +709,9 @@ export const createKulturMessageFunctions = async ({
         )
         .map((l: import('../../../../../../dbModel.ts').Lieferung) => {
           const datum =
-            l.datum ? format(new Date(l.datum), 'yyyy.MM.dd') : `kein Datum`
+            l.datum ?
+              DateTime.fromJSDate(new Date(l.datum)).toFormat('yyyy.LL.dd')
+            : `kein Datum`
           const geplant = l.geplant ? ', (geplant)' : ''
           const text = `${datum}, ID: ${l.id}${geplant}`
 
@@ -718,7 +732,9 @@ export const createKulturMessageFunctions = async ({
         )
         .map((l: import('../../../../../../dbModel.ts').Lieferung) => {
           const datum =
-            l.datum ? format(new Date(l.datum), 'yyyy.MM.dd') : `kein Datum`
+            l.datum ?
+              DateTime.fromJSDate(new Date(l.datum)).toFormat('yyyy.LL.dd')
+            : `kein Datum`
           const geplant = l.geplant ? ', (geplant)' : ''
           const text = `${datum}, ID: ${l.id}${geplant}`
 
@@ -743,7 +759,9 @@ export const createKulturMessageFunctions = async ({
         )
         .map((l: import('../../../../../../dbModel.ts').Lieferung) => {
           const datum =
-            l.datum ? format(new Date(l.datum), 'yyyy.MM.dd') : `kein Datum`
+            l.datum ?
+              DateTime.fromJSDate(new Date(l.datum)).toFormat('yyyy.LL.dd')
+            : `kein Datum`
           const geplant = l.geplant ? ', (geplant)' : ''
           const text = `${datum}, ID: ${l.id}${geplant}`
 
@@ -768,7 +786,9 @@ export const createKulturMessageFunctions = async ({
         )
         .map((l: import('../../../../../../dbModel.ts').Lieferung) => {
           const datum =
-            l.datum ? format(new Date(l.datum), 'yyyy.MM.dd') : `kein Datum`
+            l.datum ?
+              DateTime.fromJSDate(new Date(l.datum)).toFormat('yyyy.LL.dd')
+            : `kein Datum`
           const geplant = l.geplant ? ', (geplant)' : ''
           const text = `${datum}, ID: ${l.id}${geplant}`
 
@@ -788,7 +808,9 @@ export const createKulturMessageFunctions = async ({
         )
         .map((l: import('../../../../../../dbModel.ts').Lieferung) => {
           const datum =
-            l.datum ? format(new Date(l.datum), 'yyyy.MM.dd') : `kein Datum`
+            l.datum ?
+              DateTime.fromJSDate(new Date(l.datum)).toFormat('yyyy.LL.dd')
+            : `kein Datum`
           const geplant = l.geplant ? ', (geplant)' : ''
           const text = `${datum}, ID: ${l.id}${geplant}`
 
@@ -808,7 +830,9 @@ export const createKulturMessageFunctions = async ({
         )
         .map((l: import('../../../../../../dbModel.ts').Lieferung) => {
           const datum =
-            l.datum ? format(new Date(l.datum), 'yyyy.MM.dd') : `kein Datum`
+            l.datum ?
+              DateTime.fromJSDate(new Date(l.datum)).toFormat('yyyy.LL.dd')
+            : `kein Datum`
           const geplant = l.geplant ? ', (geplant)' : ''
           const text = `${datum}, ID: ${l.id}${geplant}`
 
@@ -828,7 +852,9 @@ export const createKulturMessageFunctions = async ({
         )
         .map((l: import('../../../../../../dbModel.ts').Lieferung) => {
           const datum =
-            l.datum ? format(new Date(l.datum), 'yyyy.MM.dd') : `kein Datum`
+            l.datum ?
+              DateTime.fromJSDate(new Date(l.datum)).toFormat('yyyy.LL.dd')
+            : `kein Datum`
           const geplant = l.geplant ? ', (geplant)' : ''
           const text = `${datum}, ID: ${l.id}${geplant}`
 
@@ -848,7 +874,9 @@ export const createKulturMessageFunctions = async ({
         )
         .map((l: import('../../../../../../dbModel.ts').Lieferung) => {
           const datum =
-            l.datum ? format(new Date(l.datum), 'yyyy.MM.dd') : `kein Datum`
+            l.datum ?
+              DateTime.fromJSDate(new Date(l.datum)).toFormat('yyyy.LL.dd')
+            : `kein Datum`
           const geplant = l.geplant ? ', (geplant)' : ''
           const text = `${datum}, ID: ${l.id}${geplant}`
 
