@@ -14,7 +14,7 @@ import styles from '../Arten/Row.module.css'
 export const SammlungRow = ({
   style,
   index,
-  rows
+  rows,
 }: {
   style?: Record<string, unknown>
   index?: number
@@ -29,9 +29,8 @@ export const SammlungRow = ({
   const [label, setLabel] = useState('')
   useEffect(() => {
     let isActive = true
-    const labelObservable = herkunftIdInActiveNodeArray
-      ? row.labelUnderHerkunft
-      : row.label
+    const labelObservable =
+      herkunftIdInActiveNodeArray ? row.labelUnderHerkunft : row.label
     labelObservable
       .pipe(first$())
       .toPromise()

@@ -58,17 +58,17 @@ export const LierferungForm = ({
     sammelLieferung: undefined,
   })
   useEffect(() => {
-    const userPersonOptionsObservable = user.uid
-      ? db
+    const userPersonOptionsObservable =
+      user.uid ?
+        db
           ?.get<import('../../../../../dbModel.ts').PersonOption>(
             'person_option',
           )
           .query(Q.on('person', Q.where('account_id', user.uid)))
           .observeWithColumns(['li_show_sl_felder'])
       : $of({})
-    const sLObservable = row?.sammel_lieferung
-      ? row?.sammel_lieferung.observe()
-      : $of({})
+    const sLObservable =
+      row?.sammel_lieferung ? row?.sammel_lieferung.observe() : $of({})
     const combinedObservables = combineLatest([
       userPersonOptionsObservable,
       sLObservable,
@@ -81,63 +81,62 @@ export const LierferungForm = ({
         ]
       >
     ).subscribe(async ([userPersonOptions, sammelLieferung]) => {
-        let vonSammlung
-        try {
-          vonSammlung = await row?.sammlung.fetch()
-        } catch {}
-        let vonSammlungHerkunft
-        try {
-          vonSammlungHerkunft = await vonSammlung?.herkunft?.fetch()
-        } catch {}
+      let vonSammlung
+      try {
+        vonSammlung = await row?.sammlung.fetch()
+      } catch {}
+      let vonSammlungHerkunft
+      try {
+        vonSammlungHerkunft = await vonSammlung?.herkunft?.fetch()
+      } catch {}
 
-        if (vonSammlungHerkunft) {
+      if (vonSammlungHerkunft) {
+        return setDataState({
+          herkunft: vonSammlungHerkunft,
+          herkunftQuelle: 'Sammlung',
+          userPersonOption: userPersonOptions?.[0],
+          sammelLieferung,
+        })
+      }
+
+      if (row?.von_kultur_id) {
+        let vonKultur
+        try {
+          vonKultur = await db
+            ?.get<import('../../../../../dbModel.ts').Kultur>('kultur')
+            .find(row?.von_kultur_id as string)
+        } catch {}
+        let herkunftByVonKultur
+        try {
+          herkunftByVonKultur = await vonKultur?.herkunft?.fetch()
+        } catch {}
+        if (herkunftByVonKultur) {
           return setDataState({
-            herkunft: vonSammlungHerkunft,
-            herkunftQuelle: 'Sammlung',
+            herkunft: herkunftByVonKultur,
+            herkunftQuelle: 'von-Kultur',
             userPersonOption: userPersonOptions?.[0],
             sammelLieferung,
           })
         }
+      }
+      let nachKultur
+      try {
+        nachKultur = await db
+          ?.get<import('../../../../../dbModel.ts').Kultur>('kultur')
+          .find(row?.nach_kultur_id as string)
+      } catch {}
+      let herkunftByNachKultur
+      try {
+        herkunftByNachKultur = await nachKultur?.herkunft?.fetch()
+      } catch {}
 
-        if (row?.von_kultur_id) {
-          let vonKultur
-          try {
-            vonKultur = await db
-              ?.get<import('../../../../../dbModel.ts').Kultur>('kultur')
-              .find(row?.von_kultur_id as string)
-          } catch {}
-          let herkunftByVonKultur
-          try {
-            herkunftByVonKultur = await vonKultur?.herkunft?.fetch()
-          } catch {}
-          if (herkunftByVonKultur) {
-            return setDataState({
-              herkunft: herkunftByVonKultur,
-              herkunftQuelle: 'von-Kultur',
-              userPersonOption: userPersonOptions?.[0],
-              sammelLieferung,
-            })
-          }
-        }
-        let nachKultur
-        try {
-          nachKultur = await db
-            ?.get<import('../../../../../dbModel.ts').Kultur>('kultur')
-            .find(row?.nach_kultur_id as string)
-        } catch {}
-        let herkunftByNachKultur
-        try {
-          herkunftByNachKultur = await nachKultur?.herkunft?.fetch()
-        } catch {}
-
-        setDataState({
-          herkunft: herkunftByNachKultur,
-          herkunftQuelle: herkunftByNachKultur ? 'nach-Kultur' : 'keine',
-          userPersonOption: userPersonOptions?.[0],
-          sammelLieferung,
-        })
-      },
-    )
+      setDataState({
+        herkunft: herkunftByNachKultur,
+        herkunftQuelle: herkunftByNachKultur ? 'nach-Kultur' : 'keine',
+        userPersonOption: userPersonOptions?.[0],
+        sammelLieferung,
+      })
+    })
 
     return () => subscription?.unsubscribe?.()
   }, [
@@ -166,8 +165,7 @@ export const LierferungForm = ({
     return false
   }
 
-  const ifSomeNeeded = (fields: string[]) =>
-    fields.some((f) => ifNeeded(f))
+  const ifSomeNeeded = (fields: string[]) => fields.some((f) => ifNeeded(f))
 
   useEffect(() => {
     unsetError('lieferung')
@@ -193,7 +191,8 @@ export const LierferungForm = ({
 
     // only update if value has changed
     const previousValue = ifIsNumericAsNumber(
-      (row as unknown as Record<string, unknown>)[field as string] as string | number,
+      (row as unknown as Record<string, unknown>)[field as string] as
+        string | number,
     )
     if (value === previousValue) return
     row?.edit({ field, value })
@@ -213,7 +212,7 @@ export const LierferungForm = ({
         )}
         {showDeleted && (
           <>
-            {showFilter ? (
+            {showFilter ?
               <JesNo
                 key={`${row?.id}_deleted`}
                 label="gelöscht"
@@ -222,8 +221,7 @@ export const LierferungForm = ({
                 saveToDb={saveToDb}
                 error={errors?.kultur?._deleted as string | undefined}
               />
-            ) : (
-              <Checkbox2States
+            : <Checkbox2States
                 key={`${row?.id}_deleted`}
                 label="gelöscht"
                 name="_deleted"
@@ -231,7 +229,7 @@ export const LierferungForm = ({
                 saveToDb={saveToDb}
                 error={errors?.kultur?._deleted as string | undefined}
               />
-            )}
+            }
           </>
         )}
         {ifSomeNeeded([

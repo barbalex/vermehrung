@@ -23,7 +23,11 @@ export const SammelLieferungNavButtons = () => {
 
   return (
     <>
-      <IconButton title="Zur Liste" onClick={onClickUp} size="large">
+      <IconButton
+        title="Zur Liste"
+        onClick={onClickUp}
+        size="large"
+      >
         <UpSvg />
       </IconButton>
       <IconButton

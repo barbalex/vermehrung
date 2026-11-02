@@ -31,10 +31,10 @@ export const ArtHistory = ({
   rawRow?: unknown
   historyTakeoverCallback?: () => void
 }) => {
-  const priorRevisions =
-    ((row?._revisions ?? []) as string[]).slice(1) ?? []
-  const revPath = priorRevisions.length
-    ? `/art_rev?_rev=in.(${priorRevisions.join(',')})&select=id,art_id,ae_id,set,apflora_av,apflora_ap,changed,changed_by,_rev,_parent_rev,_revisions,_depth,_deleted`
+  const priorRevisions = ((row?._revisions ?? []) as string[]).slice(1) ?? []
+  const revPath =
+    priorRevisions.length ?
+      `/art_rev?_rev=in.(${priorRevisions.join(',')})&select=id,art_id,ae_id,set,apflora_av,apflora_ap,changed,changed_by,_rev,_parent_rev,_revisions,_depth,_deleted`
     : null
   const { error, data, fetching } = useApiQuery(revPath)
   if (error) checkForOnlineError({ error })
@@ -86,7 +86,10 @@ export const ArtHistory = ({
         {...sliderSettings}
       >
         {revRows.map((r) => (
-          <Row key={r._rev} revRow={r} row={row}
+          <Row
+            key={r._rev}
+            revRow={r}
+            row={row}
             historyTakeoverCallback={historyTakeoverCallback}
           />
         ))}

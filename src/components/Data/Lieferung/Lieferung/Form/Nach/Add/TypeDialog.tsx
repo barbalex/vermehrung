@@ -15,11 +15,17 @@ export const LieferungAddTypeDialog = ({
   onClose: () => void
   onChange: (event: { target: { value: unknown } }) => void
 }) => (
-  <Dialog open={open} onClose={onClose}>
+  <Dialog
+    open={open}
+    onClose={onClose}
+  >
     <DialogTitle>Typ der Kultur wählen:</DialogTitle>
     <DialogContent>
       <FormControl>
-        <RadioGroup name="type_waehlen" onChange={onChange}>
+        <RadioGroup
+          name="type_waehlen"
+          onChange={onChange}
+        >
           <FormControlLabel
             value="zwischenlager"
             control={<Radio />}

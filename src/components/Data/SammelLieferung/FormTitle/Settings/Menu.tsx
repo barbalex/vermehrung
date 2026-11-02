@@ -25,8 +25,9 @@ export const SettingsSammelLieferungMenu = ({
     userPersonOption: {},
   })
   useEffect(() => {
-    const userPersonOptionsObservable = user.uid
-      ? db
+    const userPersonOptionsObservable =
+      user.uid ?
+        db
           ?.get<import('../../../../../dbModel.ts').PersonOption>(
             'person_option',
           )
@@ -42,17 +43,16 @@ export const SettingsSammelLieferungMenu = ({
         [Record<string, unknown>[]]
       >
     ).subscribe(([userPersonOptions]) => {
-        setDataState({
-          userPersonOption: userPersonOptions?.[0],
-        })
-      },
-    )
+      setDataState({
+        userPersonOption: userPersonOptions?.[0],
+      })
+    })
 
     return () => subscription?.unsubscribe?.()
   }, [db, user.uid])
   const { userPersonOption } = dataState
   const { sl_show_empty_when_next_to_li, sl_auto_copy_edits } =
-      (userPersonOption ?? {}) as unknown as Record<string, unknown>
+    (userPersonOption ?? {}) as unknown as Record<string, unknown>
 
   const saveToDb = (event: {
     target: { name?: string; value: unknown }
@@ -90,9 +90,7 @@ export const SettingsSammelLieferungMenu = ({
             <Checkbox
               color="primary"
               checked={!!sl_show_empty_when_next_to_li}
-              onClick={
-                  saveToDb as unknown as import('react').MouseEventHandler
-                }
+              onClick={saveToDb as unknown as import('react').MouseEventHandler}
               name="sl_show_empty_when_next_to_li"
             />
           }
@@ -107,9 +105,7 @@ export const SettingsSammelLieferungMenu = ({
             <Checkbox
               color="primary"
               checked={!!sl_auto_copy_edits}
-              onClick={
-                  saveToDb as unknown as import('react').MouseEventHandler
-                }
+              onClick={saveToDb as unknown as import('react').MouseEventHandler}
               name="sl_auto_copy_edits"
             />
           }

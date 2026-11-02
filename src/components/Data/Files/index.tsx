@@ -46,15 +46,15 @@ export const Files = ({
   // removing useMemo causes: Maximum update depth exceeded
   const observable = useMemo(
     () =>
-      parent?.files
-        ? (
-            parent?.files as {
-              observeWithColumns: (
-                columns: string[],
-              ) => import('rxjs').Observable<FileRow[]>
-            }
-          ).observeWithColumns(['name'])
-        : $of([] as FileRow[]),
+      parent?.files ?
+        (
+          parent?.files as {
+            observeWithColumns: (
+              columns: string[],
+            ) => import('rxjs').Observable<FileRow[]>
+          }
+        ).observeWithColumns(['name'])
+      : $of([] as FileRow[]),
     [parent?.files],
   )
   const files =
@@ -160,9 +160,9 @@ export const Files = ({
               onClick={onClickLightboxButton}
               className={styles.lightboxButton}
             >
-              {lightboxIsOpen
-                ? 'Galerie schliessen'
-                : 'Bilder in Galerie öffnen'}
+              {lightboxIsOpen ?
+                'Galerie schliessen'
+              : 'Bilder in Galerie öffnen'}
             </Button>
           )}
         </div>
@@ -170,14 +170,21 @@ export const Files = ({
       {lightboxIsOpen && (
         <>
           <div className={styles.spacer} />
-          <ImageGallery items={imageObjects} showPlayButton={false} />
+          <ImageGallery
+            items={imageObjects}
+            showPlayButton={false}
+          />
         </>
       )}
       {!!sortedFiles.length && (
         <>
           <div className={styles.spacer} />
           {sortedFiles.map((file) => (
-            <File key={file.file_id} file={file} parent={parent} />
+            <File
+              key={file.file_id}
+              file={file}
+              parent={parent}
+            />
           ))}
         </>
       )}

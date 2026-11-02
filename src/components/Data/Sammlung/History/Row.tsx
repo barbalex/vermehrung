@@ -77,9 +77,8 @@ export const SammlungHistoryRow = ({
     historyTakeoverCallback?.()
     // do not stringify revisions for store
     // as _that_ is a real array
-    newObjectForStore._revisions = row?._revisions
-      ? [rev, ...((row?._revisions as string[]) ?? [])]
-      : [rev]
+    newObjectForStore._revisions =
+      row?._revisions ? [rev, ...((row?._revisions as string[]) ?? [])] : [rev]
     // TODO: is this a good idea?
     newObjectForStore._conflicts = row?._conflicts
     // for store: convert rev to winner
@@ -89,16 +88,14 @@ export const SammlungHistoryRow = ({
     const db = store.get(dbAtom)
     if (!db) return
     await db.write(async () => {
-      await row?.update(
-        (row: unknown) => {
-          const mutableRow = row as Record<string, unknown>
-          Object.entries(newObjectForStore).forEach(([key, value]) => {
-            if (!isEqual(value, mutableRow[key])) {
-              mutableRow[key] = value
-            }
-          })
-        },
-      )
+      await row?.update((row: unknown) => {
+        const mutableRow = row as Record<string, unknown>
+        Object.entries(newObjectForStore).forEach(([key, value]) => {
+          if (!isEqual(value, mutableRow[key])) {
+            mutableRow[key] = value
+          }
+        })
+      })
     })
   }
 

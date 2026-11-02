@@ -73,21 +73,34 @@ export const Pflanzen = ({
   // https://github.com/recharts/recharts/issues/806
 
   return (
-    <div className={styles.container} ref={ref}>
+    <div
+      className={styles.container}
+      ref={ref}
+    >
       <ErrorBoundary>
         <h4>{herkunftLabel}</h4>
-        <ResponsiveContainer width="99%" height={450}>
+        <ResponsiveContainer
+          width="99%"
+          height={450}
+        >
           <ComposedChart
             data={data}
             margin={{ top: 25, right: 0, left: 0, bottom: 45 }}
           >
-            <CartesianGrid strokeDasharray="3 3" horizontal={false} />
-            <XAxis dataKey="datum" tick={
-                      CustomAxisTick as unknown as {
-                        value: unknown
-                        fill: string
-                      }
-                    } interval={0} />
+            <CartesianGrid
+              strokeDasharray="3 3"
+              horizontal={false}
+            />
+            <XAxis
+              dataKey="datum"
+              tick={
+                CustomAxisTick as unknown as {
+                  value: unknown
+                  fill: string
+                }
+              }
+              interval={0}
+            />
             <YAxis
               label={{
                 value: 'Anzahl Pflanzen',
@@ -100,20 +113,22 @@ export const Pflanzen = ({
               fontSize={12}
             />
             <Tooltip content={<CustomTooltip />} />
-            {isNarrow ? (
+            {isNarrow ?
               <Legend
                 layout="horizontal"
                 align="center"
                 wrapperStyle={{ bottom: 0, fontSize: 12 }}
               />
-            ) : (
-              <Legend
+            : <Legend
                 layout="vertical"
                 align="right"
                 wrapperStyle={{ right: -10, bottom: 150, fontSize: 12 }}
               />
-            )}
-            <ReferenceLine y={0} stroke="#000" />
+            }
+            <ReferenceLine
+              y={0}
+              stroke="#000"
+            />
             <Bar
               dataKey="Sammlung"
               fill="orange"

@@ -40,11 +40,9 @@ export const HistoryButton = ({
   // removing useMemo causes: Maximum update depth exceeded
   const observable = useMemo(
     () =>
-      id && initialDataQueried && db
-        ? (db
-            .get(table)
-            .findAndObserve(id) as unknown as Observable<GenericRow>)
-        : $of(null),
+      id && initialDataQueried && db ?
+        (db.get(table).findAndObserve(id) as unknown as Observable<GenericRow>)
+      : $of(null),
     [db, id, initialDataQueried, table],
   )
   const row = useObservable(observable)
@@ -61,31 +59,33 @@ export const HistoryButton = ({
     // history is url-driven: '/histories/<rev>' is appended to the form url
     // the rev is added by the history component once revisions were fetched
     const activeNodeArray = store.get(activeNodeArrayAtom)
-    const url = showHistory
-      ? activeNodeArray
-      : [...activeNodeArray, 'histories']
+    const url =
+      showHistory ? activeNodeArray : [...activeNodeArray, 'histories']
     getNavigate()?.(`/Vermehrung/${url.join('/')}`)
   }
 
-  const title = online
-    ? showHistory
-      ? 'Frühere Versionen ausblenden'
+  const title =
+    online ?
+      showHistory ? 'Frühere Versionen ausblenden'
       : 'Frühere Versionen anzeigen'
     : 'Frühere Versionen sind nur online verfügbar'
 
   if (asMenu) {
-    const style = disabled
-      ? { color: 'rgba(0, 0, 0, 0.54)', cursor: 'not-allowed' }
-      : {}
+    const style =
+      disabled ? { color: 'rgba(0, 0, 0, 0.54)', cursor: 'not-allowed' } : {}
     return (
-      <MenuItem onClick={show} style={style}>
+      <MenuItem
+        onClick={show}
+        style={style}
+      >
         {title}
       </MenuItem>
     )
   }
 
-  const style = showHistory
-    ? {
+  const style =
+    showHistory ?
+      {
         backgroundColor: 'rgba(0, 0, 0, 0.04)',
         boxShadow: 'inset 0px 0px 0px 1px rgba(0, 0, 0, 0.04)',
       }

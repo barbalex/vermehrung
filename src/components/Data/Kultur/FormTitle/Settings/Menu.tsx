@@ -28,22 +28,25 @@ export const KulturSettingsMenu = ({
 
   const [dataState, setDataState] = useState<{
     kulturOption: import('../../../../../dbModel.ts').KulturOption | undefined
-    userPersonOption: import('../../../../../dbModel.ts').PersonOption | undefined
+    userPersonOption:
+      import('../../../../../dbModel.ts').PersonOption | undefined
   }>({
     kulturOption: undefined,
     userPersonOption: undefined,
   })
   useEffect(() => {
-    const userPersonOptionsObservable = user.uid
-      ? db
+    const userPersonOptionsObservable =
+      user.uid ?
+        db
           ?.get<import('../../../../../dbModel.ts').PersonOption>(
             'person_option',
           )
           .query(Q.on('person', Q.where('account_id', user.uid)))
           .observeWithColumns(['ku_zwischenlager', 'ku_erhaltungskultur'])
       : $of({})
-    const kulturOptionObservable = kulturId
-      ? db?.get('kultur_option').findAndObserve(kulturId ?? '')
+    const kulturOptionObservable =
+      kulturId ?
+        db?.get('kultur_option').findAndObserve(kulturId ?? '')
       : $of({})
     const combinedObservables = combineLatest([
       userPersonOptionsObservable,
@@ -57,19 +60,18 @@ export const KulturSettingsMenu = ({
         ]
       >
     ).subscribe(([userPersonOptions, kulturOption]) => {
-        setDataState({
-          userPersonOption: userPersonOptions?.[0],
-          kulturOption,
-        })
-      },
-    )
+      setDataState({
+        userPersonOption: userPersonOptions?.[0],
+        kulturOption,
+      })
+    })
 
     return () => subscription?.unsubscribe?.()
   }, [db, kulturId, user])
   const { kulturOption, userPersonOption } = dataState
 
-  const { ku_zwischenlager, ku_erhaltungskultur } =
-      (userPersonOption ?? {}) as unknown as Record<string, unknown>
+  const { ku_zwischenlager, ku_erhaltungskultur } = (userPersonOption ??
+    {}) as unknown as Record<string, unknown>
   const { tk } = (kulturOption ?? {}) as unknown as Record<string, unknown>
 
   const saveToDbKulturOption = async (event: {
@@ -125,7 +127,9 @@ export const KulturSettingsMenu = ({
             <Checkbox
               color="primary"
               checked={!!tk}
-              onClick={saveToDbKulturOption as unknown as import('react').MouseEventHandler<HTMLButtonElement>}
+              onClick={
+                saveToDbKulturOption as unknown as import('react').MouseEventHandler<HTMLButtonElement>
+              }
               name="tk"
             />
           }
@@ -153,7 +157,9 @@ export const KulturSettingsMenu = ({
             <Checkbox
               color="primary"
               checked={!!ku_zwischenlager}
-              onClick={saveToDbPersonOption as unknown as import('react').MouseEventHandler<HTMLButtonElement>}
+              onClick={
+                saveToDbPersonOption as unknown as import('react').MouseEventHandler<HTMLButtonElement>
+              }
               name="ku_zwischenlager"
             />
           }
@@ -168,7 +174,9 @@ export const KulturSettingsMenu = ({
             <Checkbox
               color="primary"
               checked={!!ku_erhaltungskultur}
-              onClick={saveToDbPersonOption as unknown as import('react').MouseEventHandler<HTMLButtonElement>}
+              onClick={
+                saveToDbPersonOption as unknown as import('react').MouseEventHandler<HTMLButtonElement>
+              }
               name="ku_erhaltungskultur"
             />
           }

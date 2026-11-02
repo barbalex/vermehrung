@@ -63,25 +63,21 @@ export const PersonGaerten = ({
       .extend(Q.where('_deleted', false))
       .observe()
     const gartenDelQuery =
-      gartenFilter._deleted === false
-        ? Q.where('_deleted', false)
-        : gartenFilter._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+      gartenFilter._deleted === false ? Q.where('_deleted', false)
+      : gartenFilter._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     const gartenAktivQuery =
-      gartenFilter.aktiv === false
-        ? Q.where('aktiv', false)
-        : gartenFilter.aktiv === true
-          ? Q.where('aktiv', true)
-          : Q.or(
-              Q.where('aktiv', false),
-              Q.where('aktiv', true),
-              Q.where('aktiv', null),
-            )
+      gartenFilter.aktiv === false ? Q.where('aktiv', false)
+      : gartenFilter.aktiv === true ? Q.where('aktiv', true)
+      : Q.or(
+          Q.where('aktiv', false),
+          Q.where('aktiv', true),
+          Q.where('aktiv', null),
+        )
     const gartensObservable = db
       ?.get<import('../../../../../dbModel.ts').Garten>('garten')
       .query(
@@ -89,7 +85,11 @@ export const PersonGaerten = ({
         gartenAktivQuery,
         Q.where(
           'id',
-          Q.notIn(((gvGartenIds ?? []) as (string | null)[]).filter(Boolean) as string[]),
+          Q.notIn(
+            ((gvGartenIds ?? []) as (string | null)[]).filter(
+              Boolean,
+            ) as string[],
+          ),
         ),
       )
       .observe()
@@ -97,32 +97,33 @@ export const PersonGaerten = ({
       gvsObservable,
       gartensObservable,
     ])
-    const subscription = (combinedObservables as unknown as import('rxjs').Observable<
+    const subscription = (
+      combinedObservables as unknown as import('rxjs').Observable<
         [
           import('../../../../../dbModel.ts').Gv[],
           import('../../../../../dbModel.ts').Garten[],
         ]
-      >).subscribe(async ([gvs, gartens]) => {
-        const gvsSorted = await gvsSortByGarten(gvs)
-        const gartensSorted = await gartensSortedFromGartens(gartens)
-        const gartenWerte = await Promise.all(
-          gartensSorted.map(async (garten) => {
-            let label
-            try {
-              label = await garten.label.pipe(first$()).toPromise()
-            } catch {}
+      >
+    ).subscribe(async ([gvs, gartens]) => {
+      const gvsSorted = await gvsSortByGarten(gvs)
+      const gartensSorted = await gartensSortedFromGartens(gartens)
+      const gartenWerte = await Promise.all(
+        gartensSorted.map(async (garten) => {
+          let label
+          try {
+            label = await garten.label.pipe(first$()).toPromise()
+          } catch {}
 
-            return {
-              value: garten.id,
-              label,
-              inaktiv: garten.aktiv === false,
-              link: ['Gaerten', garten.id],
-            }
-          }),
-        )
-        setDataState({ gvs: gvsSorted, gartenWerte })
-      },
-    )
+          return {
+            value: garten.id,
+            label,
+            inaktiv: garten.aktiv === false,
+            link: ['Gaerten', garten.id],
+          }
+        }),
+      )
+      setDataState({ gvs: gvsSorted, gartenWerte })
+    })
 
     return () => subscription?.unsubscribe?.()
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -144,9 +145,7 @@ export const PersonGaerten = ({
   return (
     <ErrorBoundary>
       <section
-        onClick={
-                  onClickToggle as unknown as import('react').MouseEventHandler
-                }
+        onClick={onClickToggle as unknown as import('react').MouseEventHandler}
         title={open ? 'schliessen' : 'öffnen'}
         className={styles.titleRow}
       >
@@ -157,10 +156,14 @@ export const PersonGaerten = ({
           <IconButton
             aria-label={open ? 'schliessen' : 'öffnen'}
             title={open ? 'schliessen' : 'öffnen'}
-            onClick={onClickToggle as unknown as import('react').MouseEventHandler<HTMLElement>}
+            onClick={
+              onClickToggle as unknown as import('react').MouseEventHandler<HTMLElement>
+            }
             size="large"
           >
-            {open ? <FaChevronUp /> : <FaChevronDown />}
+            {open ?
+              <FaChevronUp />
+            : <FaChevronDown />}
           </IconButton>
         </div>
       </section>

@@ -15,10 +15,7 @@ export const useLieferungNachData = ({
 }: {
   showFilter: boolean
   row: import('../../../../../../dbModel.ts').Lieferung | null | undefined
-  herkunft:
-    | import('../../../../../../dbModel.ts').Herkunft
-    | null
-    | undefined
+  herkunft: import('../../../../../../dbModel.ts').Herkunft | null | undefined
   db: import('nitromelondb').Database | null
   filter: {
     kultur: { _deleted?: boolean | null }
@@ -36,30 +33,26 @@ export const useLieferungNachData = ({
 
   useEffect(() => {
     const kulturDelQuery =
-      filter.kultur._deleted === false
-        ? Q.where('_deleted', false)
-        : filter.kultur._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+      filter.kultur._deleted === false ? Q.where('_deleted', false)
+      : filter.kultur._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     // BEWARE: need to include inactive kulturs
     const kultursObservable = db
       ?.get<import('../../../../../../dbModel.ts').Kultur>('kultur')
       .query(kulturDelQuery)
       .observe()
     const sammlungDelQuery =
-      filter.sammlung._deleted === false
-        ? Q.where('_deleted', false)
-        : filter.sammlung._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+      filter.sammlung._deleted === false ? Q.where('_deleted', false)
+      : filter.sammlung._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     const sammlungsObservable = db
       ?.get<import('../../../../../../dbModel.ts').Sammlung>('sammlung')
       .query(sammlungDelQuery)
@@ -104,11 +97,9 @@ export const useLieferungNachData = ({
       const kultursIncludingChoosen = uniqBy(
         [
           ...kultursFiltered,
-          ...(kultur && !showFilter
-            ? [
-                kultur as import('../../../../../../dbModel.ts').Kultur,
-              ]
-            : []),
+          ...(kultur && !showFilter ?
+            [kultur as import('../../../../../../dbModel.ts').Kultur]
+          : []),
         ],
         (e) => e.id,
       )

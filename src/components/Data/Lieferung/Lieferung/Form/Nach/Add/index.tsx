@@ -18,9 +18,7 @@ export const LieferungAdd = ({
   disabled?: boolean
   lieferung: import('../../../../../../../dbModel.ts').Lieferung
   herkunft:
-    | import('../../../../../../../dbModel.ts').Herkunft
-    | null
-    | undefined
+    import('../../../../../../../dbModel.ts').Herkunft | null | undefined
 }) => {
   const [kulturType, setKulturType] = useState<string | undefined>(undefined)
   const [typeDialogOpen, setTypeDialogOpen] = useState(false)

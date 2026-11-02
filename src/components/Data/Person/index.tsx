@@ -40,13 +40,13 @@ export const Person = ({
     // need raw row because observable does not provoke rerendering of components
   }>({ row: undefined })
   useEffect(() => {
-    const personObservable = showFilter
-      ? $of(undefined)
-      : initialDataQueried || !online
-        ? db
-            ?.get<import('../../../dbModel.ts').Person>('person')
-            .findAndObserve(id as string)
-        : $of(undefined)
+    const personObservable =
+      showFilter ? $of(undefined)
+      : initialDataQueried || !online ?
+        db
+          ?.get<import('../../../dbModel.ts').Person>('person')
+          .findAndObserve(id as string)
+      : $of(undefined)
     const subscription = (
       personObservable as unknown as import('rxjs').Observable<
         import('../../../dbModel.ts').Person | undefined
@@ -98,29 +98,25 @@ export const Person = ({
               id={id}
               row={row}
               activeConflict={activeConflict}
-              setActiveConflict={
-                  setActiveConflict as unknown as never
-                }
+              setActiveConflict={setActiveConflict as unknown as never}
               showHistory={showHistory}
             />
             <Allotment.Pane visible={!!paneIsSplit}>
-              {activeConflict ? (
+              {activeConflict ?
                 <Conflict
                   rev={activeConflict}
                   id={id}
                   row={row}
-                      conflictDisposalCallback={conflictDisposalCallback}
+                  conflictDisposalCallback={conflictDisposalCallback}
                   conflictSelectionCallback={conflictSelectionCallback}
-                  setActiveConflict={
-                  setActiveConflict as unknown as never
-                }
+                  setActiveConflict={setActiveConflict as unknown as never}
                 />
-              ) : showHistory ? (
+              : showHistory ?
                 <History
                   row={row}
-                      historyTakeoverCallback={historyTakeoverCallback}
+                  historyTakeoverCallback={historyTakeoverCallback}
                 />
-              ) : null}
+              : null}
             </Allotment.Pane>
           </Allotment>
         </div>

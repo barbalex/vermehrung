@@ -45,7 +45,11 @@ if (serviceAccount) {
 // row level security reads `user_id` (app.current_user_id()).
 const signToken = (claims, secret, ttlSeconds) => {
   const b64url = (buf) =>
-    Buffer.from(buf).toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
+    Buffer.from(buf)
+      .toString('base64')
+      .replace(/\+/g, '-')
+      .replace(/\//g, '_')
+      .replace(/=+$/, '')
   const header = b64url(JSON.stringify({ alg: 'HS256', typ: 'JWT' }))
   const payload = b64url(
     JSON.stringify({
@@ -187,7 +191,8 @@ async function start() {
 
       let person
       try {
-        const persons = await sql`select p.id, u.name as user_role from person p inner join user_role u on u.id = p.user_role_id where account_id = ${decoded.uid}`
+        const persons =
+          await sql`select p.id, u.name as user_role from person p inner join user_role u on u.id = p.user_role_id where account_id = ${decoded.uid}`
         person = persons[0]
       } catch (sqlError) {
         console.log('Error querying db:', sqlError)

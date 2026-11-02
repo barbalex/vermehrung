@@ -61,15 +61,13 @@ export const Sammlungen = ({ filter: showFilter = false }) => {
       db?.get<import('../../../dbModel.ts').Sammlung>('sammlung')
     if (!collection) return
     const sammlungDelQuery =
-      sammlungFilter._deleted === false
-        ? Q.where('_deleted', false)
-        : sammlungFilter._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+      sammlungFilter._deleted === false ? Q.where('_deleted', false)
+      : sammlungFilter._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     const countObservable = collection
       .query(sammlungDelQuery, ...hierarchyQuery)
       .observeCount()
@@ -79,16 +77,17 @@ export const Sammlungen = ({ filter: showFilter = false }) => {
 
     // so need to hackly use merge
     const combinedObservables = combineLatest([countObservable, dataObservable])
-    const subscription = (combinedObservables as unknown as import('rxjs').Observable<
+    const subscription = (
+      combinedObservables as unknown as import('rxjs').Observable<
         [number, import('../../../dbModel.ts').Sammlung[]]
-      >).subscribe(async ([totalCount, sammlungs]) => {
-        const sammlungsSorted = await sammlungsSortedFromSammlungs(sammlungs)
-        setDataState({
-          sammlungs: sammlungsSorted,
-          totalCount,
-        })
-      },
-    )
+      >
+    ).subscribe(async ([totalCount, sammlungs]) => {
+      const sammlungsSorted = await sammlungsSortedFromSammlungs(sammlungs)
+      setDataState({
+        sammlungs: sammlungsSorted,
+        totalCount,
+      })
+    })
 
     return () => subscription?.unsubscribe?.()
   }, [
@@ -128,19 +127,22 @@ export const Sammlungen = ({ filter: showFilter = false }) => {
         className={artStyles.container}
         style={{ backgroundColor: showFilter ? 'var(--filter-bg)' : 'unset' }}
       >
-        {showFilter ? (
+        {showFilter ?
           <FilterTitle
             title="Sammlung"
             table="sammlung"
             totalCount={totalCount}
             filteredCount={filteredCount}
           />
-        ) : (
-          <div className={artStyles.titleContainer}>
+        : <div className={artStyles.titleContainer}>
             <div className={artStyles.title}>Sammlungen</div>
             <div className={artStyles.titleSymbols}>
               {!breadcrumbsEnabled && (
-                <IconButton title={upTitle} onClick={onClickUp} size="large">
+                <IconButton
+                  title={upTitle}
+                  onClick={onClickUp}
+                  size="large"
+                >
                   <UpSvg />
                 </IconButton>
               )}
@@ -160,7 +162,7 @@ export const Sammlungen = ({ filter: showFilter = false }) => {
               />
             </div>
           </div>
-        )}
+        }
         <div className={artStyles.fieldsContainer}>
           <List
             rowComponent={Row}

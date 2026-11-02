@@ -17,7 +17,10 @@ export const FourOhFour = () => {
     <>
       <ErrorBoundary>
         <div className={styles.outerContainer}>
-          <ProgressiveImg src={image} placeholderSrc={placeholderSrc} />
+          <ProgressiveImg
+            src={image}
+            placeholderSrc={placeholderSrc}
+          />
           <div className={styles.scrollContainer}>
             <div className={styles.textContainer}>
               <Typography
@@ -29,7 +32,11 @@ export const FourOhFour = () => {
               </Typography>
             </div>
             <div className={styles.textContainer}>
-              <Typography align="center" variant="h6" className={styles.text}>
+              <Typography
+                align="center"
+                variant="h6"
+                className={styles.text}
+              >
                 Diese Seite ist nicht verfügbar
               </Typography>
             </div>

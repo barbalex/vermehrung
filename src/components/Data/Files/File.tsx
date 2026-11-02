@@ -63,14 +63,12 @@ export const File = ({
   return (
     <ErrorBoundary>
       <div className={styles.container}>
-        {isImage ? (
+        {isImage ?
           <img
             src={`https://ucarecdn.com/${file.file_id}/-/resize/80x/-/quality/lightest/${file.name}`}
             className={styles.img}
           />
-        ) : (
-          <div className={styles.imgReplacement}>...</div>
-        )}
+        : <div className={styles.imgReplacement}>...</div>}
         <div className={styles.dateiTypField}>
           <TextField
             key={`${file.id}fileMimeType`}
@@ -106,9 +104,7 @@ export const File = ({
             label="Beschreibung"
             value={file.beschreibung}
             saveToDb={saveToDb}
-            error={
-              errors[`${parent}_file`]?.beschreibung as string | undefined
-            }
+            error={errors[`${parent}_file`]?.beschreibung as string | undefined}
             multiLine
             schrinkLabel
           />
@@ -125,9 +121,7 @@ export const File = ({
           aria-label="löschen"
           aria-owns={delMenuOpen ? 'delMenu' : undefined}
           aria-haspopup="true"
-          onClick={(event) =>
-            setDelMenuAnchorEl(event.currentTarget)
-          }
+          onClick={(event) => setDelMenuAnchorEl(event.currentTarget)}
           className={styles.delIcon}
         >
           <FaTimes />

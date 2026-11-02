@@ -44,7 +44,12 @@ export const LieferungWer = ({
   const initialDataQueried = useAtomValue(initialDataQueriedAtom)
 
   const [dataState, setDataState] = useState<{
-    personWerte: { value: string; label: string | undefined; inaktiv?: boolean; link?: string[] }[]
+    personWerte: {
+      value: string
+      label: string | undefined
+      inaktiv?: boolean
+      link?: string[]
+    }[]
     row: import('../../../../../dbModel.ts').Lieferung | undefined
   }>({
     personWerte: [],
@@ -53,31 +58,29 @@ export const LieferungWer = ({
   const { row, personWerte } = dataState
 
   useEffect(() => {
-    const rowObservable = showFilter
-      ? $of(lieferungFilter)
-      : initialDataQueried
-        ? db?.get<import('../../../../../dbModel.ts').Lieferung>('lieferung').findAndObserve(id ?? '')
-        : $of({})
+    const rowObservable =
+      showFilter ? $of(lieferungFilter)
+      : initialDataQueried ?
+        db
+          ?.get<import('../../../../../dbModel.ts').Lieferung>('lieferung')
+          .findAndObserve(id ?? '')
+      : $of({})
     const personDelQuery =
-      personFilter._deleted === false
-        ? Q.where('_deleted', false)
-        : personFilter._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+      personFilter._deleted === false ? Q.where('_deleted', false)
+      : personFilter._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     const personAktivQuery =
-      personFilter.aktiv === false
-        ? Q.where('aktiv', false)
-        : personFilter.aktiv === true
-          ? Q.where('aktiv', true)
-          : Q.or(
-              Q.where('aktiv', false),
-              Q.where('aktiv', true),
-              Q.where('aktiv', null),
-            )
+      personFilter.aktiv === false ? Q.where('aktiv', false)
+      : personFilter.aktiv === true ? Q.where('aktiv', true)
+      : Q.or(
+          Q.where('aktiv', false),
+          Q.where('aktiv', true),
+          Q.where('aktiv', null),
+        )
     const personsObservable = db
       ?.get<import('../../../../../dbModel.ts').Person>('person')
       .query(personDelQuery, personAktivQuery)
@@ -86,39 +89,40 @@ export const LieferungWer = ({
       personsObservable,
       rowObservable,
     ])
-    const subscription = (combinedObservables as unknown as import('rxjs').Observable<
+    const subscription = (
+      combinedObservables as unknown as import('rxjs').Observable<
         [
           import('../../../../../dbModel.ts').Person[],
           import('../../../../../dbModel.ts').Lieferung | undefined,
         ]
-      >).subscribe(async ([persons, row]) => {
-        // need to show a choosen kultur even if inactive but not if deleted
-        let person
-        try {
-          person = await row?.person.fetch()
-        } catch {}
-        const personsIncludingChoosen = uniqBy(
-          [...persons, ...(person && !showFilter ? [person] : [])],
-          (e) => e.id,
-        )
-        const personWerte = personsIncludingChoosen
-          .sort(personSort)
-          .map((el) => ({
-            value: el.id,
-            label: personLabelFromPerson({ person: el }),
-            inaktiv: el.aktiv === false,
-            link: ['Personen', el.id],
-          }))
+      >
+    ).subscribe(async ([persons, row]) => {
+      // need to show a choosen kultur even if inactive but not if deleted
+      let person
+      try {
+        person = await row?.person.fetch()
+      } catch {}
+      const personsIncludingChoosen = uniqBy(
+        [...persons, ...(person && !showFilter ? [person] : [])],
+        (e) => e.id,
+      )
+      const personWerte = personsIncludingChoosen
+        .sort(personSort)
+        .map((el) => ({
+          value: el.id,
+          label: personLabelFromPerson({ person: el }),
+          inaktiv: el.aktiv === false,
+          link: ['Personen', el.id],
+        }))
 
-        setDataState({ personWerte, row })
-        // TODO:
-        // reloading on http://localhost:5175/Vermehrung/Lieferungen/afd3e250-2e9f-11ed-af3a-51bb05f7b810 causes:
-        // Warning: Maximum update depth exceeded. This can happen when a component calls setState inside useEffect,
-        // but useEffect either doesn't have a dependency array, or one of the dependencies changes on every render
-        // only happens on (re-)load
-        // and only in dev mode!!
-      },
-    )
+      setDataState({ personWerte, row })
+      // TODO:
+      // reloading on http://localhost:5175/Vermehrung/Lieferungen/afd3e250-2e9f-11ed-af3a-51bb05f7b810 causes:
+      // Warning: Maximum update depth exceeded. This can happen when a component calls setState inside useEffect,
+      // but useEffect either doesn't have a dependency array, or one of the dependencies changes on every render
+      // only happens on (re-)load
+      // and only in dev mode!!
+    })
 
     return () => subscription?.unsubscribe?.()
   }, [
@@ -139,9 +143,8 @@ export const LieferungWer = ({
       <div
         className={wannStyles.titleRow}
         style={{
-          backgroundColor: showFilter
-            ? 'var(--filter-bg-alt)'
-            : 'var(--form-bg)',
+          backgroundColor:
+            showFilter ? 'var(--filter-bg-alt)' : 'var(--form-bg)',
         }}
       >
         <div className={wannStyles.title}>wer</div>
@@ -176,7 +179,12 @@ export const LieferungWer = ({
           setActiveConflict={setActiveConflict}
         />
       )}
-      {!showFilter && <Files parentTable="lieferung" parent={row} />}
+      {!showFilter && (
+        <Files
+          parentTable="lieferung"
+          parent={row}
+        />
+      )}
     </>
   )
 }

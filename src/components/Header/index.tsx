@@ -18,15 +18,17 @@ const Header = () => {
 
   return (
     <ErrorBoundary>
-      <AppBar position="static" elevation={0} className={styles.appBar}>
+      <AppBar
+        position="static"
+        elevation={0}
+        className={styles.appBar}
+      >
         <Toolbar>
-          {isHome ? (
+          {isHome ?
             <Home location={location} />
-          ) : isVermehrung ? (
+          : isVermehrung ?
             <Vermehrung />
-          ) : (
-            <Doku />
-          )}
+          : <Doku />}
         </Toolbar>
         {isVermehrung && breadcrumbsEnabled && <Breadcrumbs />}
       </AppBar>

@@ -44,7 +44,11 @@ export const HeaderVermehrung = () => {
 
   return (
     <ErrorBoundary>
-      <AppBar position="fixed" elevation={0} ref={ref}>
+      <AppBar
+        position="fixed"
+        elevation={0}
+        ref={ref}
+      >
         <Toolbar>
           <NavTree />
           {!fold.home && <Home />}

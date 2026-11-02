@@ -24,13 +24,16 @@ export const HeaderHome = ({
 
   return (
     <ErrorBoundary>
-      <AppBar position="fixed" elevation={0} ref={ref}>
+      <AppBar
+        position="fixed"
+        elevation={0}
+        ref={ref}
+      >
         <Toolbar>
-          {mobile ? (
-            isHome ? (
+          {mobile ?
+            isHome ?
               <div />
-            ) : (
-              <IconButton
+            : <IconButton
                 color="inherit"
                 aria-label="Home"
                 component={Link}
@@ -40,9 +43,8 @@ export const HeaderHome = ({
               >
                 <FaHome />
               </IconButton>
-            )
-          ) : (
-            <Button
+
+          : <Button
               variant="outlined"
               component={Link}
               to="/"
@@ -51,7 +53,7 @@ export const HeaderHome = ({
             >
               Vermehrung
             </Button>
-          )}
+          }
           <div className={styles.spacer} />
           <Button
             variant="outlined"

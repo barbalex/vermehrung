@@ -21,7 +21,10 @@ export const ArticleList = ({ articles }: { articles: ArticleNode[] }) => {
 
   return (
     <div className={styles.container}>
-      <List component="nav" dense>
+      <List
+        component="nav"
+        dense
+      >
         {articlesFiltered.map((node) => {
           const isOpen = pathname.includes(node.slug)
 
@@ -30,7 +33,10 @@ export const ArticleList = ({ articles }: { articles: ArticleNode[] }) => {
               <Article node={node} />
               {isOpen &&
                 (node.children ?? []).map((child: ArticleNode) => (
-                  <Article node={child} key={child.slug} />
+                  <Article
+                    node={child}
+                    key={child.slug}
+                  />
                 ))}
             </div>
           )

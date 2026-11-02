@@ -4,7 +4,12 @@ import LokiJSAdapter from 'nitromelondb/adapters/lokijs'
 import { Database, Model, Q } from 'nitromelondb'
 import { beforeEach, describe, expect, it } from 'vitest'
 
-import { store, dbAtom, lastUpdatedAtom, initiallyQueriedAtom } from '../src/store/index.ts'
+import {
+  store,
+  dbAtom,
+  lastUpdatedAtom,
+  initiallyQueriedAtom,
+} from '../src/store/index.ts'
 import { processSubscriptionResult } from '../src/utils/processSubscriptionResult.ts'
 import * as models from '../src/dbModel.ts'
 import { migrations } from '../src/utils/migrations.ts'
@@ -17,7 +22,10 @@ import { schema } from '../src/dbSchema/schema.ts'
 const USER_UID = 'ogA6AUQKd5byQkU2BXetDxvSLZi1'
 
 const payload = JSON.parse(
-  readFileSync(path.join(__dirname, 'fixtures', 'prod-sync-person-personoption.json'), 'utf8'),
+  readFileSync(
+    path.join(__dirname, 'fixtures', 'prod-sync-person-personoption.json'),
+    'utf8',
+  ),
 )
 
 const flush = () => new Promise((resolve) => setTimeout(resolve, 20))
@@ -36,7 +44,8 @@ describe('tree option query against real watermelondb', () => {
       adapter,
       modelClasses: Object.values(models).filter(
         (m): m is typeof Model =>
-          typeof m === 'function' && Boolean((m as unknown as { prototype?: unknown }).prototype),
+          typeof m === 'function' &&
+          Boolean((m as unknown as { prototype?: unknown }).prototype),
       ),
     })
     store.set(dbAtom, db)
@@ -63,7 +72,10 @@ describe('tree option query against real watermelondb', () => {
       .query(Q.on('person', Q.where('account_id', USER_UID)))
       .fetch()
 
-    expect(optionRows.length, 'association query must find the option row').toBeGreaterThan(0)
+    expect(
+      optionRows.length,
+      'association query must find the option row',
+    ).toBeGreaterThan(0)
     const option = optionRows[0] as unknown as {
       tree_kultur: boolean
       tree_teilkultur: boolean

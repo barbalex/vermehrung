@@ -1,6 +1,16 @@
 import { Text } from 'recharts'
 
-export const KulturLabelZaehlung = ({ x, y, stroke, value }: { x?: number; y?: number; stroke?: string; value?: number }) => (
+export const KulturLabelZaehlung = ({
+  x,
+  y,
+  stroke,
+  value,
+}: {
+  x?: number
+  y?: number
+  stroke?: string
+  value?: number
+}) => (
   <Text
     x={x}
     y={y ?? 0}

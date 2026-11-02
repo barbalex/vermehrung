@@ -16,7 +16,8 @@ export const KulturQk = ({
   qkChoosens,
 }: {
   kultur: import('../../../../../../dbModel.ts').Kultur | null | undefined
-  qkChoosens: import('../../../../../../dbModel.ts').KulturQk[] | null | undefined
+  qkChoosens:
+    import('../../../../../../dbModel.ts').KulturQk[] | null | undefined
 }) => {
   const db = useAtomValue(dbAtom)
 
@@ -40,13 +41,15 @@ export const KulturQk = ({
     }).then(async (messageFunctions) => {
       const msgGroups = await Promise.all(
         (qkChoosens ?? [])
-          .filter((qk) =>
-            !!messageFunctions[qk.name as keyof typeof messageFunctions],
+          .filter(
+            (qk) =>
+              !!messageFunctions[qk.name as keyof typeof messageFunctions],
           )
           .map(async (qk) => ({
             title: qk?.titel ?? '',
-            messages: messageFunctions
-              ? await (
+            messages:
+              messageFunctions ?
+                await (
                   messageFunctions[
                     qk?.name as keyof typeof messageFunctions
                   ] as () => Promise<{ url: string[]; text: string }[]>
@@ -64,24 +67,33 @@ export const KulturQk = ({
     }
   }, [kultur?.id, qkChoosens, db])
 
-  const messageGroupsFiltered = messageGroups
-    ? messageGroups.filter((messageGroup) => {
+  const messageGroupsFiltered =
+    messageGroups ?
+      messageGroups.filter((messageGroup) => {
         if (!!filter && messageGroup.title && messageGroup.title.toLowerCase) {
           return messageGroup.title.toLowerCase().includes(filter.toLowerCase())
         }
         return true
       })
     : []
-  const resultTitle = messageGroups
-    ? `${messageGroupsFiltered.length} ${
+  const resultTitle =
+    messageGroups ?
+      `${messageGroupsFiltered.length} ${
         messageGroupsFiltered.length === 1 ? 'Kontrolle' : 'Kontrollen'
       }:`
     : 'rechne...'
 
   return (
     <div className={styles.container}>
-      <FormControl fullWidth variant="standard" className={styles.formControl}>
-        <InputLabel htmlFor="filter" shrink>
+      <FormControl
+        fullWidth
+        variant="standard"
+        className={styles.formControl}
+      >
+        <InputLabel
+          htmlFor="filter"
+          shrink
+        >
           nach Abschnitts-Titel filtern
         </InputLabel>
         <Input
@@ -93,12 +105,19 @@ export const KulturQk = ({
       </FormControl>
       <div className={styles.resultTitleClass}>{resultTitle}</div>
       {messageGroupsFiltered.map((messageGroup) => (
-        <Paper key={messageGroup.title} elevation={2} className={styles.paper}>
+        <Paper
+          key={messageGroup.title}
+          elevation={2}
+          className={styles.paper}
+        >
           <div
             className={styles.title}
           >{`${messageGroup.title} (${messageGroup.messages.length})`}</div>
           {messageGroup.messages.map((m, i: number) => (
-            <div className={styles.row} key={`${m.text}Index${i}`}>
+            <div
+              className={styles.row}
+              key={`${m.text}Index${i}`}
+            >
               <p
                 onClick={() =>
                   window.open(

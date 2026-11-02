@@ -36,8 +36,15 @@ export const ThemeChooser = ({ asMenu }: { asMenu?: boolean }) => {
     // intentionally does not close the surrounding menu:
     // the label shows the new mode while the theme changes behind it
     return (
-      <MenuItem onClick={onClick} aria-label={label} title={label}>
-        <ModeIcon size={24} style={{ marginRight: 12 }} />
+      <MenuItem
+        onClick={onClick}
+        aria-label={label}
+        title={label}
+      >
+        <ModeIcon
+          size={24}
+          style={{ marginRight: 12 }}
+        />
         {label}
       </MenuItem>
     )

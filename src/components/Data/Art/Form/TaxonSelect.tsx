@@ -84,8 +84,11 @@ export const TaxonSelect = ({
     label: '',
   })
   useEffect(() => {
-    const observable = art?.ae_id
-      ? db?.get<import('../../../../dbModel.ts').AeArt>('ae_art').findAndObserve(art?.ae_id)
+    const observable =
+      art?.ae_id ?
+        db
+          ?.get<import('../../../../dbModel.ts').AeArt>('ae_art')
+          .findAndObserve(art?.ae_id)
       : $of(undefined)
     const subscription = (
       observable as unknown as import('rxjs').Observable<
@@ -101,7 +104,10 @@ export const TaxonSelect = ({
     return () => subscription?.unsubscribe?.()
   }, [db, art])
 
-  const loadOptions = (inputValue: string, cb: (options: unknown[]) => void) => {
+  const loadOptions = (
+    inputValue: string,
+    cb: (options: unknown[]) => void,
+  ) => {
     const data = modelFilter(inputValue).slice(0, 7)
     const options = data.map((o) => {
       return {
@@ -125,8 +131,14 @@ export const TaxonSelect = ({
   }
 
   return (
-    <div className={styles.container} data-id="ae_id">
-      <div className={styles.labelClass} style={{ fontSize: labelSize }}>
+    <div
+      className={styles.container}
+      data-id="ae_id"
+    >
+      <div
+        className={styles.labelClass}
+        style={{ fontSize: labelSize }}
+      >
         Taxon
       </div>
       <StyledSelect

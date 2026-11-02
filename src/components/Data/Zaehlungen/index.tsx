@@ -38,8 +38,9 @@ export const Zaehlungen = ({ filter: showFilter = false }) => {
     totalCount: number
   }>({ zaehlungs: [], totalCount: 0 })
   useEffect(() => {
-    const hierarchyQuery = kulturIdInActiveNodeArray
-      ? [
+    const hierarchyQuery =
+      kulturIdInActiveNodeArray ?
+        [
           Q.experimentalJoinTables(['kultur']),
           Q.on('kultur', 'id', kulturIdInActiveNodeArray),
         ]
@@ -48,15 +49,13 @@ export const Zaehlungen = ({ filter: showFilter = false }) => {
       db?.get<import('../../../dbModel.ts').Zaehlung>('zaehlung')
     if (!collection) return
     const zaehlungDelQuery =
-      zaehlungFilter._deleted === false
-        ? Q.where('_deleted', false)
-        : zaehlungFilter._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+      zaehlungFilter._deleted === false ? Q.where('_deleted', false)
+      : zaehlungFilter._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     const countObservable = collection
       .query(zaehlungDelQuery, ...hierarchyQuery)
       .observeCount()
@@ -109,19 +108,22 @@ export const Zaehlungen = ({ filter: showFilter = false }) => {
         className={artStyles.container}
         style={{ backgroundColor: showFilter ? 'var(--filter-bg)' : 'unset' }}
       >
-        {showFilter ? (
+        {showFilter ?
           <FilterTitle
             title="Zählung"
             table="zaehlung"
             totalCount={totalCount}
             filteredCount={filteredCount}
           />
-        ) : (
-          <div className={artStyles.titleContainer}>
+        : <div className={artStyles.titleContainer}>
             <div className={artStyles.title}>Zählungen</div>
             <div className={artStyles.titleSymbols}>
               {!breadcrumbsEnabled && (
-                <IconButton title={upTitle} onClick={onClickUp} size="large">
+                <IconButton
+                  title={upTitle}
+                  onClick={onClickUp}
+                  size="large"
+                >
                   <UpSvg />
                 </IconButton>
               )}
@@ -141,7 +143,7 @@ export const Zaehlungen = ({ filter: showFilter = false }) => {
               />
             </div>
           </div>
-        )}
+        }
         <div className={artStyles.fieldsContainer}>
           <List
             rowComponent={Row}

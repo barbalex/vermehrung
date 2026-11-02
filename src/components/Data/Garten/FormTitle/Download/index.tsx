@@ -63,8 +63,8 @@ export const GartenDownload = ({
         aria-haspopup="true"
         title="Daten herunterladen"
         onClick={
-                  onClickOpenMenu as unknown as import('react').MouseEventHandler
-                }
+          onClickOpenMenu as unknown as import('react').MouseEventHandler
+        }
         size="large"
       >
         <FaDownload />

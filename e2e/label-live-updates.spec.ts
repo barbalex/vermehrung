@@ -50,11 +50,18 @@ const idToken = () =>
     firebase: { sign_in_provider: 'password', identities: {} },
   })
 const apiToken = () =>
-  mint({ role: 'benutzer', user_id: PERSON_ID, sub: UID, exp: nowEpoch() + 3600 })
+  mint({
+    role: 'benutzer',
+    user_id: PERSON_ID,
+    sub: UID,
+    exp: nowEpoch() + 3600,
+  })
 
 const baseSync = () => ({
   synced_at: nowEpoch(),
-  ae_art: [{ id: AE_ART_ID, name: ARTNAME, _conflicts: null, _revisions: null }],
+  ae_art: [
+    { id: AE_ART_ID, name: ARTNAME, _conflicts: null, _revisions: null },
+  ],
   art: [
     {
       id: ART_ID,
@@ -179,9 +186,7 @@ const loginWithSync = async (page: Page, payload: () => object) => {
   await page.locator('#passwort').fill(PASSWORD)
   await page.getByRole('button', { name: 'anmelden' }).click()
   // wait for login + initial sync
-  await expect
-    .poll(() => syncCalls, { timeout: 30_000 })
-    .toBeGreaterThan(0)
+  await expect.poll(() => syncCalls, { timeout: 30_000 }).toBeGreaterThan(0)
 }
 
 test('editing label columns updates tree row and breadcrumb live', async ({

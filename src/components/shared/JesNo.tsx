@@ -80,9 +80,9 @@ export const JesNo = ({
   }
 
   const valueSelected =
-    stateValue !== null && stateValue !== undefined
-      ? toStringIfPossible(stateValue)
-      : ''
+    stateValue !== null && stateValue !== undefined ?
+      toStringIfPossible(stateValue)
+    : ''
 
   return (
     <div className={styles.container}>
@@ -93,7 +93,10 @@ export const JesNo = ({
         variant="standard"
         className={styles.formControl}
       >
-        <FormLabel component="legend" className={styles.formLabel}>
+        <FormLabel
+          component="legend"
+          className={styles.formLabel}
+        >
           {label}
         </FormLabel>
         <RadioGroup
@@ -105,7 +108,12 @@ export const JesNo = ({
             <FormControlLabel
               key={index}
               value={toStringIfPossible(e.value)}
-              control={<Radio color="primary" className={styles.radio} />}
+              control={
+                <Radio
+                  color="primary"
+                  className={styles.radio}
+                />
+              }
               label={e.label}
               onClick={onClickButton}
             />

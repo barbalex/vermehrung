@@ -39,17 +39,24 @@ export const ZaehlungFormTitle = ({
   }
 
   return (
-    <div className={artStyles.container} ref={ref}>
+    <div
+      className={artStyles.container}
+      ref={ref}
+    >
       <div className={artStyles.title}>Zählung</div>
       <div className={artStyles.symbols}>
         {!breadcrumbsEnabled && (
-          <IconButton title="Zur Liste" onClick={onClickUp} size="large">
+          <IconButton
+            title="Zur Liste"
+            onClick={onClickUp}
+            size="large"
+          >
             <UpSvg />
           </IconButton>
         )}
         <AddButton />
         <DeleteButton row={row} />
-        {(width ?? 0) < 520 ? (
+        {(width ?? 0) < 520 ?
           <Menu white={false}>
             <HistoryButton
               table="zaehlung"
@@ -57,7 +64,12 @@ export const ZaehlungFormTitle = ({
               showHistory={showHistory}
               asMenu
             />
-            {row?.kultur_id && <Settings kulturId={row?.kultur_id} asMenu />}
+            {row?.kultur_id && (
+              <Settings
+                kulturId={row?.kultur_id}
+                asMenu
+              />
+            )}
             <Anleitung asMenu />
             <FilterNumbers
               filteredCount={filteredCount}
@@ -65,8 +77,7 @@ export const ZaehlungFormTitle = ({
               asMenu
             />
           </Menu>
-        ) : (
-          <>
+        : <>
             <HistoryButton
               table="zaehlung"
               id={row?.id}
@@ -79,7 +90,7 @@ export const ZaehlungFormTitle = ({
               totalCount={totalCount}
             />
           </>
-        )}
+        }
       </div>
     </div>
   )

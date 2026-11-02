@@ -11,7 +11,7 @@ services:
       - ./.env
     ports:
       # make the Postgres database accessible from outside the Docker container on port 5432
-      - "5432:5432"
+      - '5432:5432'
     volumes:
       - db_data:/var/lib/postgresql
       - sik_data:/sik_data
@@ -24,10 +24,10 @@ services:
     command: postgres -c max_locks_per_transaction=2000
     logging:
       options:
-        max-size: "10m"
-        max-file: "3"
+        max-size: '10m'
+        max-file: '3'
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      test: ['CMD-SHELL', 'pg_isready -U postgres']
       # give the first-run restore of vermehrung.backup time to finish
       # before health failures are counted
       start_period: 5m
@@ -42,9 +42,9 @@ services:
     env_file:
       - ./.env
     expose:
-      - "7000"
+      - '7000'
     ports:
-      - "7000:7000"
+      - '7000:7000'
     depends_on:
       db:
         condition: service_healthy
@@ -52,7 +52,7 @@ services:
   # the api: PostgREST over the db, JWT-authenticated
   # (roles, grants and row level security: src/sql/createApiAccess.sql)
   api:
-    image: "postgrest/postgrest:v16.5"
+    image: 'postgrest/postgrest:v16.5'
     container_name: v_api
     depends_on:
       db:
@@ -69,7 +69,7 @@ services:
       PGRST_ROLE_CLAIM_KEY: '$.role'
   caddy:
     # https://hub.docker.com/r/caddy/caddy/tags
-    image: "caddy:2.11.7-alpine"
+    image: 'caddy:2.11.7-alpine'
     container_name: v_caddy
     depends_on:
       db:
@@ -83,8 +83,8 @@ services:
         restart: true
     restart: always
     ports:
-      - "80:80"
-      - "443:443"
+      - '80:80'
+      - '443:443'
     volumes:
       - ./caddy/Caddyfile:/etc/caddy/Caddyfile
       - caddy_certs:/data/caddy

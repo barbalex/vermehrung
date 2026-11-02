@@ -7,7 +7,9 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 
 export const KulturAddButton = ({ asMenu }: { asMenu?: boolean }) => {
   if (asMenu) {
-    return <MenuItem onClick={() => void insertKulturRev({})}>neue Kultur</MenuItem>
+    return (
+      <MenuItem onClick={() => void insertKulturRev({})}>neue Kultur</MenuItem>
+    )
   }
 
   return (

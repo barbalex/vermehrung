@@ -38,8 +38,9 @@ export const Teilkulturen = ({ filter: showFilter = false }) => {
     totalCount: number
   }>({ teilkulturs: [], totalCount: 0 })
   useEffect(() => {
-    const hierarchyQuery = kulturIdInActiveNodeArray
-      ? [
+    const hierarchyQuery =
+      kulturIdInActiveNodeArray ?
+        [
           Q.experimentalJoinTables(['kultur']),
           Q.on('kultur', 'id', kulturIdInActiveNodeArray),
         ]
@@ -48,15 +49,13 @@ export const Teilkulturen = ({ filter: showFilter = false }) => {
       db?.get<import('../../../dbModel.ts').Teilkultur>('teilkultur')
     if (!collection) return
     const teilkulturDelQuery =
-      teilkulturFilter._deleted === false
-        ? Q.where('_deleted', false)
-        : teilkulturFilter._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+      teilkulturFilter._deleted === false ? Q.where('_deleted', false)
+      : teilkulturFilter._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     const countObservable = collection
       .query(teilkulturDelQuery, ...hierarchyQuery)
       .observeCount()
@@ -103,19 +102,22 @@ export const Teilkulturen = ({ filter: showFilter = false }) => {
         className={artStyles.container}
         style={{ backgroundColor: showFilter ? 'var(--filter-bg)' : 'unset' }}
       >
-        {showFilter ? (
+        {showFilter ?
           <FilterTitle
             title="Teilkultur"
             table="teilkultur"
             totalCount={totalCount}
             filteredCount={filteredCount}
           />
-        ) : (
-          <div className={artStyles.titleContainer}>
+        : <div className={artStyles.titleContainer}>
             <div className={artStyles.title}>Teilkulturen</div>
             <div className={artStyles.titleSymbols}>
               {!breadcrumbsEnabled && (
-                <IconButton title={upTitle} onClick={onClickUp} size="large">
+                <IconButton
+                  title={upTitle}
+                  onClick={onClickUp}
+                  size="large"
+                >
                   <UpSvg />
                 </IconButton>
               )}
@@ -135,7 +137,7 @@ export const Teilkulturen = ({ filter: showFilter = false }) => {
               />
             </div>
           </div>
-        )}
+        }
         <div className={artStyles.fieldsContainer}>
           <List
             rowComponent={Row}

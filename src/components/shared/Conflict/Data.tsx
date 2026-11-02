@@ -68,28 +68,28 @@ export const Data = ({
     }
 
     return (
-      <Row key={d.label} style={rowStyle}>
+      <Row
+        key={d.label}
+        style={rowStyle}
+      >
         <div className={styles.key}>{`${d.label}:`}</div>
-        {showDiff ? (
+        {showDiff ?
           <>
             {(diffSentences(inputB, inputA) ?? []).map((group) => (
               <span
                 key={group.value}
                 style={
-                  group.added
-                    ? diffStyles.added
-                    : group.removed
-                      ? diffStyles.removed
-                      : {}
+                  group.added ? diffStyles.added
+                  : group.removed ?
+                    diffStyles.removed
+                  : {}
                 }
               >
                 {group.value}
               </span>
             ))}
           </>
-        ) : (
-          <div>{inputB}</div>
-        )}
+        : <div>{inputB}</div>}
       </Row>
     )
   })

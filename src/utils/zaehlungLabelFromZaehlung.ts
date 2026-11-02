@@ -10,8 +10,9 @@ export const zaehlungLabelFromZaehlung = ({
   zaehlung: ZaehlungRow
   teilzaehlungs?: TeilzaehlungRow[]
 }) => {
-  const datumLabel = zaehlung.datum
-    ? DateTime.fromSQL(zaehlung.datum).toFormat('yyyy.LL.dd')
+  const datumLabel =
+    zaehlung.datum ?
+      DateTime.fromSQL(zaehlung.datum).toFormat('yyyy.LL.dd')
     : 'Kein Datum'
 
   const tzs = (teilzaehlungs ?? []).filter(
@@ -22,8 +23,9 @@ export const zaehlungLabelFromZaehlung = ({
     .map((tz) => tz.anzahl_pflanzen)
     .filter((a) => exists(a))
   const anzPflanzen = (
-    anzahlenPfl.length ? anzahlenPfl.reduce((a, b) => a + b, 0) : ''
-  )
+    anzahlenPfl.length ?
+      anzahlenPfl.reduce((a, b) => a + b, 0)
+    : '')
     .toString()
     .padStart(3, '_')
 

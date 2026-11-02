@@ -47,20 +47,20 @@ export const QueuedQuery = ({
       updateModelValues({
         table: revertTable as import('../../store/index.ts').TableName,
         id: revertId as string,
-        values: (typeof revertValues === 'string'
-          ? JSON.parse(revertValues)
-          : (revertValues ?? {})) as Record<string, unknown>,
+        values: (typeof revertValues === 'string' ?
+          JSON.parse(revertValues)
+        : (revertValues ?? {})) as Record<string, unknown>,
       })
     }
     removeQueuedQueryById(id)
   }
 
   const valueStyle =
-    index === 0
-      ? {
-          borderTop: '1px solid rgba(74,20,140,0.1)',
-        }
-      : {}
+    index === 0 ?
+      {
+        borderTop: '1px solid rgba(74,20,140,0.1)',
+      }
+    : {}
 
   return (
     <>
@@ -68,30 +68,48 @@ export const QueuedQuery = ({
         className={styles.value}
         style={valueStyle}
       >{`${DateTime.fromMillis(time).toFormat('yyyy.LL.dd HH.mm.ss')}`}</div>
-      <div className={styles.value} style={valueStyle}>
+      <div
+        className={styles.value}
+        style={valueStyle}
+      >
         {String(revertTable ?? '')}
       </div>
-      <div className={styles.value} style={valueStyle}>
+      <div
+        className={styles.value}
+        style={valueStyle}
+      >
         {String(revertId ?? '')}
       </div>
-      <div className={styles.value} style={valueStyle}>
+      <div
+        className={styles.value}
+        style={valueStyle}
+      >
         {isInsert ? 'neuer Datensatz' : String(revertField ?? '')}
       </div>
-      <div className={styles.value} style={valueStyle}>
-        {isInsert
-          ? ''
-          : revertField
-            ? valFromValue(revertValue)
-            : JSON.stringify(revertValues ?? {}, null, 2)}
+      <div
+        className={styles.value}
+        style={valueStyle}
+      >
+        {isInsert ?
+          ''
+        : revertField ?
+          valFromValue(revertValue)
+        : JSON.stringify(revertValues ?? {}, null, 2)}
       </div>
-      <div className={styles.value} style={valueStyle}>
-        {isInsert
-          ? ''
-          : revertField
-            ? valFromValue(newValue)
-            : String(newValue ?? '')}
+      <div
+        className={styles.value}
+        style={valueStyle}
+      >
+        {isInsert ?
+          ''
+        : revertField ?
+          valFromValue(newValue)
+        : String(newValue ?? '')}
       </div>
-      <div className={styles.icon} style={valueStyle}>
+      <div
+        className={styles.icon}
+        style={valueStyle}
+      >
         <IconButton
           title="widerrufen"
           aria-label="widerrufen"

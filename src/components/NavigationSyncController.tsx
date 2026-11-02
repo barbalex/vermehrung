@@ -28,9 +28,7 @@ export const NavigationSyncController = () => {
   // enable navigating in store > set this as store value
   // (can't be passed when creating store yet)
   useEffect(() => {
-    setNavigate(
-      navigate as unknown as (to: string, options?: unknown) => void,
-    )
+    setNavigate(navigate as unknown as (to: string, options?: unknown) => void)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -58,9 +56,9 @@ export const NavigationSyncController = () => {
     // setActiveNodeArray below only runs when the node array changed,
     // which it does not when only the object name suffix appears/disappears
     const { activeNodeArray: activeNodeArray, objectName } =
-      breadcrumbsEnabled
-        ? splitObjectNameFromActiveNodeArray(activeNodeArrayFromUrl as string[])
-        : { activeNodeArray: activeNodeArrayFromUrl, objectName: undefined }
+      breadcrumbsEnabled ?
+        splitObjectNameFromActiveNodeArray(activeNodeArrayFromUrl as string[])
+      : { activeNodeArray: activeNodeArrayFromUrl, objectName: undefined }
     if (breadcrumbsEnabled) setObjectName(objectName)
 
     if (!isEqual(activeNodeArray, aNA)) {

@@ -24,13 +24,16 @@ export const FormTitle = ({
   const { width, ref } = useResizeDetector()
 
   return (
-    <div className={styles.container} ref={ref}>
+    <div
+      className={styles.container}
+      ref={ref}
+    >
       <div className={styles.title}>Art</div>
       <div className={styles.symbols}>
         {!breadcrumbsEnabled && <NavButtons />}
         <AddButton />
         <DeleteButton row={row} />
-        {(width ?? 0) < 520 ? (
+        {(width ?? 0) < 520 ?
           <Menu white={false}>
             <HistoryButton
               table="art"
@@ -44,15 +47,18 @@ export const FormTitle = ({
               asMenu
             />
           </Menu>
-        ) : (
-          <>
-            <HistoryButton table="art" id={row?.id} showHistory={showHistory} />
+        : <>
+            <HistoryButton
+              table="art"
+              id={row?.id}
+              showHistory={showHistory}
+            />
             <FilterNumbers
               filteredCount={filteredCount}
               totalCount={totalCount}
             />
           </>
-        )}
+        }
       </div>
     </div>
   )

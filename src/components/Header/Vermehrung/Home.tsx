@@ -14,7 +14,10 @@ export const HeaderHome = ({ asMenu }: { asMenu?: boolean }) => {
 
   if (asMenu) {
     return (
-      <MenuItem component={Link} to="/">
+      <MenuItem
+        component={Link}
+        to="/"
+      >
         Home
       </MenuItem>
     )

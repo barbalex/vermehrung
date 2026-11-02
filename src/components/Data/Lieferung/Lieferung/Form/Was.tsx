@@ -38,15 +38,13 @@ export const LieferungWas = ({
   >([])
   useEffect(() => {
     const artDelQuery =
-      artFilter._deleted === false
-        ? Q.where('_deleted', false)
-        : artFilter._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+      artFilter._deleted === false ? Q.where('_deleted', false)
+      : artFilter._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     const subscription = db
       ?.get<import('../../../../../dbModel.ts').Art>('art')
       .query(artDelQuery)
@@ -95,9 +93,8 @@ export const LieferungWas = ({
       <div
         className={wannStyles.titleRow}
         style={{
-          backgroundColor: showFilter
-            ? 'var(--filter-bg-alt)'
-            : 'var(--form-bg)',
+          backgroundColor:
+            showFilter ? 'var(--filter-bg-alt)' : 'var(--form-bg)',
         }}
       >
         <div className={wannStyles.title}>was</div>

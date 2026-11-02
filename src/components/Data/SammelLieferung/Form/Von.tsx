@@ -48,7 +48,11 @@ export const SammelLieferungVon = ({
       inaktiv?: boolean
       link?: string[]
     }[]
-    sammlungWerte: { value: string; label: string | undefined; link?: string[] }[]
+    sammlungWerte: {
+      value: string
+      label: string | undefined
+      link?: string[]
+    }[]
   }>({
     herkunftLabel: undefined,
     vonKulturWerte: [],
@@ -56,25 +60,21 @@ export const SammelLieferungVon = ({
   })
   useEffect(() => {
     const kulturDelQuery =
-      kulturFilter._deleted === false
-        ? Q.where('_deleted', false)
-        : kulturFilter._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+      kulturFilter._deleted === false ? Q.where('_deleted', false)
+      : kulturFilter._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     const sammlungDelQuery =
-      sammlungFilter._deleted === false
-        ? Q.where('_deleted', false)
-        : sammlungFilter._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+      sammlungFilter._deleted === false ? Q.where('_deleted', false)
+      : sammlungFilter._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     // BEWARE: need to include inactive kulturs, persons
     const kultursObservable = db
       ?.get<import('../../../../dbModel.ts').Kultur>('kultur')
@@ -96,97 +96,96 @@ export const SammelLieferungVon = ({
         ]
       >
     ).subscribe(async ([kulturs, sammlungs]) => {
-        const herkunftLabel =
-          herkunftLabelFromHerkunft({
-            herkunft: herkunft as unknown as {
-              id?: string | null
-              nr?: string | null
-              lokalname?: string | null
-              gemeinde?: string | null
-            },
-          }) ?? '(verfügbar, wenn Sammlung oder Kultur gewählt)'
-        const kultursFiltered = kulturs
-          // show only kulturen of art_id
-          .filter((k) => {
-            if (row?.art_id) return k.art_id === row.art_id
-            return true
-          })
-          // show only kulturen with same herkunft
-          .filter((k) => {
-            if (herkunft) return k?.herkunft_id === herkunft.id
-            return true
-          })
-          // shall not be delivered to same kultur it came from
-          .filter((k) => {
-            if (
-              row?.nach_kultur_id &&
-              row?.von_kultur_id !== row?.nach_kultur_id
-            ) {
-              return k.id !== row.nach_kultur_id
-            }
-            return true
-          })
-        let kultur
-        try {
-          kultur = await db?.get('kultur').find(row?.von_kultur_id as string)
-        } catch {}
-        const kultursIncludingChoosen = uniqBy(
-          [...kultursFiltered, ...(kultur && !showFilter ? [kultur] : [])],
-          (e) => e.id,
-        )
-        const kultursSorted = await kultursSortedFromKulturs(
-          kultursIncludingChoosen as unknown as import('../../../../dbModel.ts').Kultur[],
-        )
-        const vonKulturWerte = await Promise.all(
-          kultursSorted.map(async (el) => {
-            let label
-            try {
-              label = await el.label.pipe(first$()).toPromise()
-            } catch {}
-
-            return {
-              value: el.id,
-              label,
-              inaktiv: el.aktiv === false,
-              link: ['Kulturen', el.id],
-            }
-          }),
-        )
-        let sammlung
-        try {
-          sammlung = await db
-            ?.get<import('../../../../dbModel.ts').Sammlung>('sammlung')
-            .find(row?.von_sammlung_id as string)
-        } catch {}
-        const sammlungsIncludingChoosen = uniqBy(
-          [...sammlungs, ...(sammlung && !showFilter ? [sammlung] : [])],
-          (e) => e.id,
-        )
-        const sammlungsSorted = await sammlungsSortedFromSammlungs(
-          sammlungsIncludingChoosen,
-        )
-        const sammlungWerte = await Promise.all(
-          sammlungsSorted.map(async (el) => {
-            let label
-            try {
-              label = await el.label.pipe(first$()).toPromise()
-            } catch {}
-
-            return {
-              value: el.id,
-              label,
-              link: ['Sammlungen', el.id],
-            }
-          }),
-        )
-
-        setDataState({
-          herkunftLabel,
-          vonKulturWerte,
-          sammlungWerte,
+      const herkunftLabel =
+        herkunftLabelFromHerkunft({
+          herkunft: herkunft as unknown as {
+            id?: string | null
+            nr?: string | null
+            lokalname?: string | null
+            gemeinde?: string | null
+          },
+        }) ?? '(verfügbar, wenn Sammlung oder Kultur gewählt)'
+      const kultursFiltered = kulturs
+        // show only kulturen of art_id
+        .filter((k) => {
+          if (row?.art_id) return k.art_id === row.art_id
+          return true
         })
-      },
-    )
+        // show only kulturen with same herkunft
+        .filter((k) => {
+          if (herkunft) return k?.herkunft_id === herkunft.id
+          return true
+        })
+        // shall not be delivered to same kultur it came from
+        .filter((k) => {
+          if (
+            row?.nach_kultur_id &&
+            row?.von_kultur_id !== row?.nach_kultur_id
+          ) {
+            return k.id !== row.nach_kultur_id
+          }
+          return true
+        })
+      let kultur
+      try {
+        kultur = await db?.get('kultur').find(row?.von_kultur_id as string)
+      } catch {}
+      const kultursIncludingChoosen = uniqBy(
+        [...kultursFiltered, ...(kultur && !showFilter ? [kultur] : [])],
+        (e) => e.id,
+      )
+      const kultursSorted = await kultursSortedFromKulturs(
+        kultursIncludingChoosen as unknown as import('../../../../dbModel.ts').Kultur[],
+      )
+      const vonKulturWerte = await Promise.all(
+        kultursSorted.map(async (el) => {
+          let label
+          try {
+            label = await el.label.pipe(first$()).toPromise()
+          } catch {}
+
+          return {
+            value: el.id,
+            label,
+            inaktiv: el.aktiv === false,
+            link: ['Kulturen', el.id],
+          }
+        }),
+      )
+      let sammlung
+      try {
+        sammlung = await db
+          ?.get<import('../../../../dbModel.ts').Sammlung>('sammlung')
+          .find(row?.von_sammlung_id as string)
+      } catch {}
+      const sammlungsIncludingChoosen = uniqBy(
+        [...sammlungs, ...(sammlung && !showFilter ? [sammlung] : [])],
+        (e) => e.id,
+      )
+      const sammlungsSorted = await sammlungsSortedFromSammlungs(
+        sammlungsIncludingChoosen,
+      )
+      const sammlungWerte = await Promise.all(
+        sammlungsSorted.map(async (el) => {
+          let label
+          try {
+            label = await el.label.pipe(first$()).toPromise()
+          } catch {}
+
+          return {
+            value: el.id,
+            label,
+            link: ['Sammlungen', el.id],
+          }
+        }),
+      )
+
+      setDataState({
+        herkunftLabel,
+        vonKulturWerte,
+        sammlungWerte,
+      })
+    })
 
     return () => subscription?.unsubscribe?.()
   }, [
@@ -207,9 +206,8 @@ export const SammelLieferungVon = ({
       <div
         className={wannStyles.titleRow}
         style={{
-          backgroundColor: showFilter
-            ? 'var(--filter-bg-alt)'
-            : 'var(--form-bg)',
+          backgroundColor:
+            showFilter ? 'var(--filter-bg-alt)' : 'var(--form-bg)',
         }}
       >
         <div className={wannStyles.title}>von</div>

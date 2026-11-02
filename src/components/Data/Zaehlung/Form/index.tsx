@@ -60,25 +60,21 @@ export const ZaehlungForm = ({
   }>({ kulturWerte: [], kulturOption: undefined })
   useEffect(() => {
     const kulturDelQuery =
-      kulturFilter._deleted === false
-        ? Q.where('_deleted', false)
-        : kulturFilter._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+      kulturFilter._deleted === false ? Q.where('_deleted', false)
+      : kulturFilter._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     const kulturAktivQuery =
-      kulturFilter.aktiv === false
-        ? Q.where('aktiv', false)
-        : kulturFilter.aktiv === true
-          ? Q.where('aktiv', true)
-          : Q.or(
-              Q.where('aktiv', false),
-              Q.where('aktiv', true),
-              Q.where('aktiv', null),
-            )
+      kulturFilter.aktiv === false ? Q.where('aktiv', false)
+      : kulturFilter.aktiv === true ? Q.where('aktiv', true)
+      : Q.or(
+          Q.where('aktiv', false),
+          Q.where('aktiv', true),
+          Q.where('aktiv', null),
+        )
     const kultursObservable = db
       ?.get<import('../../../../dbModel.ts').Kultur>('kultur')
       .query(kulturDelQuery, kulturAktivQuery)
@@ -104,8 +100,7 @@ export const ZaehlungForm = ({
       const kulturWerte = await Promise.all(
         kultursSorted
           .filter((k) => {
-            const rowArtId = (row as unknown as Record<string, unknown>)
-              ?.art_id
+            const rowArtId = (row as unknown as Record<string, unknown>)?.art_id
             if (rowArtId) return k.art_id === rowArtId
             return true
           })
@@ -133,13 +128,7 @@ export const ZaehlungForm = ({
 
     return () => subscription?.unsubscribe?.()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    db,
-    kulturFilter,
-    row?.kultur,
-    row?.kultur_option,
-    showFilter,
-  ])
+  }, [db, kulturFilter, row?.kultur, row?.kultur_option, showFilter])
   const { kulturWerte, kulturOption } = dataState
 
   const z_bemerkungen = kulturOption?.z_bemerkungen ?? true
@@ -167,7 +156,8 @@ export const ZaehlungForm = ({
     }
 
     const previousValue = ifIsNumericAsNumber(
-      (row as unknown as Record<string, unknown>)[field as string] as string | number,
+      (row as unknown as Record<string, unknown>)[field as string] as
+        string | number,
     )
     // only update if value has changed
     if (value === previousValue) return
@@ -186,7 +176,7 @@ export const ZaehlungForm = ({
         )}
         {showDeleted && (
           <>
-            {showFilter ? (
+            {showFilter ?
               <JesNo
                 key={`${row?.id}_deleted`}
                 label="gelöscht"
@@ -195,8 +185,7 @@ export const ZaehlungForm = ({
                 saveToDb={saveToDb}
                 error={errors?.zaehlung?._deleted as string | undefined}
               />
-            ) : (
-              <Checkbox2States
+            : <Checkbox2States
                 key={`${row?.id}_deleted`}
                 label="gelöscht"
                 name="_deleted"
@@ -204,7 +193,7 @@ export const ZaehlungForm = ({
                 saveToDb={saveToDb}
                 error={errors?.zaehlung?._deleted as string | undefined}
               />
-            )}
+            }
           </>
         )}
         <Select
@@ -244,9 +233,7 @@ export const ZaehlungForm = ({
             setActiveConflict={setActiveConflict}
           />
         )}
-        {!showFilter && (
-          <Teilzaehlungen zaehlung={row} />
-        )}
+        {!showFilter && <Teilzaehlungen zaehlung={row} />}
       </div>
     </ErrorBoundary>
   )

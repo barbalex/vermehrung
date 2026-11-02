@@ -68,7 +68,10 @@ const sqliteWorkerDepUrl = (): Plugin => ({
     }
     try {
       const metadata = JSON.parse(
-        readFileSync(`${rootDir}/node_modules/.vite/deps/_metadata.json`, 'utf8'),
+        readFileSync(
+          `${rootDir}/node_modules/.vite/deps/_metadata.json`,
+          'utf8',
+        ),
       )
       const info = metadata.optimized[sqliteWorkerRuntimeFile]
       if (info?.file) {

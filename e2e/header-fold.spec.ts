@@ -41,11 +41,18 @@ const idToken = () =>
     firebase: { sign_in_provider: 'password', identities: {} },
   })
 const apiToken = () =>
-  mint({ role: 'benutzer', user_id: PERSON_ID, sub: UID, exp: nowEpoch() + 3600 })
+  mint({
+    role: 'benutzer',
+    user_id: PERSON_ID,
+    sub: UID,
+    exp: nowEpoch() + 3600,
+  })
 
 const fullSync = () => ({
   synced_at: nowEpoch(),
-  ae_art: [{ id: AE_ART_ID, name: ARTNAME, _conflicts: null, _revisions: null }],
+  ae_art: [
+    { id: AE_ART_ID, name: ARTNAME, _conflicts: null, _revisions: null },
+  ],
   art: [
     {
       id: ART_ID,
@@ -139,7 +146,9 @@ test('header folds ThemeChooser, Account and Online into the more-menu', async (
     if (url.pathname === '/person') {
       return route.fulfill({
         contentType: 'application/json',
-        body: JSON.stringify([{ id: PERSON_ID, user_role: { name: 'benutzer' } }]),
+        body: JSON.stringify([
+          { id: PERSON_ID, user_role: { name: 'benutzer' } },
+        ]),
       })
     }
     return route.fulfill({ status: 404, body: 'unmocked' })
@@ -171,11 +180,19 @@ test('header folds ThemeChooser, Account and Online into the more-menu', async (
     await expect(themeButton(page)).toBeVisible()
     await moreMenuButton(page).click()
     await expect(page.getByRole('menuitem', { name: 'Home' })).toBeVisible()
-    await expect(page.getByRole('menuitem', { name: 'Dokumentation' })).toBeVisible()
-    await expect(page.getByRole('menuitem', { name: 'Menu', exact: true })).toBeVisible()
-    await expect(page.getByRole('menuitem', { name: /Darstellung/ })).toHaveCount(0)
+    await expect(
+      page.getByRole('menuitem', { name: 'Dokumentation' }),
+    ).toBeVisible()
+    await expect(
+      page.getByRole('menuitem', { name: 'Menu', exact: true }),
+    ).toBeVisible()
+    await expect(
+      page.getByRole('menuitem', { name: /Darstellung/ }),
+    ).toHaveCount(0)
     await expect(page.getByRole('menuitem', { name: 'Konto' })).toHaveCount(0)
-    await expect(page.getByRole('menuitem', { name: /Sie sind/ })).toHaveCount(0)
+    await expect(page.getByRole('menuitem', { name: /Sie sind/ })).toHaveCount(
+      0,
+    )
     await page.screenshot({ path: 'test-results/header-fold/500-menu.png' })
     await page.keyboard.press('Escape')
   })
@@ -188,7 +205,9 @@ test('header folds ThemeChooser, Account and Online into the more-menu', async (
     await expect(themeItem).toBeVisible()
     // cycles system > light; the menu stays open and the label updates
     await themeItem.click()
-    await expect(page.getByRole('menuitem', { name: 'Darstellung: hell' })).toBeVisible()
+    await expect(
+      page.getByRole('menuitem', { name: 'Darstellung: hell' }),
+    ).toBeVisible()
     await page.screenshot({ path: 'test-results/header-fold/440-menu.png' })
     await page.keyboard.press('Escape')
   })
@@ -198,7 +217,9 @@ test('header folds ThemeChooser, Account and Online into the more-menu', async (
     await expect(accountButton(page)).toHaveCount(0)
     await moreMenuButton(page).click()
     await page.getByRole('menuitem', { name: 'Konto' }).click()
-    await expect(page.getByRole('menuitem', { name: /abmelden$/ })).toBeVisible()
+    await expect(
+      page.getByRole('menuitem', { name: /abmelden$/ }),
+    ).toBeVisible()
     await page.screenshot({ path: 'test-results/header-fold/400-account.png' })
     // once for the nested account menu, once for the more-menu
     await page.keyboard.press('Escape')
@@ -211,7 +232,9 @@ test('header folds ThemeChooser, Account and Online into the more-menu', async (
     await moreMenuButton(page).click()
     await page.getByRole('menuitem', { name: /Sie sind/ }).click()
     await expect(page).toHaveURL(/\/Vermehrung\/ausstehende-Operationen$/)
-    await expect(page.getByRole('menuitem', { name: /Sie sind/ })).toHaveCount(0)
+    await expect(page.getByRole('menuitem', { name: /Sie sind/ })).toHaveCount(
+      0,
+    )
     await page.screenshot({ path: 'test-results/header-fold/350.png' })
   })
 

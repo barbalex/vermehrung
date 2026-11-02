@@ -37,8 +37,9 @@ export const HeaderFilter = () => {
 
   if (singleColumnView) {
     const StyledIconButton = styled(IconButton)({
-      border: showFilter
-        ? '1px solid rgba(255, 255, 255, 0.5)'
+      border:
+        showFilter ?
+          '1px solid rgba(255, 255, 255, 0.5)'
         : '0 solid rgba(255, 255, 255, 0.5)',
       fontSize: '2rem',
       '&:hover': { borderWidth: 1 },
@@ -51,7 +52,9 @@ export const HeaderFilter = () => {
         onClick={onClickFilter}
         title="Filter"
       >
-        {filtered ? <RiFilterFill /> : <RiFilterLine />}
+        {filtered ?
+          <RiFilterFill />
+        : <RiFilterLine />}
       </StyledIconButton>
     )
   }

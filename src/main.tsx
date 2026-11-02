@@ -11,7 +11,6 @@ import { config as rxjsConfig } from 'rxjs'
 // ends, components recover when their observable dependencies change
 rxjsConfig.onUnhandledError = (error) => console.error(error)
 
-
 import { registerLocale, setDefaultLocale } from 'react-datepicker'
 import { de } from 'date-fns/locale'
 import 'react-datepicker/dist/react-datepicker.css'

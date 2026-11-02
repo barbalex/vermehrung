@@ -48,9 +48,7 @@ export const BedarfDeleteButton = ({
         aria-haspopup="true"
         aria-label="Bedarf löschen"
         title="Bedarf löschen"
-        onClick={
-                  onClickButton as unknown as import('react').MouseEventHandler
-                }
+        onClick={onClickButton as unknown as import('react').MouseEventHandler}
         disabled={!!row?._deleted}
         size="large"
       >

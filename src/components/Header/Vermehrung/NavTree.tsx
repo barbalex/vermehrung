@@ -24,9 +24,9 @@ export const HeaderNavTree = () => {
       aria-label="Navigations-Baum öffnen"
       onClick={onClickTreeMenu}
       title={
-        showTreeInSingleColumnView
-          ? 'Navigations-Baum schliessen'
-          : 'Navigations-Baum öffnen'
+        showTreeInSingleColumnView ?
+          'Navigations-Baum schliessen'
+        : 'Navigations-Baum öffnen'
       }
       data-active={showTreeInSingleColumnView}
       style={showTreeInSingleColumnView ? { border: '1px solid #9762d9' } : {}}

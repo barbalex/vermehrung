@@ -7,7 +7,13 @@ import { FaCog } from 'react-icons/fa'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.tsx'
 import { KulturSettingsMenu as Menu } from './Menu.tsx'
 
-export const KulturSettings = ({ asMenu, kulturId }: { asMenu?: boolean; kulturId?: string }) => {
+export const KulturSettings = ({
+  asMenu,
+  kulturId,
+}: {
+  asMenu?: boolean
+  kulturId?: string
+}) => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | undefined | null>(null)
   const onClickConfig = (event: {
     target: { name?: string; value: unknown }
@@ -23,7 +29,9 @@ export const KulturSettings = ({ asMenu, kulturId }: { asMenu?: boolean; kulturI
         <MenuItem
           aria-owns={anchorEl ? 'menu' : undefined}
           aria-haspopup="true"
-          onClick={onClickConfig as unknown as import('react').MouseEventHandler<HTMLElement>}
+          onClick={
+            onClickConfig as unknown as import('react').MouseEventHandler<HTMLElement>
+          }
         >
           Optionen wählen
         </MenuItem>
@@ -43,12 +51,18 @@ export const KulturSettings = ({ asMenu, kulturId }: { asMenu?: boolean; kulturI
         aria-owns={anchorEl ? 'menu' : undefined}
         aria-haspopup="true"
         title="Optionen wählen"
-        onClick={onClickConfig as unknown as import('react').MouseEventHandler<HTMLElement>}
+        onClick={
+          onClickConfig as unknown as import('react').MouseEventHandler<HTMLElement>
+        }
         size="large"
       >
         <FaCog />
       </IconButton>
-      <Menu anchorEl={anchorEl} setAnchorEl={setAnchorEl} kulturId={kulturId} />
+      <Menu
+        anchorEl={anchorEl}
+        setAnchorEl={setAnchorEl}
+        kulturId={kulturId}
+      />
     </ErrorBoundary>
   )
 }

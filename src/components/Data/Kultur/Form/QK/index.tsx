@@ -30,7 +30,8 @@ export const KulturQkRouter = ({
 
   const [dataState, setDataState] = useState<{
     qks: import('../../../../../dbModel.ts').KulturQk[]
-    userPersonOption: import('../../../../../dbModel.ts').PersonOption | undefined
+    userPersonOption:
+      import('../../../../../dbModel.ts').PersonOption | undefined
   }>({
     qks: [],
     userPersonOption: undefined,
@@ -38,8 +39,9 @@ export const KulturQkRouter = ({
   const { qks, userPersonOption } = dataState
 
   useEffect(() => {
-    const userPersonOptionsObservable = user.uid
-      ? db
+    const userPersonOptionsObservable =
+      user.uid ?
+        db
           ?.get<import('../../../../../dbModel.ts').PersonOption>(
             'person_option',
           )
@@ -54,15 +56,16 @@ export const KulturQkRouter = ({
       userPersonOptionsObservable,
       kulturQksObservable,
     ])
-    const subscription = (combinedObservables as unknown as import('rxjs').Observable<
+    const subscription = (
+      combinedObservables as unknown as import('rxjs').Observable<
         [
           import('../../../../../dbModel.ts').PersonOption[] | undefined,
           import('../../../../../dbModel.ts').KulturQk[],
         ]
-      >).subscribe(([userPersonOptions, qks]) => {
-        setDataState({ qks, userPersonOption: userPersonOptions?.[0] })
-      },
-    )
+      >
+    ).subscribe(([userPersonOptions, qks]) => {
+      setDataState({ qks, userPersonOption: userPersonOptions?.[0] })
+    })
 
     return () => subscription?.unsubscribe?.()
   }, [db, user.uid])
@@ -115,9 +118,7 @@ export const KulturQkRouter = ({
   return (
     <ErrorBoundary>
       <section
-        onClick={
-                  onClickToggle as unknown as import('react').MouseEventHandler
-                }
+        onClick={onClickToggle as unknown as import('react').MouseEventHandler}
         title={open ? 'schliessen' : 'öffnen'}
         className={styles.titleRow}
       >
@@ -126,7 +127,9 @@ export const KulturQkRouter = ({
           <IconButton
             aria-label="Anleitung öffnen"
             title="Anleitung öffnen"
-            onClick={openDocs as unknown as import('react').MouseEventHandler<HTMLButtonElement>}
+            onClick={
+              openDocs as unknown as import('react').MouseEventHandler<HTMLButtonElement>
+            }
             size="large"
           >
             <IoMdInformationCircleOutline />
@@ -134,14 +137,21 @@ export const KulturQkRouter = ({
           <IconButton
             aria-label={open ? 'schliessen' : 'öffnen'}
             title={open ? 'schliessen' : 'öffnen'}
-            onClick={onClickToggle as unknown as import('react').MouseEventHandler<HTMLButtonElement>}
+            onClick={
+              onClickToggle as unknown as import('react').MouseEventHandler<HTMLButtonElement>
+            }
             size="large"
           >
-            {open ? <FaChevronUp /> : <FaChevronDown />}
+            {open ?
+              <FaChevronUp />
+            : <FaChevronDown />}
           </IconButton>
         </div>
       </section>
-      <motion.div animate={anim} transition={{ duration: 0.5 }}>
+      <motion.div
+        animate={anim}
+        transition={{ duration: 0.5 }}
+      >
         {open && (
           <>
             <Tabs
@@ -152,7 +162,11 @@ export const KulturQkRouter = ({
               centered
               className={styles.tabs}
             >
-              <Tab label="ausführen" value="qk" data-id="qk" />
+              <Tab
+                label="ausführen"
+                value="qk"
+                data-id="qk"
+              />
               <Tab
                 label={`auswählen${
                   qkCount ? ` (${qkChoosenCount}/${qkCount})` : ''
@@ -162,14 +176,14 @@ export const KulturQkRouter = ({
               />
             </Tabs>
             <div className={styles.body}>
-              {tab === 'qk' ? (
+              {tab === 'qk' ?
                 <Qk
-                  kultur={kultur as unknown as import('../../../../../dbModel.ts').Kultur}
+                  kultur={
+                    kultur as unknown as import('../../../../../dbModel.ts').Kultur
+                  }
                   qkChoosens={qkChoosens}
                 />
-              ) : (
-                <Choose qks={qks} />
-              )}
+              : <Choose qks={qks} />}
             </div>
           </>
         )}

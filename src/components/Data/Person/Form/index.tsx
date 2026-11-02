@@ -52,19 +52,18 @@ export const PersonForm = ({
   }>({ userRoleWerte: [], userRole: undefined })
   useEffect(() => {
     const personsNrCountObservable =
-      showFilter || !exists(row?.nr)
-        ? $of(0)
-        : db
-            ?.get<import('../../../../dbModel.ts').Person>('person')
-            .query(Q.where('_deleted', false), Q.where('nr', row.nr))
-            .observeCount()
+      showFilter || !exists(row?.nr) ?
+        $of(0)
+      : db
+          ?.get<import('../../../../dbModel.ts').Person>('person')
+          .query(Q.where('_deleted', false), Q.where('nr', row.nr))
+          .observeCount()
     const userRolesObservable = db
       ?.get<import('../../../../dbModel.ts').UserRole>('user_role')
       .query()
       .observe()
-    const userRoleObservable = row?.user_role
-      ? row?.user_role.observe()
-      : $of(undefined)
+    const userRoleObservable =
+      row?.user_role ? row?.user_role.observe() : $of(undefined)
     const combinedObservables = combineLatest([
       userRolesObservable,
       personsNrCountObservable,
@@ -78,26 +77,24 @@ export const PersonForm = ({
           import('../../../../dbModel.ts').UserRole | undefined,
         ]
       >
-    ).subscribe(
-      async ([userRoles, nrCount, userRole]) => {
-        const userRoleWerte = [...(userRoles ?? [])]
-          .sort(userRoleSort)
-          .map((el) => ({
-            value: el.id,
-            label: el.label ?? undefined,
-          }))
-        if (!showFilter && nrCount > 1) {
-          setError({
-            path: 'person.nr',
-            value: `Diese Nummer wird ${nrCount} mal verwendet. Sie sollte aber über alle Personen eindeutig sein`,
-          })
-        }
-        setDataState({
-          userRoleWerte,
-          userRole,
+    ).subscribe(async ([userRoles, nrCount, userRole]) => {
+      const userRoleWerte = [...(userRoles ?? [])]
+        .sort(userRoleSort)
+        .map((el) => ({
+          value: el.id,
+          label: el.label ?? undefined,
+        }))
+      if (!showFilter && nrCount > 1) {
+        setError({
+          path: 'person.nr',
+          value: `Diese Nummer wird ${nrCount} mal verwendet. Sie sollte aber über alle Personen eindeutig sein`,
         })
-      },
-    )
+      }
+      setDataState({
+        userRoleWerte,
+        userRole,
+      })
+    })
 
     return () => subscription?.unsubscribe?.()
   }, [db, row?.nr, row?.user_role, showFilter])
@@ -126,7 +123,8 @@ export const PersonForm = ({
     }
 
     const previousValue = ifIsNumericAsNumber(
-      (row as unknown as Record<string, unknown>)[field as string] as string | number,
+      (row as unknown as Record<string, unknown>)[field as string] as
+        string | number,
     )
     // only update if value has changed
     if (value === previousValue) return
@@ -144,7 +142,7 @@ export const PersonForm = ({
       )}
       {showDeleted && (
         <>
-          {showFilter ? (
+          {showFilter ?
             <JesNo
               key={`${row?.id}_deleted`}
               label="gelöscht"
@@ -153,8 +151,7 @@ export const PersonForm = ({
               saveToDb={saveToDb}
               error={errors?.person?._deleted as string | undefined}
             />
-          ) : (
-            <Checkbox2States
+          : <Checkbox2States
               key={`${row?.id}_deleted`}
               label="gelöscht"
               name="_deleted"
@@ -162,7 +159,7 @@ export const PersonForm = ({
               saveToDb={saveToDb}
               error={errors?.person?._deleted as string | undefined}
             />
-          )}
+          }
         </>
       )}
       <Select
@@ -265,7 +262,7 @@ export const PersonForm = ({
         saveToDb={saveToDb}
         error={errors?.person?.email as string | undefined}
       />
-      {showFilter ? (
+      {showFilter ?
         <JesNo
           key={`${row?.id}kein_email`}
           label="Kein Email"
@@ -274,8 +271,7 @@ export const PersonForm = ({
           saveToDb={saveToDb}
           error={errors?.person?.kein_email as string | undefined}
         />
-      ) : (
-        <Checkbox2States
+      : <Checkbox2States
           key={`${row?.id}kein_email`}
           label="Kein Email"
           name="kein_email"
@@ -283,8 +279,8 @@ export const PersonForm = ({
           saveToDb={saveToDb}
           error={errors?.person?.kein_email as string | undefined}
         />
-      )}
-      {showFilter ? (
+      }
+      {showFilter ?
         <JesNo
           key={`${row?.id}kommerziell`}
           label="Kommerziell"
@@ -293,8 +289,7 @@ export const PersonForm = ({
           saveToDb={saveToDb}
           error={errors?.person?.kommerziell as string | undefined}
         />
-      ) : (
-        <Checkbox2States
+      : <Checkbox2States
           key={`${row?.id}kommerziell`}
           label="Kommerziell"
           name="kommerziell"
@@ -302,8 +297,8 @@ export const PersonForm = ({
           saveToDb={saveToDb}
           error={errors?.person?.kommerziell as string | undefined}
         />
-      )}
-      {showFilter ? (
+      }
+      {showFilter ?
         <JesNo
           key={`${row?.id}info`}
           label="Info"
@@ -312,8 +307,7 @@ export const PersonForm = ({
           saveToDb={saveToDb}
           error={errors?.person?.info as string | undefined}
         />
-      ) : (
-        <Checkbox2States
+      : <Checkbox2States
           key={`${row?.id}info`}
           label="Info"
           name="info"
@@ -321,8 +315,8 @@ export const PersonForm = ({
           saveToDb={saveToDb}
           error={errors?.person?.info as string | undefined}
         />
-      )}
-      {showFilter ? (
+      }
+      {showFilter ?
         <JesNo
           key={`${row?.id}aktiv`}
           label="aktiv"
@@ -331,8 +325,7 @@ export const PersonForm = ({
           saveToDb={saveToDb}
           error={errors?.person?.aktiv as string | undefined}
         />
-      ) : (
-        <Checkbox2States
+      : <Checkbox2States
           key={`${row?.id}aktiv`}
           label="aktiv"
           name="aktiv"
@@ -340,7 +333,7 @@ export const PersonForm = ({
           saveToDb={saveToDb}
           error={errors?.person?.aktiv as string | undefined}
         />
-      )}
+      }
       <TextField
         key={`${row?.id}bemerkungen`}
         name="bemerkungen"
@@ -361,7 +354,12 @@ export const PersonForm = ({
       {['gaertner', 'artverantwortlich'].includes(userRole?.name ?? '') && (
         <Gaerten person={row} />
       )}
-      {!showFilter && row?.id && <Files parentTable="person" parent={row} />}
+      {!showFilter && row?.id && (
+        <Files
+          parentTable="person"
+          parent={row}
+        />
+      )}
     </div>
   )
 }

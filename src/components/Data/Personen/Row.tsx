@@ -10,7 +10,7 @@ import styles from '../Arten/Row.module.css'
 export const PersonRow = ({
   style,
   index,
-  rows
+  rows,
 }: {
   style?: Record<string, unknown>
   index?: number

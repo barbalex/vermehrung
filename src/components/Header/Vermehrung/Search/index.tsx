@@ -20,7 +20,12 @@ import styles from './index.module.css'
 const formatOptionLabel = (
   { label }: { label: string },
   { inputValue }: { inputValue: string },
-) => <Highlighter searchWords={[inputValue]} textToHighlight={label} />
+) => (
+  <Highlighter
+    searchWords={[inputValue]}
+    textToHighlight={label}
+  />
+)
 const formatGroupLabel = (data: { label: string }) => <div>{data.label}</div>
 const noOptionsMessage = () => null
 const loadingMessage = () => null
@@ -177,7 +182,10 @@ export const HeaderSearch = () => {
   }
 
   return (
-    <div className={styles.container} ref={ref}>
+    <div
+      className={styles.container}
+      ref={ref}
+    >
       {!singleColumnView && <FaSearch className={styles.searchIcon} />}
       <Select
         styles={

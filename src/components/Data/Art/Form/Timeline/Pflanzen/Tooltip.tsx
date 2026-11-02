@@ -7,8 +7,11 @@ export const CustomTooltip = ({
   label,
   active,
 }: {
-  payload?:
-    | { payload: Record<string, unknown>; dataKey?: string; value?: number }[]
+  payload?: {
+    payload: Record<string, unknown>
+    dataKey?: string
+    value?: number
+  }[]
   label?: string
   active?: boolean
 }) => {
@@ -31,9 +34,9 @@ export const CustomTooltip = ({
           ?.map((o: { dataKey?: string; value?: number }, i: number) => {
             const label = o.dataKey ?? ''
             const value =
-              label === 'Auspflanzung' && Math.abs(o.value ?? 0)
-                ? Math.abs(o.value ?? 0)
-                : o.value
+              label === 'Auspflanzung' && Math.abs(o.value ?? 0) ?
+                Math.abs(o.value ?? 0)
+              : o.value
 
             return (
               <div

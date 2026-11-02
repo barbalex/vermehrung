@@ -15,31 +15,24 @@ import { ErrorBoundary } from '../../../../shared/ErrorBoundary.tsx'
 
 import styles from './Settings.module.css'
 
-export const TeilzaehlungenSettings = ({
-  kulturId,
-}: {
-  kulturId?: string
-}) => {
+export const TeilzaehlungenSettings = ({ kulturId }: { kulturId?: string }) => {
   const db = useAtomValue(dbAtom)
 
   const [dataState, setDataState] = useState<{
     kulturOption: Record<string, unknown> | undefined
   }>({ kulturOption: undefined })
   useEffect(() => {
-    const kulturOptionObservable = kulturId
-      ? db
-          ?.get('kultur_option')
-          .findAndObserve(kulturId ?? '')
+    const kulturOptionObservable =
+      kulturId ?
+        db?.get('kultur_option').findAndObserve(kulturId ?? '')
       : $of({})
     const subscription = (
       kulturOptionObservable as unknown as import('rxjs').Observable<
         Record<string, unknown> | undefined
       >
-    )?.subscribe(
-      async (kulturOption) => {
-        setDataState({ kulturOption })
-      },
-    )
+    )?.subscribe(async (kulturOption) => {
+      setDataState({ kulturOption })
+    })
 
     return () => subscription?.unsubscribe?.()
   }, [db, kulturId])
@@ -61,9 +54,11 @@ export const TeilzaehlungenSettings = ({
   }) => {
     const field = event.target.name
     const value = event.target.value === 'false'
-    ;(kulturOption as unknown as {
-      edit?: (args: { field?: string; value?: unknown }) => void
-    })?.edit?.({ field, value })
+    ;(
+      kulturOption as unknown as {
+        edit?: (args: { field?: string; value?: unknown }) => void
+      }
+    )?.edit?.({ field, value })
   }
 
   const openSettingsDocs = () => {
@@ -92,7 +87,9 @@ export const TeilzaehlungenSettings = ({
         aria-owns={anchorEl ? 'long-menu' : undefined}
         aria-haspopup="true"
         title="Felder wählen"
-        onClick={onClickConfig as unknown as import('react').MouseEventHandler<HTMLElement>}
+        onClick={
+          onClickConfig as unknown as import('react').MouseEventHandler<HTMLElement>
+        }
         size="large"
       >
         <FaCog />
@@ -112,7 +109,9 @@ export const TeilzaehlungenSettings = ({
               <IconButton
                 aria-label="Anleitung öffnen"
                 title="Anleitung öffnen"
-                onClick={openSettingsDocs as unknown as import('react').MouseEventHandler<HTMLElement>}
+                onClick={
+                  openSettingsDocs as unknown as import('react').MouseEventHandler<HTMLElement>
+                }
                 size="large"
               >
                 <IoMdInformationCircleOutline />
@@ -127,8 +126,8 @@ export const TeilzaehlungenSettings = ({
                   color="primary"
                   checked={!!tz_teilkultur_id}
                   onClick={
-                  saveToDb as unknown as import('react').MouseEventHandler
-                }
+                    saveToDb as unknown as import('react').MouseEventHandler
+                  }
                   name="tz_teilkultur_id"
                 />
               }
@@ -144,8 +143,8 @@ export const TeilzaehlungenSettings = ({
                   color="primary"
                   checked={!!tz_andere_menge}
                   onClick={
-                  saveToDb as unknown as import('react').MouseEventHandler
-                }
+                    saveToDb as unknown as import('react').MouseEventHandler
+                  }
                   name="tz_andere_menge"
                 />
               }
@@ -163,8 +162,8 @@ export const TeilzaehlungenSettings = ({
                   color="primary"
                   checked={!!tz_auspflanzbereit_beschreibung}
                   onClick={
-                  saveToDb as unknown as import('react').MouseEventHandler
-                }
+                    saveToDb as unknown as import('react').MouseEventHandler
+                  }
                   name="tz_auspflanzbereit_beschreibung"
                 />
               }
@@ -180,8 +179,8 @@ export const TeilzaehlungenSettings = ({
                   color="primary"
                   checked={!!tz_bemerkungen}
                   onClick={
-                  saveToDb as unknown as import('react').MouseEventHandler
-                }
+                    saveToDb as unknown as import('react').MouseEventHandler
+                  }
                   name="tz_bemerkungen"
                 />
               }

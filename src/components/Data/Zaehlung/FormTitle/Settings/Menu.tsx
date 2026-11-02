@@ -28,7 +28,11 @@ export const ZaehlungSettingsMenu = ({
   >(undefined)
   useEffect(() => {
     const kOObservable = db?.get('kultur_option').findAndObserve(kulturId ?? '')
-    const subscription = (kOObservable as unknown as import('rxjs').Observable<import('../../../../../dbModel.ts').KulturOption | undefined>)?.subscribe((kulturOption) =>
+    const subscription = (
+      kOObservable as unknown as import('rxjs').Observable<
+        import('../../../../../dbModel.ts').KulturOption | undefined
+      >
+    )?.subscribe((kulturOption) =>
       setKulturOption(
         kulturOption as unknown as Record<string, unknown> | undefined,
       ),
@@ -36,7 +40,10 @@ export const ZaehlungSettingsMenu = ({
 
     return () => subscription?.unsubscribe?.()
   }, [db, kulturId])
-  const { z_bemerkungen } = (kulturOption ?? {}) as unknown as Record<string, unknown>
+  const { z_bemerkungen } = (kulturOption ?? {}) as unknown as Record<
+    string,
+    unknown
+  >
 
   const saveToDb = async (event: {
     target: { name?: string; value: unknown }
@@ -47,9 +54,11 @@ export const ZaehlungSettingsMenu = ({
   }) => {
     const field = event.target.name
     const value = event.target.value === 'false'
-    ;(kulturOption as unknown as {
-      edit?: (args: { field?: string; value?: unknown }) => void
-    })?.edit?.({ field, value })
+    ;(
+      kulturOption as unknown as {
+        edit?: (args: { field?: string; value?: unknown }) => void
+      }
+    )?.edit?.({ field, value })
   }
 
   const openSettingsDocs = () => {
@@ -90,9 +99,7 @@ export const ZaehlungSettingsMenu = ({
             <Checkbox
               color="primary"
               checked={!!z_bemerkungen}
-              onClick={
-                  saveToDb as unknown as import('react').MouseEventHandler
-                }
+              onClick={saveToDb as unknown as import('react').MouseEventHandler}
               name="z_bemerkungen"
             />
           }

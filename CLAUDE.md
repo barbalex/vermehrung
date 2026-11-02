@@ -35,6 +35,7 @@ npm run typecheck        # tsc --noEmit (strict, noUnusedLocals/noUnusedParamete
 This is a **local-first** app. Three concerns are split across the repo:
 
 ### 1. Backend (`backend/` — deployed separately, Docker Compose)
+
 - **Postgres/PostGIS** (`db/`): source of truth. The schema is versioned **in this repo** under `src/sql/` (`createTables.sql`, `createViews.sql`, `createRevTriggers_*.sql`, `createApiAccess.sql`, `createSyncFunction.sql`, `one-offs/`).
 - **PostgREST** v16.5 (`api`): exposes Postgres over REST, JWT-authenticated. Roles, column grants and row level security live in `src/sql/createApiAccess.sql` — **generated** from the permission definitions in `src/hasuraMetadata/metadata.json` by `tools/generate_api_access_sql.py`. The directory name is historical (the JSON is Hasura's metadata format and the migration source); nothing Hasura runs anymore — regenerate with the tool after changing permissions.
 - **Auth** (`auth/`, Hapi + `firebase-admin`): `POST /token` verifies a Firebase ID token and returns the api JWT (HS256) carrying `role` + `user_id`.
@@ -42,18 +43,21 @@ This is a **local-first** app. Three concerns are split across the repo:
 - `backend-dev/docker-compose.yaml` runs `db` + `api` + `auth` locally. `backend/docker-compose.yaml` (production) runs `db` + `auth` + `api` + `caddy`.
 
 ### 2. Frontend (`src/` — this Vite app, hosted on Firebase Hosting)
+
 - **React 19** + **MUI 9** (Emotion; `jsxImportSource: '@emotion/react'`), **React Compiler** enabled, **jotai** for app/UI state.
 - **apiClient** (`src/utils/apiClient.ts`): thin fetch wrapper over PostgREST (auth header from localStorage, `Prefer:` handling for upserts).
 - **WatermelonDB** is the local-first store: models in `src/dbModel.ts`, schema in `src/dbSchema/`, persisted via **SQLiteAdapter** (wa-sqlite Asyncify in a **dedicated Web Worker**, IndexedDB VFS — the database work never touches the main thread) in `src/utils/initiateDb.ts`. The adapter's `web.workerFactory`/`web.wasmUrl` overrides point at `src/utils/sqliteWorkerEntry.ts` and the bundled wasm — nitromelondb's defaults assume an unbundled setup that does not work under Vite (see the vite.config bullet below). Legacy LokiJS data is migrated once on boot (`src/utils/migrateLokiToSqlite.ts`): when a login token and a loki IndexedDB exist, all rows are copied into SQLite before the db reaches the app; the loki store is kept as backup, a localStorage flag (`vermehrung:sqlite-migrated-v1`) prevents re-runs. **Async-adapter constraint**: `unsafeResetDatabase` opens a window in which WatermelonDB forbids ALL adapter access (queries crash with `Cannot call database.adapter.underlyingAdapter while the database is being reset`) — resets must run on an idle app before any state churn (see `Login.tsx` `fetchLogin`, `logout.ts`, `reloadData.ts`) and `fetchLogin` is single-flight. Migrations in `src/utils/migrations.ts` — bump the schema version there whenever you change `src/dbSchema/*`.
 - Entry chain: `src/main.tsx` → `src/App.tsx` (wires providers: `DatabaseProvider` → MUI theme) → `src/Router.tsx`.
 
 ### 3. The local-first data flow (the core of the app)
+
 The **UI reads from WatermelonDB, not from the api.** This is the most important thing to understand when debugging data:
 
 - **Reads:** `src/utils/syncPoller.ts` polls `POST /rpc/sync` (every 5s, server-side watermark cursors in `lastUpdated`) and upserts changed rows into WatermelonDB via `processSubscriptionResult`. The poll doubles as the online check (`shortTermOnline`). The UI can therefore **lag or drift from the backend** — query the backend directly for ground truth rather than trusting what the UI shows.
 - **Writes:** go through `@writer` methods on each WatermelonDB model in `src/dbModel.ts` (`edit`, `delete`, `removeConflict`). A write (a) optimistically updates the local WDB row and (b) enqueues an upsert via `store.addQueuedQuery`. The queue (`src/modules/observeQueuedQueries.ts`) drains to PostgREST (`POST /<table>_rev` with `Prefer: resolution=merge-duplicates`) when online; offline edits queue and replay on reconnect — replays of identical mutations are no-ops.
 
 ### 4. Revision & conflict system
+
 Every editable row is versioned. Columns on each model: `_rev` (`"<depth>-<md5>"`), `_parent_rev`, `_revisions` (pg text array of ancestor revs), `_depth`, `_deleted`, `_conflicts`.
 
 - An `edit` **does not mutate in place** — it inserts a NEW child row into the `<table>_rev` table (a new revision whose `_parent_rev` is the current `_rev`), then optimistically updates the materialized row. See the `edit` writer in `src/dbModel.ts`.

@@ -24,7 +24,7 @@ async function rewriteJsToTs(dir) {
         const original = await readFile(fullPath, 'utf8')
         const updated = original.replace(
           /from ('|")(\.{1,2}\/[^'"]+)\.js\1/g,
-          "from $1$2.ts$1",
+          'from $1$2.ts$1',
         )
         if (updated !== original) await writeFile(fullPath, updated, 'utf8')
       }

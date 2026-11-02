@@ -10,7 +10,12 @@ export const TeilzaehlungenRows = ({
 }) => (
   <ErrorBoundary>
     {teilzaehlungs.map((r, index: number) => (
-      <Teilzaehlung key={r.id} index={index} id={r.id} kulturId={kulturId ?? undefined} />
+      <Teilzaehlung
+        key={r.id}
+        index={index}
+        id={r.id}
+        kulturId={kulturId ?? undefined}
+      />
     ))}
   </ErrorBoundary>
 )

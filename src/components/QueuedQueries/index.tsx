@@ -91,7 +91,11 @@ export const QueuedQueries = () => {
             <div className={styles.heading}>nachher</div>
             <div className={styles.revertHeading}>widerrufen</div>
             {[...queuedQueries].reverse().map((qq, i) => (
-              <QueuedQuery key={qq.id} qq={qq} index={i} />
+              <QueuedQuery
+                key={qq.id}
+                qq={qq}
+                index={i}
+              />
             ))}
           </div>
         </div>

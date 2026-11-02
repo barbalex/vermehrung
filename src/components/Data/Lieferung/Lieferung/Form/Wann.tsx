@@ -36,9 +36,8 @@ export const LieferungWann = ({
       <div
         className={wannStyles.titleRow}
         style={{
-          backgroundColor: showFilter
-            ? 'var(--filter-bg-alt)'
-            : 'var(--form-bg)',
+          backgroundColor:
+            showFilter ? 'var(--filter-bg-alt)' : 'var(--form-bg)',
         }}
       >
         <div className={wannStyles.title}>wann</div>
@@ -55,7 +54,7 @@ export const LieferungWann = ({
       )}
       {ifNeeded('geplant') && (
         <div className={wannStyles.fieldRow}>
-          {showFilter ? (
+          {showFilter ?
             <JesNo
               key={`${row?.id}geplant`}
               label="Geplant"
@@ -64,8 +63,7 @@ export const LieferungWann = ({
               saveToDb={saveToDb}
               error={errors?.lieferung?.geplant as string | undefined}
             />
-          ) : (
-            <Checkbox2States
+          : <Checkbox2States
               key={`${row?.id}geplant`}
               label="Geplant"
               name="geplant"
@@ -73,7 +71,7 @@ export const LieferungWann = ({
               saveToDb={saveToDb}
               error={errors?.lieferung?.geplant as string | undefined}
             />
-          )}
+          }
           <div>
             <IconButton
               aria-label="Anleitung öffnen"

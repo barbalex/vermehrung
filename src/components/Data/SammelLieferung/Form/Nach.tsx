@@ -47,25 +47,21 @@ export const SammelLieferungNach = ({
   }>({ nachKulturWerte: [] })
   useEffect(() => {
     const kulturDelQuery =
-      kulturFilter._deleted === false
-        ? Q.where('_deleted', false)
-        : kulturFilter._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+      kulturFilter._deleted === false ? Q.where('_deleted', false)
+      : kulturFilter._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     const sammlungDelQuery =
-      sammlungFilter._deleted === false
-        ? Q.where('_deleted', false)
-        : sammlungFilter._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+      sammlungFilter._deleted === false ? Q.where('_deleted', false)
+      : sammlungFilter._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     // BEWARE: need to include inactive kulturs
     const kultursObservable = db?.get('kultur').query(kulturDelQuery).observe()
     const sammlungsObservable = db
@@ -76,9 +72,11 @@ export const SammelLieferungNach = ({
       kultursObservable,
       sammlungsObservable,
     ])
-    const subscription = (combinedObservables as unknown as import('rxjs').Observable<
+    const subscription = (
+      combinedObservables as unknown as import('rxjs').Observable<
         [import('../../../../dbModel.ts').Kultur[]]
-      >).subscribe(async ([kulturs]) => {
+      >
+    ).subscribe(async ([kulturs]) => {
       const kultursFiltered = kulturs
         // show only kulturen of art_id
         .filter((k) => {
@@ -150,9 +148,8 @@ export const SammelLieferungNach = ({
       <div
         className={wannStyles.titleRow}
         style={{
-          backgroundColor: showFilter
-            ? 'var(--filter-bg-alt)'
-            : 'var(--form-bg)',
+          backgroundColor:
+            showFilter ? 'var(--filter-bg-alt)' : 'var(--form-bg)',
         }}
       >
         <div className={wannStyles.title}>nach</div>
@@ -164,11 +161,11 @@ export const SammelLieferungNach = ({
           value={row?.nach_kultur_id ?? null}
           field="nach_kultur_id"
           label={`Kultur${
-            exists(row?.art_id)
-              ? ` (Kulturen derselben Art und Herkunft${
-                  row?.von_kultur_id ? ', ohne die von-Kultur' : ''
-                })`
-              : ''
+            exists(row?.art_id) ?
+              ` (Kulturen derselben Art und Herkunft${
+                row?.von_kultur_id ? ', ohne die von-Kultur' : ''
+              })`
+            : ''
           }`}
           options={nachKulturWerte}
           saveToDb={saveToDb}
@@ -177,7 +174,7 @@ export const SammelLieferungNach = ({
       )}
       {ifNeeded('nach_ausgepflanzt') && (
         <>
-          {showFilter ? (
+          {showFilter ?
             <JesNo
               key={`${row?.id}nach_ausgepflanzt`}
               label="Ausgepflanzt"
@@ -189,8 +186,7 @@ export const SammelLieferungNach = ({
                   string | undefined
               }
             />
-          ) : (
-            <Checkbox2States
+          : <Checkbox2States
               key={`${row?.id}nach_ausgepflanzt`}
               label="Ausgepflanzt"
               name="nach_ausgepflanzt"
@@ -201,7 +197,7 @@ export const SammelLieferungNach = ({
                   string | undefined
               }
             />
-          )}
+          }
         </>
       )}
     </>

@@ -32,8 +32,9 @@ export const LieferungContainer = ({
 
   let id = idPassed
   if (!idPassed) {
-    id = showFilter
-      ? '99999999-9999-9999-9999-999999999999'
+    id =
+      showFilter ?
+        '99999999-9999-9999-9999-999999999999'
       : activeNodeArray.filter((e) => isId(e)).at(-1)
   }
 
@@ -48,19 +49,20 @@ export const LieferungContainer = ({
   const { li_show_sl } = userPersonOption ?? {}
 
   useEffect(() => {
-    const userPersonOptionsObservable = user.uid
-      ? db
+    const userPersonOptionsObservable =
+      user.uid ?
+        db
           ?.get<import('../../../dbModel.ts').PersonOption>('person_option')
           .query(Q.on('person', Q.where('account_id', user.uid)))
           .observeWithColumns(['li_show_sl'])
       : $of({})
-    const lieferungObservable = showFilter
-      ? $of(lieferungFilter)
-      : initialDataQueried || !online
-        ? db
-            ?.get<import('../../../dbModel.ts').Lieferung>('lieferung')
-            .findAndObserve(id as string)
-        : $of(undefined)
+    const lieferungObservable =
+      showFilter ? $of(lieferungFilter)
+      : initialDataQueried || !online ?
+        db
+          ?.get<import('../../../dbModel.ts').Lieferung>('lieferung')
+          .findAndObserve(id as string)
+      : $of(undefined)
     const combinedObservables = combineLatest([
       userPersonOptionsObservable,
       lieferungObservable,
@@ -72,13 +74,12 @@ export const LieferungContainer = ({
           import('../../../dbModel.ts').Lieferung | undefined,
         ]
       >
-    ).subscribe(
-      async ([userPersonOptions, lieferung]) =>
-        setDataState({
-          row: lieferung,
-          rawRow: JSON.stringify(lieferung?._raw ?? lieferung),
-          userPersonOption: userPersonOptions?.[0],
-        }),
+    ).subscribe(async ([userPersonOptions, lieferung]) =>
+      setDataState({
+        row: lieferung,
+        rawRow: JSON.stringify(lieferung?._raw ?? lieferung),
+        userPersonOption: userPersonOptions?.[0],
+      }),
     )
 
     return () => subscription?.unsubscribe?.()
@@ -98,7 +99,12 @@ export const LieferungContainer = ({
     // show that too
     return (
       <Allotment vertical>
-        <Lieferung showFilter={showFilter} row={row} rawRow={rawRow} id={id} />
+        <Lieferung
+          showFilter={showFilter}
+          row={row}
+          rawRow={rawRow}
+          id={id}
+        />
         <SammelLieferung
           filter={showFilter}
           id={row?.sammel_lieferung_id}
@@ -108,5 +114,12 @@ export const LieferungContainer = ({
     )
   }
 
-  return <Lieferung id={id} row={row} rawRow={rawRow} showFilter={showFilter} />
+  return (
+    <Lieferung
+      id={id}
+      row={row}
+      rawRow={rawRow}
+      showFilter={showFilter}
+    />
+  )
 }

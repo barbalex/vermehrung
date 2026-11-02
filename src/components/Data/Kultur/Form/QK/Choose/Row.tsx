@@ -17,15 +17,15 @@ export const ChooseKulturQkRow = ({
 
   const [dataState, setDataState] = useState<{
     userPersonOption:
-      | import('../../../../../../dbModel.ts').PersonOption
-      | undefined
+      import('../../../../../../dbModel.ts').PersonOption | undefined
     kulturQkChoosen: string[]
   }>({ userPersonOption: undefined, kulturQkChoosen: [] })
   const { userPersonOption, kulturQkChoosen } = dataState
 
   useEffect(() => {
-    const userPersonOptionsObservable = user.uid
-      ? db
+    const userPersonOptionsObservable =
+      user.uid ?
+        db
           ?.get<import('../../../../../../dbModel.ts').PersonOption>(
             'person_option',
           )
@@ -35,9 +35,7 @@ export const ChooseKulturQkRow = ({
     const combinedObservables = combineLatest([userPersonOptionsObservable])
     const subscription = (
       combinedObservables as unknown as import('rxjs').Observable<
-        [
-          import('../../../../../../dbModel.ts').PersonOption[] | undefined,
-        ]
+        [import('../../../../../../dbModel.ts').PersonOption[] | undefined]
       >
     ).subscribe(([userPersonOptions]) =>
       setDataState({
@@ -58,8 +56,9 @@ export const ChooseKulturQkRow = ({
     stopPropagation?: () => void
     key?: string
   }) => {
-    const newValue = event?.target?.checked
-      ? [...kulturQkChoosen, qk?.id ?? '']
+    const newValue =
+      event?.target?.checked ?
+        [...kulturQkChoosen, qk?.id ?? '']
       : kulturQkChoosen.filter((id) => id !== qk?.id)
 
     userPersonOption?.edit({
@@ -73,7 +72,11 @@ export const ChooseKulturQkRow = ({
   return (
     <div className={styles.row}>
       <div className={styles.check}>
-        <Checkbox checked={checked} onChange={onChange} color="primary" />
+        <Checkbox
+          checked={checked}
+          onChange={onChange}
+          color="primary"
+        />
       </div>
       <div className={styles.titel}>{qk?.titel}</div>
       <div className={styles.beschreibung}>{qk?.beschreibung}</div>

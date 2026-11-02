@@ -45,12 +45,19 @@ export const GartenFormTitle = ({
   }
 
   return (
-    <div className={artStyles.container} ref={ref}>
+    <div
+      className={artStyles.container}
+      ref={ref}
+    >
       <div className={artStyles.title}>Garten</div>
       <div className={artStyles.symbols}>
         {!breadcrumbsEnabled && (
           <>
-            <IconButton title="Zur Liste" onClick={onClickUp} size="large">
+            <IconButton
+              title="Zur Liste"
+              onClick={onClickUp}
+              size="large"
+            >
               <UpSvg />
             </IconButton>
             <IconButton
@@ -65,7 +72,7 @@ export const GartenFormTitle = ({
         <AddButton />
         <DeleteButton row={row} />
         <Download gartenId={row?.id} />
-        {(width ?? 0) < 520 ? (
+        {(width ?? 0) < 520 ?
           <Menu white={false}>
             <HistoryButton
               table="garten"
@@ -80,8 +87,7 @@ export const GartenFormTitle = ({
               asMenu
             />
           </Menu>
-        ) : (
-          <>
+        : <>
             <HistoryButton
               table="garten"
               id={row?.id}
@@ -93,7 +99,7 @@ export const GartenFormTitle = ({
               totalCount={totalCount}
             />
           </>
-        )}
+        }
       </div>
     </div>
   )

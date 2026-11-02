@@ -13,15 +13,18 @@ import styles from '../Arten/Row.module.css'
 
 export const RootRow = ({
   style,
-  row
+  row,
 }: {
   style?: Record<string, unknown>
-  row: {
-    table?: string
-    url?: string[]
-    name?: string
-    id?: string
-  } | null | undefined
+  row:
+    | {
+        table?: string
+        url?: string[]
+        name?: string
+        id?: string
+      }
+    | null
+    | undefined
 }) => {
   const db = useAtomValue(dbAtom)
   const apFilter = useAtomValue(apFilterAtom)

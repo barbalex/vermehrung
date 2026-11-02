@@ -936,8 +936,8 @@ export class Teilzaehlung extends Model {
   @relation('zaehlung', 'zaehlung_id') zaehlung!: Relation<Zaehlung>
   @relation('teilkultur', 'teilkultur_id') teilkultur!: Relation<Teilkultur>
   @lazy label: Observable<string> = this.teilkultur.observe().pipe(
-  distinctUntilKeyChanged('teilkultur_id' as keyof Teilkultur),
-  map$((teilkultur) => teilkulturLabelFromTeilkultur({ teilkultur })),
+    distinctUntilKeyChanged('teilkultur_id' as keyof Teilkultur),
+    map$((teilkultur) => teilkulturLabelFromTeilkultur({ teilkultur })),
   )
 
   @writer async removeConflict(_rev: string) {
@@ -1149,8 +1149,9 @@ export class SammelLieferung extends Model {
         person = await lieferung.person?.fetch()
       } catch {}
       const personLabel = personLabelFromPerson({ person })
-      const datumLabel = lieferung.datum
-        ? DateTime.fromSQL(lieferung.datum).toFormat('yyyy.LL.dd')
+      const datumLabel =
+        lieferung.datum ?
+          DateTime.fromSQL(lieferung.datum).toFormat('yyyy.LL.dd')
         : `Kein Datum. ID: ${lieferung.id}`
       const von = gartenLabel ? `von: ${gartenLabel}` : ''
       const label = [datumLabel, von, personLabel].filter((e) => !!e).join('; ')

@@ -54,8 +54,9 @@ export const SammelLieferungFormTitle = ({
     import('../../../../dbModel.ts').PersonOption | undefined
   >(undefined)
   useEffect(() => {
-    const userPersonOptionsObservable = user.uid
-      ? db
+    const userPersonOptionsObservable =
+      user.uid ?
+        db
           ?.get<import('../../../../dbModel.ts').PersonOption>('person_option')
           .query(Q.on('person', Q.where('account_id', user.uid)))
           .observeWithColumns(['sl_auto_copy_edits'])
@@ -76,7 +77,10 @@ export const SammelLieferungFormTitle = ({
   if (!row || (!showFilter && filterShow)) return null
 
   return (
-    <div className={artStyles.container} ref={ref}>
+    <div
+      className={artStyles.container}
+      ref={ref}
+    >
       <div className={artStyles.title}>Sammel-Lieferung</div>
       <div className={artStyles.symbols}>
         {shownAsSammelLieferung && (
@@ -87,10 +91,13 @@ export const SammelLieferungFormTitle = ({
           </>
         )}
         {!sl_auto_copy_edits && (
-          <Copy sammelLieferung={row} lieferung={lieferung} />
+          <Copy
+            sammelLieferung={row}
+            lieferung={lieferung}
+          />
         )}
         <>
-          {(width ?? 0) < 515 ? (
+          {(width ?? 0) < 515 ?
             <Menu white={false}>
               <PrintButtons
                 printPreview={printPreview}
@@ -113,7 +120,7 @@ export const SammelLieferungFormTitle = ({
                 />
               )}
             </Menu>
-          ) : (width ?? 0) < 563 ? (
+          : (width ?? 0) < 563 ?
             <>
               <PrintButtons
                 printPreview={printPreview}
@@ -137,7 +144,7 @@ export const SammelLieferungFormTitle = ({
                 )}
               </Menu>
             </>
-          ) : (width ?? 0) < 610 ? (
+          : (width ?? 0) < 610 ?
             <>
               <PrintButtons
                 printPreview={printPreview}
@@ -162,7 +169,7 @@ export const SammelLieferungFormTitle = ({
                 </Menu>
               </>
             </>
-          ) : (width ?? 0) < 657 ? (
+          : (width ?? 0) < 657 ?
             <>
               <HistoryButton
                 table="sammel_lieferung"
@@ -183,8 +190,7 @@ export const SammelLieferungFormTitle = ({
                 </Menu>
               </>
             </>
-          ) : (
-            <>
+          : <>
               <HistoryButton
                 table="sammel_lieferung"
                 id={row.id}
@@ -199,7 +205,7 @@ export const SammelLieferungFormTitle = ({
                 />
               )}
             </>
-          )}
+          }
         </>
       </div>
     </div>

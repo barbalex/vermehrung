@@ -43,44 +43,39 @@ export const LieferungTitleChooser = ({
   })
   useEffect(() => {
     const hierarchyQuery =
-      kulturIdInActiveNodeArray && activeNodeArray.includes('Aus-Lieferungen')
-        ? [Q.where('von_kultur_id', kulturIdInActiveNodeArray)]
-        : kulturIdInActiveNodeArray &&
-            activeNodeArray.includes('An-Lieferungen')
-          ? [Q.where('nach_kultur_id', kulturIdInActiveNodeArray)]
-          : sammelLieferungIdInActiveNodeArray && !kulturIdInActiveNodeArray
-            ? [
-                Q.experimentalJoinTables(['sammel_lieferung']),
-                Q.on(
-                  'sammel_lieferung',
-                  'id',
-                  sammelLieferungIdInActiveNodeArray,
-                ),
-              ]
-            : personIdInActiveNodeArray && !kulturIdInActiveNodeArray
-              ? [
-                  Q.experimentalJoinTables(['person']),
-                  Q.on('person', 'id', personIdInActiveNodeArray),
-                ]
-              : sammlungIdInActiveNodeArray && !kulturIdInActiveNodeArray
-                ? [
-                    Q.experimentalJoinTables(['sammlung']),
-                    Q.on('sammlung', 'id', sammlungIdInActiveNodeArray),
-                  ]
-                : []
+      kulturIdInActiveNodeArray && activeNodeArray.includes('Aus-Lieferungen') ?
+        [Q.where('von_kultur_id', kulturIdInActiveNodeArray)]
+      : (
+        kulturIdInActiveNodeArray && activeNodeArray.includes('An-Lieferungen')
+      ) ?
+        [Q.where('nach_kultur_id', kulturIdInActiveNodeArray)]
+      : sammelLieferungIdInActiveNodeArray && !kulturIdInActiveNodeArray ?
+        [
+          Q.experimentalJoinTables(['sammel_lieferung']),
+          Q.on('sammel_lieferung', 'id', sammelLieferungIdInActiveNodeArray),
+        ]
+      : personIdInActiveNodeArray && !kulturIdInActiveNodeArray ?
+        [
+          Q.experimentalJoinTables(['person']),
+          Q.on('person', 'id', personIdInActiveNodeArray),
+        ]
+      : sammlungIdInActiveNodeArray && !kulturIdInActiveNodeArray ?
+        [
+          Q.experimentalJoinTables(['sammlung']),
+          Q.on('sammlung', 'id', sammlungIdInActiveNodeArray),
+        ]
+      : []
     const collection =
       db?.get<import('../../../../../dbModel.ts').Lieferung>('lieferung')
     if (!collection) return
     const lieferungDelQuery =
-      lieferungFilter._deleted === false
-        ? Q.where('_deleted', false)
-        : lieferungFilter._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+      lieferungFilter._deleted === false ? Q.where('_deleted', false)
+      : lieferungFilter._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     const totalCountObservable = collection
       .query(lieferungDelQuery, ...hierarchyQuery)
       .observeCount()

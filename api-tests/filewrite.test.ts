@@ -41,7 +41,16 @@ describe('file write', () => {
       await db.batch([collection.prepareCreateFromDirtyRaw(raw)])
     })
     const after = await art.files.fetch()
-    console.log('rows after write:', JSON.stringify(after.map((f) => ({ name: f.name, art_id: f.art_id, mime: f.file_mime_type }))))
+    console.log(
+      'rows after write:',
+      JSON.stringify(
+        after.map((f) => ({
+          name: f.name,
+          art_id: f.art_id,
+          mime: f.file_mime_type,
+        })),
+      ),
+    )
     expect(after.length).toBe(1)
     expect(after[0].name).toBe('ux8-test.txt')
     expect(after[0].file_mime_type).toBe('text/plain')

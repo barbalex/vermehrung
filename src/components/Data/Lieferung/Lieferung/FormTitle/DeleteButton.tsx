@@ -48,9 +48,7 @@ export const LieferungDeleteButton = ({
         aria-haspopup="true"
         aria-label="Lieferung löschen"
         title="Lieferung löschen"
-        onClick={
-                  onClickButton as unknown as import('react').MouseEventHandler
-                }
+        onClick={onClickButton as unknown as import('react').MouseEventHandler}
         disabled={!!row?._deleted}
         size="large"
       >

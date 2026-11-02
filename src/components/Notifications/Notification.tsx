@@ -65,16 +65,19 @@ export const Notification = ({
       updateModelValues({
         table: revertTable as import('../../store/index.ts').TableName,
         id: revertId as string,
-        values: (typeof revertValues === 'string'
-          ? JSON.parse(revertValues)
-          : revertValues) as Record<string, unknown>,
+        values: (typeof revertValues === 'string' ?
+          JSON.parse(revertValues)
+        : revertValues) as Record<string, unknown>,
       })
     }
     removeNotificationById(n.id)
   }
 
   return (
-    <div className={styles.container} style={{ backgroundColor: color }}>
+    <div
+      className={styles.container}
+      style={{ backgroundColor: color }}
+    >
       <div className={styles.text}>
         {!!title && <div className={styles.titleClass}>{title}</div>}
         <div className={styles.messageClass}>{message}</div>

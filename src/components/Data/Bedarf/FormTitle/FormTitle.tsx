@@ -37,17 +37,24 @@ export const BedarfFormTitle = ({
   }
 
   return (
-    <div className={artStyles.container} ref={ref}>
+    <div
+      className={artStyles.container}
+      ref={ref}
+    >
       <div className={artStyles.title}>Bedarf</div>
       <div className={artStyles.symbols}>
         {!breadcrumbsEnabled && (
-          <IconButton title="Zur Liste" onClick={onClickUp} size="large">
+          <IconButton
+            title="Zur Liste"
+            onClick={onClickUp}
+            size="large"
+          >
             <UpSvg />
           </IconButton>
         )}
         <AddButton />
         <DeleteButton row={row} />
-        {(width ?? 0) < 520 ? (
+        {(width ?? 0) < 520 ?
           <Menu white={false}>
             <HistoryButton
               table="bedarf"
@@ -61,8 +68,7 @@ export const BedarfFormTitle = ({
               asMenu
             />
           </Menu>
-        ) : (
-          <>
+        : <>
             <HistoryButton
               table="bedarf"
               id={row?.id}
@@ -73,7 +79,7 @@ export const BedarfFormTitle = ({
               totalCount={totalCount}
             />
           </>
-        )}
+        }
       </div>
     </div>
   )

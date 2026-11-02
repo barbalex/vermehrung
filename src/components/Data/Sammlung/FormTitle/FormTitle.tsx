@@ -50,7 +50,10 @@ export const SammlungFormTitle = ({
   const showToLi = activeNodeArray[0] !== 'Personen'
 
   return (
-    <div className={artStyles.container} ref={ref}>
+    <div
+      className={artStyles.container}
+      ref={ref}
+    >
       <div className={artStyles.title}>Sammlung</div>
       <div className={artStyles.symbols}>
         {!breadcrumbsEnabled && (
@@ -84,7 +87,7 @@ export const SammlungFormTitle = ({
         )}
         <AddButton />
         <DeleteButton row={row} />
-        {(width ?? 0) < 520 ? (
+        {(width ?? 0) < 520 ?
           <Menu white={false}>
             <HistoryButton
               table="sammlung"
@@ -99,8 +102,7 @@ export const SammlungFormTitle = ({
               asMenu
             />
           </Menu>
-        ) : (
-          <>
+        : <>
             <HistoryButton
               table="sammlung"
               id={row?.id}
@@ -112,7 +114,7 @@ export const SammlungFormTitle = ({
               totalCount={totalCount}
             />
           </>
-        )}
+        }
       </div>
     </div>
   )

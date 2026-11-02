@@ -51,14 +51,21 @@ export const HerkunftFormTitle = ({
   const editingAllowed = activeNodeArray.length <= 2
 
   return (
-    <div className={artStyles.container} ref={ref}>
+    <div
+      className={artStyles.container}
+      ref={ref}
+    >
       <div
         className={artStyles.title}
       >{`Herkunft${activeConflict ? ': Konflikt lösen' : ''}`}</div>
       <div className={artStyles.symbols}>
         {!breadcrumbsEnabled && (
           <>
-            <IconButton title="Zur Liste" onClick={onClickUp} size="large">
+            <IconButton
+              title="Zur Liste"
+              onClick={onClickUp}
+              size="large"
+            >
               <UpSvg />
             </IconButton>
             {showToSa && (
@@ -78,7 +85,7 @@ export const HerkunftFormTitle = ({
             <DeleteButton row={row} />
           </>
         )}
-        {(width ?? 0) < 520 ? (
+        {(width ?? 0) < 520 ?
           <Menu white={false}>
             <HistoryButton
               table="herkunft"
@@ -94,8 +101,7 @@ export const HerkunftFormTitle = ({
               asMenu
             />
           </Menu>
-        ) : (
-          <>
+        : <>
             <HistoryButton
               table="herkunft"
               id={row?.id}
@@ -108,7 +114,7 @@ export const HerkunftFormTitle = ({
               totalCount={totalCount}
             />
           </>
-        )}
+        }
       </div>
     </div>
   )

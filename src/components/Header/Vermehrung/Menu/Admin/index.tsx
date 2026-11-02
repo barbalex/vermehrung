@@ -101,7 +101,10 @@ export const HeaderAdminMenu = ({
           <div>
             AP-Daten (re-)importieren (Stand: 25.1.2025)
             {progress > 0 && (
-              <LinearProgress variant="determinate" value={progress} />
+              <LinearProgress
+                variant="determinate"
+                value={progress}
+              />
             )}
           </div>
         </StyledOtherMenuItem>

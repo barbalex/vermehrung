@@ -52,8 +52,9 @@ export const tableFilter = ({
   // if a url is opened, a dataset should always show
   // even if it was filtered away
   const idAtomKey = `${camelCase(table)}IdInActiveNodeArray`
-  const tableIdInActiveNodeArray = xxxIdInActiveNodeArrayAtoms[idAtomKey]
-    ? store.get(xxxIdInActiveNodeArrayAtoms[idAtomKey])
+  const tableIdInActiveNodeArray =
+    xxxIdInActiveNodeArrayAtoms[idAtomKey] ?
+      store.get(xxxIdInActiveNodeArrayAtoms[idAtomKey])
     : undefined
   if (tableIdInActiveNodeArray) {
     return [

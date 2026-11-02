@@ -33,8 +33,9 @@ export const Lieferschein = ({
   }>({ lieferungs: [], vonKulturGarten: undefined, person: undefined })
   useEffect(() => {
     const lieferungsObservable = row?.lieferungs.observe()
-    const vonKulturGartenObservable = row?.von_kultur_id
-      ? db
+    const vonKulturGartenObservable =
+      row?.von_kultur_id ?
+        db
           ?.get<import('../../../../dbModel.ts').Garten>('garten')
           .query(
             Q.where('_deleted', false),
@@ -57,13 +58,12 @@ export const Lieferschein = ({
           import('../../../../dbModel.ts').Person | undefined,
         ]
       >
-    ).subscribe(
-      async ([lieferungs, vonKulturGarten, person]) =>
-        setDataState({
-          lieferungs: lieferungs.sort(lieferungSort),
-          vonKulturGarten,
-          person,
-        }),
+    ).subscribe(async ([lieferungs, vonKulturGarten, person]) =>
+      setDataState({
+        lieferungs: lieferungs.sort(lieferungSort),
+        vonKulturGarten,
+        person,
+      }),
     )
 
     return () => subscription?.unsubscribe?.()
@@ -71,20 +71,23 @@ export const Lieferschein = ({
   const { lieferungs, vonKulturGarten, person } = dataState
 
   const vonKulturGartenFirst = vonKulturGarten?.[0]
-  const von = row?.von_kultur_id
-    ? `${vonKulturGartenFirst?.name ?? '(kein Name)'} (${
+  const von =
+    row?.von_kultur_id ?
+      `${vonKulturGartenFirst?.name ?? '(kein Name)'} (${
         vonKulturGartenFirst?.ort ?? 'kein Ort'
       })`
     : '(keine von-Kultur erfasst)'
 
-  const an = row?.person_id
-    ? `${personFullname(person) ?? '(kein Name)'} (${
+  const an =
+    row?.person_id ?
+      `${personFullname(person) ?? '(kein Name)'} (${
         person?.ort ?? 'kein Ort'
       })`
     : '(keine Person erfasst)'
 
-  const am = row?.datum
-    ? DateTime.fromSQL(row?.datum).toFormat('dd.LL.yyyy')
+  const am =
+    row?.datum ?
+      DateTime.fromSQL(row?.datum).toFormat('dd.LL.yyyy')
     : '(Kein Datum erfasst)'
 
   return (
@@ -118,8 +121,14 @@ export const Lieferschein = ({
           <div className={styles.haederLabel}>am:</div>
           <div>{am}</div>
         </div>
-        <Paper square className={styles.paper}>
-          <Table size="small" className={styles.table}>
+        <Paper
+          square
+          className={styles.paper}
+        >
+          <Table
+            size="small"
+            className={styles.table}
+          >
             <TableHead>
               <TableRow>
                 <TableCell>Art</TableCell>
@@ -130,7 +139,10 @@ export const Lieferschein = ({
             </TableHead>
             <TableBody>
               {lieferungs.map((l) => (
-                <Lieferung key={l.id} lieferung={l} />
+                <Lieferung
+                  key={l.id}
+                  lieferung={l}
+                />
               ))}
             </TableBody>
           </Table>

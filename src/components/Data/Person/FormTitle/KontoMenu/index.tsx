@@ -43,9 +43,7 @@ export const PersonKonto = ({
       <Menu
         row={row}
         menuAnchorEl={menuAnchorEl}
-        setMenuAnchorEl={
-                  setMenuAnchorEl as unknown as never
-                }
+        setMenuAnchorEl={setMenuAnchorEl as unknown as never}
         asMenu
       />
     )
@@ -63,9 +61,7 @@ export const PersonKonto = ({
       <Menu
         row={row}
         menuAnchorEl={menuAnchorEl}
-        setMenuAnchorEl={
-                  setMenuAnchorEl as unknown as never
-                }
+        setMenuAnchorEl={setMenuAnchorEl as unknown as never}
       />
     </>
   )

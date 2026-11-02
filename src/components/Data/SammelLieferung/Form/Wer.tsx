@@ -36,7 +36,12 @@ export const SammelLieferungWer = ({
   const initialDataQueried = useAtomValue(initialDataQueriedAtom)
 
   const [dataState, setDataState] = useState<{
-    personWerte: { value: string; label: string | undefined; inaktiv?: boolean; link?: string[] }[]
+    personWerte: {
+      value: string
+      label: string | undefined
+      inaktiv?: boolean
+      link?: string[]
+    }[]
     row: import('../../../../dbModel.ts').SammelLieferung | undefined
   }>({
     personWerte: [],
@@ -45,31 +50,31 @@ export const SammelLieferungWer = ({
   const { row, personWerte } = dataState
 
   useEffect(() => {
-    const rowObservable = showFilter
-      ? $of(sammelLieferungFilter)
-      : initialDataQueried
-        ? db?.get<import('../../../../dbModel.ts').SammelLieferung>('sammel_lieferung').findAndObserve(id ?? '')
-        : $of({})
+    const rowObservable =
+      showFilter ? $of(sammelLieferungFilter)
+      : initialDataQueried ?
+        db
+          ?.get<import('../../../../dbModel.ts').SammelLieferung>(
+            'sammel_lieferung',
+          )
+          .findAndObserve(id ?? '')
+      : $of({})
     const personDelQuery =
-      personFilter._deleted === false
-        ? Q.where('_deleted', false)
-        : personFilter._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+      personFilter._deleted === false ? Q.where('_deleted', false)
+      : personFilter._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     const personAktivQuery =
-      personFilter.aktiv === false
-        ? Q.where('aktiv', false)
-        : personFilter.aktiv === true
-          ? Q.where('aktiv', true)
-          : Q.or(
-              Q.where('aktiv', false),
-              Q.where('aktiv', true),
-              Q.where('aktiv', null),
-            )
+      personFilter.aktiv === false ? Q.where('aktiv', false)
+      : personFilter.aktiv === true ? Q.where('aktiv', true)
+      : Q.or(
+          Q.where('aktiv', false),
+          Q.where('aktiv', true),
+          Q.where('aktiv', null),
+        )
     const personsObservable = db
       ?.get<import('../../../../dbModel.ts').Person>('person')
       .query(personDelQuery, personAktivQuery)
@@ -78,33 +83,34 @@ export const SammelLieferungWer = ({
       personsObservable,
       rowObservable,
     ])
-    const subscription = (combinedObservables as unknown as import('rxjs').Observable<
+    const subscription = (
+      combinedObservables as unknown as import('rxjs').Observable<
         [
           import('../../../../dbModel.ts').Person[],
           import('../../../../dbModel.ts').SammelLieferung | undefined,
         ]
-      >).subscribe(async ([persons, row]) => {
-        // need to show a choosen kultur even if inactive but not if deleted
-        let person
-        try {
-          person = await row?.person.fetch()
-        } catch {}
-        const personsIncludingChoosen = uniqBy(
-          [...persons, ...(person && !showFilter ? [person] : [])],
-          (e) => e.id,
-        )
-        const personWerte = personsIncludingChoosen
-          .sort(personSort)
-          .map((el) => ({
-            value: el.id,
-            label: personLabelFromPerson({ person: el }),
-            inaktiv: el.aktiv === false,
-            link: ['Personen', el.id],
-          }))
+      >
+    ).subscribe(async ([persons, row]) => {
+      // need to show a choosen kultur even if inactive but not if deleted
+      let person
+      try {
+        person = await row?.person.fetch()
+      } catch {}
+      const personsIncludingChoosen = uniqBy(
+        [...persons, ...(person && !showFilter ? [person] : [])],
+        (e) => e.id,
+      )
+      const personWerte = personsIncludingChoosen
+        .sort(personSort)
+        .map((el) => ({
+          value: el.id,
+          label: personLabelFromPerson({ person: el }),
+          inaktiv: el.aktiv === false,
+          link: ['Personen', el.id],
+        }))
 
-        setDataState({ personWerte, row })
-      },
-    )
+      setDataState({ personWerte, row })
+    })
 
     return () => subscription?.unsubscribe?.()
   }, [
@@ -125,9 +131,8 @@ export const SammelLieferungWer = ({
       <div
         className={wannStyles.titleRow}
         style={{
-          backgroundColor: showFilter
-            ? 'var(--filter-bg-alt)'
-            : 'var(--form-bg)',
+          backgroundColor:
+            showFilter ? 'var(--filter-bg-alt)' : 'var(--form-bg)',
         }}
       >
         <div className={wannStyles.title}>wer</div>

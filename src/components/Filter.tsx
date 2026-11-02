@@ -46,8 +46,9 @@ export const Filter = () => {
   // ensure list views are directed to correct filter
   // use exact match or garten will become gart
   // see: https://stackoverflow.com/a/447258/712005
-  const activeTabFromActiveForm = activeForm
-    ? activeForm
+  const activeTabFromActiveForm =
+    activeForm ?
+      activeForm
         .replace(/^herkuenfte$/, 'herkunft')
         .replace(/^gaerten$/, 'garten')
         .replace(/^arten$/, 'art')
@@ -58,8 +59,8 @@ export const Filter = () => {
         .replace(/^sammlungen$/, 'sammlung')
         .replace(/^teilkulturen$/, 'teilkultur')
         .replace(/^zaehlungen$/, 'zaehlung')
-    : // fallback if no form is active
-      'art'
+      // fallback if no form is active
+    : 'art'
   const [activeTab, setActiveTab] = useState(activeTabFromActiveForm)
 
   const onChangeTab = (_event: unknown, value: string) => setActiveTab(value)
@@ -94,7 +95,10 @@ export const Filter = () => {
     <ErrorBoundary>
       <div className={styles.container}>
         <div className={styles.titleRow}>
-          <div className={styles.title} data-id="form-title">
+          <div
+            className={styles.title}
+            data-id="form-title"
+          >
             {titleObject[activeTab]}
           </div>
           <Tabs
@@ -106,7 +110,12 @@ export const Filter = () => {
             scrollButtons="auto"
             className={styles.tabs}
           >
-            <Tab className={styles.tab} label="Art" value="art" data-id="art" />
+            <Tab
+              className={styles.tab}
+              label="Art"
+              value="art"
+              data-id="art"
+            />
             <Tab
               className={styles.tab}
               label="Herkunft"

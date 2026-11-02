@@ -23,11 +23,16 @@ export const HerkunftSettings = ({ asMenu }: { asMenu?: boolean }) => {
         <MenuItem
           aria-owns={anchorEl ? 'menu' : undefined}
           aria-haspopup="true"
-          onClick={onClickConfig as unknown as import('react').MouseEventHandler<HTMLElement>}
+          onClick={
+            onClickConfig as unknown as import('react').MouseEventHandler<HTMLElement>
+          }
         >
           Optionen wählen
         </MenuItem>
-        <Menu anchorEl={anchorEl} setAnchorEl={setAnchorEl} />
+        <Menu
+          anchorEl={anchorEl}
+          setAnchorEl={setAnchorEl}
+        />
       </>
     )
   }
@@ -39,12 +44,17 @@ export const HerkunftSettings = ({ asMenu }: { asMenu?: boolean }) => {
         aria-owns={anchorEl ? 'menu' : undefined}
         aria-haspopup="true"
         title="Optionen wählen"
-        onClick={onClickConfig as unknown as import('react').MouseEventHandler<HTMLElement>}
+        onClick={
+          onClickConfig as unknown as import('react').MouseEventHandler<HTMLElement>
+        }
         size="large"
       >
         <FaCog />
       </IconButton>
-      <Menu anchorEl={anchorEl} setAnchorEl={setAnchorEl} />
+      <Menu
+        anchorEl={anchorEl}
+        setAnchorEl={setAnchorEl}
+      />
     </ErrorBoundary>
   )
 }

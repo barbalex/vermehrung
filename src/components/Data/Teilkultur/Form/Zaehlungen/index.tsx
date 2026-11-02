@@ -12,10 +12,7 @@ import styles from './index.module.css'
 export const TeilkulturZaehlungen = ({
   teilkultur,
 }: {
-  teilkultur:
-    | import('../../../../../dbModel.ts').Teilkultur
-    | null
-    | undefined
+  teilkultur: import('../../../../../dbModel.ts').Teilkultur | null | undefined
 }) => {
   const db = useAtomValue(dbAtom)
 
@@ -27,10 +24,7 @@ export const TeilkulturZaehlungen = ({
       ?.get<import('../../../../../dbModel.ts').Teilzaehlung>('teilzaehlung')
       .query(
         Q.where('_deleted', false),
-        Q.on(
-          'zaehlung',
-          Q.where('kultur_id', teilkultur?.kultur_id as string),
-        ),
+        Q.on('zaehlung', Q.where('kultur_id', teilkultur?.kultur_id as string)),
       )
       .observeWithColumns(['datum', 'beschreibung', 'geplant'])
     const subscription = teilzaehlungsObservable?.subscribe(

@@ -41,8 +41,9 @@ export const Bedarfe = ({ filter: showFilter = false }) => {
     totalCount: number
   }>({ bedarfe: [], totalCount: 0 })
   useEffect(() => {
-    const hierarchyQuery = kulturIdInActiveNodeArray
-      ? [
+    const hierarchyQuery =
+      kulturIdInActiveNodeArray ?
+        [
           Q.experimentalJoinTables(['kultur']),
           Q.on('kultur', 'id', kulturIdInActiveNodeArray),
         ]
@@ -50,15 +51,13 @@ export const Bedarfe = ({ filter: showFilter = false }) => {
     const collection = db?.get<import('../../../dbModel.ts').Bedarf>('bedarf')
     if (!collection) return
     const delQuery =
-      bedarfFilter._deleted === false
-        ? Q.where('_deleted', false)
-        : bedarfFilter._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+      bedarfFilter._deleted === false ? Q.where('_deleted', false)
+      : bedarfFilter._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     const countObservable = collection
       .query(delQuery, ...hierarchyQuery)
       .observeCount()
@@ -98,19 +97,22 @@ export const Bedarfe = ({ filter: showFilter = false }) => {
         className={artStyles.container}
         style={{ backgroundColor: showFilter ? 'var(--filter-bg)' : 'unset' }}
       >
-        {showFilter ? (
+        {showFilter ?
           <FilterTitle
             title="Bedarf"
             table="bedarf"
             totalCount={totalCount}
             filteredCount={filteredCount}
           />
-        ) : (
-          <div className={artStyles.titleContainer}>
+        : <div className={artStyles.titleContainer}>
             <div className={artStyles.title}>Bedarf</div>
             <div className={artStyles.titleSymbols}>
               {!breadcrumbsEnabled && (
-                <IconButton title={upTitle} onClick={onClickUp} size="large">
+                <IconButton
+                  title={upTitle}
+                  onClick={onClickUp}
+                  size="large"
+                >
                   <UpSvg />
                 </IconButton>
               )}
@@ -128,7 +130,7 @@ export const Bedarfe = ({ filter: showFilter = false }) => {
               />
             </div>
           </div>
-        )}
+        }
         <div className={artStyles.fieldsContainer}>
           <List
             rowComponent={Row}

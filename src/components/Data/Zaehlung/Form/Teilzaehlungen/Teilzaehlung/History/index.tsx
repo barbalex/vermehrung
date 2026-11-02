@@ -23,8 +23,9 @@ export const TeilzaehlungHistory = ({
   historyTakeoverCallback: () => void
 }) => {
   const priorRevisions = row?._revisions?.slice(1) ?? []
-  const revPath = priorRevisions.length
-    ? `/teilzaehlung_rev?_rev=in.(${priorRevisions.join(',')})&select=id,teilzaehlung_id,zaehlung_id,teilkultur_id,anzahl_pflanzen,anzahl_auspflanzbereit,anzahl_mutterpflanzen,andere_menge,auspflanzbereit_beschreibung,bemerkungen,prognose_von_tz,changed,changed_by,_rev,_parent_rev,_revisions,_depth,_deleted`
+  const revPath =
+    priorRevisions.length ?
+      `/teilzaehlung_rev?_rev=in.(${priorRevisions.join(',')})&select=id,teilzaehlung_id,zaehlung_id,teilkultur_id,anzahl_pflanzen,anzahl_auspflanzbereit,anzahl_mutterpflanzen,andere_menge,auspflanzbereit_beschreibung,bemerkungen,prognose_von_tz,changed,changed_by,_rev,_parent_rev,_revisions,_depth,_deleted`
     : null
   const { error, data, fetching } = useApiQuery(revPath)
   if (error) checkForOnlineError({ error })

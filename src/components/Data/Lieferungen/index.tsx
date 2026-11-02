@@ -77,15 +77,13 @@ export const Lieferungen = ({ filter: showFilter = false }) => {
       db?.get<import('../../../dbModel.ts').Lieferung>('lieferung')
     if (!collection) return
     const lieferungDelQuery =
-      lieferungFilter._deleted === false
-        ? Q.where('_deleted', false)
-        : lieferungFilter._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+      lieferungFilter._deleted === false ? Q.where('_deleted', false)
+      : lieferungFilter._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     const countObservable = collection
       .query(lieferungDelQuery, ...hierarchyQuery)
       .observeCount()
@@ -192,19 +190,22 @@ export const Lieferungen = ({ filter: showFilter = false }) => {
         className={artStyles.container}
         style={{ backgroundColor: showFilter ? 'var(--filter-bg)' : 'unset' }}
       >
-        {showFilter ? (
+        {showFilter ?
           <FilterTitle
             title="Lieferung"
             table="lieferung"
             totalCount={totalCount}
             filteredCount={filteredCount}
           />
-        ) : (
-          <div className={artStyles.titleContainer}>
+        : <div className={artStyles.titleContainer}>
             <div className={artStyles.title}>Lieferungen</div>
             <div className={artStyles.titleSymbols}>
               {!breadcrumbsEnabled && (
-                <IconButton title={upTitle} onClick={onClickUp} size="large">
+                <IconButton
+                  title={upTitle}
+                  onClick={onClickUp}
+                  size="large"
+                >
                   <UpSvg />
                 </IconButton>
               )}
@@ -222,7 +223,7 @@ export const Lieferungen = ({ filter: showFilter = false }) => {
               />
             </div>
           </div>
-        )}
+        }
         <div className={artStyles.fieldsContainer}>
           <List
             rowComponent={Row}

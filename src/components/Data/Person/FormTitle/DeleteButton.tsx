@@ -48,9 +48,7 @@ export const PersonDeleteButton = ({
         aria-haspopup="true"
         aria-label="Person löschen"
         title="Person löschen"
-        onClick={
-                  onClickDelete as unknown as import('react').MouseEventHandler
-                }
+        onClick={onClickDelete as unknown as import('react').MouseEventHandler}
         size="large"
       >
         <FaMinus />

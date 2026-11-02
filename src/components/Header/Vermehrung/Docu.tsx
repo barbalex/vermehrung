@@ -13,7 +13,10 @@ export const HeaderDocu = ({ asMenu }: { asMenu?: boolean }) => {
 
   if (asMenu) {
     return (
-      <MenuItem component={Link} to="/Dokumentation/">
+      <MenuItem
+        component={Link}
+        to="/Dokumentation/"
+      >
         Dokumentation
       </MenuItem>
     )

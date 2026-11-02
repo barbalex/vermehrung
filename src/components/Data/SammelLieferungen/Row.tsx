@@ -12,7 +12,7 @@ import styles from '../Arten/Row.module.css'
 export const SammelLieferungRow = ({
   style,
   index,
-  rows
+  rows,
 }: {
   style?: Record<string, unknown>
   index?: number

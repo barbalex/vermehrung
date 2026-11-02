@@ -46,10 +46,12 @@ const countQueryFor = ({
         ...tableFilter({ table: 'sammlung' }),
       )
     case 'art:Kulturen':
-      return (ownerRow as Art).kulturs.extend(...tableFilter({ table: 'kultur' }))
+      return (ownerRow as Art).kulturs.extend(
+        ...tableFilter({ table: 'kultur' }),
+      )
     case 'herkunft:Sammlungen':
-      return artId
-        ? (ownerRow as Herkunft).sammlungs.extend(
+      return artId ?
+          (ownerRow as Herkunft).sammlungs.extend(
             ...tableFilter({ table: 'sammlung' }),
             Q.experimentalJoinTables(['art']),
             Q.on('art', 'id', artId),
@@ -61,7 +63,9 @@ const countQueryFor = ({
       return (
         ownerRow as unknown as {
           collections: {
-            get<T extends Model>(tableName: 'kultur'): {
+            get<T extends Model>(
+              tableName: 'kultur',
+            ): {
               query: (...args: unknown[]) => Query<T>
             }
           }
@@ -79,8 +83,8 @@ const countQueryFor = ({
       // a sammlung has at most one herkunft
       return (ownerRow as Sammlung).herkunft.id ? 1 : 0
     case 'sammlung:Aus-Lieferungen':
-      return artId
-        ? (ownerRow as Sammlung).lieferungs.extend(
+      return artId ?
+          (ownerRow as Sammlung).lieferungs.extend(
             ...tableFilter({ table: 'lieferung' }),
             Q.experimentalJoinTables(['art']),
             Q.on('art', 'id', artId),
@@ -164,9 +168,7 @@ export const useChildCount = ({
             activeNodeArray,
           }) as Query<Model> | number | undefined
           if (typeof countQuery === 'number') return of(countQuery)
-          return (
-            countQuery?.observeCount() ?? of<number | undefined>(undefined)
-          )
+          return countQuery?.observeCount() ?? of<number | undefined>(undefined)
         }),
       )
       .subscribe((count) => setCount(count))

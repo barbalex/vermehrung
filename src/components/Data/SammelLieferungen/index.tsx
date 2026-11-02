@@ -40,15 +40,13 @@ export const SammelLieferungen = ({ filter: showFilter = false }) => {
       db?.get<import('../../../dbModel.ts').SammelLieferung>('sammel_lieferung')
     if (!collection) return
     const sammelLieferungDelQuery =
-      sammelLieferungFilter._deleted === false
-        ? Q.where('_deleted', false)
-        : sammelLieferungFilter._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+      sammelLieferungFilter._deleted === false ? Q.where('_deleted', false)
+      : sammelLieferungFilter._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     const countObservable = collection
       .query(sammelLieferungDelQuery)
       .observeCount()
@@ -96,19 +94,22 @@ export const SammelLieferungen = ({ filter: showFilter = false }) => {
         className={artStyles.container}
         style={{ backgroundColor: showFilter ? 'var(--filter-bg)' : 'unset' }}
       >
-        {showFilter ? (
+        {showFilter ?
           <FilterTitle
             title="Sammel-Lieferung"
             table="sammel_lieferung"
             totalCount={totalCount}
             filteredCount={filteredCount}
           />
-        ) : (
-          <div className={artStyles.titleContainer}>
+        : <div className={artStyles.titleContainer}>
             <div className={artStyles.title}>Sammel-Lieferungen</div>
             <div className={artStyles.titleSymbols}>
               {!breadcrumbsEnabled && (
-                <IconButton title={upTitle} onClick={onClickUp} size="large">
+                <IconButton
+                  title={upTitle}
+                  onClick={onClickUp}
+                  size="large"
+                >
                   <UpSvg />
                 </IconButton>
               )}
@@ -128,7 +129,7 @@ export const SammelLieferungen = ({ filter: showFilter = false }) => {
               />
             </div>
           </div>
-        )}
+        }
         <div className={artStyles.fieldsContainer}>
           <List
             rowComponent={Row}

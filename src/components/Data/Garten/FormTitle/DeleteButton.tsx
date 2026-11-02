@@ -48,9 +48,7 @@ export const GartenDeleteButton = ({
         aria-haspopup="true"
         aria-label="Garten löschen"
         title="Garten löschen"
-        onClick={
-                  onClickButton as unknown as import('react').MouseEventHandler
-                }
+        onClick={onClickButton as unknown as import('react').MouseEventHandler}
         disabled={!!row?._deleted}
         size="large"
       >

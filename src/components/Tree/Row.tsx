@@ -93,9 +93,9 @@ export const TreeRow = ({
   useEffect(() => {
     if (!node) return
     const personObservable =
-      node?.nodeType === 'table' && node.table === 'person' && node.url
-        ? db?.get('person').findAndObserve(node.url.at(-1) ?? '')
-        : $of<import('../../dbModel.ts').Person | null>(null)
+      node?.nodeType === 'table' && node.table === 'person' && node.url ?
+        db?.get('person').findAndObserve(node.url.at(-1) ?? '')
+      : $of<import('../../dbModel.ts').Person | null>(null)
 
     const subscription = (
       personObservable as unknown as
@@ -280,11 +280,10 @@ export const TreeRow = ({
       style={{
         ...rowStyle,
         paddingLeft: level * 17 - 10,
-        color: nodeIsInActiveNodePath
-          ? '#D84315'
-          : inaktiv
-            ? 'rgba(0, 0, 0, 0.35)'
-            : 'inherit',
+        color:
+          nodeIsInActiveNodePath ? '#D84315'
+          : inaktiv ? 'rgba(0, 0, 0, 0.35)'
+          : 'inherit',
       }}
       onContextMenu={onContextMenuNode}
       onPointerDown={onPointerDownNode}
@@ -343,8 +342,9 @@ export const TreeRow = ({
       <span
         onClick={onClickNode}
         style={{
-          fontFamily: node?.mono
-            ? 'ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono", "Roboto Mono", "Oxygen Mono", "Ubuntu Mono", "Source Code Pro", "Fira Mono", "Droid Sans Mono", "Consolas", "Courier New", monospace'
+          fontFamily:
+            node?.mono ?
+              'ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono", "Roboto Mono", "Oxygen Mono", "Ubuntu Mono", "Source Code Pro", "Fira Mono", "Droid Sans Mono", "Consolas", "Courier New", monospace'
             : 'system-ui',
           fontSize,
           fontWeight: nodeIsInActiveNodePath ? 700 : 'inherit',
@@ -354,7 +354,10 @@ export const TreeRow = ({
         {node?.label ?? '(kein Label)'}
       </span>
       {accountId && (
-        <AccountIcon title="hat ein Konto" className={styles.accountIcon} />
+        <AccountIcon
+          title="hat ein Konto"
+          className={styles.accountIcon}
+        />
       )}
     </div>
   )

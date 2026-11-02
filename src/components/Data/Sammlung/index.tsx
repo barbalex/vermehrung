@@ -40,11 +40,9 @@ export const Sammlung = ({
   // removing useMemo causes: Maximum update depth exceeded
   const observable = useMemo(
     () =>
-      showFilter
-        ? $of({})
-        : initialDataQueried || !online
-          ? db?.get('sammlung').findAndObserve(id)
-          : $of({}),
+      showFilter ? $of({})
+      : initialDataQueried || !online ? db?.get('sammlung').findAndObserve(id)
+      : $of({}),
     [db, id, initialDataQueried, online, showFilter],
   )
   const observedRow = useObservable(
@@ -55,8 +53,7 @@ export const Sammlung = ({
       | undefined,
   )
   const row = (showFilter ? sammlungFilter : observedRow) as
-    | import('../../../dbModel.ts').Sammlung
-    | undefined
+    import('../../../dbModel.ts').Sammlung | undefined
 
   const [activeConflict, setActiveConflict] = useState<string | null>(null)
   const conflictDisposalCallback = () => setActiveConflict(null)
@@ -98,29 +95,25 @@ export const Sammlung = ({
               id={id}
               row={row}
               activeConflict={activeConflict}
-              setActiveConflict={
-                  setActiveConflict as unknown as never
-                }
+              setActiveConflict={setActiveConflict as unknown as never}
               showHistory={showHistory}
             />
             <Allotment.Pane visible={!!paneIsSplit}>
-              {activeConflict ? (
+              {activeConflict ?
                 <Conflict
                   rev={activeConflict}
                   id={id}
                   row={row}
                   conflictDisposalCallback={conflictDisposalCallback}
                   conflictSelectionCallback={conflictSelectionCallback}
-                  setActiveConflict={
-                  setActiveConflict as unknown as never
-                }
+                  setActiveConflict={setActiveConflict as unknown as never}
                 />
-              ) : showHistory ? (
+              : showHistory ?
                 <History
                   row={row}
                   historyTakeoverCallback={historyTakeoverCallback}
                 />
-              ) : null}
+              : null}
             </Allotment.Pane>
           </Allotment>
         </div>

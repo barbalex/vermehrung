@@ -28,8 +28,9 @@ export const LieferungSettingsMenu = ({
     userPersonOption: {},
   })
   useEffect(() => {
-    const userPersonOptionsObservable = user.uid
-      ? db
+    const userPersonOptionsObservable =
+      user.uid ?
+        db
           ?.get<import('../../../../../../dbModel.ts').PersonOption>(
             'person_option',
           )
@@ -42,18 +43,17 @@ export const LieferungSettingsMenu = ({
         [Record<string, unknown>[]]
       >
     ).subscribe(([userPersonOptions]) => {
-        setDataState({
-          userPersonOption: userPersonOptions?.[0],
-        })
-      },
-    )
+      setDataState({
+        userPersonOption: userPersonOptions?.[0],
+      })
+    })
 
     return () => subscription?.unsubscribe?.()
   }, [db, user.uid])
   const { userPersonOption } = dataState
 
-  const { li_show_sl_felder, li_show_sl } =
-      (userPersonOption ?? {}) as unknown as Record<string, unknown>
+  const { li_show_sl_felder, li_show_sl } = (userPersonOption ??
+    {}) as unknown as Record<string, unknown>
 
   const saveToDb = (event: {
     target: { name?: string; value: unknown }
@@ -108,9 +108,7 @@ export const LieferungSettingsMenu = ({
             <Checkbox
               color="primary"
               checked={!!li_show_sl}
-              onClick={
-                  saveToDb as unknown as import('react').MouseEventHandler
-                }
+              onClick={saveToDb as unknown as import('react').MouseEventHandler}
               name="li_show_sl"
             />
           }
@@ -125,9 +123,7 @@ export const LieferungSettingsMenu = ({
             <Checkbox
               color="primary"
               checked={!!li_show_sl_felder}
-              onClick={
-                  saveToDb as unknown as import('react').MouseEventHandler
-                }
+              onClick={saveToDb as unknown as import('react').MouseEventHandler}
               name="li_show_sl_felder"
             />
           }

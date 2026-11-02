@@ -52,12 +52,19 @@ export const LieferungFormTitle = ({
   const showToKu = toKulturenEnabled && activeNodeArray[0] === 'Sammlungen'
 
   return (
-    <div className={artStyles.container} ref={ref}>
+    <div
+      className={artStyles.container}
+      ref={ref}
+    >
       <div className={artStyles.title}>Lieferung</div>
       <div className={artStyles.symbols}>
         {!breadcrumbsEnabled && (
           <>
-            <IconButton title="Zur Liste" onClick={onClickUp} size="large">
+            <IconButton
+              title="Zur Liste"
+              onClick={onClickUp}
+              size="large"
+            >
               <UpSvg />
             </IconButton>
             {showToKu && (
@@ -73,7 +80,7 @@ export const LieferungFormTitle = ({
         )}
         <AddButton />
         <DeleteButton row={row} />
-        {(width ?? 0) < 520 ? (
+        {(width ?? 0) < 520 ?
           <Menu white={false}>
             <HistoryButton
               table="lieferung"
@@ -89,8 +96,7 @@ export const LieferungFormTitle = ({
               asMenu
             />
           </Menu>
-        ) : (
-          <>
+        : <>
             <HistoryButton
               table="lieferung"
               id={row?.id}
@@ -103,7 +109,7 @@ export const LieferungFormTitle = ({
               totalCount={totalCount}
             />
           </>
-        )}
+        }
       </div>
     </div>
   )

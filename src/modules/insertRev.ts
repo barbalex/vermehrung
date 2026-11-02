@@ -299,15 +299,15 @@ export const insertRev = async (
     await db.batch(creates)
   })
 
-  const noNavigate = config.noNavigateArg
-    ? (args?.[config.noNavigateArg] ?? false)
-    : false
+  const noNavigate =
+    config.noNavigateArg ? (args?.[config.noNavigateArg] ?? false) : false
   const shouldNavigate = (config.navigate ?? true) && !noNavigate
   if (shouldNavigate) {
     const activeNodeArray = store.get(activeNodeArrayAtom)
     setTimeout(() => {
-      let newActiveNodeArray = isId(activeNodeArray.at(-1))
-        ? // slice if last is uuid
+      let newActiveNodeArray =
+        isId(activeNodeArray.at(-1)) ?
+          // slice if last is uuid
           [...activeNodeArray.slice(0, -1), id]
         : [...activeNodeArray, id]
       // with breadcrumbs enabled, open a new dataset's form directly,

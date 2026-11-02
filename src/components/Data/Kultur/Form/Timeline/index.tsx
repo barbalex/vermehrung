@@ -39,11 +39,12 @@ export const KulturTimeline = ({
   const [allData, setAllData] = useState<Record<string, unknown>[]>([])
   useEffect(() => {
     let isActive = true
-    if (row) buildData({ row }).then((data) => {
-      if (!isActive) return
+    if (row)
+      buildData({ row }).then((data) => {
+        if (!isActive) return
 
-      setAllData(data)
-    })
+        setAllData(data)
+      })
 
     return () => {
       isActive = false
@@ -90,21 +91,25 @@ export const KulturTimeline = ({
   // need to disable animation or labels will not show on first render
   // https://github.com/recharts/recharts/issues/806
   return (
-    <section ref={ref} className={styles.container}>
-      {!allData ? null : !row || !allData.length ? (
+    <section
+      ref={ref}
+      className={styles.container}
+    >
+      {!allData ?
+        null
+      : !row || !allData.length ?
         <ErrorBoundary>
           <div className={styles.titleRow}>
             <div className={styles.title}>Zeit-Achse</div>
             <div className={styles.content}>Sorry, keine Daten verfügbar</div>
           </div>
         </ErrorBoundary>
-      ) : (
-        <ErrorBoundary>
+      : <ErrorBoundary>
           <div
             className={styles.titleRow}
             onClick={
-                  onClickToggle as unknown as import('react').MouseEventHandler
-                }
+              onClickToggle as unknown as import('react').MouseEventHandler
+            }
             title={open ? 'schliessen' : 'öffnen'}
             style={{ cursor: 'pointer' }}
           >
@@ -126,7 +131,9 @@ export const KulturTimeline = ({
                 }
                 size="large"
               >
-                {open ? <FaChevronUp /> : <FaChevronDown />}
+                {open ?
+                  <FaChevronUp />
+                : <FaChevronDown />}
               </IconButton>
             </div>
           </div>
@@ -135,20 +142,26 @@ export const KulturTimeline = ({
             transition={{ duration: 0.2 }}
           >
             {open && (
-              <ResponsiveContainer width="99%" height={450}>
+              <ResponsiveContainer
+                width="99%"
+                height={450}
+              >
                 <ComposedChart
                   data={allData}
                   margin={{ top: 15, right: 0, left: 0, bottom: 45 }}
                 >
-                  <CartesianGrid strokeDasharray="3 3" horizontal={false} />
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    horizontal={false}
+                  />
                   <XAxis
                     dataKey="datum"
                     tick={
-                    AxisTick as unknown as {
-                      value: unknown
-                      fill: string
+                      AxisTick as unknown as {
+                        value: unknown
+                        fill: string
+                      }
                     }
-                  }
                     interval={0}
                   />
                   <YAxis
@@ -162,20 +175,22 @@ export const KulturTimeline = ({
                     fontSize={12}
                   />
                   <Tooltip content={<KulturTooltip />} />
-                  {isNarrow ? (
+                  {isNarrow ?
                     <Legend
                       layout="horizontal"
                       align="center"
                       wrapperStyle={{ bottom: 0, fontSize: 12 }}
                     />
-                  ) : (
-                    <Legend
+                  : <Legend
                       layout="vertical"
                       align="right"
                       wrapperStyle={{ right: -10, top: 50, fontSize: 12 }}
                     />
-                  )}
-                  <ReferenceLine y={0} stroke="#000" />
+                  }
+                  <ReferenceLine
+                    y={0}
+                    stroke="#000"
+                  />
                   {showCategory('Lieferung Pflanzen') && (
                     <Bar
                       dataKey="Lieferung Pflanzen"
@@ -334,7 +349,7 @@ export const KulturTimeline = ({
             )}
           </motion.div>
         </ErrorBoundary>
-      )}
+      }
     </section>
   )
 }

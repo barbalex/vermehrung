@@ -1,10 +1,7 @@
 import { Database, type Model } from 'nitromelondb'
 import LokiJSAdapter from 'nitromelondb/adapters/lokijs'
 
-import {
-  addNotification,
-  removeNotificationById,
-} from '../store/index.ts'
+import { addNotification, removeNotificationById } from '../store/index.ts'
 import type { TableName } from '../store/index.ts'
 
 // One-time migration from the LokiJS IndexedDB store (the adapter used
@@ -46,7 +43,8 @@ export const migrateLokiToSqliteIfNeeded = async (target: Database) => {
 
   // another tab might be migrating right now - let it finish and boot
   // empty here (the regular sync fills this tab once it is online)
-  const lockAge = Date.now() - Number(window.localStorage.getItem(MIGRATION_LOCK_KEY))
+  const lockAge =
+    Date.now() - Number(window.localStorage.getItem(MIGRATION_LOCK_KEY))
   if (lockAge < MIGRATION_LOCK_STALE_MS) return
   window.localStorage.setItem(MIGRATION_LOCK_KEY, String(Date.now()))
 
@@ -81,25 +79,17 @@ export const migrateLokiToSqliteIfNeeded = async (target: Database) => {
     let migratedRecords = 0
     for (const table of Object.values(schema.tables)) {
       const tableName = table.name as TableName
-      const records = (await source
-        .get(tableName)
-        .query()
-        .fetch()) as Model[]
+      const records = (await source.get(tableName).query().fetch()) as Model[]
       if (!records.length) continue
       for (let i = 0; i < records.length; i += CHUNK_SIZE) {
         const operations = records
           .slice(i, i + CHUNK_SIZE)
-          .map(
-            (record) =>
-              ['create', tableName, record._raw] as const,
-          )
+          .map((record) => ['create', tableName, record._raw] as const)
         await target.adapter.batch(operations as never[])
       }
       migratedRecords += records.length
     }
-    console.log(
-      `loki -> sqlite migration complete: ${migratedRecords} records`,
-    )
+    console.log(`loki -> sqlite migration complete: ${migratedRecords} records`)
     markMigrated()
   } catch (error) {
     console.error('loki -> sqlite migration failed:', error)

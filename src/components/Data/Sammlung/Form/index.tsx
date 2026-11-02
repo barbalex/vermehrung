@@ -85,74 +85,64 @@ export const SammlungForm = ({
   }>({ personWerte: [], herkunftWerte: [], artWerte: [] })
   useEffect(() => {
     const personDelQuery =
-      personFilter._deleted === false
-        ? Q.where('_deleted', false)
-        : personFilter._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+      personFilter._deleted === false ? Q.where('_deleted', false)
+      : personFilter._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     const personAktivQuery =
-      personFilter.aktiv === false
-        ? Q.where('aktiv', false)
-        : personFilter.aktiv === true
-          ? Q.where('aktiv', true)
-          : Q.or(
-              Q.where('aktiv', false),
-              Q.where('aktiv', true),
-              Q.where('aktiv', null),
-            )
+      personFilter.aktiv === false ? Q.where('aktiv', false)
+      : personFilter.aktiv === true ? Q.where('aktiv', true)
+      : Q.or(
+          Q.where('aktiv', false),
+          Q.where('aktiv', true),
+          Q.where('aktiv', null),
+        )
     const personsObservable = db
       ?.get<import('../../../../dbModel.ts').Person>('person')
       .query(personDelQuery, personAktivQuery)
       .observeWithColumns(['vorname', 'name'])
     const herkunftDelQuery =
-      herkunftFilter._deleted === false
-        ? Q.where('_deleted', false)
-        : herkunftFilter._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+      herkunftFilter._deleted === false ? Q.where('_deleted', false)
+      : herkunftFilter._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     const herkunftsObservable = db
       ?.get<import('../../../../dbModel.ts').Herkunft>('herkunft')
       .query(herkunftDelQuery)
       .observeWithColumns(['gemeinde', 'lokalname', 'nr'])
     const artDelQuery =
-      artFilter._deleted === false
-        ? Q.where('_deleted', false)
-        : artFilter._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+      artFilter._deleted === false ? Q.where('_deleted', false)
+      : artFilter._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     const artsObservable = db
       ?.get<import('../../../../dbModel.ts').Art>('art')
       .query(artDelQuery)
       .observeWithColumns(['ae_id'])
     const sammlungDelQuery =
-      sammlungFilter._deleted === false
-        ? Q.where('_deleted', false)
-        : sammlungFilter._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+      sammlungFilter._deleted === false ? Q.where('_deleted', false)
+      : sammlungFilter._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     const sammlungsNrCountObservable =
-      showFilter || !exists(row?.nr)
-        ? $of(0)
-        : db
-            ?.get<import('../../../../dbModel.ts').Sammlung>('sammlung')
-            .query(sammlungDelQuery, Q.where('nr', row.nr))
-            .observeCount()
+      showFilter || !exists(row?.nr) ?
+        $of(0)
+      : db
+          ?.get<import('../../../../dbModel.ts').Sammlung>('sammlung')
+          .query(sammlungDelQuery, Q.where('nr', row.nr))
+          .observeCount()
     const combinedObservables = combineLatest([
       sammlungsNrCountObservable,
       personsObservable,
@@ -168,76 +158,74 @@ export const SammlungForm = ({
           import('../../../../dbModel.ts').Art[],
         ]
       >
-    ).subscribe(
-      async ([nrCount, persons, herkunfts, arts]) => {
-        if (!showFilter && nrCount > 1) {
-          setError({
-            path: 'sammlung.nr',
-            value: `Diese Nummer wird ${nrCount} mal verwendet. Sie sollte aber über alle Sammlungen eindeutig sein`,
-          })
-        }
-        let person
-        try {
-          person = await row?.person.fetch()
-        } catch {}
-        const personsIncludingChoosen = uniqBy(
-          [...persons, ...(person && !showFilter ? [person] : [])],
-          (e) => e.id,
-        )
-        const personWerte = personsIncludingChoosen
-          .sort(personSort)
-          .map((person) => ({
-            value: person.id,
-            label: personLabelFromPerson({ person }),
-            inaktiv: person.aktiv === false,
-            link: ['Personen', person.id],
-          }))
-        let herkunft
-        try {
-          herkunft = await row?.herkunft.fetch()
-        } catch {}
-        const herkunftsIncludingChoosen = uniqBy(
-          [...herkunfts, ...(herkunft && !showFilter ? [herkunft] : [])],
-          (e) => e.id,
-        )
-        const herkunftWerte = herkunftsIncludingChoosen
-          .sort(herkunftSort)
-          .map((herkunft) => ({
-            value: herkunft.id,
-            label: herkunftLabelFromHerkunft({ herkunft }),
-            link: ['Herkuenfte', herkunft.id],
-          }))
-        let art
-        try {
-          art = await row?.art.fetch()
-        } catch {}
-        const artsIncludingChoosen = uniqBy(
-          [...arts, ...(art && !showFilter ? [art] : [])],
-          (e) => e.id,
-        )
-        const artsSorted = await artsSortedFromArts(artsIncludingChoosen)
-        const artWerte = await Promise.all(
-          artsSorted.map(async (art) => {
-            let label = ''
-            try {
-              label = (await art.label.pipe(first$()).toPromise()) ?? ''
-            } catch {}
-
-            return {
-              value: art.id,
-              label,
-              link: ['Arten', art.id],
-            }
-          }),
-        )
-
-        setDataState({
-          personWerte,
-          herkunftWerte,
-          artWerte,
+    ).subscribe(async ([nrCount, persons, herkunfts, arts]) => {
+      if (!showFilter && nrCount > 1) {
+        setError({
+          path: 'sammlung.nr',
+          value: `Diese Nummer wird ${nrCount} mal verwendet. Sie sollte aber über alle Sammlungen eindeutig sein`,
         })
-      },
-    )
+      }
+      let person
+      try {
+        person = await row?.person.fetch()
+      } catch {}
+      const personsIncludingChoosen = uniqBy(
+        [...persons, ...(person && !showFilter ? [person] : [])],
+        (e) => e.id,
+      )
+      const personWerte = personsIncludingChoosen
+        .sort(personSort)
+        .map((person) => ({
+          value: person.id,
+          label: personLabelFromPerson({ person }),
+          inaktiv: person.aktiv === false,
+          link: ['Personen', person.id],
+        }))
+      let herkunft
+      try {
+        herkunft = await row?.herkunft.fetch()
+      } catch {}
+      const herkunftsIncludingChoosen = uniqBy(
+        [...herkunfts, ...(herkunft && !showFilter ? [herkunft] : [])],
+        (e) => e.id,
+      )
+      const herkunftWerte = herkunftsIncludingChoosen
+        .sort(herkunftSort)
+        .map((herkunft) => ({
+          value: herkunft.id,
+          label: herkunftLabelFromHerkunft({ herkunft }),
+          link: ['Herkuenfte', herkunft.id],
+        }))
+      let art
+      try {
+        art = await row?.art.fetch()
+      } catch {}
+      const artsIncludingChoosen = uniqBy(
+        [...arts, ...(art && !showFilter ? [art] : [])],
+        (e) => e.id,
+      )
+      const artsSorted = await artsSortedFromArts(artsIncludingChoosen)
+      const artWerte = await Promise.all(
+        artsSorted.map(async (art) => {
+          let label = ''
+          try {
+            label = (await art.label.pipe(first$()).toPromise()) ?? ''
+          } catch {}
+
+          return {
+            value: art.id,
+            label,
+            link: ['Arten', art.id],
+          }
+        }),
+      )
+
+      setDataState({
+        personWerte,
+        herkunftWerte,
+        artWerte,
+      })
+    })
 
     return () => subscription?.unsubscribe?.()
   }, [
@@ -278,7 +266,8 @@ export const SammlungForm = ({
 
     // only update if value has changed
     const previousValue = ifIsNumericAsNumber(
-      (row as unknown as Record<string, unknown>)[field as string] as string | number,
+      (row as unknown as Record<string, unknown>)[field as string] as
+        string | number,
     )
     if (value === previousValue) return
     row?.edit({ field, value })
@@ -312,7 +301,7 @@ export const SammlungForm = ({
         )}
         {showDeleted && (
           <>
-            {showFilter ? (
+            {showFilter ?
               <JesNo
                 key={`${row?.id}_deleted`}
                 label="gelöscht"
@@ -321,8 +310,7 @@ export const SammlungForm = ({
                 saveToDb={saveToDb}
                 error={errors?.sammlung?._deleted as string | undefined}
               />
-            ) : (
-              <Checkbox2States
+            : <Checkbox2States
                 key={`${row?.id}_deleted`}
                 label="gelöscht"
                 name="_deleted"
@@ -330,7 +318,7 @@ export const SammlungForm = ({
                 saveToDb={saveToDb}
                 error={errors?.sammlung?._deleted as string | undefined}
               />
-            )}
+            }
           </>
         )}
         <TextField
@@ -447,7 +435,7 @@ export const SammlungForm = ({
           />
         )}
         <div className={styles.fieldRow}>
-          {showFilter ? (
+          {showFilter ?
             <JesNo
               key={`${row?.id}geplant`}
               label="Geplant"
@@ -456,8 +444,7 @@ export const SammlungForm = ({
               saveToDb={saveToDb}
               error={errors?.sammlung?.geplant as string | undefined}
             />
-          ) : (
-            <Checkbox2States
+          : <Checkbox2States
               key={`${row?.id}geplant`}
               label="Geplant"
               name="geplant"
@@ -465,7 +452,7 @@ export const SammlungForm = ({
               saveToDb={saveToDb}
               error={errors?.sammlung?.geplant as string | undefined}
             />
-          )}
+          }
           <div>
             <IconButton
               aria-label="Anleitung öffnen"
@@ -493,7 +480,12 @@ export const SammlungForm = ({
             setActiveConflict={setActiveConflict}
           />
         )}
-        {!showFilter && <Files parentTable="sammlung" parent={row} />}
+        {!showFilter && (
+          <Files
+            parentTable="sammlung"
+            parent={row}
+          />
+        )}
       </div>
     </ErrorBoundary>
   )

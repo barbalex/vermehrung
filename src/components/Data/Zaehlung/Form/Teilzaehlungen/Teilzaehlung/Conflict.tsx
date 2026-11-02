@@ -70,8 +70,9 @@ export const TeilzaehlungConflict = ({
     newObject.id = uuidv7()
     newObject.changed = new Date().toISOString()
     newObject.changed_by = user.email
-    newObject._revisions = revRow._revisions
-      ? toPgArray([rev, ...revRow._revisions])
+    newObject._revisions =
+      revRow._revisions ?
+        toPgArray([rev, ...revRow._revisions])
       : toPgArray([rev])
 
     addQueuedQuery({
@@ -126,9 +127,8 @@ export const TeilzaehlungConflict = ({
     newObject.id = uuidv7()
     newObject.changed = new Date().toISOString()
     newObject.changed_by = user.email
-    newObject._revisions = row?._revisions
-      ? toPgArray([rev, ...row._revisions])
-      : toPgArray([rev])
+    newObject._revisions =
+      row?._revisions ? toPgArray([rev, ...row._revisions]) : toPgArray([rev])
     try {
       await store
         .get(apiClientAtom)

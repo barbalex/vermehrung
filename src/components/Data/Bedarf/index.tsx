@@ -40,13 +40,12 @@ export const Bedarf = ({
   // removing useMemo causes: Maximum update depth exceeded
   const observable = useMemo(
     () =>
-      showFilter
-        ? $of(undefined)
-        : initialDataQueried || !online
-          ? db
-              ?.get<import('../../../dbModel.ts').Bedarf>('bedarf')
-              .findAndObserve(id as string)
-          : $of(undefined),
+      showFilter ? $of(undefined)
+      : initialDataQueried || !online ?
+        db
+          ?.get<import('../../../dbModel.ts').Bedarf>('bedarf')
+          .findAndObserve(id as string)
+      : $of(undefined),
     [db, id, initialDataQueried, online, showFilter],
   )
   const observedRow = useObservable(
@@ -57,8 +56,7 @@ export const Bedarf = ({
       | undefined,
   )
   const row = (showFilter ? bedarfFilter : observedRow) as
-    | import('../../../dbModel.ts').Bedarf
-    | undefined
+    import('../../../dbModel.ts').Bedarf | undefined
 
   const [activeConflict, setActiveConflict] = useState<string | null>(null)
   // TODO: should resync
@@ -100,29 +98,25 @@ export const Bedarf = ({
               id={id}
               row={row}
               activeConflict={activeConflict}
-              setActiveConflict={
-                  setActiveConflict as unknown as never
-                }
+              setActiveConflict={setActiveConflict as unknown as never}
               showHistory={showHistory}
             />
             <Allotment.Pane visible={paneIsSplit}>
-              {activeConflict ? (
+              {activeConflict ?
                 <Conflict
                   rev={activeConflict}
                   id={id}
                   row={row}
                   conflictDisposalCallback={conflictDisposalCallback}
                   conflictSelectionCallback={conflictSelectionCallback}
-                  setActiveConflict={
-                  setActiveConflict as unknown as never
-                }
+                  setActiveConflict={setActiveConflict as unknown as never}
                 />
-              ) : showHistory ? (
+              : showHistory ?
                 <History
                   row={row}
                   historyTakeoverCallback={historyTakeoverCallback}
                 />
-              ) : null}
+              : null}
             </Allotment.Pane>
           </Allotment>
         </div>

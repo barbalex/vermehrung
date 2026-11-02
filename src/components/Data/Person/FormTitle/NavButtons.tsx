@@ -29,7 +29,11 @@ export const PersonFormTitleNavButtons = () => {
 
   return (
     <>
-      <IconButton title="Zur Liste" onClick={onClickUp} size="large">
+      <IconButton
+        title="Zur Liste"
+        onClick={onClickUp}
+        size="large"
+      >
         <UpSvg />
       </IconButton>
       <IconButton
@@ -39,7 +43,11 @@ export const PersonFormTitleNavButtons = () => {
       >
         <SaDownSvg />
       </IconButton>
-      <IconButton title="Zu den Gärten" onClick={onClickToGaerten} size="large">
+      <IconButton
+        title="Zu den Gärten"
+        onClick={onClickToGaerten}
+        size="large"
+      >
         <GaDownSvg />
       </IconButton>
       <IconButton

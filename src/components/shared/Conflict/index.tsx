@@ -50,7 +50,10 @@ export const Conflict = ({
         Widersprüchliche Version<span className={styles.revClass}>{rev}</span>
       </h4>
       <Explainer name={name} />
-      <Data dataArray={dataArray} loading={loading} />
+      <Data
+        dataArray={dataArray}
+        loading={loading}
+      />
       <div className={styles.buttonRow}>
         <Button
           className={styles.button}
@@ -60,9 +63,9 @@ export const Conflict = ({
           startIcon={<FaRegTrashAlt />}
           color="inherit"
         >
-          {diffConflict
-            ? 'grüne (= aktuelle) Version übernehmen'
-            : 'aktuelle Version übernehmen'}
+          {diffConflict ?
+            'grüne (= aktuelle) Version übernehmen'
+          : 'aktuelle Version übernehmen'}
         </Button>
         <Button
           className={styles.button}
@@ -72,18 +75,18 @@ export const Conflict = ({
           startIcon={<FaExchangeAlt />}
           color="inherit"
         >
-          {diffConflict
-            ? 'rote (= widersprüchliche) Version übernehmen'
-            : 'widersprüchliche Version übernehmen'}
+          {diffConflict ?
+            'rote (= widersprüchliche) Version übernehmen'
+          : 'widersprüchliche Version übernehmen'}
         </Button>
         <Button
           className={styles.button}
           onClick={onClickToggleDiff}
           variant="outlined"
           title={
-            diffConflict
-              ? 'Versionen nicht vergleichen'
-              : 'Versionen vergleichen'
+            diffConflict ?
+              'Versionen nicht vergleichen'
+            : 'Versionen vergleichen'
           }
           startIcon={diffConflict ? <DoubleArrowCrossed /> : <FaArrowsAltH />}
           color="inherit"

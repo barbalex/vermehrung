@@ -52,7 +52,11 @@ const buildFakeRow = (db: unknown) => {
       fn(row)
     },
     callWriter: (fn: () => unknown) => fn(),
-    edit(args: { field?: string; value?: unknown; values?: Record<string, unknown> }) {
+    edit(args: {
+      field?: string
+      value?: unknown
+      values?: Record<string, unknown>
+    }) {
       return Herkunft.prototype.edit.call(row, args)
     },
     database: {
@@ -85,10 +89,7 @@ beforeEach(() => {
 describe('Herkunft.edit + flushRow', () => {
   it('updates the row immediately without queueing a revision', async () => {
     const db = buildDb()
-    store.set(
-    dbAtom,
-    db as unknown as Database,
-  )
+    store.set(dbAtom, db as unknown as Database)
     const row = buildFakeRow(db)
     setError({ path: 'herkunft.nr', value: 'Fehler' })
 
@@ -128,10 +129,7 @@ describe('Herkunft.edit + flushRow', () => {
 
   it('flushing builds one revision from the current row state', async () => {
     const db = buildDb()
-    store.set(
-    dbAtom,
-    db as unknown as Database,
-  )
+    store.set(dbAtom, db as unknown as Database)
     const row = buildFakeRow(db)
 
     await Herkunft.prototype.edit.call(row, { field: 'nr', value: 'Nr 2' })
@@ -148,9 +146,10 @@ describe('Herkunft.edit + flushRow', () => {
     expect(query.revertTable).toBe('herkunft')
     expect(query.revertId).toBe('herk-1')
 
-    const { object, on_conflict } = JSON.parse(
-      query.variables as string,
-    ) as { object: Record<string, unknown>; on_conflict: Record<string, unknown> }
+    const { object, on_conflict } = JSON.parse(query.variables as string) as {
+      object: Record<string, unknown>
+      on_conflict: Record<string, unknown>
+    }
     expect(on_conflict.constraint).toBe('herkunft_rev_pkey')
     // the revision captures BOTH edits
     expect(object.herkunft_id).toBe('herk-1')
@@ -189,10 +188,7 @@ describe('Herkunft.edit + flushRow', () => {
 
   it('reverting with the queued info restores the pre-flush values', async () => {
     const db = buildDb()
-    store.set(
-    dbAtom,
-    db as unknown as Database,
-  )
+    store.set(dbAtom, db as unknown as Database)
     const row: Record<string, unknown> = buildFakeRow(db)
     await (
       Herkunft.prototype.edit as unknown as (
@@ -221,10 +217,7 @@ describe('Herkunft.edit + flushRow', () => {
 
   it('deleting sets _deleted locally and flushes it into the revision', async () => {
     const db = buildDb()
-    store.set(
-    dbAtom,
-    db as unknown as Database,
-  )
+    store.set(dbAtom, db as unknown as Database)
     const row: Record<string, unknown> = buildFakeRow(db)
 
     await (

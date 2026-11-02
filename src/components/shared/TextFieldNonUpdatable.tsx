@@ -39,7 +39,10 @@ export const TextFieldNonUpdatable = ({
       variant="standard"
       className={textFieldStyles.formControl}
     >
-      <InputLabel htmlFor={label} shrink={schrink}>
+      <InputLabel
+        htmlFor={label}
+        shrink={schrink}
+      >
         {label}
       </InputLabel>
       <Input

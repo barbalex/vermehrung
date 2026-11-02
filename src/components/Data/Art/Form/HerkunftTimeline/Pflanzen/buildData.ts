@@ -2,7 +2,9 @@ import { uniq, sum } from 'es-toolkit'
 import { Q } from 'nitromelondb'
 
 export const buildData = async ({
-  artId, herkunftId, db,
+  artId,
+  herkunftId,
+  db,
 }: {
   artId: string | undefined
   herkunftId: string | undefined
@@ -10,111 +12,104 @@ export const buildData = async ({
 }) => {
   let zaehlungsDone: import('../../../../../../dbModel.ts').Zaehlung[] = []
   try {
-    zaehlungsDone = (await db
-      ?.get<import('../../../../../../dbModel.ts').Zaehlung>('zaehlung')
-      .query(
-        Q.experimentalJoinTables(['kultur']),
-        Q.on('kultur', [
-          Q.where('art_id', artId ?? ''),
-          Q.where('herkunft_id', herkunftId ?? ''),
-        ]),
-        Q.where('prognose', false),
-        Q.where('datum', Q.notEq(null)),
-        Q.experimentalJoinTables(['teilzaehlung']),
-        Q.on('teilzaehlung', 'anzahl_pflanzen', Q.notEq(null)),
-        Q.where('_deleted', false),
-      )
-      .fetch()) ?? []
+    zaehlungsDone =
+      (await db
+        ?.get<import('../../../../../../dbModel.ts').Zaehlung>('zaehlung')
+        .query(
+          Q.experimentalJoinTables(['kultur']),
+          Q.on('kultur', [
+            Q.where('art_id', artId ?? ''),
+            Q.where('herkunft_id', herkunftId ?? ''),
+          ]),
+          Q.where('prognose', false),
+          Q.where('datum', Q.notEq(null)),
+          Q.experimentalJoinTables(['teilzaehlung']),
+          Q.on('teilzaehlung', 'anzahl_pflanzen', Q.notEq(null)),
+          Q.where('_deleted', false),
+        )
+        .fetch()) ?? []
   } catch {}
-  let zaehlungsPlannedAll: import('../../../../../../dbModel.ts').Zaehlung[] = []
+  let zaehlungsPlannedAll: import('../../../../../../dbModel.ts').Zaehlung[] =
+    []
   try {
-    zaehlungsPlannedAll = (await db
-      ?.get<import('../../../../../../dbModel.ts').Zaehlung>('zaehlung')
-      .query(
-        Q.experimentalJoinTables(['kultur']),
-        Q.where('prognose', true),
-        Q.where('datum', Q.notEq(null)),
-        Q.on('kultur', [
-          Q.where('art_id', artId ?? ''),
-          Q.where('herkunft_id', herkunftId ?? ''),
-        ]),
-        Q.experimentalJoinTables(['teilzaehlung']),
-        Q.on('teilzaehlung', 'anzahl_pflanzen', Q.notEq(null)),
-        Q.where('_deleted', false),
-      )
-      .fetch()) ?? []
+    zaehlungsPlannedAll =
+      (await db
+        ?.get<import('../../../../../../dbModel.ts').Zaehlung>('zaehlung')
+        .query(
+          Q.experimentalJoinTables(['kultur']),
+          Q.where('prognose', true),
+          Q.where('datum', Q.notEq(null)),
+          Q.on('kultur', [
+            Q.where('art_id', artId ?? ''),
+            Q.where('herkunft_id', herkunftId ?? ''),
+          ]),
+          Q.experimentalJoinTables(['teilzaehlung']),
+          Q.on('teilzaehlung', 'anzahl_pflanzen', Q.notEq(null)),
+          Q.where('_deleted', false),
+        )
+        .fetch()) ?? []
   } catch {}
-  const zaehlungsPlannedIgnored = zaehlungsPlannedAll.filter(
-    (zg) =>
-      // check if more recent zaehlungsDone exists
-      zaehlungsDone.some(
-        (z) =>
-          (z.datum ?? '') >= (zg.datum ?? ''),
-      ),
+  const zaehlungsPlannedIgnored = zaehlungsPlannedAll.filter((zg) =>
+    // check if more recent zaehlungsDone exists
+    zaehlungsDone.some((z) => (z.datum ?? '') >= (zg.datum ?? '')),
   )
   const zaehlungsPlanned = zaehlungsPlannedAll.filter(
-    (lg) =>
-      !zaehlungsPlannedIgnored
-        .map((l) => l.id)
-        .includes(lg.id),
+    (lg) => !zaehlungsPlannedIgnored.map((l) => l.id).includes(lg.id),
   )
 
   let sammlungsDone: import('../../../../../../dbModel.ts').Sammlung[] = []
   try {
-    sammlungsDone = (await db
-      ?.get<import('../../../../../../dbModel.ts').Sammlung>('sammlung')
-      .query(
-        Q.where('art_id', artId ?? ''),
-        Q.where('herkunft_id', herkunftId ?? ''),
-        Q.where('geplant', false),
-        Q.where('datum', Q.notEq(null)),
-        Q.where('anzahl_pflanzen', Q.notEq(null)),
-        Q.where('_deleted', false),
-      )
-      .fetch()) ?? []
+    sammlungsDone =
+      (await db
+        ?.get<import('../../../../../../dbModel.ts').Sammlung>('sammlung')
+        .query(
+          Q.where('art_id', artId ?? ''),
+          Q.where('herkunft_id', herkunftId ?? ''),
+          Q.where('geplant', false),
+          Q.where('datum', Q.notEq(null)),
+          Q.where('anzahl_pflanzen', Q.notEq(null)),
+          Q.where('_deleted', false),
+        )
+        .fetch()) ?? []
   } catch {}
-  let sammlungsPlannedAll: import('../../../../../../dbModel.ts').Sammlung[] = []
+  let sammlungsPlannedAll: import('../../../../../../dbModel.ts').Sammlung[] =
+    []
   try {
-    sammlungsPlannedAll = (await db
-      ?.get<import('../../../../../../dbModel.ts').Sammlung>('sammlung')
-      .query(
-        Q.where('art_id', artId ?? ''),
-        Q.where('herkunft_id', herkunftId ?? ''),
-        Q.where('geplant', true),
-        Q.where('datum', Q.notEq(null)),
-        Q.where('anzahl_pflanzen', Q.notEq(null)),
-        Q.where('_deleted', false),
-      )
-      .fetch()) ?? []
+    sammlungsPlannedAll =
+      (await db
+        ?.get<import('../../../../../../dbModel.ts').Sammlung>('sammlung')
+        .query(
+          Q.where('art_id', artId ?? ''),
+          Q.where('herkunft_id', herkunftId ?? ''),
+          Q.where('geplant', true),
+          Q.where('datum', Q.notEq(null)),
+          Q.where('anzahl_pflanzen', Q.notEq(null)),
+          Q.where('_deleted', false),
+        )
+        .fetch()) ?? []
   } catch {}
-  const sammlungsPlannedIgnored = sammlungsPlannedAll.filter(
-    (zg) =>
-      // check if more recent zaehlungsDone exists
-      sammlungsDone.some(
-        (z) =>
-          (z.datum ?? '') >= (zg.datum ?? ''),
-      ),
+  const sammlungsPlannedIgnored = sammlungsPlannedAll.filter((zg) =>
+    // check if more recent zaehlungsDone exists
+    sammlungsDone.some((z) => (z.datum ?? '') >= (zg.datum ?? '')),
   )
   const sammlungsPlanned = sammlungsPlannedAll.filter(
-    (lg) =>
-      !sammlungsPlannedIgnored
-        .map((l) => l.id)
-        .includes(lg.id),
+    (lg) => !sammlungsPlannedIgnored.map((l) => l.id).includes(lg.id),
   )
 
   let allLieferungsDone: import('../../../../../../dbModel.ts').Lieferung[] = []
   try {
-    allLieferungsDone = (await db
-      ?.get<import('../../../../../../dbModel.ts').Lieferung>('lieferung')
-      .query(
-        Q.where('art_id', artId ?? ''),
-        Q.where('nach_ausgepflanzt', true),
-        Q.where('geplant', false),
-        Q.where('datum', Q.notEq(null)),
-        Q.where('anzahl_pflanzen', Q.notEq(null)),
-        Q.where('_deleted', false),
-      )
-      .fetch()) ?? []
+    allLieferungsDone =
+      (await db
+        ?.get<import('../../../../../../dbModel.ts').Lieferung>('lieferung')
+        .query(
+          Q.where('art_id', artId ?? ''),
+          Q.where('nach_ausgepflanzt', true),
+          Q.where('geplant', false),
+          Q.where('datum', Q.notEq(null)),
+          Q.where('anzahl_pflanzen', Q.notEq(null)),
+          Q.where('_deleted', false),
+        )
+        .fetch()) ?? []
   } catch {}
   // can't use Q.on here because there are two associations to kultur
   const allLieferungsDonePromises = await Promise.all(
@@ -126,8 +121,9 @@ export const buildData = async ({
         } catch {}
 
         return (
-          vonKultur as unknown as { herkunft_id?: string | null } | undefined
-        )?.herkunft_id === herkunftId
+          (vonKultur as unknown as { herkunft_id?: string | null } | undefined)
+            ?.herkunft_id === herkunftId
+        )
       },
     ),
   )
@@ -135,19 +131,21 @@ export const buildData = async ({
     (_, i) => allLieferungsDonePromises[i],
   )
 
-  let allLieferungsPlanned: import('../../../../../../dbModel.ts').Lieferung[] = []
+  let allLieferungsPlanned: import('../../../../../../dbModel.ts').Lieferung[] =
+    []
   try {
-    allLieferungsPlanned = (await db
-      ?.get<import('../../../../../../dbModel.ts').Lieferung>('lieferung')
-      .query(
-        Q.where('art_id', artId ?? ''),
-        Q.where('nach_ausgepflanzt', true),
-        Q.where('geplant', true),
-        Q.where('datum', Q.notEq(null)),
-        Q.where('anzahl_pflanzen', Q.notEq(null)),
-        Q.where('_deleted', false),
-      )
-      .fetch()) ?? []
+    allLieferungsPlanned =
+      (await db
+        ?.get<import('../../../../../../dbModel.ts').Lieferung>('lieferung')
+        .query(
+          Q.where('art_id', artId ?? ''),
+          Q.where('nach_ausgepflanzt', true),
+          Q.where('geplant', true),
+          Q.where('datum', Q.notEq(null)),
+          Q.where('anzahl_pflanzen', Q.notEq(null)),
+          Q.where('_deleted', false),
+        )
+        .fetch()) ?? []
   } catch {}
   // can't use Q.on here because there are two associations to kultur
   const allLieferungsPlannedPromises = await Promise.all(
@@ -159,8 +157,9 @@ export const buildData = async ({
         } catch {}
 
         return (
-          vonKultur as unknown as { herkunft_id?: string | null } | undefined
-        )?.herkunft_id === herkunftId
+          (vonKultur as unknown as { herkunft_id?: string | null } | undefined)
+            ?.herkunft_id === herkunftId
+        )
       },
     ),
   )
@@ -171,15 +170,11 @@ export const buildData = async ({
     (zg) =>
       // check if more recent zaehlungsDone exists
       lieferungsDoneOfThisHerkunft.some(
-        (z) =>
-          (z.datum ?? '') >= (zg.datum ?? ''),
+        (z) => (z.datum ?? '') >= (zg.datum ?? ''),
       ),
   )
   const lieferungsPlanned = lieferungsPlannedOfThisHerkunft.filter(
-    (lg) =>
-      !lieferungsPlannedIgnored
-        .map((l) => l.id)
-        .includes(lg.id),
+    (lg) => !lieferungsPlannedIgnored.map((l) => l.id).includes(lg.id),
   )
 
   // 1. get list of all dates when something was counted
@@ -198,15 +193,16 @@ export const buildData = async ({
   //    at every date the last count is used
   let kultursOfArt: import('../../../../../../dbModel.ts').Kultur[] = []
   try {
-    kultursOfArt = (await db
-      ?.get<import('../../../../../../dbModel.ts').Kultur>('kultur')
-      .query(
-        Q.where('_deleted', false),
-        Q.where('aktiv', true),
-        Q.where('herkunft_id', herkunftId ?? ''),
-        Q.where('art_id', artId ?? ''),
-      )
-      .fetch()) ?? []
+    kultursOfArt =
+      (await db
+        ?.get<import('../../../../../../dbModel.ts').Kultur>('kultur')
+        .query(
+          Q.where('_deleted', false),
+          Q.where('aktiv', true),
+          Q.where('herkunft_id', herkunftId ?? ''),
+          Q.where('art_id', artId ?? ''),
+        )
+        .fetch()) ?? []
   } catch {}
   // 3. for every date get:
   //    - sum of last zaehlung
@@ -215,48 +211,24 @@ export const buildData = async ({
     dates.map(async (date) => {
       const sammlungNow = sum(
         sammlungsDone
-          .filter(
-            (s) =>
-              s.datum === date,
-          )
-          .map(
-            (s) =>
-              s.anzahl_pflanzen ?? 0,
-          ),
+          .filter((s) => s.datum === date)
+          .map((s) => s.anzahl_pflanzen ?? 0),
       )
       const sammlungPlannedNow = sum(
         sammlungsPlanned
-          .filter(
-            (s) =>
-              s.datum === date,
-          )
-          .map(
-            (s) =>
-              s.anzahl_pflanzen ?? 0,
-          ),
+          .filter((s) => s.datum === date)
+          .map((s) => s.anzahl_pflanzen ?? 0),
       )
 
       const lieferungNow = -sum(
         lieferungsDoneOfThisHerkunft
-          .filter(
-            (s) =>
-              s.datum === date,
-          )
-          .map(
-            (s) =>
-              s.anzahl_pflanzen ?? 0,
-          ),
+          .filter((s) => s.datum === date)
+          .map((s) => s.anzahl_pflanzen ?? 0),
       )
       const lieferungPlannedNow = -sum(
         lieferungsPlanned
-          .filter(
-            (s) =>
-              s.datum === date,
-          )
-          .map(
-            (s) =>
-              s.anzahl_pflanzen ?? 0,
-          ),
+          .filter((s) => s.datum === date)
+          .map((s) => s.anzahl_pflanzen ?? 0),
       )
 
       const lastZaehlungsByKultur = await Promise.all(
@@ -273,9 +245,9 @@ export const buildData = async ({
               )
               .fetch()
             const lastZaehlungDatum = Math.max(
-              ...zaehlungs
+              ...(zaehlungs
                 .map((z) => (z.datum ?? '') as string)
-                .filter((d) => d <= (date ?? '')) as unknown as number[],
+                .filter((d) => d <= (date ?? '')) as unknown as number[]),
             )
             const lastZaehlungsOfKultur = zaehlungs.filter(
               (z) => z.datum === (lastZaehlungDatum as unknown as string),
@@ -283,7 +255,8 @@ export const buildData = async ({
             const lastTzAnzahls = await Promise.all(
               lastZaehlungsOfKultur.map(
                 async (z: import('../../../../../../dbModel.ts').Zaehlung) => {
-                  let tzs: import('../../../../../../dbModel.ts').Teilzaehlung[] = []
+                  let tzs: import('../../../../../../dbModel.ts').Teilzaehlung[] =
+                    []
                   try {
                     tzs = await z.teilzaehlungs?.fetch()
                   } catch {}
@@ -327,46 +300,54 @@ export const buildData = async ({
       const sammlungsSinceLastZaehlung = [
         ...sammlungsDone,
         ...sammlungsPlanned,
-      ].filter((l) => (l.datum ?? '') > lastZaehlungDatum && (l.datum ?? '') <= date)
+      ].filter(
+        (l) => (l.datum ?? '') > lastZaehlungDatum && (l.datum ?? '') <= date,
+      )
       const sammlungsSince = {
         anzahl_pflanzen: sum(
           sammlungsSinceLastZaehlung.map((s) => s.anzahl_pflanzen ?? 0),
         ),
         geplant: !!sammlungsPlanned.filter(
           (l) =>
-            (l?.datum ?? '') > lastZaehlungDatum && (l?.datum ?? '') <= (date ?? ''),
+            (l?.datum ?? '') > lastZaehlungDatum &&
+            (l?.datum ?? '') <= (date ?? ''),
         ).length,
       }
 
       const lieferungsSinceLastZaehlung = [
         ...lieferungsDoneOfThisHerkunft,
         ...lieferungsPlanned,
-      ].filter((l) => (l.datum ?? '') > lastZaehlungDatum && (l.datum ?? '') <= date)
+      ].filter(
+        (l) => (l.datum ?? '') > lastZaehlungDatum && (l.datum ?? '') <= date,
+      )
       const lieferungsSince = {
         anzahl_pflanzen: sum(
           lieferungsSinceLastZaehlung.map((s) => s.anzahl_pflanzen ?? 0),
         ),
         geplant: !!lieferungsPlanned.filter(
           (l) =>
-            (l?.datum ?? '') > lastZaehlungDatum && (l?.datum ?? '') <= (date ?? ''),
+            (l?.datum ?? '') > lastZaehlungDatum &&
+            (l?.datum ?? '') <= (date ?? ''),
         ).length,
       }
 
       const zaehlungsCountNow = [...zaehlungsDone, ...zaehlungsPlanned].filter(
         (s) => s.datum === date,
       ).length
-      const zaehlungsTitle = zaehlungsCountNow
-        ? zaehlungsCountNow === 1
-          ? `${zaehlungsCountNow} Zählung`
+      const zaehlungsTitle =
+        zaehlungsCountNow ?
+          zaehlungsCountNow === 1 ?
+            `${zaehlungsCountNow} Zählung`
           : `${zaehlungsCountNow} Zählungen`
         : undefined
 
       const sCount = [...sammlungsDone, ...sammlungsPlanned].filter(
         (s) => s.datum === date,
       ).length
-      const sammlungsTitle = sCount
-        ? sCount === 1
-          ? `${sCount} Sammlung`
+      const sammlungsTitle =
+        sCount ?
+          sCount === 1 ?
+            `${sCount} Sammlung`
           : `${sCount} Sammlungen`
         : undefined
 
@@ -374,9 +355,10 @@ export const buildData = async ({
         ...lieferungsDoneOfThisHerkunft,
         ...lieferungsPlanned,
       ].filter((s) => s.datum === date).length
-      const lieferungsTitle = lfCount
-        ? lfCount === 1
-          ? `${lfCount} Auspflanzung`
+      const lieferungsTitle =
+        lfCount ?
+          lfCount === 1 ?
+            `${lfCount} Auspflanzung`
           : `${lfCount} Auspflanzungen`
         : undefined
 
@@ -387,21 +369,25 @@ export const buildData = async ({
           sammlungsSince.anzahl_pflanzen -
           lieferungsSince.anzahl_pflanzen,
         Zählung:
-          lastZaehlungs.prognose ||
-          sammlungsSince.geplant ||
-          lieferungsSince.geplant
-            ? undefined
-            : lastZaehlungs.anzahl_pflanzen +
-              sammlungsSince.anzahl_pflanzen -
-              lieferungsSince.anzahl_pflanzen,
+          (
+            lastZaehlungs.prognose ||
+            sammlungsSince.geplant ||
+            lieferungsSince.geplant
+          ) ?
+            undefined
+          : lastZaehlungs.anzahl_pflanzen +
+            sammlungsSince.anzahl_pflanzen -
+            lieferungsSince.anzahl_pflanzen,
         Bedarf:
-          lastZaehlungs.prognose ||
-          sammlungsSince.geplant ||
-          lieferungsSince.geplant
-            ? lastZaehlungs.anzahl_pflanzen +
-              sammlungsSince.anzahl_pflanzen -
-              lieferungsSince.anzahl_pflanzen
-            : undefined,
+          (
+            lastZaehlungs.prognose ||
+            sammlungsSince.geplant ||
+            lieferungsSince.geplant
+          ) ?
+            lastZaehlungs.anzahl_pflanzen +
+            sammlungsSince.anzahl_pflanzen -
+            lieferungsSince.anzahl_pflanzen
+          : undefined,
         Sammlung: sammlungNow || undefined,
         'Sammlung geplant': sammlungPlannedNow || undefined,
         Auspflanzung: lieferungNow || undefined,

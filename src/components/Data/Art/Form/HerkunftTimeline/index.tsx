@@ -49,15 +49,13 @@ export const HerkunftTimeline = ({
           import('../../../../../dbModel.ts').Herkunft[] | undefined,
         ]
       >
-    ).subscribe(
-      ([sammlungs, herkunfts]) => {
-        const herkunftIds = uniq((sammlungs ?? []).map((s) => s.herkunft_id))
-        const herkunftsSorted = (herkunfts ?? [])
-          .filter((h) => herkunftIds.includes(h.id))
-          .sort(herkunftSort)
-        setHerkunfts(herkunftsSorted)
-      },
-    )
+    ).subscribe(([sammlungs, herkunfts]) => {
+      const herkunftIds = uniq((sammlungs ?? []).map((s) => s.herkunft_id))
+      const herkunftsSorted = (herkunfts ?? [])
+        .filter((h) => herkunftIds.includes(h.id))
+        .sort(herkunftSort)
+      setHerkunfts(herkunftsSorted)
+    })
 
     return () => subscription?.unsubscribe?.()
   }, [artId, db, herkunftFilter._deleted])
@@ -89,9 +87,7 @@ export const HerkunftTimeline = ({
   return (
     <ErrorBoundary>
       <section
-        onClick={
-                  onClickToggle as unknown as import('react').MouseEventHandler
-                }
+        onClick={onClickToggle as unknown as import('react').MouseEventHandler}
         title={open ? 'schliessen' : 'öffnen'}
         className={styles.titleRow}
       >
@@ -103,18 +99,27 @@ export const HerkunftTimeline = ({
             aria-label={open ? 'schliessen' : 'öffnen'}
             title={open ? 'schliessen' : 'öffnen'}
             onClick={
-                  onClickToggle as unknown as import('react').MouseEventHandler
-                }
+              onClickToggle as unknown as import('react').MouseEventHandler
+            }
             size="large"
           >
-            {open ? <FaChevronUp /> : <FaChevronDown />}
+            {open ?
+              <FaChevronUp />
+            : <FaChevronDown />}
           </IconButton>
         </div>
       </section>
-      <motion.div animate={anim} transition={{ duration: 0.2 }}>
+      <motion.div
+        animate={anim}
+        transition={{ duration: 0.2 }}
+      >
         {open &&
           herkunfts.map((herkunft) => (
-            <Pflanzen key={herkunft.id} artId={artId} herkunft={herkunft} />
+            <Pflanzen
+              key={herkunft.id}
+              artId={artId}
+              herkunft={herkunft}
+            />
           ))}
       </motion.div>
     </ErrorBoundary>

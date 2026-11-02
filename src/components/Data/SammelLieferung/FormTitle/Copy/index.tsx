@@ -61,7 +61,8 @@ export const SammelLieferungCopyMenu = ({
     Object.entries(sammelLieferung?._raw ?? {})
       .filter(
         // only accept lieferung's fields
-        ([key]) => sammelLieferungFields.filter((f) => f !== 'id').includes(key),
+        ([key]) =>
+          sammelLieferungFields.filter((f) => f !== 'id').includes(key),
       )
       // only update with existing values
       .filter(([, val]) => exists(val) && val !== (false as unknown)).length > 0
@@ -71,7 +72,8 @@ export const SammelLieferungCopyMenu = ({
     try {
       await updateSammelLieferung({
         lieferung: lieferung as import('../../../../../dbModel.ts').Lieferung,
-        sammelLieferung: sammelLieferung as import('../../../../../dbModel.ts').SammelLieferung,
+        sammelLieferung:
+          sammelLieferung as import('../../../../../dbModel.ts').SammelLieferung,
       })
     } catch {
       return
@@ -85,7 +87,8 @@ export const SammelLieferungCopyMenu = ({
   const onClickAllLieferung = () => {
     setAnchorEl(null)
     updateAllSammelLieferungen({
-      sammelLieferung: sammelLieferung as import('../../../../../dbModel.ts').SammelLieferung,
+      sammelLieferung:
+        sammelLieferung as import('../../../../../dbModel.ts').SammelLieferung,
     })
   }
 
@@ -96,9 +99,7 @@ export const SammelLieferungCopyMenu = ({
         aria-owns={anchorEl ? 'long-menu' : undefined}
         aria-haspopup="true"
         title="Daten kopieren"
-        onClick={
-                  onClickConfig as unknown as import('react').MouseEventHandler
-                }
+        onClick={onClickConfig as unknown as import('react').MouseEventHandler}
         disabled={!containsData}
         size="large"
       >

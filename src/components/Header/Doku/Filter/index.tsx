@@ -37,7 +37,7 @@ export const DokuFilter = () => {
         autoCorrect="off"
         autoCapitalize="off"
         placeholder="Artikel filtern"
-        {...({ variant: "outlined" } as { variant?: string })}
+        {...({ variant: 'outlined' } as { variant?: string })}
         startAdornment={
           <InputAdornment position="start">
             <FaFilter className={styles.filterIcon} />
@@ -48,9 +48,9 @@ export const DokuFilter = () => {
             position="end"
             onClick={onClickEmptyFilter}
             title={
-              docFilter
-                ? 'Filter entfernen'
-                : 'Filter entfernen (keiner gesetzt)'
+              docFilter ? 'Filter entfernen' : (
+                'Filter entfernen (keiner gesetzt)'
+              )
             }
           >
             <FaTimes
@@ -63,7 +63,10 @@ export const DokuFilter = () => {
         }
         className={styles.input}
       />
-      <Numbers totalCount={docsCount} filteredCount={docsFilteredCount} />
+      <Numbers
+        totalCount={docsCount}
+        filteredCount={docsFilteredCount}
+      />
     </div>
   )
 }

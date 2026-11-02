@@ -38,10 +38,10 @@ export const GartenHistory = ({
     getNavigate()?.(`/Vermehrung/${url.join('/')}`, { replace: true })
   }
 
-  const priorRevisions =
-    ((row?._revisions ?? []) as string[]).slice(1) ?? []
-  const revPath = priorRevisions.length
-    ? `/garten_rev?_rev=in.(${priorRevisions.join(',')})&select=id,garten_id,name,strasse,plz,ort,geom_point,aktiv,bemerkungen,changed,changed_by,_rev,_parent_rev,_revisions,_depth,_deleted`
+  const priorRevisions = ((row?._revisions ?? []) as string[]).slice(1) ?? []
+  const revPath =
+    priorRevisions.length ?
+      `/garten_rev?_rev=in.(${priorRevisions.join(',')})&select=id,garten_id,name,strasse,plz,ort,geom_point,aktiv,bemerkungen,changed,changed_by,_rev,_parent_rev,_revisions,_depth,_deleted`
     : null
   const { error, data, fetching } = useApiQuery(revPath)
   if (error) checkForOnlineError({ error })
@@ -85,7 +85,10 @@ export const GartenHistory = ({
         {...sliderSettings}
       >
         {revRows.map((r) => (
-          <Row key={r._rev} revRow={r} row={row}
+          <Row
+            key={r._rev}
+            revRow={r}
+            row={row}
             historyTakeoverCallback={historyTakeoverCallback}
           />
         ))}

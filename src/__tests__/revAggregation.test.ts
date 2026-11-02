@@ -43,12 +43,9 @@ beforeEach(() => {
   store.set(userAtom, { uid: 'test-uid', email: 'test@example.com' })
   store.set(queuedQueriesAtom, [])
   store.set(queueSizeAtom, 0)
-  store.set(
-    dbAtom,
-    {
-      get: () => ({ find: () => ({ fetch: async () => undefined }) }),
-    } as unknown as import('nitromelondb').Database,
-  )
+  store.set(dbAtom, {
+    get: () => ({ find: () => ({ fetch: async () => undefined }) }),
+  } as unknown as import('nitromelondb').Database)
   storageMap.clear()
   __resetRevAggregationForTests()
 })
@@ -103,7 +100,9 @@ describe('revAggregation', () => {
     await vi.waitFor(() => {
       expect(store.get(queuedQueriesAtom)).toHaveLength(1)
     })
-    const { object } = JSON.parse(store.get(queuedQueriesAtom)[0].variables as string)
+    const { object } = JSON.parse(
+      store.get(queuedQueriesAtom)[0].variables as string,
+    )
     expect(object.nr).toBe('B')
     expect(object.gemeinde).toBe('X')
     expect(getUnflushedRevs()).toEqual({})
@@ -139,9 +138,9 @@ describe('revAggregation', () => {
     ).call(row, { field: 'nr', value: 'B' })
     // no flush happened, but the registry survived in localStorage
     expect(store.get(queuedQueriesAtom)).toHaveLength(0)
-    expect(JSON.parse(window.localStorage.getItem(STORAGE_KEY) as string)).toEqual(
-      getUnflushedRevs(),
-    )
+    expect(
+      JSON.parse(window.localStorage.getItem(STORAGE_KEY) as string),
+    ).toEqual(getUnflushedRevs())
   })
 
   it('boot heal flushes rows left dirty by a previous session', async () => {
@@ -176,7 +175,9 @@ describe('revAggregation', () => {
     await vi.waitFor(() => {
       expect(store.get(queuedQueriesAtom)).toHaveLength(1)
     })
-    const { object } = JSON.parse(store.get(queuedQueriesAtom)[0].variables as string)
+    const { object } = JSON.parse(
+      store.get(queuedQueriesAtom)[0].variables as string,
+    )
     // the revision was built from the row's current (surviving) state
     expect(object.nr).toBe('B')
     expect(getUnflushedRevs()).toEqual({})
@@ -204,22 +205,18 @@ describe('revAggregation', () => {
     }))
     const db = {
       get: () => ({
-        find: (id: string) =>
-          Promise.resolve(rows.find((r) => r.id === id)),
+        find: (id: string) => Promise.resolve(rows.find((r) => r.id === id)),
       }),
       write: async (fn: () => unknown) => fn(),
     }
-    store.set(
-      dbAtom,
-      db as unknown as import('nitromelondb').Database,
-    )
+    store.set(dbAtom, db as unknown as import('nitromelondb').Database)
     for (const row of rows) {
       await (
-      Herkunft.prototype.edit as unknown as (
-        this: unknown,
-        args: { field: string; value: unknown },
-      ) => Promise<void>
-    ).call(row, { field: 'nr', value: 'Z' })
+        Herkunft.prototype.edit as unknown as (
+          this: unknown,
+          args: { field: string; value: unknown },
+        ) => Promise<void>
+      ).call(row, { field: 'nr', value: 'Z' })
     }
     // navigating ends the editing session
     initRevAggregation()
@@ -237,14 +234,11 @@ describe('revAggregation', () => {
 
   it('a row deleted before the flush is skipped gracefully', async () => {
     registerDirtyRev('herkunft', 'gone-1', 'nr', undefined)
-    store.set(
-      dbAtom,
-      {
-        get: () => ({
-          find: () => Promise.reject(new Error('not found')),
-        }),
-      } as unknown as import('nitromelondb').Database,
-    )
+    store.set(dbAtom, {
+      get: () => ({
+        find: () => Promise.reject(new Error('not found')),
+      }),
+    } as unknown as import('nitromelondb').Database)
     await flushRow('herkunft', 'gone-1')
     expect(store.get(queuedQueriesAtom)).toHaveLength(0)
     expect(getUnflushedRevs()).toEqual({})

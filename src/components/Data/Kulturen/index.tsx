@@ -60,25 +60,21 @@ export const Kulturen = ({ filter: showFilter = false }) => {
     const collection = db?.get<import('../../../dbModel.ts').Kultur>('kultur')
     if (!collection) return
     const kulturDelQuery =
-      kulturFilter._deleted === false
-        ? Q.where('_deleted', false)
-        : kulturFilter._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+      kulturFilter._deleted === false ? Q.where('_deleted', false)
+      : kulturFilter._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     const kulturAktivQuery =
-      kulturFilter.aktiv === false
-        ? Q.where('aktiv', false)
-        : kulturFilter.aktiv === true
-          ? Q.where('aktiv', true)
-          : Q.or(
-              Q.where('aktiv', false),
-              Q.where('aktiv', true),
-              Q.where('aktiv', null),
-            )
+      kulturFilter.aktiv === false ? Q.where('aktiv', false)
+      : kulturFilter.aktiv === true ? Q.where('aktiv', true)
+      : Q.or(
+          Q.where('aktiv', false),
+          Q.where('aktiv', true),
+          Q.where('aktiv', null),
+        )
     const countObservable = collection
       .query(kulturDelQuery, kulturAktivQuery, ...hierarchyQuery)
       .observeCount()
@@ -91,16 +87,17 @@ export const Kulturen = ({ filter: showFilter = false }) => {
         'zwischenlager',
       ])
     const combinedObservables = combineLatest([countObservable, dataObservable])
-    const subscription = (combinedObservables as unknown as import('rxjs').Observable<
+    const subscription = (
+      combinedObservables as unknown as import('rxjs').Observable<
         [number, import('../../../dbModel.ts').Kultur[]]
-      >).subscribe(async ([totalCount, kulturs]) => {
-        const kultursSorted = await kultursSortedFromKulturs(kulturs)
-        setDataState({
-          kulturs: kultursSorted,
-          totalCount,
-        })
-      },
-    )
+      >
+    ).subscribe(async ([totalCount, kulturs]) => {
+      const kultursSorted = await kultursSortedFromKulturs(kulturs)
+      setDataState({
+        kulturs: kultursSorted,
+        totalCount,
+      })
+    })
 
     return () => subscription?.unsubscribe?.()
   }, [
@@ -136,19 +133,22 @@ export const Kulturen = ({ filter: showFilter = false }) => {
         className={artStyles.container}
         style={{ backgroundColor: showFilter ? 'var(--filter-bg)' : 'unset' }}
       >
-        {showFilter ? (
+        {showFilter ?
           <FilterTitle
             title="Kultur"
             table="kultur"
             totalCount={totalCount}
             filteredCount={filteredCount}
           />
-        ) : (
-          <div className={artStyles.titleContainer}>
+        : <div className={artStyles.titleContainer}>
             <div className={artStyles.title}>Kulturen</div>
             <div className={artStyles.titleSymbols}>
               {!breadcrumbsEnabled && (
-                <IconButton title={upTitle} onClick={onClickUp} size="large">
+                <IconButton
+                  title={upTitle}
+                  onClick={onClickUp}
+                  size="large"
+                >
                   <UpSvg />
                 </IconButton>
               )}
@@ -168,7 +168,7 @@ export const Kulturen = ({ filter: showFilter = false }) => {
               />
             </div>
           </div>
-        )}
+        }
         <div className={artStyles.fieldsContainer}>
           <List
             rowComponent={Row}

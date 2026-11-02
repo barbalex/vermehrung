@@ -58,31 +58,28 @@ export const GartenPersonen = ({
   }>({ gvsSorted: [], personWerte: [] })
   useEffect(() => {
     const delQuery =
-      personFilter._deleted === false
-        ? Q.where('_deleted', false)
-        : personFilter._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+      personFilter._deleted === false ? Q.where('_deleted', false)
+      : personFilter._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     const aktivQuery =
-      personFilter.aktiv === false
-        ? Q.where('aktiv', false)
-        : personFilter.aktiv === true
-          ? Q.where('aktiv', true)
-          : Q.or(
-              Q.where('aktiv', false),
-              Q.where('aktiv', true),
-              Q.where('aktiv', null),
-            )
+      personFilter.aktiv === false ? Q.where('aktiv', false)
+      : personFilter.aktiv === true ? Q.where('aktiv', true)
+      : Q.or(
+          Q.where('aktiv', false),
+          Q.where('aktiv', true),
+          Q.where('aktiv', null),
+        )
     const personsObservable = db
       ?.get<import('../../../../../dbModel.ts').Person>('person')
       .query(delQuery, aktivQuery)
       .observe()
-    const gvsObservable = garten?.gvs
-      ? garten.gvs.extend(Q.where('_deleted', false)).observe()
+    const gvsObservable =
+      garten?.gvs ?
+        garten.gvs.extend(Q.where('_deleted', false)).observe()
       : $of([] as import('../../../../../dbModel.ts').Gv[])
     const combinedObservables = combineLatest([
       gvsObservable,
@@ -95,22 +92,20 @@ export const GartenPersonen = ({
           import('../../../../../dbModel.ts').Person[] | undefined,
         ]
       >
-    ).subscribe(
-      async ([gvs, persons]) => {
-        const gvsSorted = await gvsSortByPerson(gvs)
-        const gvPersonIds = gvsSorted.map((v) => v.person_id)
-        const personWerte = (persons ?? [])
-          .filter((a) => !gvPersonIds.includes(a.id))
-          .sort(personSort)
-          .map((el) => ({
-            value: el.id,
-            label: personLabelFromPerson({ person: el }),
-            inaktiv: el.aktiv === false,
-          }))
+    ).subscribe(async ([gvs, persons]) => {
+      const gvsSorted = await gvsSortByPerson(gvs)
+      const gvPersonIds = gvsSorted.map((v) => v.person_id)
+      const personWerte = (persons ?? [])
+        .filter((a) => !gvPersonIds.includes(a.id))
+        .sort(personSort)
+        .map((el) => ({
+          value: el.id,
+          label: personLabelFromPerson({ person: el }),
+          inaktiv: el.aktiv === false,
+        }))
 
-        setDataState({ gvsSorted, personWerte })
-      },
-    )
+      setDataState({ gvsSorted, personWerte })
+    })
     return () => subscription?.unsubscribe?.()
   }, [db, personFilter, garten?.gvs])
   const { gvsSorted, personWerte } = dataState
@@ -131,9 +126,7 @@ export const GartenPersonen = ({
   return (
     <ErrorBoundary>
       <section
-        onClick={
-                  onClickToggle as unknown as import('react').MouseEventHandler
-                }
+        onClick={onClickToggle as unknown as import('react').MouseEventHandler}
         title={open ? 'schliessen' : 'öffnen'}
         className={styles.titleRow}
       >
@@ -145,11 +138,13 @@ export const GartenPersonen = ({
             aria-label={open ? 'schliessen' : 'öffnen'}
             title={open ? 'schliessen' : 'öffnen'}
             onClick={
-                  onClickToggle as unknown as import('react').MouseEventHandler
-                }
+              onClickToggle as unknown as import('react').MouseEventHandler
+            }
             size="large"
           >
-            {open ? <FaChevronUp /> : <FaChevronDown />}
+            {open ?
+              <FaChevronUp />
+            : <FaChevronDown />}
           </IconButton>
         </div>
       </section>

@@ -28,15 +28,13 @@ export const ArtFormTitle = ({
     const collection = db?.get<import('../../../../dbModel.ts').Art>('art')
     if (!collection) return
     const delQuery =
-      artFilter._deleted === false
-        ? Q.where('_deleted', false)
-        : artFilter._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+      artFilter._deleted === false ? Q.where('_deleted', false)
+      : artFilter._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     const totalCountObservable = collection.query(delQuery).observeCount()
     const filteredCountObservable = collection
       .query(...tableFilter({ table: 'art' }))

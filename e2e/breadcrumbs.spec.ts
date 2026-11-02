@@ -43,11 +43,18 @@ const idToken = () =>
     firebase: { sign_in_provider: 'password', identities: {} },
   })
 const apiToken = () =>
-  mint({ role: 'benutzer', user_id: PERSON_ID, sub: UID, exp: nowEpoch() + 3600 })
+  mint({
+    role: 'benutzer',
+    user_id: PERSON_ID,
+    sub: UID,
+    exp: nowEpoch() + 3600,
+  })
 
 const fullSync = () => ({
   synced_at: nowEpoch(),
-  ae_art: [{ id: AE_ART_ID, name: ARTNAME, _conflicts: null, _revisions: null }],
+  ae_art: [
+    { id: AE_ART_ID, name: ARTNAME, _conflicts: null, _revisions: null },
+  ],
   art: [
     {
       id: ART_ID,
@@ -166,7 +173,9 @@ test('breadcrumbs strip replaces the form header nav buttons', async ({
     if (url.pathname === '/person') {
       return route.fulfill({
         contentType: 'application/json',
-        body: JSON.stringify([{ id: PERSON_ID, user_role: { name: 'benutzer' } }]),
+        body: JSON.stringify([
+          { id: PERSON_ID, user_role: { name: 'benutzer' } },
+        ]),
       })
     }
     return route.fulfill({ status: 404, body: 'unmocked' })
@@ -205,16 +214,19 @@ test('breadcrumbs strip replaces the form header nav buttons', async ({
       if (!(trail instanceof HTMLElement) || !(strip instanceof HTMLElement)) {
         return null
       }
-      return strip.getBoundingClientRect().right - trail.getBoundingClientRect().right
+      return (
+        strip.getBoundingClientRect().right -
+        trail.getBoundingClientRect().right
+      )
     })
     expect(rightAligned).toBeLessThanOrEqual(12)
   })
 
   await test.step('list: the folder is the last crumb', async () => {
     await page.goto(`/Vermehrung/Arten/${ART_ID}/Kulturen`)
-    await expect(trail.getByRole('link', { name: ARTNAME, exact: true })).toBeVisible(
-      { timeout: 60_000 },
-    )
+    await expect(
+      trail.getByRole('link', { name: ARTNAME, exact: true }),
+    ).toBeVisible({ timeout: 60_000 })
     await expect(trail.getByRole('link', { name: 'Vermehrung' })).toBeVisible()
     await expect(trail.getByRole('link', { name: 'Arten' })).toBeVisible()
     await expect(trail.getByText('Kulturen', { exact: true })).toBeVisible()
@@ -235,9 +247,9 @@ test('breadcrumbs strip replaces the form header nav buttons', async ({
     await expect(trail.locator('a')).toHaveCount(6)
     // the zaehlung form title has no up button any more
     await expect(page.locator('button[title="Zur Liste"]')).toHaveCount(0)
-    await expect(
-      page.locator('button[title="Zur Kultur-Liste"]'),
-    ).toHaveCount(0)
+    await expect(page.locator('button[title="Zur Kultur-Liste"]')).toHaveCount(
+      0,
+    )
   })
 
   await test.step('crumbs navigate to their prefix path', async () => {

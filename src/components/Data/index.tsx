@@ -3,7 +3,11 @@ import { useAtomValue } from 'jotai'
 import { isId } from '../../utils/isId.ts'
 import { ObjectList } from './ObjectList.tsx'
 import { breadcrumbsEnabled } from '../../utils/breadcrumbsEnabled.ts'
-import { activeFormAtom, activeNodeArrayAtom, activeObjectNameAtom } from '../../store/index.ts'
+import {
+  activeFormAtom,
+  activeNodeArrayAtom,
+  activeObjectNameAtom,
+} from '../../store/index.ts'
 
 const Art = lazy(async () => ({
   default: (await import('./Art/index.tsx')).Art,
@@ -93,7 +97,12 @@ const WithObjectList = ({
 }) => {
   const objectName = useAtomValue(activeObjectNameAtom)
   if (breadcrumbsEnabled && !objectName) {
-    return <ObjectList table={table} id={id} />
+    return (
+      <ObjectList
+        table={table}
+        id={id}
+      />
+    )
   }
   return children
 }
@@ -109,7 +118,10 @@ export const Data = () => {
       return <Root />
     case 'art':
       return (
-        <WithObjectList table="art" id={id}>
+        <WithObjectList
+          table="art"
+          id={id}
+        >
           <Art id={id} />
         </WithObjectList>
       )
@@ -121,7 +133,10 @@ export const Data = () => {
       return <Bedarfe />
     case 'garten':
       return (
-        <WithObjectList table="garten" id={id}>
+        <WithObjectList
+          table="garten"
+          id={id}
+        >
           <Garten id={id} />
         </WithObjectList>
       )
@@ -129,7 +144,10 @@ export const Data = () => {
       return <Gaerten />
     case 'herkunft':
       return (
-        <WithObjectList table="herkunft" id={id}>
+        <WithObjectList
+          table="herkunft"
+          id={id}
+        >
           <Herkunft id={id} />
         </WithObjectList>
       )
@@ -137,7 +155,10 @@ export const Data = () => {
       return <Herkuenfte />
     case 'kultur':
       return (
-        <WithObjectList table="kultur" id={id}>
+        <WithObjectList
+          table="kultur"
+          id={id}
+        >
           <Kultur id={id} />
         </WithObjectList>
       )
@@ -145,7 +166,10 @@ export const Data = () => {
       return <Kulturen />
     case 'sammel_lieferung':
       return (
-        <WithObjectList table="sammel_lieferung" id={id}>
+        <WithObjectList
+          table="sammel_lieferung"
+          id={id}
+        >
           <SammelLieferung id={id} />
         </WithObjectList>
       )
@@ -157,7 +181,10 @@ export const Data = () => {
       return <Lieferungen />
     case 'person':
       return (
-        <WithObjectList table="person" id={id}>
+        <WithObjectList
+          table="person"
+          id={id}
+        >
           <Person id={id} />
         </WithObjectList>
       )
@@ -165,7 +192,10 @@ export const Data = () => {
       return <Personen />
     case 'sammlung':
       return (
-        <WithObjectList table="sammlung" id={id}>
+        <WithObjectList
+          table="sammlung"
+          id={id}
+        >
           <Sammlung id={id} />
         </WithObjectList>
       )

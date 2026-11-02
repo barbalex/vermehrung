@@ -42,25 +42,21 @@ export const Personen = ({ filter: showFilter = false }) => {
     const collection = db?.get<import('../../../dbModel.ts').Person>('person')
     if (!collection) return
     const personDelQuery =
-      personFilter._deleted === false
-        ? Q.where('_deleted', false)
-        : personFilter._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+      personFilter._deleted === false ? Q.where('_deleted', false)
+      : personFilter._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     const personAktivQuery =
-      personFilter.aktiv === false
-        ? Q.where('aktiv', false)
-        : personFilter.aktiv === true
-          ? Q.where('aktiv', true)
-          : Q.or(
-              Q.where('aktiv', false),
-              Q.where('aktiv', true),
-              Q.where('aktiv', null),
-            )
+      personFilter.aktiv === false ? Q.where('aktiv', false)
+      : personFilter.aktiv === true ? Q.where('aktiv', true)
+      : Q.or(
+          Q.where('aktiv', false),
+          Q.where('aktiv', true),
+          Q.where('aktiv', null),
+        )
     const countObservable = collection
       .query(personDelQuery, personAktivQuery)
       .observeCount()
@@ -84,15 +80,13 @@ export const Personen = ({ filter: showFilter = false }) => {
           import('../../../dbModel.ts').UserRole[],
         ]
       >
-    ).subscribe(
-      async ([totalCount, persons, [userRole]]) => {
-        setDataState({
-          persons: [...persons].sort(personSort),
-          totalCount,
-          userRole,
-        })
-      },
-    )
+    ).subscribe(async ([totalCount, persons, [userRole]]) => {
+      setDataState({
+        persons: [...persons].sort(personSort),
+        totalCount,
+        userRole,
+      })
+    })
 
     return () => subscription?.unsubscribe?.()
     // need to rerender if any of the values of personFilter changes
@@ -118,19 +112,22 @@ export const Personen = ({ filter: showFilter = false }) => {
         className={artStyles.container}
         style={{ backgroundColor: showFilter ? 'var(--filter-bg)' : 'unset' }}
       >
-        {showFilter ? (
+        {showFilter ?
           <FilterTitle
             title="Person"
             table="person"
             totalCount={totalCount}
             filteredCount={filteredCount}
           />
-        ) : (
-          <div className={artStyles.titleContainer}>
+        : <div className={artStyles.titleContainer}>
             <div className={artStyles.title}>Personen</div>
             <div className={artStyles.titleSymbols}>
               {!breadcrumbsEnabled && (
-                <IconButton title={upTitle} onClick={onClickUp} size="large">
+                <IconButton
+                  title={upTitle}
+                  onClick={onClickUp}
+                  size="large"
+                >
                   <UpSvg />
                 </IconButton>
               )}
@@ -139,8 +136,8 @@ export const Personen = ({ filter: showFilter = false }) => {
                   aria-label="neue Person"
                   title="neue Person"
                   onClick={
-                  insertPersonRev as unknown as import('react').MouseEventHandler
-                }
+                    insertPersonRev as unknown as import('react').MouseEventHandler
+                  }
                   size="large"
                 >
                   <FaPlus />
@@ -152,7 +149,7 @@ export const Personen = ({ filter: showFilter = false }) => {
               />
             </div>
           </div>
-        )}
+        }
         <div className={artStyles.fieldsContainer}>
           <List
             rowComponent={Row}

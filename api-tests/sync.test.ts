@@ -106,10 +106,9 @@ describe('sync rpc', () => {
       '_deleted',
     ]
     for (const row of withGeom.slice(0, 20)) {
-      expect(
-        Object.keys(row),
-        `herkunft ${row.id} field set`,
-      ).toEqual(expect.arrayContaining(expectedFields))
+      expect(Object.keys(row), `herkunft ${row.id} field set`).toEqual(
+        expect.arrayContaining(expectedFields),
+      )
       const geom = row.geom_point
       // GeoJSON point with the crs member the app writes and reads back
       expect(geom.type).toBe('Point')

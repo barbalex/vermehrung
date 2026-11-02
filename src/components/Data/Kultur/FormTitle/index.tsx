@@ -33,40 +33,37 @@ export const KulturFormTitleChooser = ({
   })
 
   useEffect(() => {
-    const hierarchyQuery = gartenIdInActiveNodeArray
-      ? [
+    const hierarchyQuery =
+      gartenIdInActiveNodeArray ?
+        [
           Q.experimentalJoinTables(['garten']),
           Q.on('garten', 'id', gartenIdInActiveNodeArray),
         ]
-      : artIdInActiveNodeArray
-        ? [
-            Q.experimentalJoinTables(['art']),
-            Q.on('art', 'id', artIdInActiveNodeArray),
-          ]
-        : []
+      : artIdInActiveNodeArray ?
+        [
+          Q.experimentalJoinTables(['art']),
+          Q.on('art', 'id', artIdInActiveNodeArray),
+        ]
+      : []
     const collection =
       db?.get<import('../../../../dbModel.ts').Kultur>('kultur')
     if (!collection) return
     const kulturDelQuery =
-      kulturFilter._deleted === false
-        ? Q.where('_deleted', false)
-        : kulturFilter._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+      kulturFilter._deleted === false ? Q.where('_deleted', false)
+      : kulturFilter._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     const kulturAktivQuery =
-      kulturFilter.aktiv === false
-        ? Q.where('aktiv', false)
-        : kulturFilter.aktiv === true
-          ? Q.where('aktiv', true)
-          : Q.or(
-              Q.where('aktiv', false),
-              Q.where('aktiv', true),
-              Q.where('aktiv', null),
-            )
+      kulturFilter.aktiv === false ? Q.where('aktiv', false)
+      : kulturFilter.aktiv === true ? Q.where('aktiv', true)
+      : Q.or(
+          Q.where('aktiv', false),
+          Q.where('aktiv', true),
+          Q.where('aktiv', null),
+        )
     const totalCountObservable = collection
       .query(kulturDelQuery, kulturAktivQuery, ...hierarchyQuery)
       .observeCount()

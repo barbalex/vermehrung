@@ -32,7 +32,9 @@ export const buildExceljsWorksheetsForKultur = async ({
   if (!calledFromHigherUp) {
     let kultur: import('../../../../dbModel.ts').Kultur | undefined
     try {
-      kultur = await db?.get<import('../../../../dbModel.ts').Kultur>('kultur').find(kultur_id)
+      kultur = await db
+        ?.get<import('../../../../dbModel.ts').Kultur>('kultur')
+        .find(kultur_id)
     } catch {}
     let art
     try {
@@ -90,8 +92,9 @@ export const buildExceljsWorksheetsForKultur = async ({
   const zaehlungsSorted = zaehlungs.sort(zaehlungSort)
   const zaehlungen = await Promise.all(
     zaehlungsSorted.map(async (z) => {
-      const tzs = z.teilzaehlungs
-        ? await z.teilzaehlungs.extend(Q.where('_deleted', false))?.fetch()
+      const tzs =
+        z.teilzaehlungs ?
+          await z.teilzaehlungs.extend(Q.where('_deleted', false))?.fetch()
         : []
       const tzsSorted = await teilzaehlungsSortByTk(tzs)
       const newZ = {
@@ -139,9 +142,8 @@ export const buildExceljsWorksheetsForKultur = async ({
   if (zaehlungen.length) {
     addWorksheetToExceljsWorkbook({
       workbook,
-      title: calledFromHigherUp
-        ? `Kultur_${kultur_name}_Zaehlungen`
-        : 'Zaehlungen',
+      title:
+        calledFromHigherUp ? `Kultur_${kultur_name}_Zaehlungen` : 'Zaehlungen',
       data: zaehlungen,
     })
   }
@@ -157,7 +159,8 @@ export const buildExceljsWorksheetsForKultur = async ({
   const teilzaehlungsSorted = await teilzaehlungsSortByTk(teilzaehlungs)
   const teilzaehlungData = await Promise.all(
     teilzaehlungsSorted.map(async (t) => {
-      const teilkultur = t.teilkultur_id ? await t.teilkultur.fetch() : undefined
+      const teilkultur =
+        t.teilkultur_id ? await t.teilkultur.fetch() : undefined
       const newZ = {
         id: t.id,
         zaehlung_id: t.zaehlung_id,
@@ -176,8 +179,9 @@ export const buildExceljsWorksheetsForKultur = async ({
   if (teilzaehlungData.length) {
     addWorksheetToExceljsWorkbook({
       workbook,
-      title: calledFromHigherUp
-        ? `Kultur_${kultur_name}_Teilzaehlungen`
+      title:
+        calledFromHigherUp ?
+          `Kultur_${kultur_name}_Teilzaehlungen`
         : 'Teilzaehlungen',
       data: teilzaehlungData,
     })
@@ -209,7 +213,9 @@ export const buildExceljsWorksheetsForKultur = async ({
       } catch {}
       let vonSammlung: import('../../../../dbModel.ts').Sammlung | undefined
       try {
-        vonSammlung = await db?.get<import('../../../../dbModel.ts').Sammlung>('sammlung').find(l.von_sammlung_id as string)
+        vonSammlung = await db
+          ?.get<import('../../../../dbModel.ts').Sammlung>('sammlung')
+          .find(l.von_sammlung_id as string)
       } catch {}
       let vonSammlungPerson
       try {
@@ -221,7 +227,9 @@ export const buildExceljsWorksheetsForKultur = async ({
       } catch {}
       let vonKultur: import('../../../../dbModel.ts').Kultur | undefined
       try {
-        vonKultur = await db?.get<import('../../../../dbModel.ts').Kultur>('kultur').find(l.von_kultur_id as string)
+        vonKultur = await db
+          ?.get<import('../../../../dbModel.ts').Kultur>('kultur')
+          .find(l.von_kultur_id as string)
       } catch {}
       let vonKulturGarten
       try {
@@ -233,7 +241,9 @@ export const buildExceljsWorksheetsForKultur = async ({
       } catch {}
       let nachKultur: import('../../../../dbModel.ts').Kultur | undefined
       try {
-        nachKultur = await db?.get<import('../../../../dbModel.ts').Kultur>('kultur').find(l.nach_kultur_id as string)
+        nachKultur = await db
+          ?.get<import('../../../../dbModel.ts').Kultur>('kultur')
+          .find(l.nach_kultur_id as string)
       } catch {}
       let nachKulturGarten
       try {
@@ -346,8 +356,9 @@ export const buildExceljsWorksheetsForKultur = async ({
   if (anlieferungData.length) {
     addWorksheetToExceljsWorkbook({
       workbook,
-      title: calledFromHigherUp
-        ? `Kultur_${kultur_name}_Anlieferungen`
+      title:
+        calledFromHigherUp ?
+          `Kultur_${kultur_name}_Anlieferungen`
         : 'Anlieferungen',
       data: anlieferungData,
     })
@@ -382,7 +393,9 @@ export const buildExceljsWorksheetsForKultur = async ({
       } catch {}
       let vonSammlung: import('../../../../dbModel.ts').Sammlung | undefined
       try {
-        vonSammlung = await db?.get<import('../../../../dbModel.ts').Sammlung>('sammlung').find(l.von_sammlung_id as string)
+        vonSammlung = await db
+          ?.get<import('../../../../dbModel.ts').Sammlung>('sammlung')
+          .find(l.von_sammlung_id as string)
       } catch {}
       let vonSammlungPerson
       try {
@@ -394,7 +407,9 @@ export const buildExceljsWorksheetsForKultur = async ({
       } catch {}
       let vonKultur: import('../../../../dbModel.ts').Kultur | undefined
       try {
-        vonKultur = await db?.get<import('../../../../dbModel.ts').Kultur>('kultur').find(l.von_kultur_id as string)
+        vonKultur = await db
+          ?.get<import('../../../../dbModel.ts').Kultur>('kultur')
+          .find(l.von_kultur_id as string)
       } catch {}
       let vonKulturGarten
       try {
@@ -406,7 +421,9 @@ export const buildExceljsWorksheetsForKultur = async ({
       } catch {}
       let nachKultur: import('../../../../dbModel.ts').Kultur | undefined
       try {
-        nachKultur = await db?.get<import('../../../../dbModel.ts').Kultur>('kultur').find(l.nach_kultur_id as string)
+        nachKultur = await db
+          ?.get<import('../../../../dbModel.ts').Kultur>('kultur')
+          .find(l.nach_kultur_id as string)
       } catch {}
       let nachKulturGarten
       try {
@@ -513,8 +530,9 @@ export const buildExceljsWorksheetsForKultur = async ({
   if (auslieferungen.length) {
     addWorksheetToExceljsWorkbook({
       workbook,
-      title: calledFromHigherUp
-        ? `Kultur_${kultur_name}_Auslieferungen`
+      title:
+        calledFromHigherUp ?
+          `Kultur_${kultur_name}_Auslieferungen`
         : 'Auslieferungen',
       data: auslieferungen,
     })

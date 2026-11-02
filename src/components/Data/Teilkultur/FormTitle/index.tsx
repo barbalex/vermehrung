@@ -30,8 +30,9 @@ export const TeilkulturFormTitleChooser = ({
     filteredCount: 0,
   })
   useEffect(() => {
-    const hierarchyQuery = kulturIdInActiveNodeArray
-      ? [
+    const hierarchyQuery =
+      kulturIdInActiveNodeArray ?
+        [
           Q.experimentalJoinTables(['kultur']),
           Q.on('kultur', 'id', kulturIdInActiveNodeArray),
         ]
@@ -40,15 +41,13 @@ export const TeilkulturFormTitleChooser = ({
       db?.get<import('../../../../dbModel.ts').Teilkultur>('teilkultur')
     if (!collection) return
     const teilkulturDelQuery =
-      teilkulturFilter._deleted === false
-        ? Q.where('_deleted', false)
-        : teilkulturFilter._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+      teilkulturFilter._deleted === false ? Q.where('_deleted', false)
+      : teilkulturFilter._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     const totalCountObservable = collection
       .query(teilkulturDelQuery, ...hierarchyQuery)
       .observeCount()

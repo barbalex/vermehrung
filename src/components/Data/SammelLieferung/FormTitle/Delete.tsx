@@ -48,9 +48,7 @@ export const SammelLieferungDeleteButton = ({
         aria-haspopup="true"
         aria-label="Sammel-Lieferung löschen"
         title="Sammel-Lieferung löschen"
-        onClick={
-                  onClickButton as unknown as import('react').MouseEventHandler
-                }
+        onClick={onClickButton as unknown as import('react').MouseEventHandler}
         disabled={!!row?._deleted}
         size="large"
       >

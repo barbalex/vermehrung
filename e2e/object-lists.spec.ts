@@ -47,11 +47,18 @@ const idToken = () =>
     firebase: { sign_in_provider: 'password', identities: {} },
   })
 const apiToken = () =>
-  mint({ role: 'benutzer', user_id: PERSON_ID, sub: UID, exp: nowEpoch() + 3600 })
+  mint({
+    role: 'benutzer',
+    user_id: PERSON_ID,
+    sub: UID,
+    exp: nowEpoch() + 3600,
+  })
 
 const fullSync = () => ({
   synced_at: nowEpoch(),
-  ae_art: [{ id: AE_ART_ID, name: ARTNAME, _conflicts: null, _revisions: null }],
+  ae_art: [
+    { id: AE_ART_ID, name: ARTNAME, _conflicts: null, _revisions: null },
+  ],
   art: [
     {
       id: ART_ID,
@@ -204,7 +211,9 @@ test('object urls render apf2-style object lists', async ({ page }) => {
     if (url.pathname === '/person') {
       return route.fulfill({
         contentType: 'application/json',
-        body: JSON.stringify([{ id: PERSON_ID, user_role: { name: 'benutzer' } }]),
+        body: JSON.stringify([
+          { id: PERSON_ID, user_role: { name: 'benutzer' } },
+        ]),
       })
     }
     return route.fulfill({ status: 404, body: 'unmocked' })
@@ -243,9 +252,7 @@ test('object urls render apf2-style object lists', async ({ page }) => {
 
   await test.step('self row opens the form at .../Art', async () => {
     await page.getByTitle('Art').click()
-    await expect(page).toHaveURL(
-      new RegExp(`/Vermehrung/Arten/${ART_ID}/Art$`),
-    )
+    await expect(page).toHaveURL(new RegExp(`/Vermehrung/Arten/${ART_ID}/Art$`))
     // the form title renders, not the list
     await expect(page.getByText('Art', { exact: true }).first()).toBeVisible()
     await expect(page.getByTitle('Herkünfte')).toHaveCount(0)
@@ -323,9 +330,7 @@ test('object urls render apf2-style object lists', async ({ page }) => {
       timeout: 60_000,
     })
     await page.locator('.tree-root').getByText(ARTNAME).first().click()
-    await expect(page).toHaveURL(
-      new RegExp(`/Vermehrung/Arten/${ART_ID}/Art$`),
-    )
+    await expect(page).toHaveURL(new RegExp(`/Vermehrung/Arten/${ART_ID}/Art$`))
     await expect(page.getByTitle('Herkünfte')).toHaveCount(0)
   })
 

@@ -24,7 +24,9 @@ export const buildKulturTimelineData = async ({
       )
       .fetch()
   } catch {}
-  const lastZaehlungDone = zaehlungenDone.slice(-1)[0] ?? ({} as import('../../../../../dbModel.ts').Zaehlung)
+  const lastZaehlungDone =
+    zaehlungenDone.slice(-1)[0] ??
+    ({} as import('../../../../../dbModel.ts').Zaehlung)
 
   let zaehlungenPlanned: import('../../../../../dbModel.ts').Zaehlung[] = []
   try {
@@ -48,10 +50,7 @@ export const buildKulturTimelineData = async ({
   )
 
   let zaehlungenPlannedIncluded = zaehlungenPlanned.filter(
-    (lg) =>
-      !zaehlungenPlannedIgnored
-        .map((l) => l.id)
-        .includes(lg.id),
+    (lg) => !zaehlungenPlannedIgnored.map((l) => l.id).includes(lg.id),
   )
   if (zaehlungenPlannedIncluded.length) {
     // need to add last zaehlung to zaehlungenPlannedIncluded to connect lines
@@ -67,8 +66,9 @@ export const buildKulturTimelineData = async ({
     zaehlungenDone.map(
       async (z: import('../../../../../dbModel.ts').Zaehlung) => {
         const teilzaehlungs: import('../../../../../dbModel.ts').Teilzaehlung[] =
-          z.teilzaehlungs
-            ? ((await z.teilzaehlungs.extend(
+
+            z.teilzaehlungs ?
+              ((await z.teilzaehlungs.extend(
                 Q.where('_deleted', false),
               )) as unknown as import('../../../../../dbModel.ts').Teilzaehlung[])
             : []
@@ -78,8 +78,9 @@ export const buildKulturTimelineData = async ({
               tz.anzahl_pflanzen,
           )
           .filter((a: number | null) => exists(a))
-        const anzPflanzen = anzahlenPflanzen.length
-          ? anzahlenPflanzen.reduce((a: number, b: number) => a + b, 0)
+        const anzPflanzen =
+          anzahlenPflanzen.length ?
+            anzahlenPflanzen.reduce((a: number, b: number) => a + b, 0)
           : undefined
         const anzahlenAuspflanzbereit = teilzaehlungs
           .map(
@@ -87,8 +88,9 @@ export const buildKulturTimelineData = async ({
               tz.anzahl_auspflanzbereit,
           )
           .filter((a: number | null) => exists(a))
-        const anzAuspflanzbereit = anzahlenAuspflanzbereit.length
-          ? anzahlenAuspflanzbereit.reduce((a: number, b: number) => a + b, 0)
+        const anzAuspflanzbereit =
+          anzahlenAuspflanzbereit.length ?
+            anzahlenAuspflanzbereit.reduce((a: number, b: number) => a + b, 0)
           : undefined
         const anzahlenMutterPflanzen = teilzaehlungs
           .map(
@@ -96,8 +98,9 @@ export const buildKulturTimelineData = async ({
               tz.anzahl_mutterpflanzen,
           )
           .filter((a: number | null) => exists(a))
-        const anzMutterPflanzen = anzahlenMutterPflanzen.length
-          ? anzahlenMutterPflanzen.reduce((a: number, b: number) => a + b, 0)
+        const anzMutterPflanzen =
+          anzahlenMutterPflanzen.length ?
+            anzahlenMutterPflanzen.reduce((a: number, b: number) => a + b, 0)
           : undefined
         const datum = z.datum ? new Date(z.datum).getTime() : 0
 
@@ -123,8 +126,9 @@ export const buildKulturTimelineData = async ({
   const zaehlungenPlannedIncludedData = await Promise.all(
     zaehlungenPlannedIncluded.map(
       async (z: import('../../../../../dbModel.ts').Zaehlung) => {
-        const teilzaehlungs = z.teilzaehlungs
-          ? await z.teilzaehlungs.extend(Q.where('_deleted', false))
+        const teilzaehlungs =
+          z.teilzaehlungs ?
+            await z.teilzaehlungs.extend(Q.where('_deleted', false))
           : []
         const anzahlenPflanzen = teilzaehlungs
           .map(
@@ -132,8 +136,9 @@ export const buildKulturTimelineData = async ({
               tz.anzahl_pflanzen,
           )
           .filter((a: number | null) => exists(a))
-        const anzPflanzen = anzahlenPflanzen.length
-          ? anzahlenPflanzen.reduce((a: number, b: number) => a + b, 0)
+        const anzPflanzen =
+          anzahlenPflanzen.length ?
+            anzahlenPflanzen.reduce((a: number, b: number) => a + b, 0)
           : undefined
         const anzahlenAuspflanzbereit = teilzaehlungs
           .map(
@@ -141,8 +146,9 @@ export const buildKulturTimelineData = async ({
               tz.anzahl_auspflanzbereit,
           )
           .filter((a: number | null) => exists(a))
-        const anzAuspflanzbereit = anzahlenAuspflanzbereit.length
-          ? anzahlenAuspflanzbereit.reduce((a: number, b: number) => a + b, 0)
+        const anzAuspflanzbereit =
+          anzahlenAuspflanzbereit.length ?
+            anzahlenAuspflanzbereit.reduce((a: number, b: number) => a + b, 0)
           : undefined
         const anzahlenMutterPflanzen = teilzaehlungs
           .map(
@@ -150,8 +156,9 @@ export const buildKulturTimelineData = async ({
               tz.anzahl_mutterpflanzen,
           )
           .filter((a: number | null) => exists(a))
-        const anzMutterPflanzen = anzahlenMutterPflanzen.length
-          ? anzahlenMutterPflanzen.reduce((a: number, b: number) => a + b, 0)
+        const anzMutterPflanzen =
+          anzahlenMutterPflanzen.length ?
+            anzahlenMutterPflanzen.reduce((a: number, b: number) => a + b, 0)
           : undefined
 
         return {
@@ -179,8 +186,9 @@ export const buildKulturTimelineData = async ({
   const zaehlungenPlannedIgnoredData = await Promise.all(
     zaehlungenPlannedIgnored.map(
       async (z: import('../../../../../dbModel.ts').Zaehlung) => {
-        const teilzaehlungs = z.teilzaehlungs
-          ? await z.teilzaehlungs.extend(Q.where('_deleted', false))
+        const teilzaehlungs =
+          z.teilzaehlungs ?
+            await z.teilzaehlungs.extend(Q.where('_deleted', false))
           : []
         const anzahlenPflanzen = teilzaehlungs
           .map(
@@ -188,8 +196,9 @@ export const buildKulturTimelineData = async ({
               tz.anzahl_pflanzen,
           )
           .filter((a: number | null) => exists(a))
-        const anzPflanzen = anzahlenPflanzen.length
-          ? anzahlenPflanzen.reduce((a: number, b: number) => a + b, 0)
+        const anzPflanzen =
+          anzahlenPflanzen.length ?
+            anzahlenPflanzen.reduce((a: number, b: number) => a + b, 0)
           : undefined
         const anzahlenAuspflanzbereit = teilzaehlungs
           .map(
@@ -197,8 +206,9 @@ export const buildKulturTimelineData = async ({
               tz.anzahl_auspflanzbereit,
           )
           .filter((a: number | null) => exists(a))
-        const anzAuspflanzbereit = anzahlenAuspflanzbereit.length
-          ? anzahlenAuspflanzbereit.reduce((a: number, b: number) => a + b, 0)
+        const anzAuspflanzbereit =
+          anzahlenAuspflanzbereit.length ?
+            anzahlenAuspflanzbereit.reduce((a: number, b: number) => a + b, 0)
           : undefined
         const anzahlenMutterPflanzen = teilzaehlungs
           .map(
@@ -206,8 +216,9 @@ export const buildKulturTimelineData = async ({
               tz.anzahl_mutterpflanzen,
           )
           .filter((a: number | null) => exists(a))
-        const anzMutterPflanzen = anzahlenMutterPflanzen.length
-          ? anzahlenMutterPflanzen.reduce((a: number, b: number) => a + b, 0)
+        const anzMutterPflanzen =
+          anzahlenMutterPflanzen.length ?
+            anzahlenMutterPflanzen.reduce((a: number, b: number) => a + b, 0)
           : undefined
 
         return {
@@ -266,10 +277,7 @@ export const buildKulturTimelineData = async ({
     anLieferungenDone.some((lu) => (lu.datum ?? '') >= (lg.datum ?? '')),
   )
   const anLieferungenPlannedIncluded = anLieferungenPlanned.filter(
-    (lg) =>
-      !anLieferungenPlannedIgnored
-        .map((l) => l.id)
-        .includes(lg.id),
+    (lg) => !anLieferungenPlannedIgnored.map((l) => l.id).includes(lg.id),
   )
   const anLieferungenForLine = sortBy(
     [...anLieferungenDone, ...anLieferungenPlannedIncluded],
@@ -287,7 +295,8 @@ export const buildKulturTimelineData = async ({
       )
       .fetch()
   } catch {}
-  let ausLieferungenPlanned: import('../../../../../dbModel.ts').Lieferung[] = []
+  let ausLieferungenPlanned: import('../../../../../dbModel.ts').Lieferung[] =
+    []
   try {
     ausLieferungenPlanned = await row.auslieferungs
       .extend(
@@ -305,10 +314,7 @@ export const buildKulturTimelineData = async ({
     ),
   )
   const ausLieferungenPlannedIncluded = ausLieferungenPlanned.filter(
-    (lg) =>
-      !ausLieferungenPlannedIgnored
-        .map((l) => l.id)
-        .includes(lg.id),
+    (lg) => !ausLieferungenPlannedIgnored.map((l) => l.id).includes(lg.id),
   )
   const ausLieferungenForLine = sortBy(
     [...ausLieferungenDone, ...ausLieferungenPlannedIncluded],
@@ -334,10 +340,12 @@ export const buildKulturTimelineData = async ({
             (a.datum ?? '') < (l.datum ?? ''),
         )
 
-        let previousZaehlungTzs: import('../../../../../dbModel.ts').Teilzaehlung[] = []
+        let previousZaehlungTzs: import('../../../../../dbModel.ts').Teilzaehlung[] =
+          []
         try {
-          previousZaehlungTzs = previousZaehlung?.teilzaehlungs
-            ? await previousZaehlung?.teilzaehlungs
+          previousZaehlungTzs =
+            previousZaehlung?.teilzaehlungs ?
+              await previousZaehlung?.teilzaehlungs
                 ?.extend(Q.where('_deleted', false))
                 ?.fetch()
             : []
@@ -370,8 +378,10 @@ export const buildKulturTimelineData = async ({
           (sumBy(ausLieferungenSince, (e) => e.anzahl_pflanzen ?? 0) || 0)
         const sumAnzahlAuspflanzbereit =
           anzAuspflanzbereit +
-          (sumBy(anLieferungenSince, (e) => e.anzahl_auspflanzbereit ?? 0) || 0) -
-          (sumBy(ausLieferungenSince, (e) => e.anzahl_auspflanzbereit ?? 0) || 0)
+          (sumBy(anLieferungenSince, (e) => e.anzahl_auspflanzbereit ?? 0) ||
+            0) -
+          (sumBy(ausLieferungenSince, (e) => e.anzahl_auspflanzbereit ?? 0) ||
+            0)
 
         return {
           datum: l.datum ? new Date(l.datum).getTime() : 0,
@@ -408,10 +418,12 @@ export const buildKulturTimelineData = async ({
             (a.datum ?? '') > (previousZaehlung?.datum ?? '1900.01.01') &&
             (a.datum ?? '') < (l.datum ?? ''),
         )
-        let previousZaehlungTzs: import('../../../../../dbModel.ts').Teilzaehlung[] = []
+        let previousZaehlungTzs: import('../../../../../dbModel.ts').Teilzaehlung[] =
+          []
         try {
-          previousZaehlungTzs = previousZaehlung?.teilzaehlungs
-            ? await previousZaehlung?.teilzaehlungs
+          previousZaehlungTzs =
+            previousZaehlung?.teilzaehlungs ?
+              await previousZaehlung?.teilzaehlungs
                 ?.extend(Q.where('_deleted', false))
                 ?.fetch()
             : []
@@ -443,8 +455,10 @@ export const buildKulturTimelineData = async ({
           (sumBy(ausLieferungenSince, (e) => e.anzahl_pflanzen ?? 0) || 0)
         const sumAnzahlAuspflanzbereit =
           anzAuspflanzbereit +
-          (sumBy(anLieferungenSince, (e) => e.anzahl_auspflanzbereit ?? 0) || 0) -
-          (sumBy(ausLieferungenSince, (e) => e.anzahl_auspflanzbereit ?? 0) || 0)
+          (sumBy(anLieferungenSince, (e) => e.anzahl_auspflanzbereit ?? 0) ||
+            0) -
+          (sumBy(ausLieferungenSince, (e) => e.anzahl_auspflanzbereit ?? 0) ||
+            0)
 
         return {
           datum: l.datum ? new Date(l.datum).getTime() : 0,
@@ -483,10 +497,12 @@ export const buildKulturTimelineData = async ({
             (a.datum ?? '') < (l.datum ?? ''),
         )
 
-        let previousZaehlungTzs: import('../../../../../dbModel.ts').Teilzaehlung[] = []
+        let previousZaehlungTzs: import('../../../../../dbModel.ts').Teilzaehlung[] =
+          []
         try {
-          previousZaehlungTzs = previousZaehlung?.teilzaehlungs
-            ? await previousZaehlung?.teilzaehlungs
+          previousZaehlungTzs =
+            previousZaehlung?.teilzaehlungs ?
+              await previousZaehlung?.teilzaehlungs
                 ?.extend(Q.where('_deleted', false))
                 ?.fetch()
             : []
@@ -518,8 +534,10 @@ export const buildKulturTimelineData = async ({
           (sumBy(ausLieferungenSince, (e) => e.anzahl_pflanzen ?? 0) || 0)
         const sumAnzahlAuspflanzbereit =
           anzAuspflanzbereit +
-          (sumBy(anLieferungenSince, (e) => e.anzahl_auspflanzbereit ?? 0) || 0) -
-          (sumBy(ausLieferungenSince, (e) => e.anzahl_auspflanzbereit ?? 0) || 0)
+          (sumBy(anLieferungenSince, (e) => e.anzahl_auspflanzbereit ?? 0) ||
+            0) -
+          (sumBy(ausLieferungenSince, (e) => e.anzahl_auspflanzbereit ?? 0) ||
+            0)
 
         const data: Record<string, unknown> = {
           datum: l.datum ? new Date(l.datum).getTime() : 0,
@@ -534,15 +552,17 @@ export const buildKulturTimelineData = async ({
         }
         if (
           (data.datum as number) <
-          (lastZaehlungDone.datum
-            ? new Date(lastZaehlungDone.datum).getTime()
-            : Infinity)
+          (lastZaehlungDone.datum ?
+            new Date(lastZaehlungDone.datum).getTime()
+          : Infinity)
         ) {
-          data['Zählung Pflanzen'] = sumAnzahlPflanzen + (l?.anzahl_pflanzen ?? 0)
+          data['Zählung Pflanzen'] =
+            sumAnzahlPflanzen + (l?.anzahl_pflanzen ?? 0)
           data['Zählung Pflanzen auspflanzbereit'] =
             sumAnzahlAuspflanzbereit + (l?.anzahl_auspflanzbereit ?? 0)
         } else {
-          data['Pflanzen Bedarf'] = sumAnzahlPflanzen + (l?.anzahl_pflanzen ?? 0)
+          data['Pflanzen Bedarf'] =
+            sumAnzahlPflanzen + (l?.anzahl_pflanzen ?? 0)
           data['Pflanzen auspflanzbereit Bedarf'] =
             sumAnzahlAuspflanzbereit + (l?.anzahl_auspflanzbereit ?? 0)
         }
@@ -583,10 +603,12 @@ export const buildKulturTimelineData = async ({
             (a.datum ?? '') < (l.datum ?? ''),
         )
 
-        let previousZaehlungTzs: import('../../../../../dbModel.ts').Teilzaehlung[] = []
+        let previousZaehlungTzs: import('../../../../../dbModel.ts').Teilzaehlung[] =
+          []
         try {
-          previousZaehlungTzs = previousZaehlung?.teilzaehlungs
-            ? await previousZaehlung?.teilzaehlungs
+          previousZaehlungTzs =
+            previousZaehlung?.teilzaehlungs ?
+              await previousZaehlung?.teilzaehlungs
                 ?.extend(Q.where('_deleted', false))
                 ?.fetch()
             : []
@@ -618,8 +640,10 @@ export const buildKulturTimelineData = async ({
           (sumBy(ausLieferungenSince, (e) => e.anzahl_pflanzen ?? 0) || 0)
         const sumAnzahlAuspflanzbereit =
           anzAuspflanzbereit +
-          (sumBy(anLieferungenSince, (e) => e.anzahl_auspflanzbereit ?? 0) || 0) -
-          (sumBy(ausLieferungenSince, (e) => e.anzahl_auspflanzbereit ?? 0) || 0)
+          (sumBy(anLieferungenSince, (e) => e.anzahl_auspflanzbereit ?? 0) ||
+            0) -
+          (sumBy(ausLieferungenSince, (e) => e.anzahl_auspflanzbereit ?? 0) ||
+            0)
 
         const data: Record<string, unknown> = {
           datum: l.datum ? new Date(l.datum).getTime() : 0,
@@ -634,15 +658,17 @@ export const buildKulturTimelineData = async ({
         }
         if (
           (data.datum as number) <
-          (lastZaehlungDone.datum
-            ? new Date(lastZaehlungDone.datum).getTime()
-            : Infinity)
+          (lastZaehlungDone.datum ?
+            new Date(lastZaehlungDone.datum).getTime()
+          : Infinity)
         ) {
-          data['Zählung Pflanzen'] = sumAnzahlPflanzen - (l?.anzahl_pflanzen ?? 0)
+          data['Zählung Pflanzen'] =
+            sumAnzahlPflanzen - (l?.anzahl_pflanzen ?? 0)
           data['Zählung Pflanzen auspflanzbereit'] =
             sumAnzahlAuspflanzbereit - (l?.anzahl_auspflanzbereit ?? 0)
         } else {
-          data['Pflanzen Bedarf'] = sumAnzahlPflanzen - (l?.anzahl_pflanzen ?? 0)
+          data['Pflanzen Bedarf'] =
+            sumAnzahlPflanzen - (l?.anzahl_pflanzen ?? 0)
           data['Pflanzen auspflanzbereit Bedarf'] =
             sumAnzahlAuspflanzbereit - (l?.anzahl_auspflanzbereit ?? 0)
         }
@@ -653,7 +679,8 @@ export const buildKulturTimelineData = async ({
   const ausLieferungenPlannedIgnoredData = ausLieferungenPlannedIgnored.map(
     (l: import('../../../../../dbModel.ts').Lieferung) => ({
       datum: l.datum ? new Date(l.datum).getTime() : 0,
-      'Lieferung Pflanzen geplant, ignoriert': -(l?.anzahl_pflanzen ?? 0) || undefined,
+      'Lieferung Pflanzen geplant, ignoriert':
+        -(l?.anzahl_pflanzen ?? 0) || undefined,
       'Lieferung Pflanzen auspflanzbereit geplant, ignoriert':
         -(l?.anzahl_auspflanzbereit ?? 0) || undefined,
       'Lieferung andere Mengen': l.andere_menge,

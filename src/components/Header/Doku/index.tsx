@@ -19,9 +19,13 @@ export const HeaderDoku = () => {
 
   return (
     <ErrorBoundary>
-      <AppBar position="fixed" elevation={0} ref={ref}>
+      <AppBar
+        position="fixed"
+        elevation={0}
+        ref={ref}
+      >
         <Toolbar>
-          {mobile ? (
+          {mobile ?
             <IconButton
               color="inherit"
               aria-label="Home"
@@ -32,8 +36,7 @@ export const HeaderDoku = () => {
             >
               <FaHome />
             </IconButton>
-          ) : (
-            <Button
+          : <Button
               variant="outlined"
               component={Link}
               to="/"
@@ -42,7 +45,7 @@ export const HeaderDoku = () => {
             >
               Vermehrung
             </Button>
-          )}
+          }
           <div className={styles.spacer} />
           <DokuFilter />
           <Button

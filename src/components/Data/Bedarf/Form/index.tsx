@@ -72,25 +72,21 @@ export const BedarfForm = ({
   }>({ kulturWerte: [], personWerte: [] })
   useEffect(() => {
     const kulturDelQuery =
-      kulturFilter._deleted === false
-        ? Q.where('_deleted', false)
-        : kulturFilter._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+      kulturFilter._deleted === false ? Q.where('_deleted', false)
+      : kulturFilter._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     const kulturAktivQuery =
-      kulturFilter.aktiv === false
-        ? Q.where('aktiv', false)
-        : kulturFilter.aktiv === true
-          ? Q.where('aktiv', true)
-          : Q.or(
-              Q.where('aktiv', false),
-              Q.where('aktiv', true),
-              Q.where('aktiv', null),
-            )
+      kulturFilter.aktiv === false ? Q.where('aktiv', false)
+      : kulturFilter.aktiv === true ? Q.where('aktiv', true)
+      : Q.or(
+          Q.where('aktiv', false),
+          Q.where('aktiv', true),
+          Q.where('aktiv', null),
+        )
     const kultursObservable = db
       ?.get<import('../../../../dbModel.ts').Kultur>('kultur')
       .query(kulturDelQuery, kulturAktivQuery)
@@ -101,25 +97,21 @@ export const BedarfForm = ({
         'zwischenlager',
       ])
     const personDelQuery =
-      personFilter._deleted === false
-        ? Q.where('_deleted', false)
-        : personFilter._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+      personFilter._deleted === false ? Q.where('_deleted', false)
+      : personFilter._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     const personAktivQuery =
-      personFilter.aktiv === false
-        ? Q.where('aktiv', false)
-        : personFilter.aktiv === true
-          ? Q.where('aktiv', true)
-          : Q.or(
-              Q.where('aktiv', false),
-              Q.where('aktiv', true),
-              Q.where('aktiv', null),
-            )
+      personFilter.aktiv === false ? Q.where('aktiv', false)
+      : personFilter.aktiv === true ? Q.where('aktiv', true)
+      : Q.or(
+          Q.where('aktiv', false),
+          Q.where('aktiv', true),
+          Q.where('aktiv', null),
+        )
     const personsObservable = db
       ?.get<import('../../../../dbModel.ts').Person>('person')
       .query(personDelQuery, personAktivQuery)
@@ -135,58 +127,56 @@ export const BedarfForm = ({
           import('../../../../dbModel.ts').Person[],
         ]
       >
-    ).subscribe(
-      async ([kulturs, persons]) => {
-        // need to show a choosen kultur even if inactive but not if deleted
-        let kultur
-        try {
-          kultur = await row?.kultur.fetch()
-        } catch {}
-        const kultursIncludingChoosen = uniqBy(
-          [...kulturs, ...(kultur && !showFilter ? [kultur] : [])],
-          (e) => e.id,
-        )
-        const kultursSorted = await kultursSortedFromKulturs(
-          kultursIncludingChoosen,
-        )
-        const kulturWerte = await Promise.all(
-          kultursSorted.map(async (k) => {
-            let label
-            try {
-              label = await k.label.pipe(first$()).toPromise()
-            } catch {}
+    ).subscribe(async ([kulturs, persons]) => {
+      // need to show a choosen kultur even if inactive but not if deleted
+      let kultur
+      try {
+        kultur = await row?.kultur.fetch()
+      } catch {}
+      const kultursIncludingChoosen = uniqBy(
+        [...kulturs, ...(kultur && !showFilter ? [kultur] : [])],
+        (e) => e.id,
+      )
+      const kultursSorted = await kultursSortedFromKulturs(
+        kultursIncludingChoosen,
+      )
+      const kulturWerte = await Promise.all(
+        kultursSorted.map(async (k) => {
+          let label
+          try {
+            label = await k.label.pipe(first$()).toPromise()
+          } catch {}
 
-            return {
-              value: k.id,
-              label,
-              inaktiv: k.aktiv === false,
-              link: ['Kulturen', k.id],
-            }
-          }),
-        )
-        // need to show a choosen person even if inactive but not if deleted
-        let person
-        try {
-          person = await row?.person.fetch()
-        } catch {}
-        const personsIncludingChoosen = uniqBy(
-          [...persons, ...(person && !showFilter ? [person] : [])],
-          (e) => e.id,
-        )
-        const personWerte = personsIncludingChoosen
-          .sort(personSort)
-          .map((person) => ({
-            value: person.id,
-            label: personLabelFromPerson({ person }),
-            inaktiv: person.aktiv === false,
-            link: ['Personen', person.id],
-          }))
-        setDataState({
-          kulturWerte,
-          personWerte,
-        })
-      },
-    )
+          return {
+            value: k.id,
+            label,
+            inaktiv: k.aktiv === false,
+            link: ['Kulturen', k.id],
+          }
+        }),
+      )
+      // need to show a choosen person even if inactive but not if deleted
+      let person
+      try {
+        person = await row?.person.fetch()
+      } catch {}
+      const personsIncludingChoosen = uniqBy(
+        [...persons, ...(person && !showFilter ? [person] : [])],
+        (e) => e.id,
+      )
+      const personWerte = personsIncludingChoosen
+        .sort(personSort)
+        .map((person) => ({
+          value: person.id,
+          label: personLabelFromPerson({ person }),
+          inaktiv: person.aktiv === false,
+          link: ['Personen', person.id],
+        }))
+      setDataState({
+        kulturWerte,
+        personWerte,
+      })
+    })
 
     return () => subscription?.unsubscribe?.()
   }, [
@@ -244,7 +234,7 @@ export const BedarfForm = ({
         )}
         {showDeleted && (
           <>
-            {showFilter ? (
+            {showFilter ?
               <JesNo
                 key={`${row?.id}_deleted`}
                 label="gelöscht"
@@ -253,8 +243,7 @@ export const BedarfForm = ({
                 saveToDb={saveToDb}
                 error={errors?.bedarf?._deleted as string | undefined}
               />
-            ) : (
-              <Checkbox2States
+            : <Checkbox2States
                 key={`${row?.id}_deleted`}
                 label="gelöscht"
                 name="_deleted"
@@ -262,7 +251,7 @@ export const BedarfForm = ({
                 saveToDb={saveToDb}
                 error={errors?.bedarf?._deleted as string | undefined}
               />
-            )}
+            }
           </>
         )}
         <Select

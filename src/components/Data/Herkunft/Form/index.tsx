@@ -47,13 +47,12 @@ export const HerkunftForm = ({
   const user = useAtomValue(userAtom)
 
   const [dataState, setDataState] = useState<{
-    userPersonOption:
-      | import('../../../../dbModel.ts').PersonOption
-      | undefined
+    userPersonOption: import('../../../../dbModel.ts').PersonOption | undefined
   }>({ userPersonOption: undefined })
   useEffect(() => {
-    const userPersonOptionsObservable = user.uid
-      ? db
+    const userPersonOptionsObservable =
+      user.uid ?
+        db
           ?.get<import('../../../../dbModel.ts').PersonOption>('person_option')
           .query(Q.on('person', Q.where('account_id', user.uid)))
           .observeWithColumns([
@@ -64,46 +63,39 @@ export const HerkunftForm = ({
           ])
       : $of({})
     const delQuery =
-      herkunftFilter._deleted === false
-        ? Q.where('_deleted', false)
-        : herkunftFilter._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+      herkunftFilter._deleted === false ? Q.where('_deleted', false)
+      : herkunftFilter._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     const herkunftsNrCountObservable =
-      showFilter || !exists(row?.nr)
-        ? $of(0)
-        : db
-            ?.get<import('../../../../dbModel.ts').Herkunft>('herkunft')
-            .query(delQuery, Q.where('nr', row.nr))
-            .observeCount()
+      showFilter || !exists(row?.nr) ?
+        $of(0)
+      : db
+          ?.get<import('../../../../dbModel.ts').Herkunft>('herkunft')
+          .query(delQuery, Q.where('nr', row.nr))
+          .observeCount()
     const combinedObservables = combineLatest([
       userPersonOptionsObservable,
       herkunftsNrCountObservable,
     ])
     const subscription = (
       combinedObservables as unknown as import('rxjs').Observable<
-        [
-          import('../../../../dbModel.ts').PersonOption[] | undefined,
-          number,
-        ]
+        [import('../../../../dbModel.ts').PersonOption[] | undefined, number]
       >
-    ).subscribe(
-      async ([userPersonOptions, nrCount]) => {
-        if (!showFilter && nrCount > 1) {
-          setError({
-            path: 'herkunft.nr',
-            value: `Diese Nummer wird ${nrCount} mal verwendet. Sie sollte aber über alle Herkünfte eindeutig sein`,
-          })
-        }
-        setDataState({
-          userPersonOption: userPersonOptions?.[0],
+    ).subscribe(async ([userPersonOptions, nrCount]) => {
+      if (!showFilter && nrCount > 1) {
+        setError({
+          path: 'herkunft.nr',
+          value: `Diese Nummer wird ${nrCount} mal verwendet. Sie sollte aber über alle Herkünfte eindeutig sein`,
         })
-      },
-    )
+      }
+      setDataState({
+        userPersonOption: userPersonOptions?.[0],
+      })
+    })
 
     return () => subscription?.unsubscribe?.()
   }, [db, herkunftFilter, row?.nr, showFilter, user])
@@ -135,7 +127,8 @@ export const HerkunftForm = ({
     }
 
     const previousValue = ifIsNumericAsNumber(
-      (row?._raw as unknown as Record<string, unknown>)[field as string] as string | number,
+      (row?._raw as unknown as Record<string, unknown>)[field as string] as
+        string | number,
     )
     // only update if value has changed
     if (value === previousValue) return
@@ -153,7 +146,7 @@ export const HerkunftForm = ({
       )}
       {showDeleted && (
         <>
-          {showFilter ? (
+          {showFilter ?
             <JesNo
               key={`${row?.id}_deleted`}
               label="gelöscht"
@@ -162,8 +155,7 @@ export const HerkunftForm = ({
               saveToDb={saveToDb}
               error={errors?.herkunft?._deleted as string | undefined}
             />
-          ) : (
-            <Checkbox2States
+          : <Checkbox2States
               key={`${row?.id}_deleted`}
               label="gelöscht"
               name="_deleted"
@@ -171,7 +163,7 @@ export const HerkunftForm = ({
               saveToDb={saveToDb}
               error={errors?.herkunft?._deleted as string | undefined}
             />
-          )}
+          }
         </>
       )}
       <TextField
@@ -220,17 +212,17 @@ export const HerkunftForm = ({
       )}
       {!showFilter && hk_geom_point && (
         <Coordinates
-            row={
-              row as unknown as {
-                id?: string
-                lv95_x?: string | number | null
-                lv95_y?: string | number | null
-                wgs84_lat?: string | number | null
-                wgs84_long?: string | number | null
-              }
+          row={
+            row as unknown as {
+              id?: string
+              lv95_x?: string | number | null
+              lv95_y?: string | number | null
+              wgs84_lat?: string | number | null
+              wgs84_long?: string | number | null
             }
-            saveToDb={saveToDb}
-          />
+          }
+          saveToDb={saveToDb}
+        />
       )}
       {hk_bemerkungen && (
         <TextField
@@ -250,7 +242,12 @@ export const HerkunftForm = ({
           setActiveConflict={setActiveConflict}
         />
       )}
-      {!showFilter && row?.id && <Files parentTable="herkunft" parent={row} />}
+      {!showFilter && row?.id && (
+        <Files
+          parentTable="herkunft"
+          parent={row}
+        />
+      )}
     </div>
   )
 }

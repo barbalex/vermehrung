@@ -30,8 +30,9 @@ export const GartenFormTitle = ({
     filteredCount: 0,
   })
   useEffect(() => {
-    const hierarchyQuery = personIdInActiveNodeArray
-      ? [
+    const hierarchyQuery =
+      personIdInActiveNodeArray ?
+        [
           Q.experimentalJoinTables(['person']),
           Q.on('person', 'id', personIdInActiveNodeArray),
         ]
@@ -40,25 +41,21 @@ export const GartenFormTitle = ({
       db?.get<import('../../../../dbModel.ts').Garten>('garten')
     if (!collection) return
     const delQuery =
-      gartenFilter._deleted === false
-        ? Q.where('_deleted', false)
-        : gartenFilter._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+      gartenFilter._deleted === false ? Q.where('_deleted', false)
+      : gartenFilter._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     const aktivQuery =
-      gartenFilter.aktiv === false
-        ? Q.where('aktiv', false)
-        : gartenFilter.aktiv === true
-          ? Q.where('aktiv', true)
-          : Q.or(
-              Q.where('aktiv', false),
-              Q.where('aktiv', true),
-              Q.where('aktiv', null),
-            )
+      gartenFilter.aktiv === false ? Q.where('aktiv', false)
+      : gartenFilter.aktiv === true ? Q.where('aktiv', true)
+      : Q.or(
+          Q.where('aktiv', false),
+          Q.where('aktiv', true),
+          Q.where('aktiv', null),
+        )
     const totalCountObservable = collection
       .query(delQuery, aktivQuery, ...hierarchyQuery)
       .observeCount()

@@ -6,7 +6,13 @@ import { FaCog } from 'react-icons/fa'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.tsx'
 import { TeilkulturSettingsMenu as Menu } from './Menu.tsx'
 
-export const TeilkulturSettings = ({ asMenu, kulturId }: { asMenu?: boolean; kulturId?: string }) => {
+export const TeilkulturSettings = ({
+  asMenu,
+  kulturId,
+}: {
+  asMenu?: boolean
+  kulturId?: string
+}) => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | undefined | null>(null)
   const onClickConfig = (event: {
     target: { name?: string; value: unknown }
@@ -22,7 +28,9 @@ export const TeilkulturSettings = ({ asMenu, kulturId }: { asMenu?: boolean; kul
         <MenuItem
           aria-owns={anchorEl ? 'menu' : undefined}
           aria-haspopup="true"
-          onClick={onClickConfig as unknown as import('react').MouseEventHandler<HTMLElement>}
+          onClick={
+            onClickConfig as unknown as import('react').MouseEventHandler<HTMLElement>
+          }
         >
           Felder wählen
         </MenuItem>
@@ -42,12 +50,18 @@ export const TeilkulturSettings = ({ asMenu, kulturId }: { asMenu?: boolean; kul
         aria-owns={anchorEl ? 'long-menu' : undefined}
         aria-haspopup="true"
         title="Felder wählen"
-        onClick={onClickConfig as unknown as import('react').MouseEventHandler<HTMLElement>}
+        onClick={
+          onClickConfig as unknown as import('react').MouseEventHandler<HTMLElement>
+        }
         size="large"
       >
         <FaCog />
       </IconButton>
-      <Menu anchorEl={anchorEl} setAnchorEl={setAnchorEl} kulturId={kulturId} />
+      <Menu
+        anchorEl={anchorEl}
+        setAnchorEl={setAnchorEl}
+        kulturId={kulturId}
+      />
     </ErrorBoundary>
   )
 }

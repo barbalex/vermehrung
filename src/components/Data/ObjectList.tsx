@@ -7,7 +7,10 @@ import {
   dbAtom,
   setActiveNodeArray,
 } from '../../store/index.ts'
-import { singularOfFolder, labelOfSingular } from '../../utils/singularOfFolder.ts'
+import {
+  singularOfFolder,
+  labelOfSingular,
+} from '../../utils/singularOfFolder.ts'
 import { useRowLabel } from '../Breadcrumbs/useRowLabel.ts'
 import { useChildCount } from './useChildCount.ts'
 import { ErrorBoundary } from '../shared/ErrorBoundary.tsx'
@@ -41,15 +44,15 @@ const childrenOf = ({
       ]
     case 'herkunft':
       // under an art, the tree also builds kulturen
-      return underArt
-        ? [
+      return underArt ?
+          [
             { folder: 'Sammlungen', label: 'Sammlungen' },
             { folder: 'Kulturen', label: 'Kulturen' },
           ]
         : [{ folder: 'Sammlungen', label: 'Sammlungen' }]
     case 'sammlung':
-      return topLevel === 'Sammlungen'
-        ? [
+      return topLevel === 'Sammlungen' ?
+          [
             { folder: 'Herkuenfte', label: 'Herkünfte' },
             { folder: 'Aus-Lieferungen', label: 'Aus-Lieferungen' },
           ]
@@ -108,13 +111,7 @@ const ChildRow = ({
 // rendered at an object's url when breadcrumbs are enabled:
 // the object itself (leading to its form) plus its child tables,
 // like apf2's object menus
-export const ObjectList = ({
-  table,
-  id,
-}: {
-  table: string
-  id?: string
-}) => {
+export const ObjectList = ({ table, id }: { table: string; id?: string }) => {
   const activeNodeArray = useAtomValue(activeNodeArrayAtom)
   const db = useAtomValue(dbAtom)
 

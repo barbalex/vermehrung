@@ -58,9 +58,7 @@ export const Timeline = ({
   return (
     <ErrorBoundary>
       <section
-        onClick={
-                  onClickToggle as unknown as import('react').MouseEventHandler
-                }
+        onClick={onClickToggle as unknown as import('react').MouseEventHandler}
         title={open ? 'schliessen' : 'öffnen'}
         className={styles.titleRow}
       >
@@ -69,9 +67,7 @@ export const Timeline = ({
           <IconButton
             aria-label="Anleitung öffnen"
             title="Anleitung öffnen"
-            onClick={
-                  openDocs as unknown as import('react').MouseEventHandler
-                }
+            onClick={openDocs as unknown as import('react').MouseEventHandler}
             size="large"
           >
             <IoMdInformationCircleOutline />
@@ -80,16 +76,26 @@ export const Timeline = ({
             aria-label={open ? 'schliessen' : 'öffnen'}
             title={open ? 'schliessen' : 'öffnen'}
             onClick={
-                  onClickToggle as unknown as import('react').MouseEventHandler
-                }
+              onClickToggle as unknown as import('react').MouseEventHandler
+            }
             size="large"
           >
-            {open ? <FaChevronUp /> : <FaChevronDown />}
+            {open ?
+              <FaChevronUp />
+            : <FaChevronDown />}
           </IconButton>
         </div>
       </section>
-      <motion.div animate={anim} transition={{ duration: 0.2 }}>
-        {open && <Pflanzen key={artId ?? ''} artId={artId ?? undefined} />}
+      <motion.div
+        animate={anim}
+        transition={{ duration: 0.2 }}
+      >
+        {open && (
+          <Pflanzen
+            key={artId ?? ''}
+            artId={artId ?? undefined}
+          />
+        )}
       </motion.div>
     </ErrorBoundary>
   )

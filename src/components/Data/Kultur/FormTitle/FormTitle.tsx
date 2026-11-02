@@ -27,15 +27,24 @@ export const KulturFormTitle = ({
   const { width, ref } = useResizeDetector()
 
   return (
-    <div className={artStyles.container} ref={ref}>
+    <div
+      className={artStyles.container}
+      ref={ref}
+    >
       <div className={artStyles.title}>Kultur</div>
       <div className={artStyles.symbols}>
         {!breadcrumbsEnabled && <NavButtons row={row} />}
-        {(width ?? 0) < 520 ? (
+        {(width ?? 0) < 520 ?
           <Menu white={false}>
             <Add asMenu />
-            <Delete asMenu row={row} />
-            <Download row={row} asMenu />
+            <Delete
+              asMenu
+              row={row}
+            />
+            <Download
+              row={row}
+              asMenu
+            />
             <HistoryButton
               table="kultur"
               id={row?.id}
@@ -43,19 +52,25 @@ export const KulturFormTitle = ({
               asMenu
             />
             <Anleitung asMenu />
-            <Settings kulturId={row?.id} asMenu />
+            <Settings
+              kulturId={row?.id}
+              asMenu
+            />
             <FilterNumbers
               filteredCount={filteredCount}
               totalCount={totalCount}
               asMenu
             />
           </Menu>
-        ) : (width ?? 0) < 567 ? (
+        : (width ?? 0) < 567 ?
           <>
             <Add />
             <Delete row={row} />
             <Menu white={false}>
-              <Download row={row} asMenu />
+              <Download
+                row={row}
+                asMenu
+              />
               <HistoryButton
                 table="kultur"
                 id={row?.id}
@@ -63,7 +78,10 @@ export const KulturFormTitle = ({
                 asMenu
               />
               <Anleitung asMenu />
-              <Settings kulturId={row?.id} asMenu />
+              <Settings
+                kulturId={row?.id}
+                asMenu
+              />
               <FilterNumbers
                 filteredCount={filteredCount}
                 totalCount={totalCount}
@@ -71,13 +89,16 @@ export const KulturFormTitle = ({
               />
             </Menu>
           </>
-        ) : (width ?? 0) < 613 ? (
+        : (width ?? 0) < 613 ?
           <>
             <Add />
             <Delete row={row} />
             <Settings kulturId={row?.id} />
             <Menu white={false}>
-              <Download row={row} asMenu />
+              <Download
+                row={row}
+                asMenu
+              />
               <HistoryButton
                 table="kultur"
                 id={row?.id}
@@ -92,7 +113,7 @@ export const KulturFormTitle = ({
               />
             </Menu>
           </>
-        ) : (width ?? 0) < 660 ? (
+        : (width ?? 0) < 660 ?
           <>
             <Add />
             <Delete row={row} />
@@ -102,7 +123,10 @@ export const KulturFormTitle = ({
               totalCount={totalCount}
             />
             <Menu white={false}>
-              <Download row={row} asMenu />
+              <Download
+                row={row}
+                asMenu
+              />
               <HistoryButton
                 table="kultur"
                 id={row?.id}
@@ -112,7 +136,7 @@ export const KulturFormTitle = ({
               <Anleitung asMenu />
             </Menu>
           </>
-        ) : (width ?? 0) < 703 ? (
+        : (width ?? 0) < 703 ?
           <>
             <Add />
             <Delete row={row} />
@@ -132,8 +156,7 @@ export const KulturFormTitle = ({
               <Anleitung asMenu />
             </Menu>
           </>
-        ) : (
-          <>
+        : <>
             <Add />
             <Delete row={row} />
             <Download row={row} />
@@ -149,7 +172,7 @@ export const KulturFormTitle = ({
               totalCount={totalCount}
             />
           </>
-        )}
+        }
       </div>
     </div>
   )

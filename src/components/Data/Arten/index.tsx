@@ -28,11 +28,7 @@ import { ApFilter } from '../../shared/ApFilter.tsx'
 
 import artStyles from './index.module.css'
 
-export const Arten = ({
-  filter: showFilter,
-}: {
-  filter?: boolean
-}) => {
+export const Arten = ({ filter: showFilter }: { filter?: boolean }) => {
   const db = useAtomValue(dbAtom)
   const activeNodeArray = useAtomValue(activeNodeArrayAtom)
   const apFilter = useAtomValue(apFilterAtom)
@@ -46,15 +42,13 @@ export const Arten = ({
     const collection = db?.get<import('../../../dbModel.ts').Art>('art')
     if (!collection) return
     const delQuery =
-      artFilter._deleted === false
-        ? Q.where('_deleted', false)
-        : artFilter._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+      artFilter._deleted === false ? Q.where('_deleted', false)
+      : artFilter._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     const totalCountObservable = collection?.query(delQuery).observeCount()
     const artsObservable = collection
       .query(...tableFilter({ table: 'art', apFilter }))
@@ -63,13 +57,14 @@ export const Arten = ({
       totalCountObservable,
       artsObservable,
     ])
-    const subscription = (combinedObservables as unknown as import('rxjs').Observable<
+    const subscription = (
+      combinedObservables as unknown as import('rxjs').Observable<
         [number, import('../../../dbModel.ts').Art[]]
-      >).subscribe(async ([totalCount, arts]) => {
-        const artsSorted = await artsSortedFromArts(arts)
-        setDataState({ arts: artsSorted, totalCount })
-      },
-    )
+      >
+    ).subscribe(async ([totalCount, arts]) => {
+      const artsSorted = await artsSortedFromArts(arts)
+      setDataState({ arts: artsSorted, totalCount })
+    })
 
     return () => subscription?.unsubscribe?.()
     // need to rerender if any of the values of herkunftFilter changes
@@ -94,22 +89,25 @@ export const Arten = ({
         className={artStyles.container}
         style={{ backgroundColor: showFilter ? 'var(--filter-bg)' : 'unset' }}
       >
-        {showFilter ? (
+        {showFilter ?
           <FilterTitle
             title="Art"
             table="art"
             totalCount={totalCount}
             filteredCount={filteredCount}
           />
-        ) : (
-          <div className={artStyles.titleContainer}>
+        : <div className={artStyles.titleContainer}>
             <div className={artStyles.title}>Arten</div>
             <div className={artStyles.titleSymbols}>
               <div className={artStyles.apFilterContainer}>
                 <ApFilter />
               </div>
               {!breadcrumbsEnabled && (
-                <IconButton title={upTitle} onClick={onClickUp} size="large">
+                <IconButton
+                  title={upTitle}
+                  onClick={onClickUp}
+                  size="large"
+                >
                   <UpSvg />
                 </IconButton>
               )}
@@ -129,7 +127,7 @@ export const Arten = ({
               />
             </div>
           </div>
-        )}
+        }
         <div className={artStyles.fieldsContainer}>
           <List
             rowComponent={Row}

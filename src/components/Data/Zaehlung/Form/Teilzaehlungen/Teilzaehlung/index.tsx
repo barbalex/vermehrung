@@ -36,8 +36,9 @@ export const Teilzaehlung = ({
     rawRow: string | undefined
   }>({ row: undefined, rawRow: undefined })
   useEffect(() => {
-    const tzObservable = initialDataQueried
-      ? db
+    const tzObservable =
+      initialDataQueried ?
+        db
           ?.get<import('../../../../../../dbModel.ts').Teilzaehlung>(
             'teilzaehlung',
           )
@@ -84,33 +85,27 @@ export const Teilzaehlung = ({
                 id={id}
                 kulturId={kulturId}
                 activeConflict={activeConflict}
-                setActiveConflict={
-                  setActiveConflict as unknown as never
-                }
+                setActiveConflict={setActiveConflict as unknown as never}
                 showHistory={showHistory}
-                setShowHistory={
-                  setShowHistory as unknown as never
-                }
+                setShowHistory={setShowHistory as unknown as never}
               />
               <Allotment.Pane visible={!!paneIsSplit}>
-                {activeConflict ? (
+                {activeConflict ?
                   <Conflict
                     rev={activeConflict}
                     id={id}
                     row={row}
                     conflictDisposalCallback={conflictDisposalCallback}
                     conflictSelectionCallback={conflictSelectionCallback}
-                    setActiveConflict={
-                  setActiveConflict as unknown as never
-                }
+                    setActiveConflict={setActiveConflict as unknown as never}
                   />
-                ) : showHistory ? (
+                : showHistory ?
                   <History
                     row={row}
                     rawRow={rawRow}
                     historyTakeoverCallback={historyTakeoverCallback}
                   />
-                ) : null}
+                : null}
               </Allotment.Pane>
             </Allotment>
           </div>
@@ -128,13 +123,9 @@ export const Teilzaehlung = ({
             id={id}
             kulturId={kulturId}
             activeConflict={activeConflict}
-            setActiveConflict={
-                  setActiveConflict as unknown as never
-                }
+            setActiveConflict={setActiveConflict as unknown as never}
             showHistory={showHistory}
-            setShowHistory={
-                  setShowHistory as unknown as never
-                }
+            setShowHistory={setShowHistory as unknown as never}
           />
         </div>
       </div>

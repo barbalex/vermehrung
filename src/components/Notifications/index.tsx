@@ -31,7 +31,10 @@ export const Notifications = () => {
   return (
     <div className={styles.container}>
       {notificationsSorted.map((n) => (
-        <Notification key={n.id} notification={n} />
+        <Notification
+          key={n.id}
+          notification={n}
+        />
       ))}
       {notificationsSorted.length > 2 && (
         <IconButton

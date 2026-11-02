@@ -1,6 +1,14 @@
 import { DateTime } from 'luxon'
 
-export const CustomAxisTick = ({ x, y, payload }: { x?: number; y?: number; payload?: Record<string, unknown> }) => (
+export const CustomAxisTick = ({
+  x,
+  y,
+  payload,
+}: {
+  x?: number
+  y?: number
+  payload?: Record<string, unknown>
+}) => (
   <g transform={`translate(${x},${y})`}>
     <text
       x={0}
@@ -11,7 +19,9 @@ export const CustomAxisTick = ({ x, y, payload }: { x?: number; y?: number; payl
       transform="rotate(-90)"
       style={{ fontSize: 11 }}
     >
-      {DateTime.fromSQL((payload?.value ?? '') as string).toFormat('yyyy.LL.dd')}
+      {DateTime.fromSQL((payload?.value ?? '') as string).toFormat(
+        'yyyy.LL.dd',
+      )}
     </text>
   </g>
 )

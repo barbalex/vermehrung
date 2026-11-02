@@ -9,11 +9,7 @@ import { HeaderHamburgerMenu as Menu } from './Menu.tsx'
 
 import styles from './index.module.css'
 
-export const HeaderHamburgerMenu = ({
-  asMenu,
-}: {
-  asMenu?: boolean
-}) => {
+export const HeaderHamburgerMenu = ({ asMenu }: { asMenu?: boolean }) => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | undefined | null>(null)
   const onClickMenu = (event: { currentTarget: HTMLElement }) =>
     setAnchorEl(event.currentTarget)
@@ -49,9 +45,9 @@ export const HeaderHamburgerMenu = ({
         <MdMenu className={styles.icon} />
       </IconButton>
       <Menu
-          anchorEl={anchorEl ?? null}
-          setAnchorEl={setAnchorEl as (el: HTMLElement | null) => void}
-        />
+        anchorEl={anchorEl ?? null}
+        setAnchorEl={setAnchorEl as (el: HTMLElement | null) => void}
+      />
     </ErrorBoundary>
   )
 }

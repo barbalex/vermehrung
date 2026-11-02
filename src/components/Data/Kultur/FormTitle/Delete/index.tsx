@@ -29,13 +29,17 @@ export const KulturDeleteButton = ({
         <MenuItem
           aria-haspopup="true"
           onClick={
-                  onClickButton as unknown as import('react').MouseEventHandler
-                }
+            onClickButton as unknown as import('react').MouseEventHandler
+          }
           disabled={!!row?._deleted}
         >
           Kultur löschen
         </MenuItem>
-        <Menu anchorEl={anchorEl} setAnchorEl={setAnchorEl} row={row} />
+        <Menu
+          anchorEl={anchorEl}
+          setAnchorEl={setAnchorEl}
+          row={row}
+        />
       </>
     )
   }
@@ -47,15 +51,17 @@ export const KulturDeleteButton = ({
         aria-haspopup="true"
         aria-label="Kultur löschen"
         title="Kultur löschen"
-        onClick={
-                  onClickButton as unknown as import('react').MouseEventHandler
-                }
+        onClick={onClickButton as unknown as import('react').MouseEventHandler}
         disabled={!!row?._deleted}
         size="large"
       >
         <FaMinus />
       </IconButton>
-      <Menu anchorEl={anchorEl} setAnchorEl={setAnchorEl} row={row} />
+      <Menu
+        anchorEl={anchorEl}
+        setAnchorEl={setAnchorEl}
+        row={row}
+      />
     </ErrorBoundary>
   )
 }

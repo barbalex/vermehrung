@@ -47,9 +47,8 @@ export const KulturNavButtons = ({
   const { kulturOption } = dataState
 
   useEffect(() => {
-    const kOObservable = row?.kultur_option
-      ? row?.kultur_option.observe()
-      : $of({})
+    const kOObservable =
+      row?.kultur_option ? row?.kultur_option.observe() : $of({})
     const subscription = (
       kOObservable as unknown as import('rxjs').Observable<
         import('../../../../dbModel.ts').KulturOption | undefined
@@ -98,7 +97,11 @@ export const KulturNavButtons = ({
       >
         <AusLiDownSvg />
       </IconButton>
-      <IconButton title="Zum Bedarf" onClick={onClickToBedarf} size="large">
+      <IconButton
+        title="Zum Bedarf"
+        onClick={onClickToBedarf}
+        size="large"
+      >
         <BeDownSvg />
       </IconButton>
     </>

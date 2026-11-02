@@ -80,16 +80,16 @@ const OpenContextMenu = ({
       } else if (e.key === 'ArrowDown') {
         e.preventDefault()
         setSelectedIndex((i) =>
-          selectableEntries.length === 0
-            ? -1
-            : (i + 1) % selectableEntries.length,
+          selectableEntries.length === 0 ?
+            -1
+          : (i + 1) % selectableEntries.length,
         )
       } else if (e.key === 'ArrowUp') {
         e.preventDefault()
         setSelectedIndex((i) =>
-          selectableEntries.length === 0
-            ? -1
-            : (i <= 0 ? selectableEntries.length : i) - 1,
+          selectableEntries.length === 0 ?
+            -1
+          : (i <= 0 ? selectableEntries.length : i) - 1,
         )
       } else if (e.key === 'Enter') {
         e.preventDefault()
@@ -152,9 +152,9 @@ const OpenContextMenu = ({
             role="menuitem"
             tabIndex={-1}
             className={
-              itemIndex === selectedIndex
-                ? `${styles.item} ${styles.itemSelected} ${entry.className ?? ''}`
-                : `${styles.item} ${entry.className ?? ''}`
+              itemIndex === selectedIndex ?
+                `${styles.item} ${styles.itemSelected} ${entry.className ?? ''}`
+              : `${styles.item} ${entry.className ?? ''}`
             }
             onClick={() => activateEntry(itemIndex)}
             onMouseEnter={() => setSelectedIndex(itemIndex)}
@@ -177,11 +177,11 @@ export const TreeContextMenu = () => {
   const menuState = useAtomValue(treeContextMenuAtom)
   const closeMenu = useSetAtom(treeContextMenuAtom)
 
-  return menuState ? (
-    <OpenContextMenu
-      key={menuState.id}
-      menuState={menuState}
-      closeMenu={() => closeMenu(null)}
-    />
-  ) : null
+  return menuState ?
+      <OpenContextMenu
+        key={menuState.id}
+        menuState={menuState}
+        closeMenu={() => closeMenu(null)}
+      />
+    : null
 }

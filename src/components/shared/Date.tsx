@@ -62,9 +62,9 @@ export const DateField = ({
   const isValid =
     stateValue !== null ? DateTime.fromSQL(stateValue).isValid : false
   const selected =
-    isValid && stateValue !== null && stateValue !== ''
-      ? DateTime.fromSQL(stateValue as string).toJSDate()
-      : null
+    isValid && stateValue !== null && stateValue !== '' ?
+      DateTime.fromSQL(stateValue as string).toJSDate()
+    : null
 
   // for popperPlacement see https://github.com/Hacker0x01/react-datepicker/issues/1246#issuecomment-361833919
   return (
@@ -72,7 +72,10 @@ export const DateField = ({
       variant="standard"
       className={`date-field ${styles.formControl}`}
     >
-      <InputLabel htmlFor={name} className={styles.labelClass}>
+      <InputLabel
+        htmlFor={name}
+        className={styles.labelClass}
+      >
         {label}
       </InputLabel>
       <DatePicker

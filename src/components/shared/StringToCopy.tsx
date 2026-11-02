@@ -29,7 +29,10 @@ export const StringToCopy = ({
         <div className={styles.stringToCopyContainer}>
           <div className={styles.guidContainer}>{text}</div>
           <div className={styles.copyButtonContainer}>
-            <Button color="primary" onClick={onCopy}>
+            <Button
+              color="primary"
+              onClick={onCopy}
+            >
               {copied ? `${label} kopiert` : `${label} kopieren`}
             </Button>
           </div>

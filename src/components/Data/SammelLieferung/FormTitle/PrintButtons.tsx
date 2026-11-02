@@ -55,7 +55,9 @@ export const SammelLieferungPrint = ({
         onClick={showLieferschein}
         size="large"
       >
-        {printPreview ? <FaEdit /> : <FaEnvelopeOpenText />}
+        {printPreview ?
+          <FaEdit />
+        : <FaEnvelopeOpenText />}
       </IconButton>
     </>
   )

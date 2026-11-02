@@ -8,7 +8,11 @@ export const Technologien = () => (
     <p className={dokuStyles.dokuDate}>27.10.2026</p>
     <ul>
       <li>
-        <a href="https://www.postgresql.org" target="_blank" rel="noreferrer">
+        <a
+          href="https://www.postgresql.org"
+          target="_blank"
+          rel="noreferrer"
+        >
           PostgreSQL
         </a>{' '}
         als Datenbank
@@ -30,13 +34,21 @@ export const Technologien = () => (
         </Link>
       </li>
       <li>
-        <a href="https://postgrest.org" target="_blank" rel="noreferrer">
+        <a
+          href="https://postgrest.org"
+          target="_blank"
+          rel="noreferrer"
+        >
           PostgREST
         </a>{' '}
         als Daten-Schnittstelle
       </li>
       <li>
-        <a href="https://jotai.org/" target="_blank" rel="noreferrer">
+        <a
+          href="https://jotai.org/"
+          target="_blank"
+          rel="noreferrer"
+        >
           Jotai
         </a>{' '}
         für app-seitigen &quot;Status&quot; und offline-fähige Warteschlangen
@@ -53,7 +65,11 @@ export const Technologien = () => (
         für die Benutzeroberfläche
       </li>
       <li>
-        <a href="https://vitejs.dev/" target="_blank" rel="noreferrer">
+        <a
+          href="https://vitejs.dev/"
+          target="_blank"
+          rel="noreferrer"
+        >
           Vite
         </a>{' '}
         als Entwicklungs-Umgebung

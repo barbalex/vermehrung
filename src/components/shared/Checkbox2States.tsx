@@ -48,7 +48,10 @@ export const Checkbox2States = ({
         aria-describedby={`${label}ErrorText`}
         variant="standard"
       >
-        <FormLabel component="legend" className={styles.formLabel}>
+        <FormLabel
+          component="legend"
+          className={styles.formLabel}
+        >
           {label}
         </FormLabel>
         <Checkbox

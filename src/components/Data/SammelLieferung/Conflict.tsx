@@ -75,8 +75,9 @@ export const SammelLieferungConflict = ({
     newObject.id = uuidv7()
     newObject.changed = new Date().toISOString()
     newObject.changed_by = user.email
-    newObject._revisions = revRow._revisions
-      ? toPgArray([rev, ...(revRow._revisions as string[])])
+    newObject._revisions =
+      revRow._revisions ?
+        toPgArray([rev, ...(revRow._revisions as string[])])
       : toPgArray([rev])
 
     try {
@@ -133,8 +134,9 @@ export const SammelLieferungConflict = ({
     newObject.id = uuidv7()
     newObject.changed = new Date().toISOString()
     newObject.changed_by = user.email
-    newObject._revisions = row?._revisions
-      ? toPgArray([rev, ...((row?._revisions as string[]) ?? [])])
+    newObject._revisions =
+      row?._revisions ?
+        toPgArray([rev, ...((row?._revisions as string[]) ?? [])])
       : toPgArray([rev])
     try {
       await store

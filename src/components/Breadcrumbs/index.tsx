@@ -106,9 +106,9 @@ export const Breadcrumbs = () => {
   return (
     <div
       className={
-        treePaneHidden
-          ? `${styles.container} ${styles.containerWithoutSeparator}`
-          : styles.container
+        treePaneHidden ?
+          `${styles.container} ${styles.containerWithoutSeparator}`
+        : styles.container
       }
       ref={scrollRef}
     >
@@ -121,20 +121,21 @@ export const Breadcrumbs = () => {
         maxItems={100}
       >
         {crumbs.map((crumb, index) =>
-          index === crumbs.length - 1 ? (
-            <span key={crumb.key} className={styles.current}>
+          index === crumbs.length - 1 ?
+            <span
+              key={crumb.key}
+              className={styles.current}
+            >
               {crumb.label}
             </span>
-          ) : (
-            <Link
+          : <Link
               key={crumb.key}
               component={RouterLink}
               to={`/Vermehrung/${crumb.url.join('/')}`}
               underline="hover"
             >
               {crumb.label}
-            </Link>
-          ),
+            </Link>,
         )}
       </MuiBreadcrumbs>
     </div>

@@ -36,35 +36,34 @@ export const SammlungFormTitleChooser = ({
     filteredCount: 0,
   })
   useEffect(() => {
-    const hierarchyQuery = artIdInActiveNodeArray
-      ? [
+    const hierarchyQuery =
+      artIdInActiveNodeArray ?
+        [
           Q.experimentalJoinTables(['art']),
           Q.on('art', 'id', artIdInActiveNodeArray),
         ]
-      : herkunftIdInActiveNodeArray
-        ? [
-            Q.experimentalJoinTables(['herkunft']),
-            Q.on('herkunft', 'id', herkunftIdInActiveNodeArray),
-          ]
-        : personIdInActiveNodeArray
-          ? [
-              Q.experimentalJoinTables(['person']),
-              Q.on('person', 'id', personIdInActiveNodeArray),
-            ]
-          : []
+      : herkunftIdInActiveNodeArray ?
+        [
+          Q.experimentalJoinTables(['herkunft']),
+          Q.on('herkunft', 'id', herkunftIdInActiveNodeArray),
+        ]
+      : personIdInActiveNodeArray ?
+        [
+          Q.experimentalJoinTables(['person']),
+          Q.on('person', 'id', personIdInActiveNodeArray),
+        ]
+      : []
     const collection =
       db?.get<import('../../../../dbModel.ts').Sammlung>('sammlung')
     if (!collection) return
     const sammlungDelQuery =
-      sammlungFilter._deleted === false
-        ? Q.where('_deleted', false)
-        : sammlungFilter._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+      sammlungFilter._deleted === false ? Q.where('_deleted', false)
+      : sammlungFilter._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     const totalCountObservable = collection
       .query(sammlungDelQuery, ...hierarchyQuery)
       .observeCount()

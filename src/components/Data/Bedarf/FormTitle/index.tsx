@@ -30,8 +30,9 @@ export const BedarfFormTitle = ({
     filteredCount: 0,
   })
   useEffect(() => {
-    const hierarchyQuery = kulturIdInActiveNodeArray
-      ? [
+    const hierarchyQuery =
+      kulturIdInActiveNodeArray ?
+        [
           Q.experimentalJoinTables(['kultur']),
           Q.on('kultur', 'id', kulturIdInActiveNodeArray),
         ]
@@ -40,15 +41,13 @@ export const BedarfFormTitle = ({
       db?.get<import('../../../../dbModel.ts').Bedarf>('bedarf')
     if (!collection) return
     const delQuery =
-      bedarfFilter._deleted === false
-        ? Q.where('_deleted', false)
-        : bedarfFilter._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+      bedarfFilter._deleted === false ? Q.where('_deleted', false)
+      : bedarfFilter._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     const totalCountObservable = collection
       .query(delQuery, ...hierarchyQuery)
       .observeCount()

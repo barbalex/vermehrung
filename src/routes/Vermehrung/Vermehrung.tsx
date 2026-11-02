@@ -23,16 +23,16 @@ export const Vermehrung = () => {
   const showFilter = useAtomValue(filterShowAtom)
   const treePaneHidden = useAtomValue(treePaneHiddenAtom)
 
-  const treeWidth = treePaneHidden
-    ? 0
-    : singleColumnView
-      ? // if no form is active, show only tree
-        '100%'
-      : `${widthInPercentOfScreen}%`
+  const treeWidth =
+    treePaneHidden ? 0
+    : singleColumnView ?
+      // if no form is active, show only tree
+      '100%'
+    : `${widthInPercentOfScreen}%`
 
-  const formWidth = singleColumnView
-    ? treePaneHidden
-      ? '100%'
+  const formWidth =
+    singleColumnView ?
+      treePaneHidden ? '100%'
       : 0
     : `${100 - widthInPercentOfScreen}%`
   const minSizeTree = Number(treeWidth) < 30 ? Number(treeWidth) : 30
@@ -45,20 +45,18 @@ export const Vermehrung = () => {
   // the very first paint.
   const containerWidth = window.innerWidth
   const treeSizePx =
-    treeWidth === 0
-      ? 0
-      : treeWidth === '100%'
-        ? containerWidth
-        : Math.round((widthInPercentOfScreen / 100) * containerWidth)
+    treeWidth === 0 ? 0
+    : treeWidth === '100%' ? containerWidth
+    : Math.round((widthInPercentOfScreen / 100) * containerWidth)
   const formSizePx = containerWidth - treeSizePx
 
   // need the key on Allotment or it would only render correctly on second render
   return (
     <div
       className={
-        breadcrumbsEnabled
-          ? `${styles.container} ${styles.containerWithBreadcrumbs}`
-          : styles.container
+        breadcrumbsEnabled ?
+          `${styles.container} ${styles.containerWithBreadcrumbs}`
+        : styles.container
       }
     >
       <Allotment
@@ -83,7 +81,11 @@ export const Vermehrung = () => {
           minSize={minSizeForm}
         >
           <Suspense fallback={<Fallback />}>
-            <ErrorBoundary>{showFilter ? <Filter /> : <Data />}</ErrorBoundary>
+            <ErrorBoundary>
+              {showFilter ?
+                <Filter />
+              : <Data />}
+            </ErrorBoundary>
           </Suspense>
         </Allotment.Pane>
       </Allotment>

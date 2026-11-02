@@ -1,7 +1,13 @@
 import { randomUUID } from 'node:crypto'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
-import { assertBackendAvailable, getTestPerson, mintToken, pgrst, psql } from './helpers.ts'
+import {
+  assertBackendAvailable,
+  getTestPerson,
+  mintToken,
+  pgrst,
+  psql,
+} from './helpers.ts'
 
 // The write path:
 // 1. http upsert semantics (Prefer: resolution=merge-duplicates) - this is
@@ -181,7 +187,8 @@ rollback;`),
     ).trim()
     expect(artId).toBeTruthy()
 
-    const output = psql(`select 'before=' || _rev from art where id = '${artId}';
+    const output =
+      psql(`select 'before=' || _rev from art where id = '${artId}';
 begin;
 set local role artverantwortlich;
 select set_config('request.jwt.claims', '{"role": "artverantwortlich", "user_id": "${artverantwortlich.id}"}', true);

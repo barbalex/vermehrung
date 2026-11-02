@@ -34,8 +34,9 @@ export const HerkunftFormTitleChooser = ({
     filteredCount: 0,
   })
   useEffect(() => {
-    const hierarchyQuery = sammlungIdInActiveNodeArray
-      ? [
+    const hierarchyQuery =
+      sammlungIdInActiveNodeArray ?
+        [
           Q.experimentalJoinTables(['sammlung']),
           Q.on('sammlung', 'id', sammlungIdInActiveNodeArray),
         ]
@@ -44,15 +45,13 @@ export const HerkunftFormTitleChooser = ({
       db?.get<import('../../../../dbModel.ts').Herkunft>('herkunft')
     if (!collection) return
     const delQuery =
-      herkunftFilter._deleted === false
-        ? Q.where('_deleted', false)
-        : herkunftFilter._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+      herkunftFilter._deleted === false ? Q.where('_deleted', false)
+      : herkunftFilter._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     const totalCountObservable = collection
       .query(delQuery, ...hierarchyQuery)
       .observeCount()

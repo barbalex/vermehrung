@@ -63,15 +63,13 @@ export const PersonArten = ({
       .observe()
     const artFilter = store.get(filterArtAtom)
     const artDelQuery =
-      artFilter._deleted === false
-        ? Q.where('_deleted', false)
-        : artFilter._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+      artFilter._deleted === false ? Q.where('_deleted', false)
+      : artFilter._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     const artsObservable = db
       ?.get<import('../../../../../dbModel.ts').Art>('art')
       .query(artDelQuery, Q.where('id', Q.notIn(avArtIds)))
@@ -124,9 +122,7 @@ export const PersonArten = ({
   return (
     <ErrorBoundary>
       <section
-        onClick={
-                  onClickToggle as unknown as import('react').MouseEventHandler
-                }
+        onClick={onClickToggle as unknown as import('react').MouseEventHandler}
         title={open ? 'schliessen' : 'öffnen'}
         className={styles.titleRow}
       >
@@ -137,10 +133,14 @@ export const PersonArten = ({
           <IconButton
             aria-label={open ? 'schliessen' : 'öffnen'}
             title={open ? 'schliessen' : 'öffnen'}
-            onClick={onClickToggle as unknown as import('react').MouseEventHandler<HTMLElement>}
+            onClick={
+              onClickToggle as unknown as import('react').MouseEventHandler<HTMLElement>
+            }
             size="large"
           >
-            {open ? <FaChevronUp /> : <FaChevronDown />}
+            {open ?
+              <FaChevronUp />
+            : <FaChevronDown />}
           </IconButton>
         </div>
       </section>
@@ -153,7 +153,10 @@ export const PersonArten = ({
           <>
             <div className={styles.avsClass}>
               {avs.map((av, index) => (
-                <Art key={`${av.person_id}/${av.art_id}/${index}`} av={av} />
+                <Art
+                  key={`${av.person_id}/${av.art_id}/${index}`}
+                  av={av}
+                />
               ))}
             </div>
             {!!artWerte.length && (
@@ -166,8 +169,9 @@ export const PersonArten = ({
                 saveToDb={saveToDb}
                 isClearable={false}
                 error={
-                (errors as Record<string, unknown>).art_id as string | undefined
-              }
+                  (errors as Record<string, unknown>).art_id as
+                    string | undefined
+                }
               />
             )}
           </>

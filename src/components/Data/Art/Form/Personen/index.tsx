@@ -59,38 +59,33 @@ export const Personen = ({
   }
 
   const [dataState, setDataState] = useState<{
-  avsSorted: unknown[]
-  personWerte: { value: string; label: string | undefined; link?: string[] }[]
-}>({    avsSorted: [],
-    personWerte: [],
-})
+    avsSorted: unknown[]
+    personWerte: { value: string; label: string | undefined; link?: string[] }[]
+  }>({ avsSorted: [], personWerte: [] })
   useEffect(() => {
     const delQuery =
-      personFilter?._deleted === false
-        ? Q.where('_deleted', false)
-        : personFilter?._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+      personFilter?._deleted === false ? Q.where('_deleted', false)
+      : personFilter?._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     const aktivQuery =
-      personFilter?.aktiv === false
-        ? Q.where('aktiv', false)
-        : personFilter?.aktiv === true
-          ? Q.where('aktiv', true)
-          : Q.or(
-              Q.where('aktiv', false),
-              Q.where('aktiv', true),
-              Q.where('aktiv', null),
-            )
+      personFilter?.aktiv === false ? Q.where('aktiv', false)
+      : personFilter?.aktiv === true ? Q.where('aktiv', true)
+      : Q.or(
+          Q.where('aktiv', false),
+          Q.where('aktiv', true),
+          Q.where('aktiv', null),
+        )
     const personsObservable = db
       ?.get<import('../../../../../dbModel.ts').Person>('person')
       .query(delQuery, aktivQuery)
       .observe()
-    const avsObservable = art?.avs
-      ? art?.avs?.extend(Q.where('_deleted', false))?.observe()
+    const avsObservable =
+      art?.avs ?
+        art?.avs?.extend(Q.where('_deleted', false))?.observe()
       : $of([])
     const combinedObservables = combineLatest([
       personsObservable,
@@ -104,21 +99,18 @@ export const Personen = ({
         ]
       >
     ).subscribe(async ([persons, avs]) => {
-        const avsSorted = await avsSortByPerson(avs)
-        const avPersonIds = avsSorted.map((v) => v.person_id)
-        const personWerte = persons
-          .filter(
-            (a) => !avPersonIds.includes(a.id),
-          )
-          .sort(personSort)
-          .map((el: import('../../../../../dbModel.ts').Person) => ({
-            value: el.id,
-            label: personLabelFromPerson({ person: el }),
-            inaktiv: el.aktiv === false,
-          }))
-        setDataState({ avsSorted, personWerte })
-      },
-    )
+      const avsSorted = await avsSortByPerson(avs)
+      const avPersonIds = avsSorted.map((v) => v.person_id)
+      const personWerte = persons
+        .filter((a) => !avPersonIds.includes(a.id))
+        .sort(personSort)
+        .map((el: import('../../../../../dbModel.ts').Person) => ({
+          value: el.id,
+          label: personLabelFromPerson({ person: el }),
+          inaktiv: el.aktiv === false,
+        }))
+      setDataState({ avsSorted, personWerte })
+    })
     return () => subscription?.unsubscribe?.()
   }, [art?.avs, db, personFilter])
   const { avsSorted, personWerte } = dataState
@@ -135,9 +127,7 @@ export const Personen = ({
   return (
     <ErrorBoundary>
       <section
-        onClick={
-                  onClickToggle as unknown as import('react').MouseEventHandler
-                }
+        onClick={onClickToggle as unknown as import('react').MouseEventHandler}
         title={open ? 'schliessen' : 'öffnen'}
         className={styles.titleRow}
       >
@@ -148,10 +138,14 @@ export const Personen = ({
           <IconButton
             aria-label={open ? 'schliessen' : 'öffnen'}
             title={open ? 'schliessen' : 'öffnen'}
-            onClick={onClickToggle as unknown as import('react').MouseEventHandler<HTMLElement>}
+            onClick={
+              onClickToggle as unknown as import('react').MouseEventHandler<HTMLElement>
+            }
             size="large"
           >
-            {open ? <FaChevronUp /> : <FaChevronDown />}
+            {open ?
+              <FaChevronUp />
+            : <FaChevronDown />}
           </IconButton>
         </div>
       </section>

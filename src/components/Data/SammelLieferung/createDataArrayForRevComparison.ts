@@ -53,11 +53,13 @@ export const createDataArrayForSammellieferungRevComparison = ({
     label: 'Von Kultur (id)',
   },
   {
-    valueInRow: row?.datum
-      ? DateTime.fromSQL(row?.datum as string).toFormat('dd.LL.yyyy')
+    valueInRow:
+      row?.datum ?
+        DateTime.fromSQL(row?.datum as string).toFormat('dd.LL.yyyy')
       : null,
-    valueInRev: revRow?.datum
-      ? DateTime.fromSQL(revRow?.datum as string).toFormat('dd.LL.yyyy')
+    valueInRev:
+      revRow?.datum ?
+        DateTime.fromSQL(revRow?.datum as string).toFormat('dd.LL.yyyy')
       : null,
     label: 'Datum',
   },

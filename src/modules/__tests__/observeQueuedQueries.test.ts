@@ -50,10 +50,7 @@ describe('observeQueuedQueries', () => {
     store.set(notificationsAtom, [])
     store.set(errorsAtom, { art: {} })
     store.set(shortTermOnlineAtom, true)
-    store.set(
-      dbAtom,
-      dbMock as unknown as import('nitromelondb').Database,
-    )
+    store.set(dbAtom, dbMock as unknown as import('nitromelondb').Database)
 
     // executeQueuedQuery awaits apiClient.post and normalizes thrown
     // errors into { error: { message, status, code, isNetwork } }

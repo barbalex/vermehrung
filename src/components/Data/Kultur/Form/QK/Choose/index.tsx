@@ -13,7 +13,10 @@ export const ChooseKulturQk = ({
       <div className={styles.info}>Diese Wahl gilt für alle Kulturen</div>
       <div className={styles.fieldsContainer}>
         {qks.map((row) => (
-          <Row key={row.id} qk={row} />
+          <Row
+            key={row.id}
+            qk={row}
+          />
         ))}
       </div>
     </div>

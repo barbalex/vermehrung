@@ -15,7 +15,7 @@ import styles from '../Arten/Row.module.css'
 export const KulturRow = ({
   style,
   index,
-  rows
+  rows,
 }: {
   style?: Record<string, unknown>
   index?: number
@@ -29,11 +29,10 @@ export const KulturRow = ({
   const [label, setLabel] = useState('')
   useEffect(() => {
     let isActive = true
-    const labelObservable = artIdInActiveNodeArray
-      ? row.labelUnderArt
-      : gartenIdInActiveNodeArray
-        ? row.labelUnderGarten
-        : row.label
+    const labelObservable =
+      artIdInActiveNodeArray ? row.labelUnderArt
+      : gartenIdInActiveNodeArray ? row.labelUnderGarten
+      : row.label
     labelObservable
       .pipe(first$())
       .toPromise()

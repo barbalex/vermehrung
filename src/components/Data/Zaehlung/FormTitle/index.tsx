@@ -30,8 +30,9 @@ export const ZaehlungFormTitleChooser = ({
     filteredCount: 0,
   })
   useEffect(() => {
-    const hierarchyQuery = kulturIdInActiveNodeArray
-      ? [
+    const hierarchyQuery =
+      kulturIdInActiveNodeArray ?
+        [
           Q.experimentalJoinTables(['kultur']),
           Q.on('kultur', 'id', kulturIdInActiveNodeArray),
         ]
@@ -40,15 +41,13 @@ export const ZaehlungFormTitleChooser = ({
       db?.get<import('../../../../dbModel.ts').Zaehlung>('zaehlung')
     if (!collection) return
     const zaehlungDelQuery =
-      zaehlungFilter._deleted === false
-        ? Q.where('_deleted', false)
-        : zaehlungFilter._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+      zaehlungFilter._deleted === false ? Q.where('_deleted', false)
+      : zaehlungFilter._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     const totalCountObservable = collection
       .query(zaehlungDelQuery, ...hierarchyQuery)
       .observeCount()

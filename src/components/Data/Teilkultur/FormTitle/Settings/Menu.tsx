@@ -28,15 +28,21 @@ export const TeilkulturSettingsMenu = ({
     kulturOption: import('../../../../../dbModel.ts').KulturOption | undefined
   }>({ kulturOption: undefined })
   const { kulturOption } = dataState
-  const { tk_bemerkungen } = (kulturOption ?? {}) as unknown as Record<string, unknown>
+  const { tk_bemerkungen } = (kulturOption ?? {}) as unknown as Record<
+    string,
+    unknown
+  >
 
   useEffect(() => {
-    const kOObservable = kulturId
-      ? db?.get('kultur_option').findAndObserve(kulturId ?? '')
+    const kOObservable =
+      kulturId ?
+        db?.get('kultur_option').findAndObserve(kulturId ?? '')
       : $of({})
-    const subscription = (kOObservable as unknown as import('rxjs').Observable<import('../../../../../dbModel.ts').KulturOption | undefined>)?.subscribe((kulturOption) =>
-      setDataState({ kulturOption }),
-    )
+    const subscription = (
+      kOObservable as unknown as import('rxjs').Observable<
+        import('../../../../../dbModel.ts').KulturOption | undefined
+      >
+    )?.subscribe((kulturOption) => setDataState({ kulturOption }))
 
     return () => subscription?.unsubscribe?.()
   }, [db, kulturId])
@@ -91,9 +97,7 @@ export const TeilkulturSettingsMenu = ({
             <Checkbox
               color="primary"
               checked={!!tk_bemerkungen}
-              onClick={
-                  saveToDb as unknown as import('react').MouseEventHandler
-                }
+              onClick={saveToDb as unknown as import('react').MouseEventHandler}
               name="tk_bemerkungen"
             />
           }

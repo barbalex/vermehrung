@@ -123,8 +123,9 @@ export const updateSammelLieferung = async ({
   const newObjectForStore = { ...newObject }
   // convert array to string as hasura does not support arrays yet
   // https://github.com/hasura/graphql-engine/pull/2243
-  newObject._revisions = lfLastVersion._revisions
-    ? toPgArray([rev, ...lfLastVersion._revisions])
+  newObject._revisions =
+    lfLastVersion._revisions ?
+      toPgArray([rev, ...lfLastVersion._revisions])
     : toPgArray([rev])
   addQueuedQuery({
     name: 'mutateInsert_lieferung_rev_one',
@@ -140,22 +141,19 @@ export const updateSammelLieferung = async ({
     revertValues: JSON.stringify(newObject),
   })
   // optimistically update store
-  newObjectForStore._revisions = lfLastVersion._revisions
-    ? [rev, ...lfLastVersion._revisions]
-    : [rev]
+  newObjectForStore._revisions =
+    lfLastVersion._revisions ? [rev, ...lfLastVersion._revisions] : [rev]
   newObjectForStore._conflicts = lfLastVersion._conflicts
   newObjectForStore.id = lfLastVersion.id
   delete newObjectForStore.lieferung_id
   await db?.write(async () => {
-    await lieferung.update(
-      (row: unknown) => {
-        const mutableRow = row as Record<string, unknown>
-        Object.entries(newObjectForStore).forEach(([key, value]) => {
-          if (!isEqual(value, mutableRow[key])) {
-            mutableRow[key] = value
-          }
-        })
-      },
-    )
+    await lieferung.update((row: unknown) => {
+      const mutableRow = row as Record<string, unknown>
+      Object.entries(newObjectForStore).forEach(([key, value]) => {
+        if (!isEqual(value, mutableRow[key])) {
+          mutableRow[key] = value
+        }
+      })
+    })
   })
 }

@@ -28,11 +28,7 @@ import { constants } from '../../../utils/constants.ts'
 
 import artStyles from '../Arten/index.module.css'
 
-export const Herkuenfte = ({
-  filter: showFilter,
-}: {
-  filter?: boolean
-}) => {
+export const Herkuenfte = ({ filter: showFilter }: { filter?: boolean }) => {
   const db = useAtomValue(dbAtom)
   const activeNodeArray = useAtomValue(activeNodeArrayAtom)
   const sammlungIdInActiveNodeArray = useAtomValue(
@@ -46,30 +42,29 @@ export const Herkuenfte = ({
     totalCount: number
   }>({ herkunfts: [], totalCount: 0 })
   useEffect(() => {
-    const hierarchyQuery = sammlungIdInActiveNodeArray
-      ? [
+    const hierarchyQuery =
+      sammlungIdInActiveNodeArray ?
+        [
           Q.experimentalJoinTables(['sammlung']),
           Q.on('sammlung', 'id', sammlungIdInActiveNodeArray),
         ]
-      : artIdInActiveNodeArray
-        ? [
-            Q.experimentalJoinTables(['sammlung']),
-            Q.on('sammlung', 'art_id', artIdInActiveNodeArray),
-          ]
-        : []
+      : artIdInActiveNodeArray ?
+        [
+          Q.experimentalJoinTables(['sammlung']),
+          Q.on('sammlung', 'art_id', artIdInActiveNodeArray),
+        ]
+      : []
     const collection =
       db?.get<import('../../../dbModel.ts').Herkunft>('herkunft')
     if (!collection) return
     const delQuery =
-      herkunftFilter._deleted === false
-        ? Q.where('_deleted', false)
-        : herkunftFilter._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+      herkunftFilter._deleted === false ? Q.where('_deleted', false)
+      : herkunftFilter._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     const countObservable = collection
       .query(delQuery, ...hierarchyQuery)
       .observeCount()
@@ -111,19 +106,22 @@ export const Herkuenfte = ({
         className={artStyles.container}
         style={{ backgroundColor: showFilter ? 'var(--filter-bg)' : 'unset' }}
       >
-        {showFilter ? (
+        {showFilter ?
           <FilterTitle
             title="Herkunft"
             table="herkunft"
             totalCount={totalCount}
             filteredCount={filteredCount}
           />
-        ) : (
-          <div className={artStyles.titleContainer}>
+        : <div className={artStyles.titleContainer}>
             <div className={artStyles.title}>Herkünfte</div>
             <div className={artStyles.titleSymbols}>
               {!breadcrumbsEnabled && (
-                <IconButton title={upTitle} onClick={onClickUp} size="large">
+                <IconButton
+                  title={upTitle}
+                  onClick={onClickUp}
+                  size="large"
+                >
                   <UpSvg />
                 </IconButton>
               )}
@@ -132,8 +130,8 @@ export const Herkuenfte = ({
                   aria-label="neue Herkunft"
                   title="neue Herkunft"
                   onClick={
-                  insertHerkunftRev as unknown as import('react').MouseEventHandler
-                }
+                    insertHerkunftRev as unknown as import('react').MouseEventHandler
+                  }
                   size="large"
                 >
                   <FaPlus />
@@ -145,7 +143,7 @@ export const Herkuenfte = ({
               />
             </div>
           </div>
-        )}
+        }
         <div className={artStyles.fieldsContainer}>
           <List
             rowComponent={Row}

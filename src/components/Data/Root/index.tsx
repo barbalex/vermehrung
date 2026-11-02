@@ -52,8 +52,9 @@ export const Root = ({ filter: showFilter }: { filter?: boolean }) => {
 
   useEffect(
     () => {
-      const userPersonOptionsObservable = user.uid
-        ? db
+      const userPersonOptionsObservable =
+        user.uid ?
+          db
             ?.get<import('../../../dbModel.ts').PersonOption>('person_option')
             .query(Q.on('person', Q.where('account_id', user.uid)))
             .observeWithColumns([
@@ -63,8 +64,9 @@ export const Root = ({ filter: showFilter }: { filter?: boolean }) => {
               'tree_lieferung',
             ])
         : $of([undefined])
-      const userRoleObservable = user.uid
-        ? db
+      const userRoleObservable =
+        user.uid ?
+          db
             ?.get<import('../../../dbModel.ts').UserRole>('user_role')
             .query(Q.on('person', Q.where('account_id', user.uid)))
             .observeWithColumns(['name'])
@@ -80,54 +82,52 @@ export const Root = ({ filter: showFilter }: { filter?: boolean }) => {
             [import('../../../dbModel.ts').UserRole | undefined],
           ]
         >
-      ).subscribe(
-        async ([[userPersonOption], [userRole]]) => {
-          const sArt = getShowArt({
-            userRole: userRole?.name,
-            activeNodeArray,
-          })
-          const sGarten = getShowGarten()
-          const sHerkunft = getShowHerkunft({
-            userRole: userRole?.name,
-            activeNodeArray,
-          })
-          const sKultur = getShowKultur({ userPersonOption, activeNodeArray })
-          const sLieferung = getShowLieferung({
-            userPersonOption,
-            activeNodeArray,
-          })
-          const sPerson = getShowPerson()
-          // const sSammelLieferung = getShowSammelLieferung({
-          //   userPersonOption,
-          //   activeNodeArray,
-          // })
-          const sSammlung = getShowSammlung({
-            userRole: userRole?.name,
-            activeNodeArray,
-          })
-          const sTeilkultur = getShowTeilkultur({
-            userPersonOption,
-            activeNodeArray,
-          })
-          const sZaehlung = getShowZaehlung({
-            userPersonOption,
-            activeNodeArray,
-          })
+      ).subscribe(async ([[userPersonOption], [userRole]]) => {
+        const sArt = getShowArt({
+          userRole: userRole?.name,
+          activeNodeArray,
+        })
+        const sGarten = getShowGarten()
+        const sHerkunft = getShowHerkunft({
+          userRole: userRole?.name,
+          activeNodeArray,
+        })
+        const sKultur = getShowKultur({ userPersonOption, activeNodeArray })
+        const sLieferung = getShowLieferung({
+          userPersonOption,
+          activeNodeArray,
+        })
+        const sPerson = getShowPerson()
+        // const sSammelLieferung = getShowSammelLieferung({
+        //   userPersonOption,
+        //   activeNodeArray,
+        // })
+        const sSammlung = getShowSammlung({
+          userRole: userRole?.name,
+          activeNodeArray,
+        })
+        const sTeilkultur = getShowTeilkultur({
+          userPersonOption,
+          activeNodeArray,
+        })
+        const sZaehlung = getShowZaehlung({
+          userPersonOption,
+          activeNodeArray,
+        })
 
-          setDataState({
-            showArt: sArt,
-            showGarten: sGarten,
-            showHerkunft: sHerkunft,
-            showKultur: sKultur,
-            showLieferung: sLieferung,
-            showPerson: sPerson,
-            // showSammelLieferung: sSammelLieferung,
-            showSammlung: sSammlung,
-            showTeilkultur: sTeilkultur,
-            showZaehlung: sZaehlung,
-          })
-        },
-      )
+        setDataState({
+          showArt: sArt,
+          showGarten: sGarten,
+          showHerkunft: sHerkunft,
+          showKultur: sKultur,
+          showLieferung: sLieferung,
+          showPerson: sPerson,
+          // showSammelLieferung: sSammelLieferung,
+          showSammlung: sSammlung,
+          showTeilkultur: sTeilkultur,
+          showZaehlung: sZaehlung,
+        })
+      })
 
       return () => subscription?.unsubscribe?.()
     },
@@ -154,51 +154,51 @@ export const Root = ({ filter: showFilter }: { filter?: boolean }) => {
   // TODO: filter according to roles
   // by adding each role name as key and true/false as value
   const rows = [
-    ...(showArt
-      ? [{ name: 'Arten', url: ['Arten'], table: 'art', sort: 1 }]
-      : []),
-    ...(showHerkunft
-      ? [{ name: 'Herkünfte', url: ['Herkuenfte'], table: 'herkunft', sort: 2 }]
-      : []),
-    ...(showSammlung
-      ? [
-          {
-            name: 'Sammlungen',
-            url: ['Sammlungen'],
-            table: 'sammlung',
-            sort: 3,
-          },
-        ]
-      : []),
-    ...(showGarten
-      ? [{ name: 'Gärten', url: ['Gaerten'], table: 'garten', sort: 4 }]
-      : []),
-    ...(showKultur
-      ? [{ name: 'Kulturen', url: ['Kulturen'], table: 'kultur', sort: 5 }]
-      : []),
-    ...(showTeilkultur
-      ? [
-          {
-            name: 'Teilkulturen',
-            url: ['Teilkulturen'],
-            table: 'teilkultur',
-            sort: 6,
-          },
-        ]
-      : []),
-    ...(showZaehlung
-      ? [{ name: 'Zählungen', url: ['Zaehlungen'], table: 'zaehlung', sort: 7 }]
-      : []),
-    ...(showLieferung
-      ? [
-          {
-            name: 'Lieferungen',
-            url: ['Lieferungen'],
-            table: 'lieferung',
-            sort: 8,
-          },
-        ]
-      : []),
+    ...(showArt ?
+      [{ name: 'Arten', url: ['Arten'], table: 'art', sort: 1 }]
+    : []),
+    ...(showHerkunft ?
+      [{ name: 'Herkünfte', url: ['Herkuenfte'], table: 'herkunft', sort: 2 }]
+    : []),
+    ...(showSammlung ?
+      [
+        {
+          name: 'Sammlungen',
+          url: ['Sammlungen'],
+          table: 'sammlung',
+          sort: 3,
+        },
+      ]
+    : []),
+    ...(showGarten ?
+      [{ name: 'Gärten', url: ['Gaerten'], table: 'garten', sort: 4 }]
+    : []),
+    ...(showKultur ?
+      [{ name: 'Kulturen', url: ['Kulturen'], table: 'kultur', sort: 5 }]
+    : []),
+    ...(showTeilkultur ?
+      [
+        {
+          name: 'Teilkulturen',
+          url: ['Teilkulturen'],
+          table: 'teilkultur',
+          sort: 6,
+        },
+      ]
+    : []),
+    ...(showZaehlung ?
+      [{ name: 'Zählungen', url: ['Zaehlungen'], table: 'zaehlung', sort: 7 }]
+    : []),
+    ...(showLieferung ?
+      [
+        {
+          name: 'Lieferungen',
+          url: ['Lieferungen'],
+          table: 'lieferung',
+          sort: 8,
+        },
+      ]
+    : []),
     // ...(showSammelLieferung ?
     //   [
     //     {
@@ -209,9 +209,9 @@ export const Root = ({ filter: showFilter }: { filter?: boolean }) => {
     //     },
     //   ]
     // : []),
-    ...(showPerson
-      ? [{ name: 'Personen', url: ['Personen'], table: 'person', sort: 11 }]
-      : []),
+    ...(showPerson ?
+      [{ name: 'Personen', url: ['Personen'], table: 'person', sort: 11 }]
+    : []),
   ]
 
   return (
@@ -222,7 +222,11 @@ export const Root = ({ filter: showFilter }: { filter?: boolean }) => {
       >
         <div className={styles.fieldsContainer}>
           {rows.map((row) => (
-            <Row key={row.name} row={row} style={{}} />
+            <Row
+              key={row.name}
+              row={row}
+              style={{}}
+            />
           ))}
         </div>
       </div>

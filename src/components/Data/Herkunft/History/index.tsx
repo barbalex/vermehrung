@@ -31,10 +31,10 @@ export const HerkunftHistory = ({
   rawRow?: unknown
   historyTakeoverCallback?: () => void
 }) => {
-  const priorRevisions =
-    ((row?._revisions ?? []) as string[]).slice(1) ?? []
-  const revPath = priorRevisions.length
-    ? `/herkunft_rev?_rev=in.(${priorRevisions.join(',')})&select=id,bemerkungen,gemeinde,geom_point,herkunft_id,kanton,land,lokalname,nr,changed,changed_by,_rev,_parent_rev,_revisions,_depth,_deleted`
+  const priorRevisions = ((row?._revisions ?? []) as string[]).slice(1) ?? []
+  const revPath =
+    priorRevisions.length ?
+      `/herkunft_rev?_rev=in.(${priorRevisions.join(',')})&select=id,bemerkungen,gemeinde,geom_point,herkunft_id,kanton,land,lokalname,nr,changed,changed_by,_rev,_parent_rev,_revisions,_depth,_deleted`
     : null
   const { error, data, fetching } = useApiQuery(revPath)
   if (error) checkForOnlineError({ error })
@@ -86,7 +86,10 @@ export const HerkunftHistory = ({
         {...sliderSettings}
       >
         {revRows.map((r) => (
-          <Row key={r._rev} revRow={r} row={row}
+          <Row
+            key={r._rev}
+            revRow={r}
+            row={row}
             historyTakeoverCallback={historyTakeoverCallback}
           />
         ))}

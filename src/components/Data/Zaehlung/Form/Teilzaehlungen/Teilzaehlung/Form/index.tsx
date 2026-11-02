@@ -53,8 +53,13 @@ export const TeilzaehlungForm = ({
   const initialDataQueried = useAtomValue(initialDataQueriedAtom)
 
   const [dataState, setDataState] = useState<{
-    teilkulturWerte: { value: string; label: string | undefined; link?: string[] }[]
-    kulturOption: import('../../../../../../../dbModel.ts').KulturOption | undefined
+    teilkulturWerte: {
+      value: string
+      label: string | undefined
+      link?: string[]
+    }[]
+    kulturOption:
+      import('../../../../../../../dbModel.ts').KulturOption | undefined
     row: import('../../../../../../../dbModel.ts').Teilzaehlung | undefined
   }>({
     teilkulturWerte: [],
@@ -65,61 +70,70 @@ export const TeilzaehlungForm = ({
 
   useEffect(() => {
     const teilkulturDelQuery =
-      teilkulturFilter._deleted === false
-        ? Q.where('_deleted', false)
-        : teilkulturFilter._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+      teilkulturFilter._deleted === false ? Q.where('_deleted', false)
+      : teilkulturFilter._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     const teilkultursObservable = db
       ?.get<import('../../../../../../../dbModel.ts').Teilkultur>('teilkultur')
       .query(teilkulturDelQuery, Q.where('kultur_id', kulturId ?? ''))
       .observeWithColumns(['name'])
-    const kulturOptionObservable = kulturId
-      ? db?.get<import('../../../../../../../dbModel.ts').KulturOption>('kultur_option').findAndObserve(kulturId)
+    const kulturOptionObservable =
+      kulturId ?
+        db
+          ?.get<import('../../../../../../../dbModel.ts').KulturOption>(
+            'kultur_option',
+          )
+          .findAndObserve(kulturId)
       : $of(null)
-    const tzObservable = initialDataQueried
-      ? db?.get<import('../../../../../../../dbModel.ts').Teilzaehlung>('teilzaehlung').findAndObserve(id ?? '')
+    const tzObservable =
+      initialDataQueried ?
+        db
+          ?.get<import('../../../../../../../dbModel.ts').Teilzaehlung>(
+            'teilzaehlung',
+          )
+          .findAndObserve(id ?? '')
       : $of({})
     const combinedObservables = combineLatest([
       teilkultursObservable,
       kulturOptionObservable,
       tzObservable,
     ])
-    const subscription = (combinedObservables as unknown as import('rxjs').Observable<
+    const subscription = (
+      combinedObservables as unknown as import('rxjs').Observable<
         [
           import('../../../../../../../dbModel.ts').Teilkultur[],
           import('../../../../../../../dbModel.ts').KulturOption | undefined,
           import('../../../../../../../dbModel.ts').Teilzaehlung | undefined,
         ]
-      >).subscribe(async ([teilkulturs, kulturOption, teilzaehlung]) => {
-        // use the emitted teilzaehlung, not row from the closure:
-        // row is undefined until the first emission and reading it here
-        // makes the react compiler evaluate row.teilkultur during render
-        const teilkulturRelation = teilzaehlung?.teilkultur
-        let teilkultur
-        if (teilkulturRelation) {
-          try {
-            teilkultur = await teilkulturRelation.fetch()
-          } catch {}
-        }
-        const teilkultursIncludingChoosen = uniqBy(
-          [...teilkulturs, ...(teilkultur ? [teilkultur] : [])],
-          (e) => e.id,
-        )
-        const teilkulturWerte = teilkultursIncludingChoosen
-          .sort(teilkulturSort)
-          .map((tk) => ({
-            value: tk.id,
-            label: teilkulturLabelFromTeilkultur({ teilkultur: tk }),
-            link: ['Teilkulturen', tk.id],
-          }))
-        setDataState({ teilkulturWerte, kulturOption, row: teilzaehlung })
-      },
-    )
+      >
+    ).subscribe(async ([teilkulturs, kulturOption, teilzaehlung]) => {
+      // use the emitted teilzaehlung, not row from the closure:
+      // row is undefined until the first emission and reading it here
+      // makes the react compiler evaluate row.teilkultur during render
+      const teilkulturRelation = teilzaehlung?.teilkultur
+      let teilkultur
+      if (teilkulturRelation) {
+        try {
+          teilkultur = await teilkulturRelation.fetch()
+        } catch {}
+      }
+      const teilkultursIncludingChoosen = uniqBy(
+        [...teilkulturs, ...(teilkultur ? [teilkultur] : [])],
+        (e) => e.id,
+      )
+      const teilkulturWerte = teilkultursIncludingChoosen
+        .sort(teilkulturSort)
+        .map((tk) => ({
+          value: tk.id,
+          label: teilkulturLabelFromTeilkultur({ teilkultur: tk }),
+          link: ['Teilkulturen', tk.id],
+        }))
+      setDataState({ teilkulturWerte, kulturOption, row: teilzaehlung })
+    })
 
     return () => subscription?.unsubscribe?.()
   }, [db, teilkulturFilter, id, kulturId, initialDataQueried])
@@ -133,11 +147,7 @@ export const TeilzaehlungForm = ({
     tz_bemerkungen,
   } = kulturOptionRecord ?? {}
 
-  const onCreateNewTeilkultur = async ({
-    name,
-  }: {
-    name: string
-  }) => {
+  const onCreateNewTeilkultur = async ({ name }: { name: string }) => {
     const teilkultur_id = await insertTeilkulturRev({
       noNavigateInTree: true,
       values: {
@@ -166,7 +176,8 @@ export const TeilzaehlungForm = ({
     if (event.target.value === undefined) value = null
     if (event.target.value === '') value = null
     const previousValue = ifIsNumericAsNumber(
-      (row as unknown as Record<string, unknown>)[field as string] as string | number,
+      (row as unknown as Record<string, unknown>)[field as string] as
+        string | number,
     )
     // only update if value has changed
     if (value === previousValue) return
@@ -184,13 +195,15 @@ export const TeilzaehlungForm = ({
   if (!row || !Object.keys(row ?? {}).length) return null
 
   const anzahl_jungpflanzen =
-    exists(row?.anzahl_pflanzen) &&
-    exists(row?.anzahl_auspflanzbereit) &&
-    exists(row?.anzahl_mutterpflanzen)
-      ? row?.anzahl_pflanzen -
-        row?.anzahl_auspflanzbereit -
-        row?.anzahl_mutterpflanzen
-      : null
+    (
+      exists(row?.anzahl_pflanzen) &&
+      exists(row?.anzahl_auspflanzbereit) &&
+      exists(row?.anzahl_mutterpflanzen)
+    ) ?
+      row?.anzahl_pflanzen -
+      row?.anzahl_auspflanzbereit -
+      row?.anzahl_mutterpflanzen
+    : null
 
   return (
     <ErrorBoundary>

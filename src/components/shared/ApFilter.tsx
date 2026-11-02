@@ -15,7 +15,10 @@ export const ApFilter = ({ color }: { color?: string }) => {
   return (
     <ErrorBoundary>
       <div className={styles.container}>
-        <Label label="nur AP" color={color} />
+        <Label
+          label="nur AP"
+          color={color}
+        />
         <Switch
           data-id="ap-filter"
           checked={apFilter}

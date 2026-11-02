@@ -42,15 +42,13 @@ export const SammelLieferungFormTitleChooser = ({
       )
     if (!collection) return
     const sammelLieferungDelQuery =
-      sammelLieferungFilter._deleted === false
-        ? Q.where('_deleted', false)
-        : sammelLieferungFilter._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+      sammelLieferungFilter._deleted === false ? Q.where('_deleted', false)
+      : sammelLieferungFilter._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     const totalCountObservable = collection
       .query(sammelLieferungDelQuery)
       .observeCount()

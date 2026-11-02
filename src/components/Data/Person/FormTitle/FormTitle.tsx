@@ -49,7 +49,10 @@ export const PersonFormTitle = ({
   if (!userRole) return null
 
   return (
-    <div className={artStyles.container} ref={ref}>
+    <div
+      className={artStyles.container}
+      ref={ref}
+    >
       <div className={artStyles.title}>Person</div>
       <div className={artStyles.symbols}>
         {!breadcrumbsEnabled && <NavButtons />}
@@ -59,7 +62,7 @@ export const PersonFormTitle = ({
             <DeleteButton row={row} />
           </>
         )}
-        {(width ?? 0) < 568 ? (
+        {(width ?? 0) < 568 ?
           <Menu white={false}>
             <HistoryButton
               table="person"
@@ -67,15 +70,17 @@ export const PersonFormTitle = ({
               showHistory={showHistory}
               asMenu
             />
-            <KontoMenu row={row} asMenu />
+            <KontoMenu
+              row={row}
+              asMenu
+            />
             <FilterNumbers
               filteredCount={filteredCount}
               totalCount={totalCount}
               asMenu
             />
           </Menu>
-        ) : (
-          <>
+        : <>
             <HistoryButton
               table="person"
               id={row?.id}
@@ -87,7 +92,7 @@ export const PersonFormTitle = ({
               totalCount={totalCount}
             />
           </>
-        )}
+        }
       </div>
     </div>
   )

@@ -49,9 +49,7 @@ export const DeleteButton = ({
         aria-haspopup="true"
         aria-label="Art löschen"
         title="Art löschen"
-        onClick={
-                  onClickButton as unknown as import('react').MouseEventHandler
-                }
+        onClick={onClickButton as unknown as import('react').MouseEventHandler}
         disabled={!!row?._deleted}
         size="large"
       >

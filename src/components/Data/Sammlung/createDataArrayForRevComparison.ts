@@ -28,11 +28,13 @@ export const createDataArrayForSammlungRevComparison = ({
     label: 'Nr',
   },
   {
-    valueInRow: row?.datum
-      ? DateTime.fromSQL(row?.datum as string).toFormat('dd.LL.yyyy')
+    valueInRow:
+      row?.datum ?
+        DateTime.fromSQL(row?.datum as string).toFormat('dd.LL.yyyy')
       : '',
-    valueInRev: revRow?.datum
-      ? DateTime.fromSQL(revRow?.datum as string).toFormat('dd.LL.yyyy')
+    valueInRev:
+      revRow?.datum ?
+        DateTime.fromSQL(revRow?.datum as string).toFormat('dd.LL.yyyy')
       : '',
     label: 'Datum',
   },

@@ -72,14 +72,16 @@ export const Documentation = () => {
 
   return (
     <ErrorBoundary>
-      <div ref={ref} className="docs">
-        {(width ?? 0) < (constants?.tree?.minimalWindowWidth ?? 0) ? (
-          path.length === 1 ? (
+      <div
+        ref={ref}
+        className="docs"
+      >
+        {(width ?? 0) < (constants?.tree?.minimalWindowWidth ?? 0) ?
+          path.length === 1 ?
             <div className={styles.container}>
               <ArticleList articles={articles} />
             </div>
-          ) : (
-            <div className={styles.container}>
+          : <div className={styles.container}>
               <div className={styles.doku}>
                 <FormTitle />
                 <div className={styles.dokuInnerContainer}>
@@ -87,9 +89,8 @@ export const Documentation = () => {
                 </div>
               </div>
             </div>
-          )
-        ) : (
-          <div className={styles.splitPaneContainer}>
+
+        : <div className={styles.splitPaneContainer}>
             <Allotment>
               <Allotment.Pane preferredSize="22%">
                 <ArticleList articles={articles} />
@@ -102,7 +103,7 @@ export const Documentation = () => {
               </div>
             </Allotment>
           </div>
-        )}
+        }
       </div>
     </ErrorBoundary>
   )

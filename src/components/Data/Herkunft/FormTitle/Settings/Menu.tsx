@@ -28,8 +28,9 @@ export const HerkunftSettingsMenu = ({
     userPersonOption: {},
   })
   useEffect(() => {
-    const userPersonOptionsObservable = user.uid
-      ? db
+    const userPersonOptionsObservable =
+      user.uid ?
+        db
           ?.get<import('../../../../../dbModel.ts').PersonOption>(
             'person_option',
           )
@@ -47,18 +48,17 @@ export const HerkunftSettingsMenu = ({
         [Record<string, unknown>[]]
       >
     ).subscribe(([userPersonOptions]) => {
-        setDataState({
-          userPersonOption: userPersonOptions?.[0],
-        })
-      },
-    )
+      setDataState({
+        userPersonOption: userPersonOptions?.[0],
+      })
+    })
 
     return () => subscription?.unsubscribe?.()
   }, [db, user.uid])
   const { userPersonOption } = dataState
 
   const { hk_kanton, hk_land, hk_bemerkungen, hk_geom_point } =
-      (userPersonOption ?? {}) as unknown as Record<string, unknown>
+    (userPersonOption ?? {}) as unknown as Record<string, unknown>
 
   const saveToDb = async (event: {
     target: { name?: string; value: unknown }
@@ -113,9 +113,7 @@ export const HerkunftSettingsMenu = ({
             <Checkbox
               color="primary"
               checked={!!hk_kanton}
-              onClick={
-                  saveToDb as unknown as import('react').MouseEventHandler
-                }
+              onClick={saveToDb as unknown as import('react').MouseEventHandler}
               name="hk_kanton"
             />
           }
@@ -130,9 +128,7 @@ export const HerkunftSettingsMenu = ({
             <Checkbox
               color="primary"
               checked={!!hk_land}
-              onClick={
-                  saveToDb as unknown as import('react').MouseEventHandler
-                }
+              onClick={saveToDb as unknown as import('react').MouseEventHandler}
               name="hk_land"
             />
           }
@@ -147,9 +143,7 @@ export const HerkunftSettingsMenu = ({
             <Checkbox
               color="primary"
               checked={!!hk_geom_point}
-              onClick={
-                  saveToDb as unknown as import('react').MouseEventHandler
-                }
+              onClick={saveToDb as unknown as import('react').MouseEventHandler}
               name="hk_geom_point"
             />
           }
@@ -164,9 +158,7 @@ export const HerkunftSettingsMenu = ({
             <Checkbox
               color="primary"
               checked={!!hk_bemerkungen}
-              onClick={
-                  saveToDb as unknown as import('react').MouseEventHandler
-                }
+              onClick={saveToDb as unknown as import('react').MouseEventHandler}
               name="hk_bemerkungen"
             />
           }

@@ -61,15 +61,13 @@ export const ArtForm = ({
       .query(Q.sortBy('taxonomy'), Q.sortBy('name'))
       .observe()
     const delQuery =
-      artFilter?._deleted === false
-        ? Q.where('_deleted', false)
-        : artFilter?._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+      artFilter?._deleted === false ? Q.where('_deleted', false)
+      : artFilter?._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     const artsObservable = db?.get('art').query(delQuery).observe()
     const combinedObservables = combineLatest([aeArtObservable, artsObservable])
     const subscription = (
@@ -80,14 +78,13 @@ export const ArtForm = ({
         ]
       >
     ).subscribe(async ([aeArts, arts]) => {
-        const artsSorted = await artsSortedFromArts(arts)
+      const artsSorted = await artsSortedFromArts(arts)
 
-        setDataState({
-          aeArts,
-          artsSorted,
-        })
-      },
-    )
+      setDataState({
+        aeArts,
+        artsSorted,
+      })
+    })
 
     return () => subscription?.unsubscribe?.()
   }, [db, artFilter])
@@ -117,7 +114,8 @@ export const ArtForm = ({
 
     // only update if value has changed
     const previousValue = ifIsNumericAsNumber(
-      (row as unknown as Record<string, unknown>)[field as string] as string | number,
+      (row as unknown as Record<string, unknown>)[field as string] as
+        string | number,
     )
     if (value === previousValue) return
     row?.edit({ field, value })
@@ -164,7 +162,7 @@ export const ArtForm = ({
         )}
         {showDeleted && (
           <>
-            {showFilter ? (
+            {showFilter ?
               <JesNo
                 key={`${row?.id}_deleted`}
                 label="gelöscht"
@@ -173,8 +171,7 @@ export const ArtForm = ({
                 saveToDb={saveToDb}
                 error={errors?.art?._deleted as string | undefined}
               />
-            ) : (
-              <Checkbox2States
+            : <Checkbox2States
                 key={`${row?.id}_deleted`}
                 label="gelöscht"
                 name="_deleted"
@@ -182,16 +179,14 @@ export const ArtForm = ({
                 saveToDb={saveToDb}
                 error={errors?.art?._deleted as string | undefined}
               />
-            )}
+            }
           </>
         )}
         <TaxonSelect
           key={`${row?.id}${row?.ae_id}ae_id`}
           art={row}
           saveToDb={saveToDb}
-          error={
-            errors?.art?.ae_id as string | boolean | null | undefined
-          }
+          error={errors?.art?.ae_id as string | boolean | null | undefined}
           modelFilter={aeArtsFilter}
         />
         <SelectCreatable
@@ -214,7 +209,7 @@ export const ArtForm = ({
           saveToDb={saveToDb}
           error={errors?.art?.apflora_av as string | undefined}
         />
-        {showFilter ? (
+        {showFilter ?
           <JesNo
             key={`${row?.id}apflora_ap`}
             label="Aktionsplan"
@@ -223,8 +218,7 @@ export const ArtForm = ({
             saveToDb={saveToDb}
             error={errors?.art?.apflora_ap as string | undefined}
           />
-        ) : (
-          <Checkbox2States
+        : <Checkbox2States
             key={`${row?.id}apflora_ap`}
             label="Aktionsplan"
             name="apflora_ap"
@@ -232,7 +226,7 @@ export const ArtForm = ({
             saveToDb={saveToDb}
             error={errors?.art?.apflora_ap as string | undefined}
           />
-        )}
+        }
         {online && !showFilter && row?._conflicts?.map && (
           <ConflictList
             conflicts={row?._conflicts}
@@ -246,7 +240,10 @@ export const ArtForm = ({
             <Timeline artId={id} />
             <HerkunftTimeline artId={id} />
             <QK artId={id} />
-            <Files parent={row} parentTable="art" />
+            <Files
+              parent={row}
+              parentTable="art"
+            />
           </>
         )}
       </div>

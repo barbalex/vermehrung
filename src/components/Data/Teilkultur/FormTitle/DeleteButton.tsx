@@ -50,9 +50,7 @@ export const TeilkulturDeleteButton = ({
         aria-haspopup="true"
         aria-label="Teilkultur löschen"
         title="Teilkultur löschen"
-        onClick={
-                  onClickButton as unknown as import('react').MouseEventHandler
-                }
+        onClick={onClickButton as unknown as import('react').MouseEventHandler}
         disabled={!!row?._deleted}
         size="large"
       >

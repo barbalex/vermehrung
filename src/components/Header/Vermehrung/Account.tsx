@@ -40,8 +40,9 @@ const Account = ({ asMenu }: { asMenu?: boolean }) => {
     import('../../../dbModel.ts').Person | undefined
   >(undefined)
   useEffect(() => {
-    const userPersonObservable = user.uid
-      ? db
+    const userPersonObservable =
+      user.uid ?
+        db
           ?.get<import('../../../dbModel.ts').Person>('person')
           .query(Q.where('account_id', user.uid))
           .observeWithColumns(['vorname', 'name'])
@@ -125,7 +126,7 @@ const Account = ({ asMenu }: { asMenu?: boolean }) => {
   return (
     <ErrorBoundary>
       <>
-        {asMenu ? (
+        {asMenu ?
           <MenuItem
             aria-label="Konto"
             aria-owns={anchorEl ? 'menu-appbar' : undefined}
@@ -136,20 +137,19 @@ const Account = ({ asMenu }: { asMenu?: boolean }) => {
           >
             Konto
           </MenuItem>
-        ) : (
-          <IconButton
+        : <IconButton
             aria-label="Konto"
             aria-owns={anchorEl ? 'long-menu' : undefined}
             aria-haspopup="true"
             title={`Konto und Daten verwalten`}
             onClick={
-              onClickMenu as unknown as import("react").MouseEventHandler<HTMLButtonElement>
+              onClickMenu as unknown as import('react').MouseEventHandler<HTMLButtonElement>
             }
             size="large"
           >
             <UserIcon className={styles.userIcon} />
           </IconButton>
-        )}
+        }
         <Menu
           id="menu-appbar"
           anchorEl={anchorEl}

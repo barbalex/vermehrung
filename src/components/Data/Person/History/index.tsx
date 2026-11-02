@@ -31,10 +31,10 @@ export const PersonHistory = ({
   rawRow?: unknown
   historyTakeoverCallback?: () => void
 }) => {
-  const priorRevisions =
-    ((row?._revisions ?? []) as string[]).slice(1) ?? []
-  const revPath = priorRevisions.length
-    ? `/person_rev?_rev=in.(${priorRevisions.join(',')})&select=id,person_id,nr,vorname,name,adresszusatz,strasse,plz,ort,telefon_privat,telefon_geschaeft,telefon_mobile,email,kein_email,bemerkungen,aktiv,user_role_id,kommerziell,info,changed,changed_by,_rev,_parent_rev,_revisions,_depth,_deleted`
+  const priorRevisions = ((row?._revisions ?? []) as string[]).slice(1) ?? []
+  const revPath =
+    priorRevisions.length ?
+      `/person_rev?_rev=in.(${priorRevisions.join(',')})&select=id,person_id,nr,vorname,name,adresszusatz,strasse,plz,ort,telefon_privat,telefon_geschaeft,telefon_mobile,email,kein_email,bemerkungen,aktiv,user_role_id,kommerziell,info,changed,changed_by,_rev,_parent_rev,_revisions,_depth,_deleted`
     : null
   const { error, data, fetching } = useApiQuery(revPath)
   if (error) checkForOnlineError({ error })
@@ -86,7 +86,10 @@ export const PersonHistory = ({
         {...sliderSettings}
       >
         {revRows.map((r) => (
-          <Row key={r._rev} revRow={r} row={row}
+          <Row
+            key={r._rev}
+            revRow={r}
+            row={row}
             historyTakeoverCallback={historyTakeoverCallback}
           />
         ))}

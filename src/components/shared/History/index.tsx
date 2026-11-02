@@ -65,9 +65,9 @@ export const History = ({
           onClick={onClickToggleDiff}
           variant="outlined"
           title={
-            diffConflict
-              ? 'Versionen nicht vergleichen'
-              : 'Versionen vergleichen'
+            diffConflict ?
+              'Versionen nicht vergleichen'
+            : 'Versionen vergleichen'
           }
           startIcon={diffConflict ? <DoubleArrowCrossed /> : <FaArrowsAltH />}
           color="inherit"

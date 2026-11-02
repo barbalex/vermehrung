@@ -60,12 +60,12 @@ export const Coordinates = ({
   })
   useEffect(() => {
     const userPersonOptionsObservable =
-      user.uid && db
-        ? db
-            .get('person_option')
-            .query(Q.on('person', Q.where('account_id', user.uid)))
-            .observeWithColumns(['ga_lat_lng'])
-        : $of<Record<string, unknown>[]>([])
+      user.uid && db ?
+        db
+          .get('person_option')
+          .query(Q.on('person', Q.where('account_id', user.uid)))
+          .observeWithColumns(['ga_lat_lng'])
+      : $of<Record<string, unknown>[]>([])
     const combinedObservables = combineLatest([
       userPersonOptionsObservable as Observable<Record<string, unknown>[]>,
     ])
@@ -246,7 +246,10 @@ export const Coordinates = ({
               variant="standard"
               className={styles.leftFormControl}
             >
-              <InputLabel htmlFor={`${id}wgs84_long`} shrink>
+              <InputLabel
+                htmlFor={`${id}wgs84_long`}
+                shrink
+              >
                 Längengrad
               </InputLabel>
               <Input
@@ -269,7 +272,10 @@ export const Coordinates = ({
               variant="standard"
               className={styles.formControl}
             >
-              <InputLabel htmlFor={`${id}wgs84_lat`} shrink>
+              <InputLabel
+                htmlFor={`${id}wgs84_lat`}
+                shrink
+              >
                 Breitengrad
               </InputLabel>
               <Input
@@ -311,7 +317,10 @@ export const Coordinates = ({
             variant="standard"
             className={styles.leftFormControl}
           >
-            <InputLabel htmlFor={`${id}lv95_x`} shrink>
+            <InputLabel
+              htmlFor={`${id}lv95_x`}
+              shrink
+            >
               X-Koordinate
             </InputLabel>
             <Input
@@ -342,7 +351,10 @@ export const Coordinates = ({
             variant="standard"
             className={styles.formControl}
           >
-            <InputLabel htmlFor={`${id}lv95_y`} shrink>
+            <InputLabel
+              htmlFor={`${id}lv95_y`}
+              shrink
+            >
               Y-Koordinate
             </InputLabel>
             <Input

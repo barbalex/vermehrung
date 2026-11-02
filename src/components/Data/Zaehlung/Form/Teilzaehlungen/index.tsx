@@ -28,11 +28,13 @@ export const Teilzaehlungen = ({
     kulturOption: import('../../../../../dbModel.ts').KulturOption | undefined
   }>({ teilzaehlungs: [], kulturOption: undefined })
   useEffect(() => {
-    const teilzaehlungsObservable = zaehlung?.teilzaehlungs
-      ? zaehlung?.teilzaehlungs.extend(Q.where('_deleted', false))?.observe()
+    const teilzaehlungsObservable =
+      zaehlung?.teilzaehlungs ?
+        zaehlung?.teilzaehlungs.extend(Q.where('_deleted', false))?.observe()
       : $of([])
-    const kulturOptionObservable = kulturId
-      ? db
+    const kulturOptionObservable =
+      kulturId ?
+        db
           ?.get<import('../../../../../dbModel.ts').KulturOption>(
             'kultur_option',
           )
@@ -49,12 +51,10 @@ export const Teilzaehlungen = ({
           import('../../../../../dbModel.ts').KulturOption | undefined,
         ]
       >
-    ).subscribe(
-      async ([tzs, kulturOption]) => {
-        const teilzaehlungs = await teilzaehlungsSortByTk(tzs)
-        setDataState({ teilzaehlungs, kulturOption })
-      },
-    )
+    ).subscribe(async ([tzs, kulturOption]) => {
+      const teilzaehlungs = await teilzaehlungsSortByTk(tzs)
+      setDataState({ teilzaehlungs, kulturOption })
+    })
 
     return () => subscription?.unsubscribe?.()
   }, [
@@ -82,8 +82,8 @@ export const Teilzaehlungen = ({
               aria-label="Neu"
               title="Neue Teil-Zählung"
               onClick={
-                  insertTeilzaehlungRev as unknown as import('react').MouseEventHandler
-                }
+                insertTeilzaehlungRev as unknown as import('react').MouseEventHandler
+              }
               size="large"
             >
               <FaPlus />
@@ -91,7 +91,10 @@ export const Teilzaehlungen = ({
           )}
         </div>
       </div>
-      <TeilzaehlungenRows kulturId={kulturId} teilzaehlungs={teilzaehlungs} />
+      <TeilzaehlungenRows
+        kulturId={kulturId}
+        teilzaehlungs={teilzaehlungs}
+      />
     </ErrorBoundary>
   )
 }

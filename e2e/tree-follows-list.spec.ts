@@ -49,11 +49,18 @@ const idToken = () =>
     firebase: { sign_in_provider: 'password', identities: {} },
   })
 const apiToken = () =>
-  mint({ role: 'benutzer', user_id: PERSON_ID, sub: UID, exp: nowEpoch() + 3600 })
+  mint({
+    role: 'benutzer',
+    user_id: PERSON_ID,
+    sub: UID,
+    exp: nowEpoch() + 3600,
+  })
 
 const fullSync = () => ({
   synced_at: nowEpoch(),
-  ae_art: [{ id: AE_ART_ID, name: ARTNAME, _conflicts: null, _revisions: null }],
+  ae_art: [
+    { id: AE_ART_ID, name: ARTNAME, _conflicts: null, _revisions: null },
+  ],
   art: [
     {
       id: ART_ID,
@@ -173,7 +180,9 @@ test('tree scrolls to the active node when navigating from a list view', async (
     if (url.pathname === '/person') {
       return route.fulfill({
         contentType: 'application/json',
-        body: JSON.stringify([{ id: PERSON_ID, user_role: { name: 'benutzer' } }]),
+        body: JSON.stringify([
+          { id: PERSON_ID, user_role: { name: 'benutzer' } },
+        ]),
       })
     }
     return route.fulfill({ status: 404, body: 'unmocked' })
@@ -198,7 +207,9 @@ test('tree scrolls to the active node when navigating from a list view', async (
 
   await test.step('the tree starts at the top', async () => {
     await page.goto('/Vermehrung/Arten')
-    await expect(page.getByText(ARTNAME).first()).toBeVisible({ timeout: 60_000 })
+    await expect(page.getByText(ARTNAME).first()).toBeVisible({
+      timeout: 60_000,
+    })
     // the way-down zaehlung row is not rendered while the tree sits at
     // the top (the list is virtualized)
     await expect(tree.getByText(ZAEHLUNG_LABEL)).toHaveCount(0)
@@ -207,9 +218,12 @@ test('tree scrolls to the active node when navigating from a list view', async (
   await test.step('navigate down entirely through list views', async () => {
     // the art row in the arten list opens the art form
     await page.getByText(ARTNAME).first().click()
-    await expect(page).toHaveURL(new RegExp(`/Vermehrung/Arten/${ART_ID}/Art$`), {
-      timeout: 20_000,
-    })
+    await expect(page).toHaveURL(
+      new RegExp(`/Vermehrung/Arten/${ART_ID}/Art$`),
+      {
+        timeout: 20_000,
+      },
+    )
     // the trail's object crumb leads to the art object list
     const trail = page.locator('nav[aria-label="Pfad"]')
     await trail.getByRole('link', { name: ARTNAME, exact: true }).click()
@@ -246,11 +260,15 @@ test('tree scrolls to the active node when navigating from a list view', async (
 
   await test.step('the tree has scrolled its row into view', async () => {
     // the row only renders when scrolled near it
-    await expect(tree.getByText(ZAEHLUNG_LABEL)).toBeVisible({ timeout: 20_000 })
+    await expect(tree.getByText(ZAEHLUNG_LABEL)).toBeVisible({
+      timeout: 20_000,
+    })
   })
 
   await test.step('a reload still centers the active node', async () => {
     await page.reload()
-    await expect(tree.getByText(ZAEHLUNG_LABEL)).toBeVisible({ timeout: 60_000 })
+    await expect(tree.getByText(ZAEHLUNG_LABEL)).toBeVisible({
+      timeout: 60_000,
+    })
   })
 })

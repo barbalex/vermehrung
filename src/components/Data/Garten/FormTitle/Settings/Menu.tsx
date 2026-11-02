@@ -26,10 +26,11 @@ export const GartenSettingsMenu = ({
 
   const [dataState, setDataState] = useState<Record<string, unknown>>({
     userPersonOption: undefined,
-})
+  })
   useEffect(() => {
-    const userPersonOptionsObservable = user.uid
-      ? db
+    const userPersonOptionsObservable =
+      user.uid ?
+        db
           ?.get<import('../../../../../dbModel.ts').PersonOption>(
             'person_option',
           )
@@ -50,11 +51,10 @@ export const GartenSettingsMenu = ({
         [Record<string, unknown>[]]
       >
     ).subscribe(([userPersonOptions]) => {
-        setDataState({
-          userPersonOption: userPersonOptions?.[0],
-        })
-      },
-    )
+      setDataState({
+        userPersonOption: userPersonOptions?.[0],
+      })
+    })
 
     return () => subscription?.unsubscribe?.()
   }, [db, user.uid])
@@ -68,7 +68,7 @@ export const GartenSettingsMenu = ({
     ga_lat_lng,
     ga_aktiv,
     ga_bemerkungen,
-} = (userPersonOption ?? {}) as unknown as Record<string, unknown>
+  } = (userPersonOption ?? {}) as unknown as Record<string, unknown>
 
   const saveToDb = (event: {
     target: { name?: string; value: unknown }
@@ -123,9 +123,7 @@ export const GartenSettingsMenu = ({
             <Checkbox
               color="primary"
               checked={!!ga_strasse}
-              onClick={
-                  saveToDb as unknown as import('react').MouseEventHandler
-                }
+              onClick={saveToDb as unknown as import('react').MouseEventHandler}
               name="ga_strasse"
             />
           }
@@ -140,9 +138,7 @@ export const GartenSettingsMenu = ({
             <Checkbox
               color="primary"
               checked={!!ga_plz}
-              onClick={
-                  saveToDb as unknown as import('react').MouseEventHandler
-                }
+              onClick={saveToDb as unknown as import('react').MouseEventHandler}
               name="ga_plz"
             />
           }
@@ -157,9 +153,7 @@ export const GartenSettingsMenu = ({
             <Checkbox
               color="primary"
               checked={!!ga_ort}
-              onClick={
-                  saveToDb as unknown as import('react').MouseEventHandler
-                }
+              onClick={saveToDb as unknown as import('react').MouseEventHandler}
               name="ga_ort"
             />
           }
@@ -174,9 +168,7 @@ export const GartenSettingsMenu = ({
             <Checkbox
               color="primary"
               checked={!!ga_geom_point}
-              onClick={
-                  saveToDb as unknown as import('react').MouseEventHandler
-                }
+              onClick={saveToDb as unknown as import('react').MouseEventHandler}
               name="ga_geom_point"
             />
           }
@@ -191,9 +183,7 @@ export const GartenSettingsMenu = ({
             <Checkbox
               color="primary"
               checked={!!ga_lat_lng}
-              onClick={
-                  saveToDb as unknown as import('react').MouseEventHandler
-                }
+              onClick={saveToDb as unknown as import('react').MouseEventHandler}
               name="ga_lat_lng"
             />
           }
@@ -208,9 +198,7 @@ export const GartenSettingsMenu = ({
             <Checkbox
               color="primary"
               checked={!!ga_aktiv}
-              onClick={
-                  saveToDb as unknown as import('react').MouseEventHandler
-                }
+              onClick={saveToDb as unknown as import('react').MouseEventHandler}
               name="ga_aktiv"
             />
           }
@@ -225,9 +213,7 @@ export const GartenSettingsMenu = ({
             <Checkbox
               color="primary"
               checked={!!ga_bemerkungen}
-              onClick={
-                  saveToDb as unknown as import('react').MouseEventHandler
-                }
+              onClick={saveToDb as unknown as import('react').MouseEventHandler}
               name="ga_bemerkungen"
             />
           }

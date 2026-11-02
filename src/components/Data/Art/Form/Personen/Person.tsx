@@ -56,7 +56,9 @@ export const Person = ({
           aria-label="löschen"
           aria-owns={delMenuOpen ? 'delMenu' : undefined}
           aria-haspopup="true"
-          onClick={onClickDeleteIcon as unknown as import('react').MouseEventHandler<HTMLElement>}
+          onClick={
+            onClickDeleteIcon as unknown as import('react').MouseEventHandler<HTMLElement>
+          }
           className={styles.delIcon}
         >
           <FaTimes />
@@ -76,7 +78,13 @@ export const Person = ({
           }}
         >
           <h3 className={styles.menuTitle}>löschen?</h3>
-          <MenuItem onClick={onClickDelete as unknown as import('react').MouseEventHandler<HTMLElement>}>ja</MenuItem>
+          <MenuItem
+            onClick={
+              onClickDelete as unknown as import('react').MouseEventHandler<HTMLElement>
+            }
+          >
+            ja
+          </MenuItem>
           <MenuItem onClick={onClose}>nein</MenuItem>
         </Menu>
       </div>

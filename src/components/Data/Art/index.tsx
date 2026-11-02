@@ -40,25 +40,21 @@ export const Art = ({
   // removing useMemo causes: Maximum update depth exceeded
   const observable = useMemo(
     () =>
-      showFilter
-        ? $of(undefined)
-        : initialDataQueried || !online
-          ? db
-              ?.get<import('../../../dbModel.ts').Art>('art')
-              .findAndObserve(id as string)
-          : $of(undefined),
+      showFilter ? $of(undefined)
+      : initialDataQueried || !online ?
+        db
+          ?.get<import('../../../dbModel.ts').Art>('art')
+          .findAndObserve(id as string)
+      : $of(undefined),
     [db, id, initialDataQueried, online, showFilter],
   )
   const observedRow = useObservable(
     observable as unknown as
-      | import('rxjs').Observable<
-          import('../../../dbModel.ts').Art | undefined
-        >
+      | import('rxjs').Observable<import('../../../dbModel.ts').Art | undefined>
       | undefined,
   )
   const row = (showFilter ? artFilter : observedRow) as
-    | import('../../../dbModel.ts').Art
-    | undefined
+    import('../../../dbModel.ts').Art | undefined
 
   const [activeConflict, setActiveConflict] = useState<string | null>(null)
   const conflictDisposalCallback = () => setActiveConflict(null)
@@ -102,29 +98,25 @@ export const Art = ({
               id={id}
               row={row}
               activeConflict={activeConflict}
-              setActiveConflict={
-                  setActiveConflict as unknown as never
-                }
+              setActiveConflict={setActiveConflict as unknown as never}
               showHistory={showHistory}
             />
             <Allotment.Pane visible={!!paneIsSplit}>
-              {activeConflict ? (
+              {activeConflict ?
                 <Conflict
                   rev={activeConflict}
                   id={id}
                   row={row}
                   conflictDisposalCallback={conflictDisposalCallback}
                   conflictSelectionCallback={conflictSelectionCallback}
-                  setActiveConflict={
-                  setActiveConflict as unknown as never
-                }
+                  setActiveConflict={setActiveConflict as unknown as never}
                 />
-              ) : showHistory ? (
+              : showHistory ?
                 <History
                   row={row}
                   historyTakeoverCallback={historyTakeoverCallback}
                 />
-              ) : null}
+              : null}
             </Allotment.Pane>
           </Allotment>
         </div>

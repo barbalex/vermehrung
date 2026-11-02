@@ -17,11 +17,7 @@ import { constants } from '../../../../../utils/constants.ts'
 
 import styles from './index.module.css'
 
-export const ArtQkWrapper = ({
-  artId,
-}: {
-  artId: string | undefined
-}) => {
+export const ArtQkWrapper = ({ artId }: { artId: string | undefined }) => {
   const db = useAtomValue(dbAtom)
   const user = useAtomValue(userAtom)
 
@@ -30,11 +26,13 @@ export const ArtQkWrapper = ({
 
   const [dataState, setDataState] = useState<{
     qks: import('../../../../../dbModel.ts').ArtQk[]
-    userPersonOption: import('../../../../../dbModel.ts').PersonOption | undefined
+    userPersonOption:
+      import('../../../../../dbModel.ts').PersonOption | undefined
   }>({ qks: [], userPersonOption: undefined })
   useEffect(() => {
-    const userPersonOptionsObservable = user.uid
-      ? db
+    const userPersonOptionsObservable =
+      user.uid ?
+        db
           ?.get<import('../../../../../dbModel.ts').PersonOption>(
             'person_option',
           )
@@ -57,22 +55,24 @@ export const ArtQkWrapper = ({
         ]
       >
     ).subscribe(([userPersonOptions, qks]) =>
-        setDataState({
-          qks,
-          userPersonOption: userPersonOptions?.[0],
-        }),
+      setDataState({
+        qks,
+        userPersonOption: userPersonOptions?.[0],
+      }),
     )
 
     return () => subscription?.unsubscribe?.()
   }, [db, user.uid])
   const { qks, userPersonOption } = dataState
-  const userPersonOptionRecord = userPersonOption as unknown as
-    Record<string, unknown>
+  const userPersonOptionRecord = userPersonOption as unknown as Record<
+    string,
+    unknown
+  >
   const qkChoosens = qks.filter(
     (qk) =>
-      (userPersonOptionRecord?.art_qk_choosen as string[] | undefined)?.includes?.(
-        qk.id,
-      ) ?? false,
+      (
+        userPersonOptionRecord?.art_qk_choosen as string[] | undefined
+      )?.includes?.(qk.id) ?? false,
   )
 
   const qkCount = qks.length
@@ -120,9 +120,7 @@ export const ArtQkWrapper = ({
   return (
     <ErrorBoundary>
       <section
-        onClick={
-                  onClickToggle as unknown as import('react').MouseEventHandler
-                }
+        onClick={onClickToggle as unknown as import('react').MouseEventHandler}
         title={open ? 'schliessen' : 'öffnen'}
         className={styles.titleRow}
       >
@@ -131,7 +129,9 @@ export const ArtQkWrapper = ({
           <IconButton
             aria-label="Anleitung öffnen"
             title="Anleitung öffnen"
-            onClick={openDocs as unknown as import('react').MouseEventHandler<HTMLButtonElement>}
+            onClick={
+              openDocs as unknown as import('react').MouseEventHandler<HTMLButtonElement>
+            }
             size="large"
           >
             <IoMdInformationCircleOutline />
@@ -144,11 +144,16 @@ export const ArtQkWrapper = ({
             }
             size="large"
           >
-            {open ? <FaChevronUp /> : <FaChevronDown />}
+            {open ?
+              <FaChevronUp />
+            : <FaChevronDown />}
           </IconButton>
         </div>
       </section>
-      <motion.div animate={anim} transition={{ duration: 0.4 }}>
+      <motion.div
+        animate={anim}
+        transition={{ duration: 0.4 }}
+      >
         {open && (
           <>
             <Tabs
@@ -159,7 +164,11 @@ export const ArtQkWrapper = ({
               centered
               className={styles.tabs}
             >
-              <Tab label="ausführen" value="qk" data-id="qk" />
+              <Tab
+                label="ausführen"
+                value="qk"
+                data-id="qk"
+              />
               <Tab
                 label={`auswählen${
                   qkCount ? ` (${qkChoosenCount}/${qkCount})` : ''
@@ -169,11 +178,12 @@ export const ArtQkWrapper = ({
               />
             </Tabs>
             <div className={styles.body}>
-              {tab === 'qk' ? (
-                <Qk artId={artId} qkChoosens={qkChoosens} />
-              ) : (
-                <Choose qks={qks} />
-              )}
+              {tab === 'qk' ?
+                <Qk
+                  artId={artId}
+                  qkChoosens={qkChoosens}
+                />
+              : <Choose qks={qks} />}
             </div>
           </>
         )}

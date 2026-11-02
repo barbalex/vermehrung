@@ -27,11 +27,10 @@ export const Online = ({ asMenu }: { asMenu?: boolean }) => {
   const navigate = useNavigate()
   const closeMenu = useContext(MenuCloseContext)
 
-  const title = online
-    ? 'Sie sind online'
-    : queueSize
-      ? `Sie sind offline. ${queueSize} wartende Operationen`
-      : `Sie sind offline`
+  const title =
+    online ? 'Sie sind online'
+    : queueSize ? `Sie sind offline. ${queueSize} wartende Operationen`
+    : `Sie sind offline`
 
   // TODO:
   // 1. add menu to link to info
@@ -61,7 +60,9 @@ export const Online = ({ asMenu }: { asMenu?: boolean }) => {
           max={999}
           style={{ marginRight: 12 }}
         >
-          {online ? <NetworkOn /> : <NetworkOff />}
+          {online ?
+            <NetworkOn />
+          : <NetworkOff />}
         </StyledBadge>
         {title}
       </MenuItem>
@@ -75,8 +76,14 @@ export const Online = ({ asMenu }: { asMenu?: boolean }) => {
       title={title}
       onClick={onClick}
     >
-      <StyledBadge color="primary" badgeContent={queueSize} max={999}>
-        {online ? <NetworkOn /> : <NetworkOff />}
+      <StyledBadge
+        color="primary"
+        badgeContent={queueSize}
+        max={999}
+      >
+        {online ?
+          <NetworkOn />
+        : <NetworkOff />}
       </StyledBadge>
     </IconButton>
   )

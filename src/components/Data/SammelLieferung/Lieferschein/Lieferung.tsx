@@ -25,19 +25,22 @@ export const LieferungForLieferschein = ({
     herkunftLabel: string
   }>({ artLabel: '', herkunftLabel: '' })
   useEffect(() => {
-    const artObservable = row.art_id
-      ? db
+    const artObservable =
+      row.art_id ?
+        db
           ?.get<import('../../../../dbModel.ts').Art>('art')
           .findAndObserve(row.art_id)
       : $of({})
-    const vonKulturHerkunftObservable = row.von_kultur_id
-      ? db
+    const vonKulturHerkunftObservable =
+      row.von_kultur_id ?
+        db
           ?.get<import('../../../../dbModel.ts').Herkunft>('herkunft')
           .query(Q.on('kultur', 'id', row.von_kultur_id))
           .observe()
       : $of({})
-    const vonSammlungHerkunftObservable = row.von_sammlung_id
-      ? db
+    const vonSammlungHerkunftObservable =
+      row.von_sammlung_id ?
+        db
           ?.get<import('../../../../dbModel.ts').Herkunft>('herkunft')
           .query(Q.on('sammlung', 'id', row.von_sammlung_id))
           .observe()
@@ -55,23 +58,22 @@ export const LieferungForLieferschein = ({
           [import('../../../../dbModel.ts').Herkunft | undefined],
         ]
       >
-    ).subscribe(
-      async ([art, [vonKulturHerkunft], [vonSammlungHerkunft]]) => {
-        let artLabel
-        try {
-          artLabel = await art?.label.pipe(first$()).toPromise()
-        } catch {}
-        const herkunftLabel = vonKulturHerkunft
-          ? herkunftLabelFromHerkunft({
-              herkunft: vonKulturHerkunft,
-            })
-          : vonSammlungHerkunft
-            ? herkunftLabelFromHerkunft({ herkunft: vonSammlungHerkunft })
-            : ''
+    ).subscribe(async ([art, [vonKulturHerkunft], [vonSammlungHerkunft]]) => {
+      let artLabel
+      try {
+        artLabel = await art?.label.pipe(first$()).toPromise()
+      } catch {}
+      const herkunftLabel =
+        vonKulturHerkunft ?
+          herkunftLabelFromHerkunft({
+            herkunft: vonKulturHerkunft,
+          })
+        : vonSammlungHerkunft ?
+          herkunftLabelFromHerkunft({ herkunft: vonSammlungHerkunft })
+        : ''
 
-        setDataState({ artLabel, herkunftLabel })
-      },
-    )
+      setDataState({ artLabel, herkunftLabel })
+    })
 
     return () => subscription?.unsubscribe?.()
   }, [db, row.art, row.art_id, row.von_kultur_id, row.von_sammlung_id])
@@ -93,7 +95,10 @@ export const LieferungForLieferschein = ({
       <TableCell className={styles.tableCell}>{herkunftLabel}</TableCell>
       <TableCell className={styles.tableCell}>
         {wasArray.map((w, i) => (
-          <Zeile key={i} value={w} />
+          <Zeile
+            key={i}
+            value={w}
+          />
         ))}
       </TableCell>
       <TableCell className={styles.tableCell}>{bemerkungen}</TableCell>

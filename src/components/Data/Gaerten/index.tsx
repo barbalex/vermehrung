@@ -38,8 +38,9 @@ export const Gaerten = ({ filter: showFilter = false }) => {
     totalCount: number
   }>({ gartens: [], totalCount: 0 })
   useEffect(() => {
-    const hierarchyQuery = personIdInActiveNodeArray
-      ? [
+    const hierarchyQuery =
+      personIdInActiveNodeArray ?
+        [
           Q.experimentalJoinTables(['person']),
           Q.on('person', 'id', personIdInActiveNodeArray),
         ]
@@ -47,25 +48,21 @@ export const Gaerten = ({ filter: showFilter = false }) => {
     const collection = db?.get<import('../../../dbModel.ts').Garten>('garten')
     if (!collection) return
     const delQuery =
-      gartenFilter._deleted === false
-        ? Q.where('_deleted', false)
-        : gartenFilter._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+      gartenFilter._deleted === false ? Q.where('_deleted', false)
+      : gartenFilter._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     const aktivQuery =
-      gartenFilter?.aktiv === true
-        ? Q.where('aktiv', true)
-        : gartenFilter?.aktiv === false
-          ? Q.where('aktiv', false)
-          : Q.or(
-              Q.where('aktiv', false),
-              Q.where('aktiv', true),
-              Q.where('aktiv', null),
-            )
+      gartenFilter?.aktiv === true ? Q.where('aktiv', true)
+      : gartenFilter?.aktiv === false ? Q.where('aktiv', false)
+      : Q.or(
+          Q.where('aktiv', false),
+          Q.where('aktiv', true),
+          Q.where('aktiv', null),
+        )
     const totalCountObservable = collection
       .query(delQuery, aktivQuery, ...hierarchyQuery)
       .observeCount()
@@ -76,16 +73,17 @@ export const Gaerten = ({ filter: showFilter = false }) => {
       totalCountObservable,
       gartenObservable,
     ])
-    const subscription = (combinedObservables as unknown as import('rxjs').Observable<
+    const subscription = (
+      combinedObservables as unknown as import('rxjs').Observable<
         [number, import('../../../dbModel.ts').Garten[]]
-      >).subscribe(async ([totalCount, gartens]) => {
-        const gartensSorted = await gartensSortedFromGartens(gartens)
-        setDataState({
-          gartens: gartensSorted,
-          totalCount,
-        })
-      },
-    )
+      >
+    ).subscribe(async ([totalCount, gartens]) => {
+      const gartensSorted = await gartensSortedFromGartens(gartens)
+      setDataState({
+        gartens: gartensSorted,
+        totalCount,
+      })
+    })
 
     return () => subscription?.unsubscribe?.()
   }, [
@@ -117,19 +115,22 @@ export const Gaerten = ({ filter: showFilter = false }) => {
         className={artStyles.container}
         style={{ backgroundColor: showFilter ? 'var(--filter-bg)' : 'unset' }}
       >
-        {showFilter ? (
+        {showFilter ?
           <FilterTitle
             title="Garten"
             table="garten"
             totalCount={totalCount}
             filteredCount={filteredCount}
           />
-        ) : (
-          <div className={artStyles.titleContainer}>
+        : <div className={artStyles.titleContainer}>
             <div className={artStyles.title}>Gärten</div>
             <div className={artStyles.titleSymbols}>
               {!breadcrumbsEnabled && (
-                <IconButton title={upTitle} onClick={onClickUp} size="large">
+                <IconButton
+                  title={upTitle}
+                  onClick={onClickUp}
+                  size="large"
+                >
                   <UpSvg />
                 </IconButton>
               )}
@@ -149,7 +150,7 @@ export const Gaerten = ({ filter: showFilter = false }) => {
               />
             </div>
           </div>
-        )}
+        }
         <div className={artStyles.fieldsContainer}>
           <List
             rowComponent={Row}

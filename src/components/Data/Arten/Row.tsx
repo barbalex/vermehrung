@@ -12,7 +12,7 @@ import styles from './Row.module.css'
 export const ArtRow = ({
   style,
   index,
-  rows
+  rows,
 }: {
   style?: Record<string, unknown>
   index?: number

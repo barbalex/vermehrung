@@ -32,83 +32,88 @@ export const createKulturMessageFunctions = async ({
   let kulturs: import('../../../../../../dbModel.ts').Kultur[] = []
   try {
     const kulturDelQuery =
-      filter.kultur._deleted === false
-        ? Q.where('_deleted', false)
-        : filter.kultur._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+      filter.kultur._deleted === false ? Q.where('_deleted', false)
+      : filter.kultur._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     const kulturAktivQuery =
-      filter.kultur.aktiv === false
-        ? Q.where('aktiv', false)
-        : filter.kultur.aktiv === true
-          ? Q.where('aktiv', true)
-          : Q.or(
-              Q.where('aktiv', false),
-              Q.where('aktiv', true),
-              Q.where('aktiv', null),
-            )
-    kulturs = (await db
-      ?.get<import('../../../../../../dbModel.ts').Kultur>('kultur')
-      .query(kulturDelQuery, kulturAktivQuery)
-      .fetch()) ?? []
+      filter.kultur.aktiv === false ? Q.where('aktiv', false)
+      : filter.kultur.aktiv === true ? Q.where('aktiv', true)
+      : Q.or(
+          Q.where('aktiv', false),
+          Q.where('aktiv', true),
+          Q.where('aktiv', null),
+        )
+    kulturs =
+      (await db
+        ?.get<import('../../../../../../dbModel.ts').Kultur>('kultur')
+        .query(kulturDelQuery, kulturAktivQuery)
+        .fetch()) ?? []
   } catch {}
   const kultursSorted = await kultursSortedFromKulturs(kulturs)
   let lieferungs: import('../../../../../../dbModel.ts').Lieferung[] = []
   try {
     const lieferungDelQuery =
-      filter.lieferung._deleted === false
-        ? Q.where('_deleted', false)
-        : filter.lieferung._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
-    lieferungs = (await db
-      ?.get<import('../../../../../../dbModel.ts').Lieferung>('lieferung').query(lieferungDelQuery).fetch()) ?? []
+      filter.lieferung._deleted === false ? Q.where('_deleted', false)
+      : filter.lieferung._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
+    lieferungs =
+      (await db
+        ?.get<import('../../../../../../dbModel.ts').Lieferung>('lieferung')
+        .query(lieferungDelQuery)
+        .fetch()) ?? []
   } catch {}
   const lieferungsSorted = lieferungs.sort(lieferungSort)
   let teilkulturs: import('../../../../../../dbModel.ts').Teilkultur[] = []
   try {
     const teilkulturDelQuery =
-      filter.teilkultur._deleted === false
-        ? Q.where('_deleted', false)
-        : filter.teilkultur._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
-    teilkulturs = (await db
-      ?.get<import('../../../../../../dbModel.ts').Teilkultur>('teilkultur').query(teilkulturDelQuery).fetch()) ?? []
+      filter.teilkultur._deleted === false ? Q.where('_deleted', false)
+      : filter.teilkultur._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
+    teilkulturs =
+      (await db
+        ?.get<import('../../../../../../dbModel.ts').Teilkultur>('teilkultur')
+        .query(teilkulturDelQuery)
+        .fetch()) ?? []
   } catch {}
   const teilkultursSorted = teilkulturs.sort(teilkulturSort)
   let zaehlungs: import('../../../../../../dbModel.ts').Zaehlung[] = []
   try {
     const zaehlungDelQuery =
-      filter.zaehlung._deleted === false
-        ? Q.where('_deleted', false)
-        : filter.zaehlung._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
-    zaehlungs = (await db
-      ?.get<import('../../../../../../dbModel.ts').Zaehlung>('zaehlung').query(zaehlungDelQuery).fetch()) ?? []
+      filter.zaehlung._deleted === false ? Q.where('_deleted', false)
+      : filter.zaehlung._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
+    zaehlungs =
+      (await db
+        ?.get<import('../../../../../../dbModel.ts').Zaehlung>('zaehlung')
+        .query(zaehlungDelQuery)
+        .fetch()) ?? []
   } catch {}
   const zaehlungsSorted = zaehlungs.sort(zaehlungSort)
   let teilzaehlungs: import('../../../../../../dbModel.ts').Teilzaehlung[] = []
   try {
-    teilzaehlungs = (await db
-      ?.get<import('../../../../../../dbModel.ts').Teilzaehlung>('teilzaehlung').query(notDeletedQuery).fetch()) ?? []
+    teilzaehlungs =
+      (await db
+        ?.get<import('../../../../../../dbModel.ts').Teilzaehlung>(
+          'teilzaehlung',
+        )
+        .query(notDeletedQuery)
+        .fetch()) ?? []
   } catch {}
 
   return {
@@ -235,9 +240,8 @@ export const createKulturMessageFunctions = async ({
           .filter(
             (z: import('../../../../../../dbModel.ts').Zaehlung) => !!z.datum,
           )
-          .filter(
-            (z: import('../../../../../../dbModel.ts').Zaehlung) =>
-              z.datum ? new Date(z.datum).getTime() > now : false,
+          .filter((z: import('../../../../../../dbModel.ts').Zaehlung) =>
+            z.datum ? new Date(z.datum).getTime() > now : false,
           )
           .map(async (z: import('../../../../../../dbModel.ts').Zaehlung) => {
             let kultur
@@ -327,11 +331,13 @@ export const createKulturMessageFunctions = async ({
             try {
               kulturLabel = await kultur?.label.pipe(first$()).toPromise()
             } catch {}
-            const zaehlungLabel = z.datum
-              ? `Zählung am ${format(new Date(z.datum), 'yyyy.MM.dd')}`
+            const zaehlungLabel =
+              z.datum ?
+                `Zählung am ${format(new Date(z.datum), 'yyyy.MM.dd')}`
               : `Zählung-ID: ${z.id}`
-            const tzs = z.teilzaehlungs
-              ? await z.teilzaehlungs.extend(notDeletedQuery)?.fetch()
+            const tzs =
+              z.teilzaehlungs ?
+                await z.teilzaehlungs.extend(notDeletedQuery)?.fetch()
               : []
             const anzTz = tzs.length
             const teilzaehlung = anzTz > 1 ? ` (${anzTz} Teilzählungen)` : ''
@@ -384,8 +390,9 @@ export const createKulturMessageFunctions = async ({
             try {
               kulturLabel = await kultur?.label.pipe(first$()).toPromise()
             } catch {}
-            const zaehlung = z.datum
-              ? `Zählung am ${format(new Date(z.datum), 'yyyy.MM.dd')}`
+            const zaehlung =
+              z.datum ?
+                `Zählung am ${format(new Date(z.datum), 'yyyy.MM.dd')}`
               : `Zählung-ID: ${z.id}`
             const anzTz = teilzaehlungs
               .filter(
@@ -446,8 +453,9 @@ export const createKulturMessageFunctions = async ({
             try {
               kulturLabel = await kultur?.label.pipe(first$()).toPromise()
             } catch {}
-            const zaehlung = z.datum
-              ? `Zählung am ${format(new Date(z.datum), 'yyyy.MM.dd')}`
+            const zaehlung =
+              z.datum ?
+                `Zählung am ${format(new Date(z.datum), 'yyyy.MM.dd')}`
               : `Zählung-ID: ${z.id}`
             const anzTz = teilzaehlungs
               .filter(
@@ -521,8 +529,9 @@ export const createKulturMessageFunctions = async ({
               try {
                 kulturLabel = await kultur?.label.pipe(first$()).toPromise()
               } catch {}
-              const zaehlung = z.datum
-                ? `Zählung am ${format(new Date(z.datum), 'yyyy.MM.dd')}`
+              const zaehlung =
+                z.datum ?
+                  `Zählung am ${format(new Date(z.datum), 'yyyy.MM.dd')}`
                 : `Zählung-ID: ${z.id}`
               const anzTz = teilzaehlungs
                 .filter(
@@ -561,9 +570,8 @@ export const createKulturMessageFunctions = async ({
             !!l.von_sammlung_id,
         )
         .map((l: import('../../../../../../dbModel.ts').Lieferung) => {
-          const datum = l.datum
-            ? format(new Date(l.datum), 'yyyy.MM.dd')
-            : `kein Datum`
+          const datum =
+            l.datum ? format(new Date(l.datum), 'yyyy.MM.dd') : `kein Datum`
           const geplant = l.geplant ? ', (geplant)' : ''
           const text = `${datum}, ID: ${l.id}${geplant}`
 
@@ -583,9 +591,8 @@ export const createKulturMessageFunctions = async ({
             l.nach_ausgepflanzt,
         )
         .map((l: import('../../../../../../dbModel.ts').Lieferung) => {
-          const datum = l.datum
-            ? format(new Date(l.datum), 'yyyy.MM.dd')
-            : `kein Datum`
+          const datum =
+            l.datum ? format(new Date(l.datum), 'yyyy.MM.dd') : `kein Datum`
           const geplant = l.geplant ? ', (geplant)' : ''
           const text = `${datum}, ID: ${l.id}${geplant}`
 
@@ -605,9 +612,8 @@ export const createKulturMessageFunctions = async ({
             !exists(l.anzahl_pflanzen),
         )
         .map((l: import('../../../../../../dbModel.ts').Lieferung) => {
-          const datum = l.datum
-            ? format(new Date(l.datum), 'yyyy.MM.dd')
-            : `kein Datum`
+          const datum =
+            l.datum ? format(new Date(l.datum), 'yyyy.MM.dd') : `kein Datum`
           const geplant = l.geplant ? ', (geplant)' : ''
           const text = `${datum}, ID: ${l.id}${geplant}`
 
@@ -627,9 +633,8 @@ export const createKulturMessageFunctions = async ({
             !exists(l.anzahl_pflanzen),
         )
         .map((l: import('../../../../../../dbModel.ts').Lieferung) => {
-          const datum = l.datum
-            ? format(new Date(l.datum), 'yyyy.MM.dd')
-            : `kein Datum`
+          const datum =
+            l.datum ? format(new Date(l.datum), 'yyyy.MM.dd') : `kein Datum`
           const geplant = l.geplant ? ', (geplant)' : ''
           const text = `${datum}, ID: ${l.id}${geplant}`
 
@@ -649,9 +654,8 @@ export const createKulturMessageFunctions = async ({
             !exists(l.anzahl_auspflanzbereit),
         )
         .map((l: import('../../../../../../dbModel.ts').Lieferung) => {
-          const datum = l.datum
-            ? format(new Date(l.datum), 'yyyy.MM.dd')
-            : `kein Datum`
+          const datum =
+            l.datum ? format(new Date(l.datum), 'yyyy.MM.dd') : `kein Datum`
           const geplant = l.geplant ? ', (geplant)' : ''
           const text = `${datum}, ID: ${l.id}${geplant}`
 
@@ -671,9 +675,8 @@ export const createKulturMessageFunctions = async ({
             !exists(l.anzahl_auspflanzbereit),
         )
         .map((l: import('../../../../../../dbModel.ts').Lieferung) => {
-          const datum = l.datum
-            ? format(new Date(l.datum), 'yyyy.MM.dd')
-            : `kein Datum`
+          const datum =
+            l.datum ? format(new Date(l.datum), 'yyyy.MM.dd') : `kein Datum`
           const geplant = l.geplant ? ', (geplant)' : ''
           const text = `${datum}, ID: ${l.id}${geplant}`
 
@@ -693,9 +696,8 @@ export const createKulturMessageFunctions = async ({
             !exists(l.von_anzahl_individuen),
         )
         .map((l: import('../../../../../../dbModel.ts').Lieferung) => {
-          const datum = l.datum
-            ? format(new Date(l.datum), 'yyyy.MM.dd')
-            : `kein Datum`
+          const datum =
+            l.datum ? format(new Date(l.datum), 'yyyy.MM.dd') : `kein Datum`
           const geplant = l.geplant ? ', (geplant)' : ''
           const text = `${datum}, ID: ${l.id}${geplant}`
 
@@ -715,9 +717,8 @@ export const createKulturMessageFunctions = async ({
             !exists(l.von_anzahl_individuen),
         )
         .map((l: import('../../../../../../dbModel.ts').Lieferung) => {
-          const datum = l.datum
-            ? format(new Date(l.datum), 'yyyy.MM.dd')
-            : `kein Datum`
+          const datum =
+            l.datum ? format(new Date(l.datum), 'yyyy.MM.dd') : `kein Datum`
           const geplant = l.geplant ? ', (geplant)' : ''
           const text = `${datum}, ID: ${l.id}${geplant}`
 
@@ -741,9 +742,8 @@ export const createKulturMessageFunctions = async ({
             !l.von_sammlung_id,
         )
         .map((l: import('../../../../../../dbModel.ts').Lieferung) => {
-          const datum = l.datum
-            ? format(new Date(l.datum), 'yyyy.MM.dd')
-            : `kein Datum`
+          const datum =
+            l.datum ? format(new Date(l.datum), 'yyyy.MM.dd') : `kein Datum`
           const geplant = l.geplant ? ', (geplant)' : ''
           const text = `${datum}, ID: ${l.id}${geplant}`
 
@@ -767,9 +767,8 @@ export const createKulturMessageFunctions = async ({
             !l.nach_ausgepflanzt,
         )
         .map((l: import('../../../../../../dbModel.ts').Lieferung) => {
-          const datum = l.datum
-            ? format(new Date(l.datum), 'yyyy.MM.dd')
-            : `kein Datum`
+          const datum =
+            l.datum ? format(new Date(l.datum), 'yyyy.MM.dd') : `kein Datum`
           const geplant = l.geplant ? ', (geplant)' : ''
           const text = `${datum}, ID: ${l.id}${geplant}`
 
@@ -788,9 +787,8 @@ export const createKulturMessageFunctions = async ({
           (l: import('../../../../../../dbModel.ts').Lieferung) => !l.datum,
         )
         .map((l: import('../../../../../../dbModel.ts').Lieferung) => {
-          const datum = l.datum
-            ? format(new Date(l.datum), 'yyyy.MM.dd')
-            : `kein Datum`
+          const datum =
+            l.datum ? format(new Date(l.datum), 'yyyy.MM.dd') : `kein Datum`
           const geplant = l.geplant ? ', (geplant)' : ''
           const text = `${datum}, ID: ${l.id}${geplant}`
 
@@ -809,9 +807,8 @@ export const createKulturMessageFunctions = async ({
           (l: import('../../../../../../dbModel.ts').Lieferung) => !l.datum,
         )
         .map((l: import('../../../../../../dbModel.ts').Lieferung) => {
-          const datum = l.datum
-            ? format(new Date(l.datum), 'yyyy.MM.dd')
-            : `kein Datum`
+          const datum =
+            l.datum ? format(new Date(l.datum), 'yyyy.MM.dd') : `kein Datum`
           const geplant = l.geplant ? ', (geplant)' : ''
           const text = `${datum}, ID: ${l.id}${geplant}`
 
@@ -830,9 +827,8 @@ export const createKulturMessageFunctions = async ({
           (l: import('../../../../../../dbModel.ts').Lieferung) => !l.person_id,
         )
         .map((l: import('../../../../../../dbModel.ts').Lieferung) => {
-          const datum = l.datum
-            ? format(new Date(l.datum), 'yyyy.MM.dd')
-            : `kein Datum`
+          const datum =
+            l.datum ? format(new Date(l.datum), 'yyyy.MM.dd') : `kein Datum`
           const geplant = l.geplant ? ', (geplant)' : ''
           const text = `${datum}, ID: ${l.id}${geplant}`
 
@@ -851,9 +847,8 @@ export const createKulturMessageFunctions = async ({
           (l: import('../../../../../../dbModel.ts').Lieferung) => !l.person_id,
         )
         .map((l: import('../../../../../../dbModel.ts').Lieferung) => {
-          const datum = l.datum
-            ? format(new Date(l.datum), 'yyyy.MM.dd')
-            : `kein Datum`
+          const datum =
+            l.datum ? format(new Date(l.datum), 'yyyy.MM.dd') : `kein Datum`
           const geplant = l.geplant ? ', (geplant)' : ''
           const text = `${datum}, ID: ${l.id}${geplant}`
 

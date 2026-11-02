@@ -62,32 +62,30 @@ export const TeilkulturForm = ({
   }>({ kulturWerte: [], kulturOption: undefined })
   useEffect(() => {
     const kulturDelQuery =
-      kulturFilter._deleted === false
-        ? Q.where('_deleted', false)
-        : kulturFilter._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+      kulturFilter._deleted === false ? Q.where('_deleted', false)
+      : kulturFilter._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     const kulturAktivQuery =
-      kulturFilter.aktiv === false
-        ? Q.where('aktiv', false)
-        : kulturFilter.aktiv === true
-          ? Q.where('aktiv', true)
-          : Q.or(
-              Q.where('aktiv', false),
-              Q.where('aktiv', true),
-              Q.where('aktiv', null),
-            )
+      kulturFilter.aktiv === false ? Q.where('aktiv', false)
+      : kulturFilter.aktiv === true ? Q.where('aktiv', true)
+      : Q.or(
+          Q.where('aktiv', false),
+          Q.where('aktiv', true),
+          Q.where('aktiv', null),
+        )
     const kultursObservable = db
       ?.get<import('../../../../dbModel.ts').Kultur>('kultur')
       .query(kulturDelQuery, kulturAktivQuery)
       .observe()
-    const kulturObservable = row?.kultur ? row?.kultur.observe() : $of(undefined)
-    const kulturOptionObservable = row?.kultur_id
-      ? db
+    const kulturObservable =
+      row?.kultur ? row?.kultur.observe() : $of(undefined)
+    const kulturOptionObservable =
+      row?.kultur_id ?
+        db
           ?.get<import('../../../../dbModel.ts').KulturOption>('kultur_option')
           .findAndObserve(row?.kultur_id as string)
       : $of(undefined)
@@ -104,35 +102,33 @@ export const TeilkulturForm = ({
           import('../../../../dbModel.ts').KulturOption | undefined,
         ]
       >
-    ).subscribe(
-      async ([kulturs, kultur, kulturOption]) => {
-        // need to show a choosen kultur even if inactive but not if deleted
-        const kultursIncludingChoosen = uniqBy(
-          [...kulturs, ...(kultur && !showFilter ? [kultur] : [])],
-          (e) => e.id,
-        )
-        const kultursSorted = await kultursSortedFromKulturs(
-          kultursIncludingChoosen,
-        )
-        const kulturWerte = await Promise.all(
-          kultursSorted.map(async (el) => {
-            let label = ''
-            try {
-              label = (await el.label.pipe(first$()).toPromise()) ?? ''
-            } catch {}
+    ).subscribe(async ([kulturs, kultur, kulturOption]) => {
+      // need to show a choosen kultur even if inactive but not if deleted
+      const kultursIncludingChoosen = uniqBy(
+        [...kulturs, ...(kultur && !showFilter ? [kultur] : [])],
+        (e) => e.id,
+      )
+      const kultursSorted = await kultursSortedFromKulturs(
+        kultursIncludingChoosen,
+      )
+      const kulturWerte = await Promise.all(
+        kultursSorted.map(async (el) => {
+          let label = ''
+          try {
+            label = (await el.label.pipe(first$()).toPromise()) ?? ''
+          } catch {}
 
-            return {
-              value: el.id,
-              label,
-              inaktiv: el.aktiv === false,
-              link: ['Kulturen', el.id],
-            }
-          }),
-        )
+          return {
+            value: el.id,
+            label,
+            inaktiv: el.aktiv === false,
+            link: ['Kulturen', el.id],
+          }
+        }),
+      )
 
-        setDataState({ kulturWerte, kulturOption })
-      },
-    )
+      setDataState({ kulturWerte, kulturOption })
+    })
 
     return () => subscription?.unsubscribe?.()
   }, [db, kulturFilter, row?.kultur, row?.kultur_id, showFilter])
@@ -155,11 +151,16 @@ export const TeilkulturForm = ({
     if (event.target.value === '') value = null
 
     if (showFilter) {
-      return setFilterValue({ table: 'teilkultur', key: field as string, value })
+      return setFilterValue({
+        table: 'teilkultur',
+        key: field as string,
+        value,
+      })
     }
 
     const previousValue = ifIsNumericAsNumber(
-      (row as unknown as Record<string, unknown>)[field as string] as string | number,
+      (row as unknown as Record<string, unknown>)[field as string] as
+        string | number,
     )
     // only update if value has changed
     if (value === previousValue) return
@@ -178,7 +179,7 @@ export const TeilkulturForm = ({
         )}
         {showDeleted && (
           <>
-            {showFilter ? (
+            {showFilter ?
               <JesNo
                 key={`${row?.id}_deleted`}
                 label="gelöscht"
@@ -187,8 +188,7 @@ export const TeilkulturForm = ({
                 saveToDb={saveToDb}
                 error={errors?.teilkultur?._deleted as string | undefined}
               />
-            ) : (
-              <Checkbox2States
+            : <Checkbox2States
                 key={`${row?.id}_deleted`}
                 label="gelöscht"
                 name="_deleted"
@@ -196,7 +196,7 @@ export const TeilkulturForm = ({
                 saveToDb={saveToDb}
                 error={errors?.teilkultur?._deleted as string | undefined}
               />
-            )}
+            }
           </>
         )}
         <Select

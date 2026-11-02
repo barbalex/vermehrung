@@ -68,8 +68,9 @@ export const GartenForm = ({
     gvs: [],
   })
   useEffect(() => {
-    const userPersonOptionsObservable = user.uid
-      ? db
+    const userPersonOptionsObservable =
+      user.uid ?
+        db
           ?.get<import('../../../../dbModel.ts').PersonOption>('person_option')
           .query(Q.on('person', Q.where('account_id', user.uid)))
           .observeWithColumns([
@@ -82,33 +83,28 @@ export const GartenForm = ({
           ])
       : $of({})
     const delQuery =
-      personFilter._deleted === false
-        ? Q.where('_deleted', false)
-        : personFilter._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+      personFilter._deleted === false ? Q.where('_deleted', false)
+      : personFilter._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     const aktivQuery =
-      personFilter.aktiv === false
-        ? Q.where('aktiv', false)
-        : personFilter.aktiv === true
-          ? Q.where('aktiv', true)
-          : Q.or(
-              Q.where('aktiv', false),
-              Q.where('aktiv', true),
-              Q.where('aktiv', null),
-            )
+      personFilter.aktiv === false ? Q.where('aktiv', false)
+      : personFilter.aktiv === true ? Q.where('aktiv', true)
+      : Q.or(
+          Q.where('aktiv', false),
+          Q.where('aktiv', true),
+          Q.where('aktiv', null),
+        )
     const personsObservable = db
       ?.get<import('../../../../dbModel.ts').Person>('person')
       .query(delQuery, aktivQuery)
       .observeWithColumns(['vorname', 'name'])
     const personObservable = row?.person ? row?.person.observe() : $of({})
-    const gvsObservable = row?.gvs
-      ? row?.gvs.extend(Q.where('_deleted', false)).observe()
-      : $of([])
+    const gvsObservable =
+      row?.gvs ? row?.gvs.extend(Q.where('_deleted', false)).observe() : $of([])
     const combinedObservables = combineLatest([
       userPersonOptionsObservable,
       personsObservable,
@@ -125,32 +121,33 @@ export const GartenForm = ({
         ]
       >
     ).subscribe(async ([userPersonOptions, persons, person, gvs]) => {
-        // need to show a choosen person even if inactive but not if deleted
-        const personsIncludingChoosen = uniqBy(
-          [...persons, ...(person?.id && !showFilter ? [person] : [])],
-          (e) => e.id,
-        )
-        const personWerte = personsIncludingChoosen
-          .sort(personSort)
-          .map((person) => ({
-            value: person.id,
-            label: personLabelFromPerson({ person }),
-            inaktiv: person.aktiv === false,
-            link: ['Personen', person.id],
-          }))
+      // need to show a choosen person even if inactive but not if deleted
+      const personsIncludingChoosen = uniqBy(
+        [...persons, ...(person?.id && !showFilter ? [person] : [])],
+        (e) => e.id,
+      )
+      const personWerte = personsIncludingChoosen
+        .sort(personSort)
+        .map((person) => ({
+          value: person.id,
+          label: personLabelFromPerson({ person }),
+          inaktiv: person.aktiv === false,
+          link: ['Personen', person.id],
+        }))
 
-        setDataState({
-          personWerte: personWerte as {
-            value: string
-            label: string | undefined
-            link?: string[]
-          }[],
-          userPersonOption: userPersonOptions?.[0] as unknown as
-            Record<string, unknown>,
-          gvs,
-        })
-      },
-    )
+      setDataState({
+        personWerte: personWerte as {
+          value: string
+          label: string | undefined
+          link?: string[]
+        }[],
+        userPersonOption: userPersonOptions?.[0] as unknown as Record<
+          string,
+          unknown
+        >,
+        gvs,
+      })
+    })
 
     return () => subscription?.unsubscribe?.()
   }, [
@@ -172,7 +169,7 @@ export const GartenForm = ({
     ga_geom_point,
     ga_aktiv,
     ga_bemerkungen,
-} = (userPersonOption ?? {}) as unknown as Record<string, unknown>
+  } = (userPersonOption ?? {}) as unknown as Record<string, unknown>
 
   // console.log('Garten, render, Form', { ga_aktiv })
 
@@ -194,7 +191,8 @@ export const GartenForm = ({
       return setFilterValue({ table: 'garten', key: field as string, value })
     }
     const previousValue = ifIsNumericAsNumber(
-      (row as unknown as Record<string, unknown>)[field as string] as string | number,
+      (row as unknown as Record<string, unknown>)[field as string] as
+        string | number,
     )
     // only update if value has changed
     if (value === previousValue) return
@@ -225,7 +223,7 @@ export const GartenForm = ({
       )}
       {showDeleted && (
         <>
-          {showFilter ? (
+          {showFilter ?
             <JesNo
               key={`${row?.id}_deleted`}
               label="gelöscht"
@@ -234,8 +232,7 @@ export const GartenForm = ({
               saveToDb={saveToDb}
               error={errors?.garten?._deleted as string | undefined}
             />
-          ) : (
-            <Checkbox2States
+          : <Checkbox2States
               key={`${row?.id}_deleted`}
               label="gelöscht"
               name="_deleted"
@@ -243,7 +240,7 @@ export const GartenForm = ({
               saveToDb={saveToDb}
               error={errors?.garten?._deleted as string | undefined}
             />
-          )}
+          }
         </>
       )}
       <TextField
@@ -311,7 +308,7 @@ export const GartenForm = ({
       )}
       {!!ga_aktiv && (
         <>
-          {showFilter ? (
+          {showFilter ?
             <JesNo
               key={`${row?.id}aktiv`}
               label="aktiv"
@@ -320,8 +317,7 @@ export const GartenForm = ({
               saveToDb={saveToDb}
               error={errors?.garten?.aktiv as string | undefined}
             />
-          ) : (
-            <Checkbox2States
+          : <Checkbox2States
               key={`${row?.id}aktiv`}
               label="aktiv"
               name="aktiv"
@@ -329,7 +325,7 @@ export const GartenForm = ({
               saveToDb={saveToDb}
               error={errors?.garten?.aktiv as string | undefined}
             />
-          )}
+          }
         </>
       )}
       {!!ga_bemerkungen && (
@@ -352,9 +348,7 @@ export const GartenForm = ({
       )}
       {!showFilter && (
         <>
-          <Personen
-            garten={row as unknown as never}
-          />{' '}
+          <Personen garten={row as unknown as never} />{' '}
           <Files
             parentTable="garten"
             parent={row as unknown as never}

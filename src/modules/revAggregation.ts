@@ -143,8 +143,9 @@ export const flushRow = async (table: string, id: string) => {
     newObject.changed_by = store.get(userAtom)?.email
     // convert to string as the api does not support arrays here
     const existingRevisions = rowRecord._revisions as string[] | null
-    newObject._revisions = existingRevisions
-      ? toPgArray([rev, ...existingRevisions])
+    newObject._revisions =
+      existingRevisions ?
+        toPgArray([rev, ...existingRevisions])
       : toPgArray([rev])
 
     // on a server rejection the row is reverted to its pre-session

@@ -51,16 +51,18 @@ export const SammelLieferungForm = ({
   const sammelLieferungFilter = useAtomValue(filterSammelLieferungAtom)
 
   const [dataState, setDataState] = useState<{
-  herkunft?: import('../../../../dbModel.ts').Herkunft
-  herkunftQuelle?: string
-  userPersonOption?: import('../../../../dbModel.ts').PersonOption
-}>({    herkunft: undefined,
+    herkunft?: import('../../../../dbModel.ts').Herkunft
+    herkunftQuelle?: string
+    userPersonOption?: import('../../../../dbModel.ts').PersonOption
+  }>({
+    herkunft: undefined,
     herkunftQuelle: undefined,
     userPersonOption: undefined,
-})
+  })
   useEffect(() => {
-    const userPersonOptionsObservable = user.uid
-      ? db
+    const userPersonOptionsObservable =
+      user.uid ?
+        db
           ?.get<import('../../../../dbModel.ts').PersonOption>('person_option')
           .query(Q.on('person', Q.where('account_id', user.uid)))
           .observeWithColumns(['sl_show_empty_when_next_to_li'])
@@ -81,7 +83,10 @@ export const SammelLieferungForm = ({
           return setDataState({
             herkunft: vonSammlungHerkunft,
             herkunftQuelle: 'Sammlung',
-            userPersonOption: (userPersonOptions as unknown as import('../../../../dbModel.ts').PersonOption[] | undefined)?.[0],
+            userPersonOption: (
+              userPersonOptions as unknown as
+                import('../../../../dbModel.ts').PersonOption[] | undefined
+            )?.[0],
           })
         }
 
@@ -100,7 +105,10 @@ export const SammelLieferungForm = ({
             return setDataState({
               herkunft: herkunftByVonKultur,
               herkunftQuelle: 'von-Kultur',
-              userPersonOption: (userPersonOptions as unknown as import('../../../../dbModel.ts').PersonOption[] | undefined)?.[0],
+              userPersonOption: (
+                userPersonOptions as unknown as
+                  import('../../../../dbModel.ts').PersonOption[] | undefined
+              )?.[0],
             })
           }
         }
@@ -118,7 +126,10 @@ export const SammelLieferungForm = ({
         setDataState({
           herkunft: herkunftByNachKultur,
           herkunftQuelle: herkunftByNachKultur ? 'nach-Kultur' : 'keine',
-          userPersonOption: (userPersonOptions as unknown as import('../../../../dbModel.ts').PersonOption[] | undefined)?.[0],
+          userPersonOption: (
+            userPersonOptions as unknown as
+              import('../../../../dbModel.ts').PersonOption[] | undefined
+          )?.[0],
         })
       },
     )
@@ -160,7 +171,8 @@ export const SammelLieferungForm = ({
     if (event.target.value === undefined) value = null
     if (event.target.value === '') value = null
     const previousValue = ifIsNumericAsNumber(
-      (row as unknown as Record<string, unknown>)[field as string] as string | number,
+      (row as unknown as Record<string, unknown>)[field as string] as
+        string | number,
     )
 
     if (showFilter) {
@@ -192,8 +204,7 @@ export const SammelLieferungForm = ({
     return true
   }
 
-  const ifSomeNeeded = (fields: string[]) =>
-    fields.some((f) => ifNeeded(f))
+  const ifSomeNeeded = (fields: string[]) => fields.some((f) => ifNeeded(f))
 
   const showDeleted = sammelLieferungFilter._deleted !== false || row?._deleted
 
@@ -207,7 +218,7 @@ export const SammelLieferungForm = ({
         )}
         {showDeleted && (
           <>
-            {showFilter ? (
+            {showFilter ?
               <JesNo
                 key={`${row?.id}_deleted`}
                 label="gelöscht"
@@ -216,8 +227,7 @@ export const SammelLieferungForm = ({
                 saveToDb={saveToDb}
                 error={errors?.sammel_lieferung?._deleted as string | undefined}
               />
-            ) : (
-              <Checkbox2States
+            : <Checkbox2States
                 key={`${row?.id}_deleted`}
                 label="gelöscht"
                 name="_deleted"
@@ -225,7 +235,7 @@ export const SammelLieferungForm = ({
                 saveToDb={saveToDb}
                 error={errors?.sammel_lieferung?._deleted as string | undefined}
               />
-            )}
+            }
           </>
         )}
         {ifSomeNeeded([

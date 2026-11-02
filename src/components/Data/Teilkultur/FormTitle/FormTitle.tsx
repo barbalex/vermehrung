@@ -39,17 +39,24 @@ export const TeilkulturFormTitle = ({
   }
 
   return (
-    <div className={artStyles.container} ref={ref}>
+    <div
+      className={artStyles.container}
+      ref={ref}
+    >
       <div className={artStyles.title}>Teilkultur</div>
       <div className={artStyles.symbols}>
         {!breadcrumbsEnabled && (
-          <IconButton title="Zur Liste" onClick={onClickUp} size="large">
+          <IconButton
+            title="Zur Liste"
+            onClick={onClickUp}
+            size="large"
+          >
             <UpSvg />
           </IconButton>
         )}
         <AddButton />
         <DeleteButton row={row} />
-        {(width ?? 0) < 520 ? (
+        {(width ?? 0) < 520 ?
           <Menu white={false}>
             <HistoryButton
               table="teilkultur"
@@ -57,7 +64,10 @@ export const TeilkulturFormTitle = ({
               showHistory={showHistory}
               asMenu
             />
-            <Settings kulturId={row?.kultur_id ?? undefined} asMenu />
+            <Settings
+              kulturId={row?.kultur_id ?? undefined}
+              asMenu
+            />
             <Anleitung asMenu />
             <FilterNumbers
               filteredCount={filteredCount}
@@ -65,8 +75,7 @@ export const TeilkulturFormTitle = ({
               asMenu
             />
           </Menu>
-        ) : (
-          <>
+        : <>
             <HistoryButton
               table="teilkultur"
               id={row?.id}
@@ -79,7 +88,7 @@ export const TeilkulturFormTitle = ({
               totalCount={totalCount}
             />
           </>
-        )}
+        }
       </div>
     </div>
   )

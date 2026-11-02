@@ -24,38 +24,37 @@ export const LieferungAddChooseDialog = ({
   kulturType: string | undefined
   lieferung: import('../../../../../../../dbModel.ts').Lieferung
   herkunft:
-    | import('../../../../../../../dbModel.ts').Herkunft
-    | null
-    | undefined
+    import('../../../../../../../dbModel.ts').Herkunft | null | undefined
 }) => {
   const db = useAtomValue(dbAtom)
   const gartenFilter = useAtomValue(filterGartenAtom)
 
   const [gartens, setGartens] = useState<
-    { value: string; label: string | undefined; inaktiv: boolean; link: string[] }[]
+    {
+      value: string
+      label: string | undefined
+      inaktiv: boolean
+      link: string[]
+    }[]
   >([])
 
   useEffect(() => {
     const gartenDelQuery =
-      gartenFilter._deleted === false
-        ? Q.where('_deleted', false)
-        : gartenFilter._deleted === true
-          ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+      gartenFilter._deleted === false ? Q.where('_deleted', false)
+      : gartenFilter._deleted === true ? Q.where('_deleted', true)
+      : Q.or(
+          Q.where('_deleted', false),
+          Q.where('_deleted', true),
+          Q.where('_deleted', null),
+        )
     const gartenAktivQuery =
-      gartenFilter.aktiv === false
-        ? Q.where('aktiv', false)
-        : gartenFilter.aktiv === true
-          ? Q.where('aktiv', true)
-          : Q.or(
-              Q.where('aktiv', false),
-              Q.where('aktiv', true),
-              Q.where('aktiv', null),
-            )
+      gartenFilter.aktiv === false ? Q.where('aktiv', false)
+      : gartenFilter.aktiv === true ? Q.where('aktiv', true)
+      : Q.or(
+          Q.where('aktiv', false),
+          Q.where('aktiv', true),
+          Q.where('aktiv', null),
+        )
     const gartensObservable = db
       ?.get<import('../../../../../../../dbModel.ts').Garten>('garten')
       .query(gartenDelQuery, gartenAktivQuery)
@@ -109,7 +108,12 @@ export const LieferungAddChooseDialog = ({
   console.log('ChooseDialog: gartens:', gartens)
 
   return (
-    <Dialog open={open} onClose={onClose} fullWidth maxWidth="md">
+    <Dialog
+      open={open}
+      onClose={onClose}
+      fullWidth
+      maxWidth="md"
+    >
       <DialogTitle>Garten wählen:</DialogTitle>
       <DialogContent>
         <StyledSelect

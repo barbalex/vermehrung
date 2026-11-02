@@ -165,7 +165,10 @@ export const Login = () => {
   return (
     <ErrorBoundary>
       <div className={styles.container}>
-        <Dialog aria-labelledby="dialog-title" open={true}>
+        <Dialog
+          aria-labelledby="dialog-title"
+          open={true}
+        >
           <DialogTitle id="dialog-title">Anmeldung</DialogTitle>
           <div className={styles.div}>
             <FormControl
@@ -216,7 +219,9 @@ export const Login = () => {
                       title={showPass ? 'verstecken' : 'anzeigen'}
                       size="large"
                     >
-                      {showPass ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                      {showPass ?
+                        <VisibilityOffIcon />
+                      : <VisibilityIcon />}
                     </IconButton>
                   </InputAdornment>
                 }
@@ -234,7 +239,10 @@ export const Login = () => {
             >
               {resetTitle}
             </Button>
-            <Button color="primary" onClick={() => void fetchLogin({})}>
+            <Button
+              color="primary"
+              onClick={() => void fetchLogin({})}
+            >
               anmelden
             </Button>
           </DialogActions>
