@@ -3,7 +3,8 @@ import { useAtomValue } from 'jotai'
 import { FaSearch } from 'react-icons/fa'
 import Select from 'react-select/async'
 import Highlighter from 'react-highlight-words'
-import { useDebouncedCallback } from 'use-debounce'
+
+import { useDebouncedCallback } from '../../../../utils/useDebouncedCallback.ts'
 
 import {
   singleColumnViewAtom,

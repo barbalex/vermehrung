@@ -1,4 +1,3 @@
-import fileSaver from 'file-saver'
 import { format } from 'date-fns/format'
 import type { Workbook } from 'exceljs'
 
@@ -24,8 +23,12 @@ export const downloadExceljsWorkbook = async ({
     })
   }
   const file = `${fileName}_${format(new Date(), 'yyyy-MM-dd_HH-mm-ss')}`
-  fileSaver.saveAs(
-    new Blob([buffer], { type: 'application/octet-stream' }),
-    `${file}.xlsx`,
-  )
+  const blob = new Blob([buffer], { type: 'application/octet-stream' })
+  const url = URL.createObjectURL(blob)
+  const anchor = document.createElement('a')
+  anchor.href = url
+  anchor.download = `${file}.xlsx`
+  anchor.click()
+  // revoke delayed: immediately after click, safari can still abort the download
+  setTimeout(() => URL.revokeObjectURL(url), 10_000)
 }

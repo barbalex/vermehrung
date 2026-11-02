@@ -1,5 +1,3 @@
-import axios from 'redaxios'
-
 import {
   store,
   addNotification,
@@ -7,6 +5,7 @@ import {
   setOnline,
 } from '../store/index.ts'
 import { constants } from './constants.ts'
+import { fetchWithTimeout } from './fetchWithTimeout.ts'
 import type { Person } from '../dbModel.ts'
 
 export const signup = async ({ person }: { person: Person | null }) => {
@@ -26,17 +25,20 @@ export const signup = async ({ person }: { person: Person | null }) => {
       type: 'warning',
     })
   }
-  let res
+  let data: string
   try {
-    res = await axios.get(`${constants?.getAuthUri()}/create-user/${email}`)
+    const res = await fetchWithTimeout(
+      `${constants?.getAuthUri()}/create-user/${email}`,
+    )
+    data = await res.text()
+    // like axios, treat non-2xx as an error and surface the body
+    if (!res.ok) throw new Error(data || res.statusText)
   } catch (error) {
     if (online) {
       setOnline(false)
     }
     return addNotification({
-      message:
-        (error as { response?: { data?: string } })?.response?.data ??
-        'Oh je. Da ging was schief',
+      message: (error as Error).message || 'Oh je. Da ging was schief',
     })
   }
   if (!online) {
@@ -51,5 +53,5 @@ export const signup = async ({ person }: { person: Person | null }) => {
       message: 'Keine Person gefunden',
     })
   }
-  person.edit({ field: 'account_id', value: res.data })
+  person.edit({ field: 'account_id', value: data })
 }

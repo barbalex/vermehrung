@@ -3,7 +3,8 @@ import { useAtomValue } from 'jotai'
 import { interval, combineLatest } from 'rxjs'
 import { Q } from 'nitromelondb'
 import { throttle } from 'rxjs/operators'
-import { useDebouncedCallback } from 'use-debounce'
+
+import { useDebouncedCallback } from '../../utils/useDebouncedCallback.ts'
 
 import {
   dbAtom,

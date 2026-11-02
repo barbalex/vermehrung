@@ -1,5 +1,3 @@
-import axios from 'redaxios'
-
 import {
   store,
   addNotification,
@@ -9,6 +7,7 @@ import {
   setShortTermOnline,
 } from '../store/index.ts'
 import { constants } from './constants.ts'
+import { fetchWithTimeout } from './fetchWithTimeout.ts'
 import type { Person } from '../dbModel.ts'
 
 export const deleteAccount = async ({ person }: { person: Person | null }) => {
@@ -17,9 +16,11 @@ export const deleteAccount = async ({ person }: { person: Person | null }) => {
   // delete firebase user
   if (person?.account_id) {
     try {
-      await axios.get(
+      const res = await fetchWithTimeout(
         `${constants?.getAuthUri()}/delete-user/${person?.account_id}`,
       )
+      // like axios, treat non-2xx as an error and surface the body
+      if (!res.ok) throw new Error((await res.text()) || res.statusText)
     } catch (error) {
       console.log(error)
       if (online) {
@@ -29,10 +30,7 @@ export const deleteAccount = async ({ person }: { person: Person | null }) => {
         setShortTermOnline(false)
       }
       return addNotification({
-        message: String(
-          (error as { response?: { data?: unknown } })?.response?.data ??
-            'Fehler',
-        ),
+        message: (error as Error).message || 'Fehler',
       })
     }
     if (!online) {
