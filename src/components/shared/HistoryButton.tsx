@@ -6,13 +6,12 @@ import MenuItem from '@mui/material/MenuItem'
 import { of as $of } from 'rxjs'
 
 import {
-  activeNodeArrayAtom,
   dbAtom,
   getNavigate,
   onlineAtom,
   initialDataQueriedAtom,
-  store,
 } from '../../store/index.ts'
+import { historyUrlClose, historyUrlOpen } from '../../utils/historyUrl.ts'
 import { ErrorBoundary } from './ErrorBoundary.tsx'
 import { useObservable } from '../../utils/useObservable.ts'
 import type { Observable } from 'rxjs'
@@ -57,11 +56,10 @@ export const HistoryButton = ({
     // keep using local state
     if (setShowHistory) return setShowHistory(!showHistory)
     // history is url-driven: '/histories/<rev>' is appended to the form url
-    // the rev is added by the history component once revisions were fetched
-    const activeNodeArray = store.get(activeNodeArrayAtom)
-    const url =
-      showHistory ? activeNodeArray : [...activeNodeArray, 'histories']
-    getNavigate()?.(`/Vermehrung/${url.join('/')}`)
+    // (built from the path - activeNodeArray lacks the breadcrumbs form
+    // suffix). the rev is added by the history component once revisions
+    // were fetched
+    getNavigate()?.(showHistory ? historyUrlClose() : historyUrlOpen())
   }
 
   const title =

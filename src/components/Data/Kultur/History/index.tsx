@@ -1,13 +1,9 @@
 import { useEffect } from 'react'
 import { useAtomValue } from 'jotai'
+import { historyUrlForRev } from '../../../../utils/historyUrl.ts'
 import { useApiQuery } from '../../../../utils/useApiQuery.ts'
 
-import {
-  activeNodeArrayAtom,
-  getNavigate,
-  historyRevAtom,
-  store,
-} from '../../../../store/index.ts'
+import { getNavigate, historyRevAtom } from '../../../../store/index.ts'
 
 import { checkForOnlineError } from '../../../../utils/checkForOnlineError.ts'
 import { HistorySlider } from '../../../shared/HistorySlider.tsx'
@@ -43,8 +39,7 @@ export const KulturHistory = ({
 
   // replace: sliding should not create a browser history entry per revision
   const navigateToRev = (rev: string | true | null | undefined) => {
-    const url = [...store.get(activeNodeArrayAtom), 'histories', rev as string]
-    getNavigate()?.(`/Vermehrung/${url.join('/')}`, { replace: true })
+    getNavigate()?.(historyUrlForRev(rev as string), { replace: true })
   }
 
   const indexOfRev = revRows.findIndex((r) => r._rev === historyRev)

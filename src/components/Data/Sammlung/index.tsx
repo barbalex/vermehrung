@@ -4,7 +4,6 @@ import { Allotment } from 'allotment'
 import { of as $of } from 'rxjs'
 
 import {
-  activeNodeArrayAtom,
   dbAtom,
   filterSammlungAtom,
   filterShowAtom,
@@ -12,8 +11,8 @@ import {
   historyRevAtom,
   initialDataQueriedAtom,
   onlineAtom,
-  store,
 } from '../../../store/index.ts'
+import { historyUrlClose } from '../../../utils/historyUrl.ts'
 import { SammlungFormTitleChooser as FormTitle } from './FormTitle/index.tsx'
 import { SammlungForm as Form } from './Form/index.tsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
@@ -69,8 +68,7 @@ export const Sammlung = ({
   // which is not part of activeNodeArray
   const historyRev = useAtomValue(historyRevAtom)
   const showHistory = historyRev !== undefined
-  const historyTakeoverCallback = () =>
-    getNavigate()?.(`/Vermehrung/${store.get(activeNodeArrayAtom).join('/')}`)
+  const historyTakeoverCallback = () => getNavigate()?.(historyUrlClose())
 
   if (!row || !Object.keys(row ?? {}).length) return <Spinner />
   if (!showFilter && filterShow) return null

@@ -128,7 +128,7 @@ export const HistorySlider = ({
         <button
           type="button"
           className={styles.previous}
-          aria-label="frühere Version"
+          aria-label="neuere Version"
           disabled={activeIndex === 0}
           onClick={() => goTo(activeIndex - 1)}
         >
@@ -147,7 +147,7 @@ export const HistorySlider = ({
         <button
           type="button"
           className={styles.next}
-          aria-label="spätere Version"
+          aria-label="ältere Version"
           disabled={activeIndex === slideCount - 1}
           onClick={() => goTo(activeIndex + 1)}
         >

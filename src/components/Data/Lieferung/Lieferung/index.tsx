@@ -3,13 +3,12 @@ import { useAtomValue } from 'jotai'
 import { Allotment } from 'allotment'
 
 import {
-  activeNodeArrayAtom,
   filterShowAtom,
   getNavigate,
   historyRevAtom,
   onlineAtom,
-  store,
 } from '../../../../store/index.ts'
+import { historyUrlClose } from '../../../../utils/historyUrl.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { Spinner } from '../../../shared/Spinner.tsx'
 import { LieferungConflict as Conflict } from './Conflict.tsx'
@@ -47,8 +46,7 @@ export const Lieferung = ({
   // which is not part of activeNodeArray
   const historyRev = useAtomValue(historyRevAtom)
   const showHistory = historyRev !== undefined
-  const historyTakeoverCallback = () =>
-    getNavigate()?.(`/Vermehrung/${store.get(activeNodeArrayAtom).join('/')}`)
+  const historyTakeoverCallback = () => getNavigate()?.(historyUrlClose())
 
   if (!row) return <Spinner />
   if (!showFilter && filterShow) return null

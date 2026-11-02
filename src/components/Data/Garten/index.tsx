@@ -4,7 +4,6 @@ import { Allotment } from 'allotment'
 import { of as $of } from 'rxjs'
 
 import {
-  activeNodeArrayAtom,
   dbAtom,
   filterGartenAtom,
   filterShowAtom,
@@ -12,8 +11,8 @@ import {
   historyRevAtom,
   initialDataQueriedAtom,
   onlineAtom,
-  store,
 } from '../../../store/index.ts'
+import { historyUrlClose } from '../../../utils/historyUrl.ts'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
 import { Spinner } from '../../shared/Spinner.tsx'
 import { GartenConflict as Conflict } from './Conflict.tsx'
@@ -71,8 +70,7 @@ export const Garten = ({
   // which is not part of activeNodeArray
   const historyRev = useAtomValue(historyRevAtom)
   const showHistory = historyRev !== undefined
-  const historyTakeoverCallback = () =>
-    getNavigate()?.(`/Vermehrung/${store.get(activeNodeArrayAtom).join('/')}`)
+  const historyTakeoverCallback = () => getNavigate()?.(historyUrlClose())
 
   if (!row || !Object.keys(row ?? {}).length) return <Spinner />
   if (!showFilter && filterShow) return null
