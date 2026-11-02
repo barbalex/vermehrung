@@ -1,0 +1,62 @@
+.wrapper {
+  position: relative;
+}
+
+.track {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  /* hidden on purpose: arrows and swiping navigate, the bar would
+     flicker during the snap animation */
+  scrollbar-width: none;
+}
+
+.track::-webkit-scrollbar {
+  display: none;
+}
+
+.slide {
+  flex: 0 0 100%;
+  scroll-snap-align: start;
+  /* all slides share the height of the tallest one, like the former
+     slick track */
+  display: flex;
+  flex-direction: column;
+}
+
+.arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background-color: rgba(74, 20, 140, 0.1);
+  color: #4a148c;
+  cursor: pointer;
+}
+
+.arrow:hover:not(:disabled) {
+  background-color: rgba(74, 20, 140, 0.25);
+}
+
+.arrow:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.previous {
+  composes: arrow;
+  left: -15px;
+}
+
+.next {
+  composes: arrow;
+  right: -15px;
+}

@@ -1,17 +1,11 @@
-import Slider from 'react-slick'
-
 import { useApiQuery } from '../../../../../../../utils/useApiQuery.ts'
 
 import { checkForOnlineError } from '../../../../../../../utils/checkForOnlineError.ts'
+import { HistorySlider } from '../../../../../../shared/HistorySlider.tsx'
 import { Spinner } from '../../../../../../shared/Spinner.tsx'
 import { TeilzaehlungHistoryRow as Row } from './Row.tsx'
 
 import styles from './index.module.css'
-
-const sliderSettings = {
-  dots: false,
-  infinite: false,
-}
 
 export const TeilzaehlungHistory = ({
   row,
@@ -51,7 +45,7 @@ export const TeilzaehlungHistory = ({
 
   return (
     <div className={styles.container}>
-      <Slider {...sliderSettings}>
+      <HistorySlider>
         {revRows.map((r) => (
           <Row
             key={row?._rev}
@@ -60,7 +54,7 @@ export const TeilzaehlungHistory = ({
             historyTakeoverCallback={historyTakeoverCallback}
           />
         ))}
-      </Slider>
+      </HistorySlider>
     </div>
   )
 }

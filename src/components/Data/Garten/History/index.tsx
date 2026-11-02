@@ -1,7 +1,5 @@
 import { useEffect } from 'react'
 import { useAtomValue } from 'jotai'
-import Slider from 'react-slick'
-
 import { useApiQuery } from '../../../../utils/useApiQuery.ts'
 
 import {
@@ -11,15 +9,11 @@ import {
   store,
 } from '../../../../store/index.ts'
 import { checkForOnlineError } from '../../../../utils/checkForOnlineError.ts'
+import { HistorySlider } from '../../../shared/HistorySlider.tsx'
 import { Spinner } from '../../../shared/Spinner.tsx'
 import { GartenHistoryRow as Row } from './Row.tsx'
 
 import artStyles from '../../Art/History/index.module.css'
-
-const sliderSettings = {
-  dots: false,
-  infinite: false,
-}
 
 export const GartenHistory = ({
   row,
@@ -75,14 +69,13 @@ export const GartenHistory = ({
       {/* keying by rev makes the shown revision a function of the url:
           the slider is remounted at the right slide whenever the url changes,
           also when it was remounted after fetching */}
-      <Slider
+      <HistorySlider
         key={historyRev as string}
-        initialSlide={indexOfRev > -1 ? indexOfRev : 0}
-        afterChange={(index: number) => {
+        initialIndex={indexOfRev > -1 ? indexOfRev : 0}
+        onSlideChange={(index: number) => {
           const rev = revRows[index]?._rev
           if (rev && rev !== historyRev) navigateToRev(rev)
         }}
-        {...sliderSettings}
       >
         {revRows.map((r) => (
           <Row
@@ -92,7 +85,7 @@ export const GartenHistory = ({
             historyTakeoverCallback={historyTakeoverCallback}
           />
         ))}
-      </Slider>
+      </HistorySlider>
     </div>
   )
 }

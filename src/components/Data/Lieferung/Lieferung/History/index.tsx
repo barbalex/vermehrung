@@ -1,7 +1,5 @@
 import { useEffect } from 'react'
 import { useAtomValue } from 'jotai'
-import Slider from 'react-slick'
-
 import { useApiQuery } from '../../../../../utils/useApiQuery.ts'
 
 import {
@@ -12,15 +10,11 @@ import {
 } from '../../../../../store/index.ts'
 
 import { checkForOnlineError } from '../../../../../utils/checkForOnlineError.ts'
+import { HistorySlider } from '../../../../shared/HistorySlider.tsx'
 import { Spinner } from '../../../../shared/Spinner.tsx'
 import { LieferungHistoryRow as Row } from './Row.tsx'
 
 import artStyles from '../../../Art/History/index.module.css'
-
-const sliderSettings = {
-  dots: false,
-  infinite: false,
-}
 
 export const LieferungHistory = ({
   row,
@@ -79,14 +73,13 @@ export const LieferungHistory = ({
       {/* keying by rev makes the shown revision a function of the url:
           the slider is remounted at the right slide whenever the url changes,
           also when it was remounted after fetching */}
-      <Slider
+      <HistorySlider
         key={historyRev as string}
-        initialSlide={indexOfRev > -1 ? indexOfRev : 0}
-        afterChange={(index: number) => {
+        initialIndex={indexOfRev > -1 ? indexOfRev : 0}
+        onSlideChange={(index: number) => {
           const rev = revRows[index]?._rev
           if (rev && rev !== historyRev) navigateToRev(rev)
         }}
-        {...sliderSettings}
       >
         {revRows.map((r) => (
           <Row
@@ -96,7 +89,7 @@ export const LieferungHistory = ({
             historyTakeoverCallback={historyTakeoverCallback as () => void}
           />
         ))}
-      </Slider>
+      </HistorySlider>
     </div>
   )
 }

@@ -230,23 +230,6 @@ html[data-theme='dark'] .react-select__option--is-selected {
   background-color: rgba(156, 77, 204, 0.35) !important;
 }
 
-/* react-slick */
-
-.slick-prev:before,
-.slick-next:before,
-.slick-dots li button:before {
-  color: #4a148c;
-}
-.slick-prev {
-  left: -20px;
-}
-.slick-next {
-  right: -20px;
-}
-.slick-dots {
-  bottom: -10px;
-}
-
 /* docs */
 
 .docs {
