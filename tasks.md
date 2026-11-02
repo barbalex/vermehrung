@@ -13,6 +13,8 @@
 
 ---
 
+I see there are still a few useMemo (and others?) usages. Are they still needed considering this app uses react compiler?
+
 ---
 
 ---
