@@ -1,5 +1,5 @@
-// runs the production deploy pipeline: lint + typecheck + tests,
-// then bumps the version (tools/bumpVersion.mjs), builds and deploys
+// runs the production deploy pipeline: format check + lint + typecheck +
+// tests, then bumps the version (tools/bumpVersion.mjs), builds and deploys
 // to firebase hosting.
 // usage: npm run deploy [patch|minor|major] (default: patch)
 import { execFileSync } from 'node:child_process'
@@ -19,6 +19,7 @@ if (!['patch', 'minor', 'major'].includes(type)) {
 
 const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)))
 
+run('npm', ['run', 'format:check'])
 run('npm', ['run', 'lint'])
 run('npm', ['run', 'typecheck'])
 run('npm', ['test'])
