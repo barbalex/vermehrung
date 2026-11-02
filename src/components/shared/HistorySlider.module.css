@@ -38,12 +38,22 @@
   border: none;
   border-radius: 50%;
   background-color: rgba(74, 20, 140, 0.1);
-  color: #4a148c;
+  color: var(--icon-primary);
   cursor: pointer;
 }
 
 .arrow:hover:not(:disabled) {
   background-color: rgba(74, 20, 140, 0.25);
+}
+
+html[data-theme='dark'] .arrow {
+  background-color: rgba(186, 104, 200, 0.32);
+  /* ring for definition: the translucent fill alone vanishes on dark */
+  border: 1px solid rgba(186, 104, 200, 0.45);
+}
+
+html[data-theme='dark'] .arrow:hover:not(:disabled) {
+  background-color: rgba(186, 104, 200, 0.48);
 }
 
 .arrow:disabled {
