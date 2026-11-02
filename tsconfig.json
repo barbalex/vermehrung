@@ -16,8 +16,7 @@
     "noEmit": true,
     "allowImportingTsExtensions": true,
     "jsx": "react-jsx",
-    "jsxImportSource": "@emotion/react",
-    "experimentalDecorators": true
+    "jsxImportSource": "@emotion/react"
   },
   "include": ["src/**/*"],
   "references": [{ "path": "./tsconfig.node.json" }]

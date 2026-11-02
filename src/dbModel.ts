@@ -1,13 +1,7 @@
 import { Model, type Query, type Relation } from 'nitromelondb'
 import type { Associations } from 'nitromelondb/Model'
-import {
-  writer,
-  children,
-  field,
-  json,
-  lazy,
-  relation,
-} from 'nitromelondb/decorators'
+import { children, field, json, relation } from 'nitromelondb/decorators'
+import { modelDecorators } from './modelDecorators.ts'
 import { Q } from 'nitromelondb'
 import {
   distinctUntilChanged,
@@ -52,31 +46,31 @@ export class Herkunft extends Model {
     herkunft_file: { type: 'has_many', foreignKey: 'herkunft_id' },
   }
 
-  @field('nr') nr!: string | null
-  @field('lokalname') lokalname!: string | null
-  @field('gemeinde') gemeinde!: string | null
-  @field('kanton') kanton!: string | null
-  @field('land') land!: string | null
-  @json('geom_point', dontSanitize) geom_point!: unknown
-  @field('wgs84_lat') wgs84_lat!: number | null
-  @field('wgs84_long') wgs84_long!: number | null
-  @field('lv95_x') lv95_x!: number | null
-  @field('lv95_y') lv95_y!: number | null
-  @field('bemerkungen') bemerkungen!: string | null
-  @field('changed') changed!: string | null
-  @field('changed_by') changed_by!: string | null
-  @field('_rev') _rev!: string | null
-  @field('_parent_rev') _parent_rev!: string | null
-  @json('_revisions', dontSanitize) _revisions!: string[] | null
-  @field('_depth') _depth!: number | null
-  @field('_deleted') _deleted!: boolean | null
-  @json('_conflicts', dontSanitize) _conflicts!: string[] | null
+  declare nr: string | null
+  declare lokalname: string | null
+  declare gemeinde: string | null
+  declare kanton: string | null
+  declare land: string | null
+  declare geom_point: unknown
+  declare wgs84_lat: number | null
+  declare wgs84_long: number | null
+  declare lv95_x: number | null
+  declare lv95_y: number | null
+  declare bemerkungen: string | null
+  declare changed: string | null
+  declare changed_by: string | null
+  declare _rev: string | null
+  declare _parent_rev: string | null
+  declare _revisions: string[] | null
+  declare _depth: number | null
+  declare _deleted: boolean | null
+  declare _conflicts: string[] | null
 
-  @children('sammlung') sammlungs!: Query<Sammlung>
-  @children('herkunft') herkunfts!: Query<Herkunft>
-  @children('herkunft_file') files!: Query<HerkunftFile>
+  declare sammlungs: Query<Sammlung>
+  declare herkunfts: Query<Herkunft>
+  declare files: Query<HerkunftFile>
 
-  @writer async removeConflict(_rev: string) {
+  async removeConflict(_rev: string) {
     await this.update((row) => {
       row._conflicts = (this._conflicts ?? []).filter((r) => r !== _rev)
     })
@@ -84,7 +78,7 @@ export class Herkunft extends Model {
   // updates the row locally - ui and labels stay live.
   // the revision is created when the editing session on this row
   // ends (see modules/revAggregation.js), not per field change
-  @writer async edit({
+  async edit({
     field,
     value,
     values,
@@ -108,10 +102,38 @@ export class Herkunft extends Model {
       row.changed_by = store.get(userAtom)?.email ?? null
     })
   }
-  @writer async delete() {
+  async delete() {
     await this.callWriter(() => this.edit({ field: '_deleted', value: true }))
   }
 }
+modelDecorators(
+  Herkunft,
+  {
+    nr: field('nr'),
+    lokalname: field('lokalname'),
+    gemeinde: field('gemeinde'),
+    kanton: field('kanton'),
+    land: field('land'),
+    geom_point: json('geom_point', dontSanitize),
+    wgs84_lat: field('wgs84_lat'),
+    wgs84_long: field('wgs84_long'),
+    lv95_x: field('lv95_x'),
+    lv95_y: field('lv95_y'),
+    bemerkungen: field('bemerkungen'),
+    changed: field('changed'),
+    changed_by: field('changed_by'),
+    _rev: field('_rev'),
+    _parent_rev: field('_parent_rev'),
+    _revisions: json('_revisions', dontSanitize),
+    _depth: field('_depth'),
+    _deleted: field('_deleted'),
+    _conflicts: json('_conflicts', dontSanitize),
+    sammlungs: children('sammlung'),
+    herkunfts: children('herkunft'),
+    files: children('herkunft_file'),
+  },
+  ['removeConflict', 'edit', 'delete'],
+)
 
 export class Sammlung extends Model {
   static table = 'sammlung'
@@ -123,94 +145,100 @@ export class Sammlung extends Model {
     sammlung_file: { type: 'has_many', foreignKey: 'sammlung_id' },
   }
 
-  @field('art_id') art_id!: string | null
-  @field('person_id') person_id!: string | null
-  @field('herkunft_id') herkunft_id!: string | null
-  @field('nr') nr!: string | null
-  @field('datum') datum!: string | null
-  @field('von_anzahl_individuen') von_anzahl_individuen!: number | null
-  @field('anzahl_pflanzen') anzahl_pflanzen!: number | null
-  @field('gramm_samen') gramm_samen!: number | null
-  @field('andere_menge') andere_menge!: string | null
-  @json('geom_point', dontSanitize) geom_point!: unknown
-  @field('wgs84_lat') wgs84_lat!: number | null
-  @field('wgs84_long') wgs84_long!: number | null
-  @field('lv95_x') lv95_x!: number | null
-  @field('lv95_y') lv95_y!: number | null
-  @field('geplant') geplant!: boolean | null
-  @field('bemerkungen') bemerkungen!: string | null
-  @field('changed') changed!: string | null
-  @field('changed_by') changed_by!: string | null
-  @field('_rev') _rev!: string | null
-  @field('_parent_rev') _parent_rev!: string | null
-  @json('_revisions', dontSanitize) _revisions!: string[] | null
-  @field('_depth') _depth!: number | null
-  @field('_deleted') _deleted!: boolean | null
-  @json('_conflicts', dontSanitize) _conflicts!: string[] | null
+  declare art_id: string | null
+  declare person_id: string | null
+  declare herkunft_id: string | null
+  declare nr: string | null
+  declare datum: string | null
+  declare von_anzahl_individuen: number | null
+  declare anzahl_pflanzen: number | null
+  declare gramm_samen: number | null
+  declare andere_menge: string | null
+  declare geom_point: unknown
+  declare wgs84_lat: number | null
+  declare wgs84_long: number | null
+  declare lv95_x: number | null
+  declare lv95_y: number | null
+  declare geplant: boolean | null
+  declare bemerkungen: string | null
+  declare changed: string | null
+  declare changed_by: string | null
+  declare _rev: string | null
+  declare _parent_rev: string | null
+  declare _revisions: string[] | null
+  declare _depth: number | null
+  declare _deleted: boolean | null
+  declare _conflicts: string[] | null
 
-  @relation('art', 'art_id') art!: Relation<Art>
-  @relation('herkunft', 'herkunft_id') herkunft!: Relation<Herkunft>
-  @relation('person', 'person_id') person!: Relation<Person>
-  @children('lieferung') lieferungs!: Query<Lieferung>
-  @children('sammlung_file') files!: Query<SammlungFile>
+  declare art: Relation<Art>
+  declare herkunft: Relation<Herkunft>
+  declare person: Relation<Person>
+  declare lieferungs: Query<Lieferung>
+  declare files: Query<SammlungFile>
 
-  @lazy label: Observable<Promise<string>> = this.observe().pipe(
-    // TODO: optimize untilChanged
-    distinctUntilChanged(),
-    map$(async (sammlung) => {
-      let art
-      try {
-        art = await sammlung.art.fetch()
-      } catch {}
-      let ae_art
-      try {
-        ae_art = await art?.ae_art?.fetch()
-      } catch {}
-      let person
-      try {
-        person = await sammlung.person?.fetch()
-      } catch {}
-      let herkunft
-      try {
-        herkunft = await sammlung.herkunft?.fetch()
-      } catch {}
+  #label?: Observable<Promise<string>>
+  get label(): Observable<Promise<string>> {
+    return (this.#label ??= this.observe().pipe(
+      // TODO: optimize untilChanged
+      distinctUntilChanged(),
+      map$(async (sammlung) => {
+        let art
+        try {
+          art = await sammlung.art.fetch()
+        } catch {}
+        let ae_art
+        try {
+          ae_art = await art?.ae_art?.fetch()
+        } catch {}
+        let person
+        try {
+          person = await sammlung.person?.fetch()
+        } catch {}
+        let herkunft
+        try {
+          herkunft = await sammlung.herkunft?.fetch()
+        } catch {}
 
-      return sammlungLabelFromSammlung({
-        sammlung,
-        art,
-        ae_art,
-        person,
-        herkunft,
-      })
-    }),
-  )
-  @lazy labelUnderHerkunft: Observable<Promise<string>> = this.observe().pipe(
-    // TODO: optimize untilChanged
-    distinctUntilChanged(),
-    map$(async (sammlung) => {
-      let art
-      try {
-        art = await sammlung.art.fetch()
-      } catch {}
-      let ae_art
-      try {
-        ae_art = await art?.ae_art?.fetch()
-      } catch {}
-      let person
-      try {
-        person = await sammlung.person.fetch()
-      } catch {}
+        return sammlungLabelFromSammlung({
+          sammlung,
+          art,
+          ae_art,
+          person,
+          herkunft,
+        })
+      }),
+    ))
+  }
+  #labelUnderHerkunft?: Observable<Promise<string>>
+  get labelUnderHerkunft(): Observable<Promise<string>> {
+    return (this.#labelUnderHerkunft ??= this.observe().pipe(
+      // TODO: optimize untilChanged
+      distinctUntilChanged(),
+      map$(async (sammlung) => {
+        let art
+        try {
+          art = await sammlung.art.fetch()
+        } catch {}
+        let ae_art
+        try {
+          ae_art = await art?.ae_art?.fetch()
+        } catch {}
+        let person
+        try {
+          person = await sammlung.person.fetch()
+        } catch {}
 
-      return sammlungLabelFromSammlungUnderHerkunft({
-        sammlung,
-        art,
-        ae_art,
-        person,
-      })
-    }),
-  )
+        return sammlungLabelFromSammlungUnderHerkunft({
+          sammlung,
+          art,
+          ae_art,
+          person,
+        })
+      }),
+    ))
+  }
 
-  @writer async removeConflict(_rev: string) {
+  async removeConflict(_rev: string) {
     await this.update((row) => {
       row._conflicts = (this._conflicts ?? []).filter((r) => r !== _rev)
     })
@@ -218,7 +246,7 @@ export class Sammlung extends Model {
   // updates the row locally - ui and labels stay live.
   // the revision is created when the editing session on this row
   // ends (see modules/revAggregation.js), not per field change
-  @writer async edit({
+  async edit({
     field,
     value,
     values,
@@ -243,10 +271,45 @@ export class Sammlung extends Model {
     })
   }
 
-  @writer async delete() {
+  async delete() {
     await this.callWriter(() => this.edit({ field: '_deleted', value: true }))
   }
 }
+modelDecorators(
+  Sammlung,
+  {
+    art_id: field('art_id'),
+    person_id: field('person_id'),
+    herkunft_id: field('herkunft_id'),
+    nr: field('nr'),
+    datum: field('datum'),
+    von_anzahl_individuen: field('von_anzahl_individuen'),
+    anzahl_pflanzen: field('anzahl_pflanzen'),
+    gramm_samen: field('gramm_samen'),
+    andere_menge: field('andere_menge'),
+    geom_point: json('geom_point', dontSanitize),
+    wgs84_lat: field('wgs84_lat'),
+    wgs84_long: field('wgs84_long'),
+    lv95_x: field('lv95_x'),
+    lv95_y: field('lv95_y'),
+    geplant: field('geplant'),
+    bemerkungen: field('bemerkungen'),
+    changed: field('changed'),
+    changed_by: field('changed_by'),
+    _rev: field('_rev'),
+    _parent_rev: field('_parent_rev'),
+    _revisions: json('_revisions', dontSanitize),
+    _depth: field('_depth'),
+    _deleted: field('_deleted'),
+    _conflicts: json('_conflicts', dontSanitize),
+    art: relation('art', 'art_id'),
+    herkunft: relation('herkunft', 'herkunft_id'),
+    person: relation('person', 'person_id'),
+    lieferungs: children('lieferung'),
+    files: children('sammlung_file'),
+  },
+  ['removeConflict', 'edit', 'delete'],
+)
 
 export class Lieferung extends Model {
   static table = 'lieferung'
@@ -263,41 +326,41 @@ export class Lieferung extends Model {
     lieferung_file: { type: 'has_many', foreignKey: 'lieferung_id' },
   }
 
-  @field('sammel_lieferung_id') sammel_lieferung_id!: string | null
-  @field('art_id') art_id!: string | null
-  @field('person_id') person_id!: string | null
-  @field('von_sammlung_id') von_sammlung_id!: string | null
-  @field('von_kultur_id') von_kultur_id!: string | null
-  @field('datum') datum!: string | null
-  @field('nach_kultur_id') nach_kultur_id!: string | null
-  @field('nach_ausgepflanzt') nach_ausgepflanzt!: boolean | null
-  @field('von_anzahl_individuen') von_anzahl_individuen!: number | null
-  @field('anzahl_pflanzen') anzahl_pflanzen!: number | null
-  @field('anzahl_auspflanzbereit') anzahl_auspflanzbereit!: number | null
-  @field('gramm_samen') gramm_samen!: number | null
-  @field('andere_menge') andere_menge!: string | null
-  @field('geplant') geplant!: boolean | null
-  @field('bemerkungen') bemerkungen!: string | null
-  @field('changed') changed!: string | null
-  @field('changed_by') changed_by!: string | null
-  @field('_rev') _rev!: string | null
-  @field('_parent_rev') _parent_rev!: string | null
-  @json('_revisions', dontSanitize) _revisions!: string[] | null
-  @field('_depth') _depth!: number | null
-  @field('_deleted') _deleted!: boolean | null
-  @json('_conflicts', dontSanitize) _conflicts!: string[] | null
+  declare sammel_lieferung_id: string | null
+  declare art_id: string | null
+  declare person_id: string | null
+  declare von_sammlung_id: string | null
+  declare von_kultur_id: string | null
+  declare datum: string | null
+  declare nach_kultur_id: string | null
+  declare nach_ausgepflanzt: boolean | null
+  declare von_anzahl_individuen: number | null
+  declare anzahl_pflanzen: number | null
+  declare anzahl_auspflanzbereit: number | null
+  declare gramm_samen: number | null
+  declare andere_menge: string | null
+  declare geplant: boolean | null
+  declare bemerkungen: string | null
+  declare changed: string | null
+  declare changed_by: string | null
+  declare _rev: string | null
+  declare _parent_rev: string | null
+  declare _revisions: string[] | null
+  declare _depth: number | null
+  declare _deleted: boolean | null
+  declare _conflicts: string[] | null
 
-  @relation('art', 'art_id') art!: Relation<Art>
-  @relation('sammlung', 'von_sammlung_id') sammlung!: Relation<Sammlung>
-  @relation('sammel_lieferung', 'sammel_lieferung_id')
-  sammel_lieferung!: Relation<SammelLieferung>
+  declare art: Relation<Art>
+  declare sammlung: Relation<Sammlung>
+  declare sammel_lieferung: Relation<SammelLieferung>
   //@relation('kultur', 'von_kultur_id') von_kultur
   //@relation('kultur', 'nach_kultur_id') nach_kultur
-  @relation('person', 'person_id') person!: Relation<Person>
-  @children('lieferung_file') files!: Query<LieferungFile>
+  declare person: Relation<Person>
+  declare files: Query<LieferungFile>
 
-  @lazy von_kultur: Observable<Promise<Kultur | undefined>> =
-    this.observe().pipe(
+  #von_kultur?: Observable<Promise<Kultur | undefined>>
+  get von_kultur(): Observable<Promise<Kultur | undefined>> {
+    return (this.#von_kultur ??= this.observe().pipe(
       map$(async (lieferung) => {
         let vonKultur
         try {
@@ -307,9 +370,11 @@ export class Lieferung extends Model {
         } catch {}
         return vonKultur
       }),
-    )
-  @lazy nach_kultur: Observable<Promise<Kultur | undefined>> =
-    this.observe().pipe(
+    ))
+  }
+  #nach_kultur?: Observable<Promise<Kultur | undefined>>
+  get nach_kultur(): Observable<Promise<Kultur | undefined>> {
+    return (this.#nach_kultur ??= this.observe().pipe(
       map$(async (lieferung) => {
         let nachKultur
         try {
@@ -319,20 +384,24 @@ export class Lieferung extends Model {
         } catch {}
         return nachKultur
       }),
-    )
+    ))
+  }
 
-  @lazy label: Observable<string> = this.observe().pipe(
-    distinctUntilChanged(
-      (a, b) =>
-        a.datum === b.datum &&
-        a.anzahl_pflanzen === b.anzahl_pflanzen &&
-        a.anzahl_auspflanzbereit === b.anzahl_auspflanzbereit &&
-        a.geplant === b.geplant,
-    ),
-    map$((lieferung) => lieferungLabelFromLieferung({ lieferung })),
-  )
+  #label?: Observable<string>
+  get label(): Observable<string> {
+    return (this.#label ??= this.observe().pipe(
+      distinctUntilChanged(
+        (a, b) =>
+          a.datum === b.datum &&
+          a.anzahl_pflanzen === b.anzahl_pflanzen &&
+          a.anzahl_auspflanzbereit === b.anzahl_auspflanzbereit &&
+          a.geplant === b.geplant,
+      ),
+      map$((lieferung) => lieferungLabelFromLieferung({ lieferung })),
+    ))
+  }
 
-  @writer async removeConflict(_rev: string) {
+  async removeConflict(_rev: string) {
     await this.update((row) => {
       row._conflicts = (this._conflicts ?? []).filter((r) => r !== _rev)
     })
@@ -340,7 +409,7 @@ export class Lieferung extends Model {
   // updates the row locally - ui and labels stay live.
   // the revision is created when the editing session on this row
   // ends (see modules/revAggregation.js), not per field change
-  @writer async edit({
+  async edit({
     field,
     value,
     values,
@@ -365,10 +434,45 @@ export class Lieferung extends Model {
     })
   }
 
-  @writer async delete() {
+  async delete() {
     await this.callWriter(() => this.edit({ field: '_deleted', value: true }))
   }
 }
+modelDecorators(
+  Lieferung,
+  {
+    sammel_lieferung_id: field('sammel_lieferung_id'),
+    art_id: field('art_id'),
+    person_id: field('person_id'),
+    von_sammlung_id: field('von_sammlung_id'),
+    von_kultur_id: field('von_kultur_id'),
+    datum: field('datum'),
+    nach_kultur_id: field('nach_kultur_id'),
+    nach_ausgepflanzt: field('nach_ausgepflanzt'),
+    von_anzahl_individuen: field('von_anzahl_individuen'),
+    anzahl_pflanzen: field('anzahl_pflanzen'),
+    anzahl_auspflanzbereit: field('anzahl_auspflanzbereit'),
+    gramm_samen: field('gramm_samen'),
+    andere_menge: field('andere_menge'),
+    geplant: field('geplant'),
+    bemerkungen: field('bemerkungen'),
+    changed: field('changed'),
+    changed_by: field('changed_by'),
+    _rev: field('_rev'),
+    _parent_rev: field('_parent_rev'),
+    _revisions: json('_revisions', dontSanitize),
+    _depth: field('_depth'),
+    _deleted: field('_deleted'),
+    _conflicts: json('_conflicts', dontSanitize),
+    art: relation('art', 'art_id'),
+    sammlung: relation('sammlung', 'von_sammlung_id'),
+    sammel_lieferung: relation('sammel_lieferung', 'sammel_lieferung_id'),
+    person: relation('person', 'person_id'),
+    files: children('lieferung_file'),
+  },
+  ['removeConflict', 'edit', 'delete'],
+)
+
 export class Art extends Model {
   static table = 'art'
   static associations: Associations = {
@@ -381,37 +485,43 @@ export class Art extends Model {
     art_file: { type: 'has_many', foreignKey: 'art_id' },
   }
 
-  @field('ae_id') ae_id!: string | null
-  @field('set') set!: string | null
-  @field('apflora_av') apflora_av!: string | null
-  @field('apflora_ap') apflora_ap!: boolean | null
-  @field('changed') changed!: string | null
-  @field('changed_by') changed_by!: string | null
-  @field('_rev') _rev!: string | null
-  @field('_parent_rev') _parent_rev!: string | null
-  @json('_revisions', dontSanitize) _revisions!: string[] | null
-  @field('_depth') _depth!: number | null
-  @field('_deleted') _deleted!: boolean | null
-  @json('_conflicts', dontSanitize) _conflicts!: string[] | null
+  declare ae_id: string | null
+  declare set: string | null
+  declare apflora_av: string | null
+  declare apflora_ap: boolean | null
+  declare changed: string | null
+  declare changed_by: string | null
+  declare _rev: string | null
+  declare _parent_rev: string | null
+  declare _revisions: string[] | null
+  declare _depth: number | null
+  declare _deleted: boolean | null
+  declare _conflicts: string[] | null
 
-  @relation('ae_art', 'ae_id') ae_art!: Relation<AeArt>
+  declare ae_art: Relation<AeArt>
 
-  @children('sammlung') sammlungs!: Query<Sammlung>
-  @children('sammel_lieferung') sammel_lieferungs!: Query<SammelLieferung>
-  @children('lieferung') lieferungs!: Query<Lieferung>
-  @children('kultur') kulturs!: Query<Kultur>
-  @children('av') avs!: Query<Av>
-  @children('art_file') files!: Query<ArtFile>
+  declare sammlungs: Query<Sammlung>
+  declare sammel_lieferungs: Query<SammelLieferung>
+  declare lieferungs: Query<Lieferung>
+  declare kulturs: Query<Kultur>
+  declare avs: Query<Av>
+  declare files: Query<ArtFile>
 
-  @lazy label: Observable<string> = this.ae_art.observe().pipe(
-    distinctUntilKeyChanged('ae_id' as keyof AeArt),
-    map$((ae_art) => artLabelFromAeArt({ ae_art })),
-  )
-  @lazy herkunfts: Query<Herkunft> = this.collections
-    .get<Herkunft>('herkunft')
-    .query(Q.on('sammlung', 'art_id', this.id))
+  #label?: Observable<string>
+  get label(): Observable<string> {
+    return (this.#label ??= this.ae_art.observe().pipe(
+      distinctUntilKeyChanged('ae_id' as keyof AeArt),
+      map$((ae_art) => artLabelFromAeArt({ ae_art })),
+    ))
+  }
+  #herkunfts?: Query<Herkunft>
+  get herkunfts(): Query<Herkunft> {
+    return (this.#herkunfts ??= this.collections
+      .get<Herkunft>('herkunft')
+      .query(Q.on('sammlung', 'art_id', this.id)))
+  }
 
-  @writer async removeConflict(_rev: string) {
+  async removeConflict(_rev: string) {
     await this.update((row) => {
       row._conflicts = (this._conflicts ?? []).filter((r) => r !== _rev)
     })
@@ -420,7 +530,7 @@ export class Art extends Model {
   // updates the row locally - ui and labels stay live.
   // the revision is created when the editing session on this row
   // ends (see modules/revAggregation.js), not per field change
-  @writer async edit({
+  async edit({
     field,
     value,
     values,
@@ -445,10 +555,35 @@ export class Art extends Model {
     })
   }
 
-  @writer async delete() {
+  async delete() {
     await this.callWriter(() => this.edit({ field: '_deleted', value: true }))
   }
 }
+modelDecorators(
+  Art,
+  {
+    ae_id: field('ae_id'),
+    set: field('set'),
+    apflora_av: field('apflora_av'),
+    apflora_ap: field('apflora_ap'),
+    changed: field('changed'),
+    changed_by: field('changed_by'),
+    _rev: field('_rev'),
+    _parent_rev: field('_parent_rev'),
+    _revisions: json('_revisions', dontSanitize),
+    _depth: field('_depth'),
+    _deleted: field('_deleted'),
+    _conflicts: json('_conflicts', dontSanitize),
+    ae_art: relation('ae_art', 'ae_id'),
+    sammlungs: children('sammlung'),
+    sammel_lieferungs: children('sammel_lieferung'),
+    lieferungs: children('lieferung'),
+    kulturs: children('kultur'),
+    avs: children('av'),
+    files: children('art_file'),
+  },
+  ['removeConflict', 'edit', 'delete'],
+)
 
 export class ApfloraAp extends Model {
   static table = 'apflora_ap'
@@ -456,10 +591,15 @@ export class ApfloraAp extends Model {
     ae_art: { type: 'belongs_to', key: 'ae_id' },
   }
 
-  @field('ae_id') ae_id!: string | null
-  @field('ap') ap!: boolean | null
-  @field('av') av!: string | null
+  declare ae_id: string | null
+  declare ap: boolean | null
+  declare av: string | null
 }
+modelDecorators(ApfloraAp, {
+  ae_id: field('ae_id'),
+  ap: field('ap'),
+  av: field('av'),
+})
 
 export class AeArt extends Model {
   static table = 'ae_art'
@@ -467,12 +607,18 @@ export class AeArt extends Model {
     art: { type: 'has_many', foreignKey: 'ae_id' },
   }
 
-  @field('name') name!: string | null
-  @field('taxonomy') taxonomy!: string | null
-  @field('changed') changed!: string | null
+  declare name: string | null
+  declare taxonomy: string | null
+  declare changed: string | null
 
-  @children('art') arts!: Query<Art>
+  declare arts: Query<Art>
 }
+modelDecorators(AeArt, {
+  name: field('name'),
+  taxonomy: field('taxonomy'),
+  changed: field('changed'),
+  arts: children('art'),
+})
 
 export class Garten extends Model {
   static table = 'garten'
@@ -483,51 +629,54 @@ export class Garten extends Model {
     garten_file: { type: 'has_many', foreignKey: 'garten_id' },
   }
 
-  @field('name') name!: string | null
-  @field('person_id') person_id!: string | null
-  @field('strasse') strasse!: string | null
-  @field('plz') plz!: number | null
-  @field('ort') ort!: string | null
-  @json('geom_point', dontSanitize) geom_point!: unknown
-  @field('wgs84_lat') wgs84_lat!: number | null
-  @field('wgs84_long') wgs84_long!: number | null
-  @field('lv95_x') lv95_x!: number | null
-  @field('lv95_y') lv95_y!: number | null
-  @field('aktiv') aktiv!: boolean | null
-  @field('bemerkungen') bemerkungen!: string | null
-  @field('changed') changed!: string | null
-  @field('changed_by') changed_by!: string | null
-  @field('_rev') _rev!: string | null
-  @field('_parent_rev') _parent_rev!: string | null
-  @json('_revisions', dontSanitize) _revisions!: string[] | null
-  @field('_depth') _depth!: number | null
-  @field('_deleted') _deleted!: boolean | null
-  @json('_conflicts', dontSanitize) _conflicts!: string[] | null
+  declare name: string | null
+  declare person_id: string | null
+  declare strasse: string | null
+  declare plz: number | null
+  declare ort: string | null
+  declare geom_point: unknown
+  declare wgs84_lat: number | null
+  declare wgs84_long: number | null
+  declare lv95_x: number | null
+  declare lv95_y: number | null
+  declare aktiv: boolean | null
+  declare bemerkungen: string | null
+  declare changed: string | null
+  declare changed_by: string | null
+  declare _rev: string | null
+  declare _parent_rev: string | null
+  declare _revisions: string[] | null
+  declare _depth: number | null
+  declare _deleted: boolean | null
+  declare _conflicts: string[] | null
 
-  @children('kultur') kulturs!: Query<Kultur>
-  @children('gv') gvs!: Query<Gv>
-  @children('garten_file') files!: Query<GartenFile>
-  @relation('person', 'person_id') person!: Relation<Person>
+  declare kulturs: Query<Kultur>
+  declare gvs: Query<Gv>
+  declare files: Query<GartenFile>
+  declare person: Relation<Person>
 
-  @lazy label: Observable<Promise<string>> = this.observe().pipe(
-    // TODO: optimize untilChanged
-    distinctUntilChanged(
-      (p, q) => p.name === q.name && p.person_id === q.person_id,
-    ),
-    map$(async (garten) => {
-      let person
-      try {
-        person = await garten.person.fetch()
-      } catch {}
+  #label?: Observable<Promise<string>>
+  get label(): Observable<Promise<string>> {
+    return (this.#label ??= this.observe().pipe(
+      // TODO: optimize untilChanged
+      distinctUntilChanged(
+        (p, q) => p.name === q.name && p.person_id === q.person_id,
+      ),
+      map$(async (garten) => {
+        let person
+        try {
+          person = await garten.person.fetch()
+        } catch {}
 
-      return gartenLabelFromGarten({
-        garten,
-        person,
-      })
-    }),
-  )
+        return gartenLabelFromGarten({
+          garten,
+          person,
+        })
+      }),
+    ))
+  }
 
-  @writer async removeConflict(_rev: string) {
+  async removeConflict(_rev: string) {
     await this.update((row) => {
       row._conflicts = (this._conflicts ?? []).filter((r) => r !== _rev)
     })
@@ -535,7 +684,7 @@ export class Garten extends Model {
   // updates the row locally - ui and labels stay live.
   // the revision is created when the editing session on this row
   // ends (see modules/revAggregation.js), not per field change
-  @writer async edit({
+  async edit({
     field,
     value,
     values,
@@ -559,10 +708,40 @@ export class Garten extends Model {
       row.changed_by = store.get(userAtom)?.email ?? null
     })
   }
-  @writer async delete() {
+  async delete() {
     await this.callWriter(() => this.edit({ field: '_deleted', value: true }))
   }
 }
+modelDecorators(
+  Garten,
+  {
+    name: field('name'),
+    person_id: field('person_id'),
+    strasse: field('strasse'),
+    plz: field('plz'),
+    ort: field('ort'),
+    geom_point: json('geom_point', dontSanitize),
+    wgs84_lat: field('wgs84_lat'),
+    wgs84_long: field('wgs84_long'),
+    lv95_x: field('lv95_x'),
+    lv95_y: field('lv95_y'),
+    aktiv: field('aktiv'),
+    bemerkungen: field('bemerkungen'),
+    changed: field('changed'),
+    changed_by: field('changed_by'),
+    _rev: field('_rev'),
+    _parent_rev: field('_parent_rev'),
+    _revisions: json('_revisions', dontSanitize),
+    _depth: field('_depth'),
+    _deleted: field('_deleted'),
+    _conflicts: json('_conflicts', dontSanitize),
+    kulturs: children('kultur'),
+    gvs: children('gv'),
+    files: children('garten_file'),
+    person: relation('person', 'person_id'),
+  },
+  ['removeConflict', 'edit', 'delete'],
+)
 
 export class Kultur extends Model {
   static table = 'kultur'
@@ -582,123 +761,138 @@ export class Kultur extends Model {
     kultur_file: { type: 'has_many', foreignKey: 'kultur_id' },
   }
 
-  @field('art_id') art_id!: string | null
-  @field('herkunft_id') herkunft_id!: string | null
-  @field('garten_id') garten_id!: string | null
-  @field('zwischenlager') zwischenlager!: boolean | null
-  @field('erhaltungskultur') erhaltungskultur!: boolean | null
-  @field('von_anzahl_individuen') von_anzahl_individuen!: number | null
-  @field('bemerkungen') bemerkungen!: string | null
-  @field('aktiv') aktiv!: boolean | null
-  @field('changed') changed!: string | null
-  @field('changed_by') changed_by!: string | null
-  @field('_rev') _rev!: string | null
-  @field('_parent_rev') _parent_rev!: string | null
-  @json('_revisions', dontSanitize) _revisions!: string[] | null
-  @field('_depth') _depth!: number | null
-  @field('_deleted') _deleted!: boolean | null
-  @json('_conflicts', dontSanitize) _conflicts!: string[] | null
+  declare art_id: string | null
+  declare herkunft_id: string | null
+  declare garten_id: string | null
+  declare zwischenlager: boolean | null
+  declare erhaltungskultur: boolean | null
+  declare von_anzahl_individuen: number | null
+  declare bemerkungen: string | null
+  declare aktiv: boolean | null
+  declare changed: string | null
+  declare changed_by: string | null
+  declare _rev: string | null
+  declare _parent_rev: string | null
+  declare _revisions: string[] | null
+  declare _depth: number | null
+  declare _deleted: boolean | null
+  declare _conflicts: string[] | null
 
-  @children('teilkultur') teilkulturs!: Query<Teilkultur>
-  @children('zaehlung') zaehlungs!: Query<Zaehlung>
-  @children('bedarf') bedarfs!: Query<Bedarf>
-  @children('kultur_file') files!: Query<KulturFile>
-  @relation('kultur_option', 'id') kultur_option!: Relation<KulturOption>
-  @relation('garten', 'garten_id') garten!: Relation<Garten>
-  @relation('art', 'art_id') art!: Relation<Art>
-  @relation('herkunft', 'herkunft_id') herkunft!: Relation<Herkunft>
+  declare teilkulturs: Query<Teilkultur>
+  declare zaehlungs: Query<Zaehlung>
+  declare bedarfs: Query<Bedarf>
+  declare files: Query<KulturFile>
+  declare kultur_option: Relation<KulturOption>
+  declare garten: Relation<Garten>
+  declare art: Relation<Art>
+  declare herkunft: Relation<Herkunft>
 
-  @lazy anlieferungs: Query<Lieferung> = this.collections
-    .get<Lieferung>('lieferung')
-    .query(Q.where('nach_kultur_id', this.id))
-  @lazy auslieferungs: Query<Lieferung> = this.collections
-    .get<Lieferung>('lieferung')
-    .query(Q.where('von_kultur_id', this.id))
+  #anlieferungs?: Query<Lieferung>
+  get anlieferungs(): Query<Lieferung> {
+    return (this.#anlieferungs ??= this.collections
+      .get<Lieferung>('lieferung')
+      .query(Q.where('nach_kultur_id', this.id)))
+  }
+  #auslieferungs?: Query<Lieferung>
+  get auslieferungs(): Query<Lieferung> {
+    return (this.#auslieferungs ??= this.collections
+      .get<Lieferung>('lieferung')
+      .query(Q.where('von_kultur_id', this.id)))
+  }
 
-  @lazy label: Observable<Promise<string>> = this.observe().pipe(
-    distinctUntilChanged(),
-    map$(async (kultur) => {
-      let garten
-      try {
-        garten = await kultur.garten?.fetch()
-      } catch {}
-      let gartenPerson
-      try {
-        gartenPerson = await garten?.person?.fetch()
-      } catch {}
-      let art
-      try {
-        art = await kultur.art?.fetch()
-      } catch {}
-      let aeArt
-      try {
-        aeArt = await art?.ae_art?.fetch()
-      } catch {}
-      let herkunft
-      try {
-        herkunft = await kultur.herkunft.fetch()
-      } catch {}
+  #label?: Observable<Promise<string>>
+  get label(): Observable<Promise<string>> {
+    return (this.#label ??= this.observe().pipe(
+      distinctUntilChanged(),
+      map$(async (kultur) => {
+        let garten
+        try {
+          garten = await kultur.garten?.fetch()
+        } catch {}
+        let gartenPerson
+        try {
+          gartenPerson = await garten?.person?.fetch()
+        } catch {}
+        let art
+        try {
+          art = await kultur.art?.fetch()
+        } catch {}
+        let aeArt
+        try {
+          aeArt = await art?.ae_art?.fetch()
+        } catch {}
+        let herkunft
+        try {
+          herkunft = await kultur.herkunft.fetch()
+        } catch {}
 
-      return kulturLabelFromKultur({
-        kultur,
-        garten,
-        gartenPerson,
-        art,
-        aeArt,
-        herkunft,
-      })
-    }),
-  )
-  @lazy labelUnderArt: Observable<Promise<string>> = this.observe().pipe(
-    distinctUntilChanged(),
-    map$(async (kultur) => {
-      let garten
-      try {
-        garten = await kultur.garten?.fetch()
-      } catch {}
-      let gartenPerson
-      try {
-        gartenPerson = await garten?.person?.fetch()
-      } catch {}
-      let herkunft
-      try {
-        herkunft = await kultur.herkunft?.fetch()
-      } catch {}
+        return kulturLabelFromKultur({
+          kultur,
+          garten,
+          gartenPerson,
+          art,
+          aeArt,
+          herkunft,
+        })
+      }),
+    ))
+  }
+  #labelUnderArt?: Observable<Promise<string>>
+  get labelUnderArt(): Observable<Promise<string>> {
+    return (this.#labelUnderArt ??= this.observe().pipe(
+      distinctUntilChanged(),
+      map$(async (kultur) => {
+        let garten
+        try {
+          garten = await kultur.garten?.fetch()
+        } catch {}
+        let gartenPerson
+        try {
+          gartenPerson = await garten?.person?.fetch()
+        } catch {}
+        let herkunft
+        try {
+          herkunft = await kultur.herkunft?.fetch()
+        } catch {}
 
-      return kulturLabelFromKulturUnderArt({
-        kultur,
-        garten,
-        gartenPerson,
-        herkunft,
-      })
-    }),
-  )
-  @lazy labelUnderGarten: Observable<Promise<string>> = this.observe().pipe(
-    distinctUntilChanged(),
-    map$(async (kultur) => {
-      let art
-      try {
-        art = await kultur.art?.fetch()
-      } catch {}
-      let aeArt
-      try {
-        aeArt = await art?.ae_art?.fetch()
-      } catch {}
-      let herkunft
-      try {
-        herkunft = await kultur.herkunft?.fetch()
-      } catch {}
+        return kulturLabelFromKulturUnderArt({
+          kultur,
+          garten,
+          gartenPerson,
+          herkunft,
+        })
+      }),
+    ))
+  }
+  #labelUnderGarten?: Observable<Promise<string>>
+  get labelUnderGarten(): Observable<Promise<string>> {
+    return (this.#labelUnderGarten ??= this.observe().pipe(
+      distinctUntilChanged(),
+      map$(async (kultur) => {
+        let art
+        try {
+          art = await kultur.art?.fetch()
+        } catch {}
+        let aeArt
+        try {
+          aeArt = await art?.ae_art?.fetch()
+        } catch {}
+        let herkunft
+        try {
+          herkunft = await kultur.herkunft?.fetch()
+        } catch {}
 
-      return kulturLabelFromKulturUnderGarten({
-        kultur,
-        art,
-        aeArt,
-        herkunft,
-      })
-    }),
-  )
+        return kulturLabelFromKulturUnderGarten({
+          kultur,
+          art,
+          aeArt,
+          herkunft,
+        })
+      }),
+    ))
+  }
 
-  @writer async removeConflict(_rev: string) {
+  async removeConflict(_rev: string) {
     await this.update((row) => {
       row._conflicts = (this._conflicts ?? []).filter((r) => r !== _rev)
     })
@@ -706,7 +900,7 @@ export class Kultur extends Model {
   // updates the row locally - ui and labels stay live.
   // the revision is created when the editing session on this row
   // ends (see modules/revAggregation.js), not per field change
-  @writer async edit({
+  async edit({
     field,
     value,
     values,
@@ -730,10 +924,40 @@ export class Kultur extends Model {
       row.changed_by = store.get(userAtom)?.email ?? null
     })
   }
-  @writer async delete() {
+  async delete() {
     await this.callWriter(() => this.edit({ field: '_deleted', value: true }))
   }
 }
+modelDecorators(
+  Kultur,
+  {
+    art_id: field('art_id'),
+    herkunft_id: field('herkunft_id'),
+    garten_id: field('garten_id'),
+    zwischenlager: field('zwischenlager'),
+    erhaltungskultur: field('erhaltungskultur'),
+    von_anzahl_individuen: field('von_anzahl_individuen'),
+    bemerkungen: field('bemerkungen'),
+    aktiv: field('aktiv'),
+    changed: field('changed'),
+    changed_by: field('changed_by'),
+    _rev: field('_rev'),
+    _parent_rev: field('_parent_rev'),
+    _revisions: json('_revisions', dontSanitize),
+    _depth: field('_depth'),
+    _deleted: field('_deleted'),
+    _conflicts: json('_conflicts', dontSanitize),
+    teilkulturs: children('teilkultur'),
+    zaehlungs: children('zaehlung'),
+    bedarfs: children('bedarf'),
+    files: children('kultur_file'),
+    kultur_option: relation('kultur_option', 'id'),
+    garten: relation('garten', 'garten_id'),
+    art: relation('art', 'art_id'),
+    herkunft: relation('herkunft', 'herkunft_id'),
+  },
+  ['removeConflict', 'edit', 'delete'],
+)
 
 export class Teilkultur extends Model {
   static table = 'teilkultur'
@@ -742,25 +966,25 @@ export class Teilkultur extends Model {
     teilzaehlung: { type: 'has_many', foreignKey: 'teilkultur_id' },
   }
 
-  @field('kultur_id') kultur_id!: string | null
-  @field('name') name!: string | null
-  @field('ort1') ort1!: string | null
-  @field('ort2') ort2!: string | null
-  @field('ort3') ort3!: string | null
-  @field('bemerkungen') bemerkungen!: string | null
-  @field('changed') changed!: string | null
-  @field('changed_by') changed_by!: string | null
-  @field('_rev') _rev!: string | null
-  @field('_parent_rev') _parent_rev!: string | null
-  @json('_revisions', dontSanitize) _revisions!: string[] | null
-  @field('_depth') _depth!: number | null
-  @field('_deleted') _deleted!: boolean | null
-  @json('_conflicts', dontSanitize) _conflicts!: string[] | null
+  declare kultur_id: string | null
+  declare name: string | null
+  declare ort1: string | null
+  declare ort2: string | null
+  declare ort3: string | null
+  declare bemerkungen: string | null
+  declare changed: string | null
+  declare changed_by: string | null
+  declare _rev: string | null
+  declare _parent_rev: string | null
+  declare _revisions: string[] | null
+  declare _depth: number | null
+  declare _deleted: boolean | null
+  declare _conflicts: string[] | null
 
-  @relation('kultur', 'kultur_id') kultur!: Relation<Kultur>
-  @children('teilzaehlung') teilzaehlungs!: Query<Teilzaehlung>
+  declare kultur: Relation<Kultur>
+  declare teilzaehlungs: Query<Teilzaehlung>
 
-  @writer async removeConflict(_rev: string) {
+  async removeConflict(_rev: string) {
     await this.update((row) => {
       row._conflicts = (this._conflicts ?? []).filter((r) => r !== _rev)
     })
@@ -768,7 +992,7 @@ export class Teilkultur extends Model {
   // updates the row locally - ui and labels stay live.
   // the revision is created when the editing session on this row
   // ends (see modules/revAggregation.js), not per field change
-  @writer async edit({
+  async edit({
     field,
     value,
     values,
@@ -792,10 +1016,32 @@ export class Teilkultur extends Model {
       row.changed_by = store.get(userAtom)?.email ?? null
     })
   }
-  @writer async delete() {
+  async delete() {
     await this.callWriter(() => this.edit({ field: '_deleted', value: true }))
   }
 }
+modelDecorators(
+  Teilkultur,
+  {
+    kultur_id: field('kultur_id'),
+    name: field('name'),
+    ort1: field('ort1'),
+    ort2: field('ort2'),
+    ort3: field('ort3'),
+    bemerkungen: field('bemerkungen'),
+    changed: field('changed'),
+    changed_by: field('changed_by'),
+    _rev: field('_rev'),
+    _parent_rev: field('_parent_rev'),
+    _revisions: json('_revisions', dontSanitize),
+    _depth: field('_depth'),
+    _deleted: field('_deleted'),
+    _conflicts: json('_conflicts', dontSanitize),
+    kultur: relation('kultur', 'kultur_id'),
+    teilzaehlungs: children('teilzaehlung'),
+  },
+  ['removeConflict', 'edit', 'delete'],
+)
 
 export class Zaehlung extends Model {
   static table = 'zaehlung'
@@ -806,38 +1052,41 @@ export class Zaehlung extends Model {
     teilkultur: { type: 'has_many', foreignKey: 'zaehlung_id' },
   }
 
-  @field('kultur_id') kultur_id!: string | null
-  @field('datum') datum!: string | null
-  @field('prognose') prognose!: boolean | null
-  @field('bemerkungen') bemerkungen!: string | null
-  @field('changed') changed!: string | null
-  @field('changed_by') changed_by!: string | null
-  @field('_rev') _rev!: string | null
-  @field('_parent_rev') _parent_rev!: string | null
-  @json('_revisions', dontSanitize) _revisions!: string[] | null
-  @field('_depth') _depth!: number | null
-  @field('_deleted') _deleted!: boolean | null
-  @json('_conflicts', dontSanitize) _conflicts!: string[] | null
+  declare kultur_id: string | null
+  declare datum: string | null
+  declare prognose: boolean | null
+  declare bemerkungen: string | null
+  declare changed: string | null
+  declare changed_by: string | null
+  declare _rev: string | null
+  declare _parent_rev: string | null
+  declare _revisions: string[] | null
+  declare _depth: number | null
+  declare _deleted: boolean | null
+  declare _conflicts: string[] | null
 
-  @relation('kultur', 'kultur_id') kultur!: Relation<Kultur>
-  @relation('kultur_option', 'kultur_id') kultur_option!: Relation<KulturOption>
-  @children('teilzaehlung') teilzaehlungs!: Query<Teilzaehlung>
-  @children('teilkultur') teilkulturs!: Query<Teilkultur>
+  declare kultur: Relation<Kultur>
+  declare kultur_option: Relation<KulturOption>
+  declare teilzaehlungs: Query<Teilzaehlung>
+  declare teilkulturs: Query<Teilkultur>
 
-  @lazy label: Observable<Promise<string>> = this.observe().pipe(
-    distinctUntilChanged(),
-    map$(async (zaehlung) => {
-      let teilzaehlungs
-      try {
-        teilzaehlungs = await zaehlung.teilzaehlungs?.fetch()
-      } catch {}
+  #label?: Observable<Promise<string>>
+  get label(): Observable<Promise<string>> {
+    return (this.#label ??= this.observe().pipe(
+      distinctUntilChanged(),
+      map$(async (zaehlung) => {
+        let teilzaehlungs
+        try {
+          teilzaehlungs = await zaehlung.teilzaehlungs?.fetch()
+        } catch {}
 
-      return await zaehlungLabelFromZaehlung({
-        zaehlung,
-        teilzaehlungs,
-      })
-    }),
-  )
+        return await zaehlungLabelFromZaehlung({
+          zaehlung,
+          teilzaehlungs,
+        })
+      }),
+    ))
+  }
   // tried to use these fields in observeWithColumns - but does not work
   /*@lazy anzahl_pflanzen = this.observe().pipe(
     distinctUntilChanged(),
@@ -870,7 +1119,7 @@ export class Zaehlung extends Model {
     }),
   )*/
 
-  @writer async removeConflict(_rev: string) {
+  async removeConflict(_rev: string) {
     await this.update((row) => {
       row._conflicts = (this._conflicts ?? []).filter((r) => r !== _rev)
     })
@@ -878,7 +1127,7 @@ export class Zaehlung extends Model {
   // updates the row locally - ui and labels stay live.
   // the revision is created when the editing session on this row
   // ends (see modules/revAggregation.js), not per field change
-  @writer async edit({
+  async edit({
     field,
     value,
     values,
@@ -902,10 +1151,32 @@ export class Zaehlung extends Model {
       row.changed_by = store.get(userAtom)?.email ?? null
     })
   }
-  @writer async delete() {
+  async delete() {
     await this.callWriter(() => this.edit({ field: '_deleted', value: true }))
   }
 }
+modelDecorators(
+  Zaehlung,
+  {
+    kultur_id: field('kultur_id'),
+    datum: field('datum'),
+    prognose: field('prognose'),
+    bemerkungen: field('bemerkungen'),
+    changed: field('changed'),
+    changed_by: field('changed_by'),
+    _rev: field('_rev'),
+    _parent_rev: field('_parent_rev'),
+    _revisions: json('_revisions', dontSanitize),
+    _depth: field('_depth'),
+    _deleted: field('_deleted'),
+    _conflicts: json('_conflicts', dontSanitize),
+    kultur: relation('kultur', 'kultur_id'),
+    kultur_option: relation('kultur_option', 'kultur_id'),
+    teilzaehlungs: children('teilzaehlung'),
+    teilkulturs: children('teilkultur'),
+  },
+  ['removeConflict', 'edit', 'delete'],
+)
 
 export class Teilzaehlung extends Model {
   static table = 'teilzaehlung'
@@ -914,33 +1185,35 @@ export class Teilzaehlung extends Model {
     teilkultur: { type: 'belongs_to', key: 'teilkultur_id' },
   }
 
-  @field('zaehlung_id') zaehlung_id!: string | null
-  @field('teilkultur_id') teilkultur_id!: string | null
-  @field('anzahl_pflanzen') anzahl_pflanzen!: number | null
-  @field('anzahl_auspflanzbereit') anzahl_auspflanzbereit!: number | null
-  @field('anzahl_mutterpflanzen') anzahl_mutterpflanzen!: number | null
-  @field('andere_menge') andere_menge!: string | null
-  @field('auspflanzbereit_beschreibung') auspflanzbereit_beschreibung!:
-    string | null
-  @field('bemerkungen') bemerkungen!: string | null
-  @field('prognose_von_tz') prognose_von_tz!: string | null
-  @field('changed') changed!: string | null
-  @field('changed_by') changed_by!: string | null
-  @field('_rev') _rev!: string | null
-  @field('_parent_rev') _parent_rev!: string | null
-  @json('_revisions', dontSanitize) _revisions!: string[] | null
-  @field('_depth') _depth!: number | null
-  @field('_deleted') _deleted!: boolean | null
-  @json('_conflicts', dontSanitize) _conflicts!: string[] | null
+  declare zaehlung_id: string | null
+  declare teilkultur_id: string | null
+  declare anzahl_pflanzen: number | null
+  declare anzahl_auspflanzbereit: number | null
+  declare anzahl_mutterpflanzen: number | null
+  declare andere_menge: string | null
+  declare auspflanzbereit_beschreibung: string | null
+  declare bemerkungen: string | null
+  declare prognose_von_tz: string | null
+  declare changed: string | null
+  declare changed_by: string | null
+  declare _rev: string | null
+  declare _parent_rev: string | null
+  declare _revisions: string[] | null
+  declare _depth: number | null
+  declare _deleted: boolean | null
+  declare _conflicts: string[] | null
 
-  @relation('zaehlung', 'zaehlung_id') zaehlung!: Relation<Zaehlung>
-  @relation('teilkultur', 'teilkultur_id') teilkultur!: Relation<Teilkultur>
-  @lazy label: Observable<string> = this.teilkultur.observe().pipe(
-    distinctUntilKeyChanged('teilkultur_id' as keyof Teilkultur),
-    map$((teilkultur) => teilkulturLabelFromTeilkultur({ teilkultur })),
-  )
+  declare zaehlung: Relation<Zaehlung>
+  declare teilkultur: Relation<Teilkultur>
+  #label?: Observable<string>
+  get label(): Observable<string> {
+    return (this.#label ??= this.teilkultur.observe().pipe(
+      distinctUntilKeyChanged('teilkultur_id' as keyof Teilkultur),
+      map$((teilkultur) => teilkulturLabelFromTeilkultur({ teilkultur })),
+    ))
+  }
 
-  @writer async removeConflict(_rev: string) {
+  async removeConflict(_rev: string) {
     await this.update((row) => {
       row._conflicts = (this._conflicts ?? []).filter((r) => r !== _rev)
     })
@@ -948,7 +1221,7 @@ export class Teilzaehlung extends Model {
   // updates the row locally - ui and labels stay live.
   // the revision is created when the editing session on this row
   // ends (see modules/revAggregation.js), not per field change
-  @writer async edit({
+  async edit({
     field,
     value,
     values,
@@ -972,10 +1245,35 @@ export class Teilzaehlung extends Model {
       row.changed_by = store.get(userAtom)?.email ?? null
     })
   }
-  @writer async delete() {
+  async delete() {
     await this.callWriter(() => this.edit({ field: '_deleted', value: true }))
   }
 }
+modelDecorators(
+  Teilzaehlung,
+  {
+    zaehlung_id: field('zaehlung_id'),
+    teilkultur_id: field('teilkultur_id'),
+    anzahl_pflanzen: field('anzahl_pflanzen'),
+    anzahl_auspflanzbereit: field('anzahl_auspflanzbereit'),
+    anzahl_mutterpflanzen: field('anzahl_mutterpflanzen'),
+    andere_menge: field('andere_menge'),
+    auspflanzbereit_beschreibung: field('auspflanzbereit_beschreibung'),
+    bemerkungen: field('bemerkungen'),
+    prognose_von_tz: field('prognose_von_tz'),
+    changed: field('changed'),
+    changed_by: field('changed_by'),
+    _rev: field('_rev'),
+    _parent_rev: field('_parent_rev'),
+    _revisions: json('_revisions', dontSanitize),
+    _depth: field('_depth'),
+    _deleted: field('_deleted'),
+    _conflicts: json('_conflicts', dontSanitize),
+    zaehlung: relation('zaehlung', 'zaehlung_id'),
+    teilkultur: relation('teilkultur', 'teilkultur_id'),
+  },
+  ['removeConflict', 'edit', 'delete'],
+)
 
 export class Person extends Model {
   static table = 'person'
@@ -992,61 +1290,64 @@ export class Person extends Model {
     person_file: { type: 'has_many', foreignKey: 'person_id' },
   }
 
-  @field('nr') nr!: string | null
-  @field('vorname') vorname!: string | null
-  @field('name') name!: string | null
-  @field('adresszusatz') adresszusatz!: string | null
-  @field('strasse') strasse!: string | null
-  @field('plz') plz!: number | null
-  @field('ort') ort!: string | null
-  @field('telefon_privat') telefon_privat!: string | null
-  @field('telefon_geschaeft') telefon_geschaeft!: string | null
-  @field('telefon_mobile') telefon_mobile!: string | null
-  @field('email') email!: string | null
-  @field('kein_email') kein_email!: boolean | null
-  @field('bemerkungen') bemerkungen!: string | null
-  @field('changed') changed!: string | null
-  @field('changed_by') changed_by!: string | null
-  @field('account_id') account_id!: string | null
-  @field('user_role_id') user_role_id!: string | null
-  @field('kommerziell') kommerziell!: boolean | null
-  @field('info') info!: boolean | null
-  @field('aktiv') aktiv!: boolean | null
-  @field('_rev') _rev!: string | null
-  @field('_parent_rev') _parent_rev!: string | null
-  @json('_revisions', dontSanitize) _revisions!: string[] | null
-  @field('_depth') _depth!: number | null
-  @field('_deleted') _deleted!: boolean | null
-  @json('_conflicts', dontSanitize) _conflicts!: string[] | null
+  declare nr: string | null
+  declare vorname: string | null
+  declare name: string | null
+  declare adresszusatz: string | null
+  declare strasse: string | null
+  declare plz: number | null
+  declare ort: string | null
+  declare telefon_privat: string | null
+  declare telefon_geschaeft: string | null
+  declare telefon_mobile: string | null
+  declare email: string | null
+  declare kein_email: boolean | null
+  declare bemerkungen: string | null
+  declare changed: string | null
+  declare changed_by: string | null
+  declare account_id: string | null
+  declare user_role_id: string | null
+  declare kommerziell: boolean | null
+  declare info: boolean | null
+  declare aktiv: boolean | null
+  declare _rev: string | null
+  declare _parent_rev: string | null
+  declare _revisions: string[] | null
+  declare _depth: number | null
+  declare _deleted: boolean | null
+  declare _conflicts: string[] | null
 
   // https://github.com/Nozbe/WatermelonDB/issues/313#issuecomment-483293806
-  @lazy fullname: Observable<string | undefined> = this.observe().pipe(
-    distinctUntilChanged(
-      (p, q) => p.name === q.name && p.vorname === q.vorname,
-    ),
-    map$((p) => {
-      if (p.vorname && p.name) {
-        return `${p.vorname} ${p.name}`
-      }
-      if (p.name) return p.name
-      if (p.vorname) return p.vorname
-      return undefined
-    }),
-  )
+  #fullname?: Observable<string | undefined>
+  get fullname(): Observable<string | undefined> {
+    return (this.#fullname ??= this.observe().pipe(
+      distinctUntilChanged(
+        (p, q) => p.name === q.name && p.vorname === q.vorname,
+      ),
+      map$((p) => {
+        if (p.vorname && p.name) {
+          return `${p.vorname} ${p.name}`
+        }
+        if (p.name) return p.name
+        if (p.vorname) return p.vorname
+        return undefined
+      }),
+    ))
+  }
 
-  @relation('user_role', 'user_role_id') user_role!: Relation<UserRole>
-  @relation('person_option', 'id') person_option!: Relation<PersonOption>
+  declare user_role: Relation<UserRole>
+  declare person_option: Relation<PersonOption>
 
-  @children('sammel_lieferung') sammel_lieferungs!: Query<SammelLieferung>
-  @children('av') avs!: Query<Av>
-  @children('gv') gvs!: Query<Gv>
-  @children('sammlung') sammlungs!: Query<Sammlung>
-  @children('lieferung') lieferungs!: Query<Lieferung>
-  @children('garten') gartens!: Query<Garten>
-  @children('bedarf') bedarfs!: Query<Bedarf>
-  @children('person_file') files!: Query<PersonFile>
+  declare sammel_lieferungs: Query<SammelLieferung>
+  declare avs: Query<Av>
+  declare gvs: Query<Gv>
+  declare sammlungs: Query<Sammlung>
+  declare lieferungs: Query<Lieferung>
+  declare gartens: Query<Garten>
+  declare bedarfs: Query<Bedarf>
+  declare files: Query<PersonFile>
 
-  @writer async removeConflict(_rev: string) {
+  async removeConflict(_rev: string) {
     await this.update((row) => {
       row._conflicts = (this._conflicts ?? []).filter((r) => r !== _rev)
     })
@@ -1054,7 +1355,7 @@ export class Person extends Model {
   // updates the row locally - ui and labels stay live.
   // the revision is created when the editing session on this row
   // ends (see modules/revAggregation.js), not per field change
-  @writer async edit({
+  async edit({
     field,
     value,
     values,
@@ -1079,12 +1380,54 @@ export class Person extends Model {
     })
   }
 
-  @writer async delete() {
+  async delete() {
     await this.callWriter(() => this.edit({ field: '_deleted', value: true }))
     // delete firebase user
     deleteAccount({ person: this })
   }
 }
+modelDecorators(
+  Person,
+  {
+    nr: field('nr'),
+    vorname: field('vorname'),
+    name: field('name'),
+    adresszusatz: field('adresszusatz'),
+    strasse: field('strasse'),
+    plz: field('plz'),
+    ort: field('ort'),
+    telefon_privat: field('telefon_privat'),
+    telefon_geschaeft: field('telefon_geschaeft'),
+    telefon_mobile: field('telefon_mobile'),
+    email: field('email'),
+    kein_email: field('kein_email'),
+    bemerkungen: field('bemerkungen'),
+    changed: field('changed'),
+    changed_by: field('changed_by'),
+    account_id: field('account_id'),
+    user_role_id: field('user_role_id'),
+    kommerziell: field('kommerziell'),
+    info: field('info'),
+    aktiv: field('aktiv'),
+    _rev: field('_rev'),
+    _parent_rev: field('_parent_rev'),
+    _revisions: json('_revisions', dontSanitize),
+    _depth: field('_depth'),
+    _deleted: field('_deleted'),
+    _conflicts: json('_conflicts', dontSanitize),
+    user_role: relation('user_role', 'user_role_id'),
+    person_option: relation('person_option', 'id'),
+    sammel_lieferungs: children('sammel_lieferung'),
+    avs: children('av'),
+    gvs: children('gv'),
+    sammlungs: children('sammlung'),
+    lieferungs: children('lieferung'),
+    gartens: children('garten'),
+    bedarfs: children('bedarf'),
+    files: children('person_file'),
+  },
+  ['removeConflict', 'edit', 'delete'],
+)
 
 export class SammelLieferung extends Model {
   static table = 'sammel_lieferung'
@@ -1097,70 +1440,75 @@ export class SammelLieferung extends Model {
     lieferung: { type: 'has_many', foreignKey: 'sammel_lieferung_id' },
   }
 
-  @field('art_id') art_id!: string | null
-  @field('person_id') person_id!: string | null
-  @field('von_sammlung_id') von_sammlung_id!: string | null
-  @field('von_kultur_id') von_kultur_id!: string | null
-  @field('datum') datum!: string | null
-  @field('nach_kultur_id') nach_kultur_id!: string | null
-  @field('nach_ausgepflanzt') nach_ausgepflanzt!: boolean | null
-  @field('von_anzahl_individuen') von_anzahl_individuen!: number | null
-  @field('anzahl_pflanzen') anzahl_pflanzen!: number | null
-  @field('anzahl_auspflanzbereit') anzahl_auspflanzbereit!: number | null
-  @field('gramm_samen') gramm_samen!: number | null
-  @field('andere_menge') andere_menge!: string | null
-  @field('geplant') geplant!: boolean | null
-  @field('bemerkungen') bemerkungen!: string | null
-  @field('changed') changed!: string | null
-  @field('changed_by') changed_by!: string | null
-  @field('_rev') _rev!: string | null
-  @field('_parent_rev') _parent_rev!: string | null
-  @json('_revisions', dontSanitize) _revisions!: string[] | null
-  @field('_depth') _depth!: number | null
-  @field('_deleted') _deleted!: boolean | null
-  @json('_conflicts', dontSanitize) _conflicts!: string[] | null
+  declare art_id: string | null
+  declare person_id: string | null
+  declare von_sammlung_id: string | null
+  declare von_kultur_id: string | null
+  declare datum: string | null
+  declare nach_kultur_id: string | null
+  declare nach_ausgepflanzt: boolean | null
+  declare von_anzahl_individuen: number | null
+  declare anzahl_pflanzen: number | null
+  declare anzahl_auspflanzbereit: number | null
+  declare gramm_samen: number | null
+  declare andere_menge: string | null
+  declare geplant: boolean | null
+  declare bemerkungen: string | null
+  declare changed: string | null
+  declare changed_by: string | null
+  declare _rev: string | null
+  declare _parent_rev: string | null
+  declare _revisions: string[] | null
+  declare _depth: number | null
+  declare _deleted: boolean | null
+  declare _conflicts: string[] | null
 
-  @relation('art', 'art_id') art!: Relation<Art>
-  @relation('sammlung', 'von_sammlung_id') sammlung!: Relation<Sammlung>
-  @relation('sammlung', 'von_kultur_id') von_kultur!: Relation<Sammlung>
-  @relation('sammlung', 'nach_kultur_id') nach_kultur!: Relation<Sammlung>
-  @relation('person', 'person_id') person!: Relation<Person>
-  @children('lieferung') lieferungs!: Query<Lieferung>
+  declare art: Relation<Art>
+  declare sammlung: Relation<Sammlung>
+  declare von_kultur: Relation<Sammlung>
+  declare nach_kultur: Relation<Sammlung>
+  declare person: Relation<Person>
+  declare lieferungs: Query<Lieferung>
 
-  @lazy label: Observable<Promise<string>> = this.observe().pipe(
-    distinctUntilChanged(),
-    map$(async (lieferung) => {
-      let vonKultur
-      try {
-        vonKultur = await this.collections
-          .get<Kultur>('kultur')
-          .find(lieferung.von_kultur_id ?? '')
-      } catch {}
-      let vonGarten
-      try {
-        vonGarten = await vonKultur?.garten?.fetch()
-      } catch {}
-      let gartenLabel
-      try {
-        gartenLabel = await vonGarten?.label.pipe(first$()).toPromise()
-      } catch {}
-      let person
-      try {
-        person = await lieferung.person?.fetch()
-      } catch {}
-      const personLabel = personLabelFromPerson({ person })
-      const datumLabel =
-        lieferung.datum ?
-          DateTime.fromSQL(lieferung.datum).toFormat('yyyy.LL.dd')
-        : `Kein Datum. ID: ${lieferung.id}`
-      const von = gartenLabel ? `von: ${gartenLabel}` : ''
-      const label = [datumLabel, von, personLabel].filter((e) => !!e).join('; ')
+  #label?: Observable<Promise<string>>
+  get label(): Observable<Promise<string>> {
+    return (this.#label ??= this.observe().pipe(
+      distinctUntilChanged(),
+      map$(async (lieferung) => {
+        let vonKultur
+        try {
+          vonKultur = await this.collections
+            .get<Kultur>('kultur')
+            .find(lieferung.von_kultur_id ?? '')
+        } catch {}
+        let vonGarten
+        try {
+          vonGarten = await vonKultur?.garten?.fetch()
+        } catch {}
+        let gartenLabel
+        try {
+          gartenLabel = await vonGarten?.label.pipe(first$()).toPromise()
+        } catch {}
+        let person
+        try {
+          person = await lieferung.person?.fetch()
+        } catch {}
+        const personLabel = personLabelFromPerson({ person })
+        const datumLabel =
+          lieferung.datum ?
+            DateTime.fromSQL(lieferung.datum).toFormat('yyyy.LL.dd')
+          : `Kein Datum. ID: ${lieferung.id}`
+        const von = gartenLabel ? `von: ${gartenLabel}` : ''
+        const label = [datumLabel, von, personLabel]
+          .filter((e) => !!e)
+          .join('; ')
 
-      return label
-    }),
-  )
+        return label
+      }),
+    ))
+  }
 
-  @writer async removeConflict(_rev: string) {
+  async removeConflict(_rev: string) {
     await this.update((row) => {
       row._conflicts = (this._conflicts ?? []).filter((r) => r !== _rev)
     })
@@ -1168,7 +1516,7 @@ export class SammelLieferung extends Model {
   // updates the row locally - ui and labels stay live.
   // the revision is created when the editing session on this row
   // ends (see modules/revAggregation.js), not per field change
-  @writer async edit({
+  async edit({
     field,
     value,
     values,
@@ -1193,10 +1541,44 @@ export class SammelLieferung extends Model {
     })
   }
 
-  @writer async delete() {
+  async delete() {
     await this.callWriter(() => this.edit({ field: '_deleted', value: true }))
   }
 }
+modelDecorators(
+  SammelLieferung,
+  {
+    art_id: field('art_id'),
+    person_id: field('person_id'),
+    von_sammlung_id: field('von_sammlung_id'),
+    von_kultur_id: field('von_kultur_id'),
+    datum: field('datum'),
+    nach_kultur_id: field('nach_kultur_id'),
+    nach_ausgepflanzt: field('nach_ausgepflanzt'),
+    von_anzahl_individuen: field('von_anzahl_individuen'),
+    anzahl_pflanzen: field('anzahl_pflanzen'),
+    anzahl_auspflanzbereit: field('anzahl_auspflanzbereit'),
+    gramm_samen: field('gramm_samen'),
+    andere_menge: field('andere_menge'),
+    geplant: field('geplant'),
+    bemerkungen: field('bemerkungen'),
+    changed: field('changed'),
+    changed_by: field('changed_by'),
+    _rev: field('_rev'),
+    _parent_rev: field('_parent_rev'),
+    _revisions: json('_revisions', dontSanitize),
+    _depth: field('_depth'),
+    _deleted: field('_deleted'),
+    _conflicts: json('_conflicts', dontSanitize),
+    art: relation('art', 'art_id'),
+    sammlung: relation('sammlung', 'von_sammlung_id'),
+    von_kultur: relation('sammlung', 'von_kultur_id'),
+    nach_kultur: relation('sammlung', 'nach_kultur_id'),
+    person: relation('person', 'person_id'),
+    lieferungs: children('lieferung'),
+  },
+  ['removeConflict', 'edit', 'delete'],
+)
 
 export class Bedarf extends Model {
   static table = 'bedarf'
@@ -1205,36 +1587,39 @@ export class Bedarf extends Model {
     person: { type: 'belongs_to', key: 'person_id' },
   }
 
-  @field('kultur_id') kultur_id!: string | null
-  @field('person_id') person_id!: string | null
-  @field('jahr') jahr!: number | null
-  @field('beschreibung') beschreibung!: string | null
-  @field('bemerkungen') bemerkungen!: string | null
-  @field('neues_material') neues_material!: string | null
-  @field('changed') changed!: string | null
-  @field('changed_by') changed_by!: string | null
-  @field('_rev') _rev!: string | null
-  @field('_parent_rev') _parent_rev!: string | null
-  @json('_revisions', dontSanitize) _revisions!: string[] | null
-  @field('_depth') _depth!: number | null
-  @field('_deleted') _deleted!: boolean | null
-  @json('_conflicts', dontSanitize) _conflicts!: string[] | null
+  declare kultur_id: string | null
+  declare person_id: string | null
+  declare jahr: number | null
+  declare beschreibung: string | null
+  declare bemerkungen: string | null
+  declare neues_material: string | null
+  declare changed: string | null
+  declare changed_by: string | null
+  declare _rev: string | null
+  declare _parent_rev: string | null
+  declare _revisions: string[] | null
+  declare _depth: number | null
+  declare _deleted: boolean | null
+  declare _conflicts: string[] | null
 
-  @relation('kultur', 'kultur_id') kultur!: Relation<Kultur>
-  @relation('person', 'person_id') person!: Relation<Person>
+  declare kultur: Relation<Kultur>
+  declare person: Relation<Person>
 
-  @lazy label: Observable<string> = this.observe().pipe(
-    distinctUntilChanged(
-      (a, b) => a.jahr === b.jahr && a.beschreibung === b.beschreibung,
-    ),
-    map$((bedarf) =>
-      bedarfLabelFromBedarf({
-        bedarf,
-      }),
-    ),
-  )
+  #label?: Observable<string>
+  get label(): Observable<string> {
+    return (this.#label ??= this.observe().pipe(
+      distinctUntilChanged(
+        (a, b) => a.jahr === b.jahr && a.beschreibung === b.beschreibung,
+      ),
+      map$((bedarf) =>
+        bedarfLabelFromBedarf({
+          bedarf,
+        }),
+      ),
+    ))
+  }
 
-  @writer async removeConflict(_rev: string) {
+  async removeConflict(_rev: string) {
     await this.update((row) => {
       row._conflicts = (this._conflicts ?? []).filter((r) => r !== _rev)
     })
@@ -1242,7 +1627,7 @@ export class Bedarf extends Model {
   // updates the row locally - ui and labels stay live.
   // the revision is created when the editing session on this row
   // ends (see modules/revAggregation.js), not per field change
-  @writer async edit({
+  async edit({
     field,
     value,
     values,
@@ -1266,10 +1651,32 @@ export class Bedarf extends Model {
       row.changed_by = store.get(userAtom)?.email ?? null
     })
   }
-  @writer async delete() {
+  async delete() {
     await this.callWriter(() => this.edit({ field: '_deleted', value: true }))
   }
 }
+modelDecorators(
+  Bedarf,
+  {
+    kultur_id: field('kultur_id'),
+    person_id: field('person_id'),
+    jahr: field('jahr'),
+    beschreibung: field('beschreibung'),
+    bemerkungen: field('bemerkungen'),
+    neues_material: field('neues_material'),
+    changed: field('changed'),
+    changed_by: field('changed_by'),
+    _rev: field('_rev'),
+    _parent_rev: field('_parent_rev'),
+    _revisions: json('_revisions', dontSanitize),
+    _depth: field('_depth'),
+    _deleted: field('_deleted'),
+    _conflicts: json('_conflicts', dontSanitize),
+    kultur: relation('kultur', 'kultur_id'),
+    person: relation('person', 'person_id'),
+  },
+  ['removeConflict', 'edit', 'delete'],
+)
 
 export class Av extends Model {
   static table = 'av'
@@ -1278,40 +1685,44 @@ export class Av extends Model {
     person: { type: 'belongs_to', key: 'person_id' },
   }
 
-  @field('art_id') art_id!: string
-  @field('person_id') person_id!: string
-  @field('changed') changed!: string | null
-  @field('changed_by') changed_by!: string | null
-  @field('_rev') _rev!: string | null
-  @field('_parent_rev') _parent_rev!: string | null
-  @json('_revisions', dontSanitize) _revisions!: string[] | null
-  @field('_depth') _depth!: number | null
-  @field('_deleted') _deleted!: boolean | null
-  @json('_conflicts', dontSanitize) _conflicts!: string[] | null
+  declare art_id: string
+  declare person_id: string
+  declare changed: string | null
+  declare changed_by: string | null
+  declare _rev: string | null
+  declare _parent_rev: string | null
+  declare _revisions: string[] | null
+  declare _depth: number | null
+  declare _deleted: boolean | null
+  declare _conflicts: string[] | null
 
-  @relation('art', 'art_id') art!: Relation<Art>
-  @relation('person', 'person_id') person!: Relation<Person>
+  declare art: Relation<Art>
+  declare person: Relation<Person>
 
-  @lazy personLabel: Observable<string> = this.person.observe().pipe(
-    distinctUntilChanged(
-      (a, b) =>
-        personLabelFromPerson({ person: a }) ===
-        personLabelFromPerson({ person: b }),
-    ),
-    map$((p) => personLabelFromPerson({ person: p })),
-  )
-  @lazy artLabel: Observable<Promise<string | undefined>> = this.art
-    .observe()
-    .pipe(
+  #personLabel?: Observable<string>
+  get personLabel(): Observable<string> {
+    return (this.#personLabel ??= this.person.observe().pipe(
+      distinctUntilChanged(
+        (a, b) =>
+          personLabelFromPerson({ person: a }) ===
+          personLabelFromPerson({ person: b }),
+      ),
+      map$((p) => personLabelFromPerson({ person: p })),
+    ))
+  }
+  #artLabel?: Observable<Promise<string | undefined>>
+  get artLabel(): Observable<Promise<string | undefined>> {
+    return (this.#artLabel ??= this.art.observe().pipe(
       distinctUntilKeyChanged('ae_id'),
       map$(async (art) => {
         const artLabel = await art?.label.pipe(first$()).toPromise()
 
         return artLabel
       }),
-    )
+    ))
+  }
 
-  @writer async removeConflict(_rev: string) {
+  async removeConflict(_rev: string) {
     await this.update((row) => {
       row._conflicts = (this._conflicts ?? []).filter((r) => r !== _rev)
     })
@@ -1319,7 +1730,7 @@ export class Av extends Model {
   // updates the row locally - ui and labels stay live.
   // the revision is created when the editing session on this row
   // ends (see modules/revAggregation.js), not per field change
-  @writer async edit({
+  async edit({
     field,
     value,
     values,
@@ -1343,10 +1754,28 @@ export class Av extends Model {
       row.changed_by = store.get(userAtom)?.email ?? null
     })
   }
-  @writer async delete() {
+  async delete() {
     await this.callWriter(() => this.edit({ field: '_deleted', value: true }))
   }
 }
+modelDecorators(
+  Av,
+  {
+    art_id: field('art_id'),
+    person_id: field('person_id'),
+    changed: field('changed'),
+    changed_by: field('changed_by'),
+    _rev: field('_rev'),
+    _parent_rev: field('_parent_rev'),
+    _revisions: json('_revisions', dontSanitize),
+    _depth: field('_depth'),
+    _deleted: field('_deleted'),
+    _conflicts: json('_conflicts', dontSanitize),
+    art: relation('art', 'art_id'),
+    person: relation('person', 'person_id'),
+  },
+  ['removeConflict', 'edit', 'delete'],
+)
 
 export class Gv extends Model {
   static table = 'gv'
@@ -1355,41 +1784,47 @@ export class Gv extends Model {
     person: { type: 'belongs_to', key: 'person_id' },
   }
 
-  @field('garten_id') garten_id!: string | null
-  @field('person_id') person_id!: string | null
-  @field('changed') changed!: string | null
-  @field('changed_by') changed_by!: string | null
-  @field('_rev') _rev!: string | null
-  @field('_parent_rev') _parent_rev!: string | null
-  @json('_revisions', dontSanitize) _revisions!: string[] | null
-  @field('_depth') _depth!: number | null
-  @field('_deleted') _deleted!: boolean | null
-  @json('_conflicts', dontSanitize) _conflicts!: string[] | null
+  declare garten_id: string | null
+  declare person_id: string | null
+  declare changed: string | null
+  declare changed_by: string | null
+  declare _rev: string | null
+  declare _parent_rev: string | null
+  declare _revisions: string[] | null
+  declare _depth: number | null
+  declare _deleted: boolean | null
+  declare _conflicts: string[] | null
 
-  @relation('garten', 'garten_id') garten!: Relation<Garten>
-  @relation('person', 'person_id') person!: Relation<Person>
+  declare garten: Relation<Garten>
+  declare person: Relation<Person>
 
-  @lazy personLabel: Observable<string> = this.person.observe().pipe(
-    distinctUntilChanged(
-      (a, b) =>
-        personLabelFromPerson({ person: a }) ===
-        personLabelFromPerson({ person: b }),
-    ),
-    map$((p) => personLabelFromPerson({ person: p })),
-  )
-  @lazy gartenLabel: Observable<Promise<string>> = this.garten.observe().pipe(
-    distinctUntilChanged(),
-    map$(async (garten) => {
-      let person
-      try {
-        person = await garten.person?.fetch()
-      } catch {}
+  #personLabel?: Observable<string>
+  get personLabel(): Observable<string> {
+    return (this.#personLabel ??= this.person.observe().pipe(
+      distinctUntilChanged(
+        (a, b) =>
+          personLabelFromPerson({ person: a }) ===
+          personLabelFromPerson({ person: b }),
+      ),
+      map$((p) => personLabelFromPerson({ person: p })),
+    ))
+  }
+  #gartenLabel?: Observable<Promise<string>>
+  get gartenLabel(): Observable<Promise<string>> {
+    return (this.#gartenLabel ??= this.garten.observe().pipe(
+      distinctUntilChanged(),
+      map$(async (garten) => {
+        let person
+        try {
+          person = await garten.person?.fetch()
+        } catch {}
 
-      return gartenLabelFromGarten({ garten, person })
-    }),
-  )
+        return gartenLabelFromGarten({ garten, person })
+      }),
+    ))
+  }
 
-  @writer async removeConflict(_rev: string) {
+  async removeConflict(_rev: string) {
     await this.update((row) => {
       row._conflicts = (this._conflicts ?? []).filter((r) => r !== _rev)
     })
@@ -1397,7 +1832,7 @@ export class Gv extends Model {
   // updates the row locally - ui and labels stay live.
   // the revision is created when the editing session on this row
   // ends (see modules/revAggregation.js), not per field change
-  @writer async edit({
+  async edit({
     field,
     value,
     values,
@@ -1421,10 +1856,28 @@ export class Gv extends Model {
       row.changed_by = store.get(userAtom)?.email ?? null
     })
   }
-  @writer async delete() {
+  async delete() {
     await this.callWriter(() => this.edit({ field: '_deleted', value: true }))
   }
 }
+modelDecorators(
+  Gv,
+  {
+    garten_id: field('garten_id'),
+    person_id: field('person_id'),
+    changed: field('changed'),
+    changed_by: field('changed_by'),
+    _rev: field('_rev'),
+    _parent_rev: field('_parent_rev'),
+    _revisions: json('_revisions', dontSanitize),
+    _depth: field('_depth'),
+    _deleted: field('_deleted'),
+    _conflicts: json('_conflicts', dontSanitize),
+    garten: relation('garten', 'garten_id'),
+    person: relation('person', 'person_id'),
+  },
+  ['removeConflict', 'edit', 'delete'],
+)
 
 export class ArtFile extends Model {
   static table = 'art_file'
@@ -1432,17 +1885,17 @@ export class ArtFile extends Model {
     art: { type: 'belongs_to', key: 'art_id' },
   }
 
-  @field('art_id') art_id!: string | null
-  @field('file_id') file_id!: string | null
-  @field('file_mime_type') file_mime_type!: string | null
-  @field('name') name!: string | null
-  @field('beschreibung') beschreibung!: string | null
-  @field('changed') changed!: string | null
-  @field('_rev_at') _rev_at!: number | null
+  declare art_id: string | null
+  declare file_id: string | null
+  declare file_mime_type: string | null
+  declare name: string | null
+  declare beschreibung: string | null
+  declare changed: string | null
+  declare _rev_at: number | null
 
-  @relation('art', 'art_id') art!: Relation<Art>
+  declare art: Relation<Art>
 
-  @writer async edit({ field, value }: { field?: string; value?: unknown }) {
+  async edit({ field, value }: { field?: string; value?: unknown }) {
     // extract only the needed keys
     const { id, art_id, file_id, file_mime_type, name, beschreibung, changed } =
       this
@@ -1473,7 +1926,7 @@ export class ArtFile extends Model {
     })
     return
   }
-  @writer async delete() {
+  async delete() {
     try {
       await store.get(apiClientAtom)?.delete(`/art_file?id=eq.${this.id}`)
     } catch (error) {
@@ -1486,6 +1939,20 @@ export class ArtFile extends Model {
     await this.destroyPermanently()
   }
 }
+modelDecorators(
+  ArtFile,
+  {
+    art_id: field('art_id'),
+    file_id: field('file_id'),
+    file_mime_type: field('file_mime_type'),
+    name: field('name'),
+    beschreibung: field('beschreibung'),
+    changed: field('changed'),
+    _rev_at: field('_rev_at'),
+    art: relation('art', 'art_id'),
+  },
+  ['edit', 'delete'],
+)
 
 export class GartenFile extends Model {
   static table = 'garten_file'
@@ -1493,17 +1960,17 @@ export class GartenFile extends Model {
     garten: { type: 'belongs_to', key: 'garten_id' },
   }
 
-  @field('garten_id') garten_id!: string | null
-  @field('file_id') file_id!: string | null
-  @field('file_mime_type') file_mime_type!: string | null
-  @field('name') name!: string | null
-  @field('beschreibung') beschreibung!: string | null
-  @field('changed') changed!: string | null
-  @field('_rev_at') _rev_at!: number | null
+  declare garten_id: string | null
+  declare file_id: string | null
+  declare file_mime_type: string | null
+  declare name: string | null
+  declare beschreibung: string | null
+  declare changed: string | null
+  declare _rev_at: number | null
 
-  @relation('garten', 'garten_id') garten!: Relation<Garten>
+  declare garten: Relation<Garten>
 
-  @writer async edit({ field, value }: { field?: string; value?: unknown }) {
+  async edit({ field, value }: { field?: string; value?: unknown }) {
     // extract only the needed keys
     const {
       id,
@@ -1541,7 +2008,7 @@ export class GartenFile extends Model {
     })
     return
   }
-  @writer async delete() {
+  async delete() {
     try {
       await store.get(apiClientAtom)?.delete(`/garten_file?id=eq.${this.id}`)
     } catch (error) {
@@ -1554,6 +2021,20 @@ export class GartenFile extends Model {
     await this.destroyPermanently()
   }
 }
+modelDecorators(
+  GartenFile,
+  {
+    garten_id: field('garten_id'),
+    file_id: field('file_id'),
+    file_mime_type: field('file_mime_type'),
+    name: field('name'),
+    beschreibung: field('beschreibung'),
+    changed: field('changed'),
+    _rev_at: field('_rev_at'),
+    garten: relation('garten', 'garten_id'),
+  },
+  ['edit', 'delete'],
+)
 
 export class HerkunftFile extends Model {
   static table = 'herkunft_file'
@@ -1561,17 +2042,17 @@ export class HerkunftFile extends Model {
     herkunft: { type: 'belongs_to', key: 'herkunft_id' },
   }
 
-  @field('herkunft_id') herkunft_id!: string | null
-  @field('file_id') file_id!: string | null
-  @field('file_mime_type') file_mime_type!: string | null
-  @field('name') name!: string | null
-  @field('beschreibung') beschreibung!: string | null
-  @field('changed') changed!: string | null
-  @field('_rev_at') _rev_at!: number | null
+  declare herkunft_id: string | null
+  declare file_id: string | null
+  declare file_mime_type: string | null
+  declare name: string | null
+  declare beschreibung: string | null
+  declare changed: string | null
+  declare _rev_at: number | null
 
-  @relation('herkunft', 'herkunft_id') herkunft!: Relation<Herkunft>
+  declare herkunft: Relation<Herkunft>
 
-  @writer async edit({ field, value }: { field?: string; value?: unknown }) {
+  async edit({ field, value }: { field?: string; value?: unknown }) {
     // extract only the needed keys
     const {
       id,
@@ -1609,7 +2090,7 @@ export class HerkunftFile extends Model {
     })
     return
   }
-  @writer async delete() {
+  async delete() {
     try {
       await store.get(apiClientAtom)?.delete(`/herkunft_file?id=eq.${this.id}`)
     } catch (error) {
@@ -1622,6 +2103,20 @@ export class HerkunftFile extends Model {
     await this.destroyPermanently()
   }
 }
+modelDecorators(
+  HerkunftFile,
+  {
+    herkunft_id: field('herkunft_id'),
+    file_id: field('file_id'),
+    file_mime_type: field('file_mime_type'),
+    name: field('name'),
+    beschreibung: field('beschreibung'),
+    changed: field('changed'),
+    _rev_at: field('_rev_at'),
+    herkunft: relation('herkunft', 'herkunft_id'),
+  },
+  ['edit', 'delete'],
+)
 
 export class KulturFile extends Model {
   static table = 'kultur_file'
@@ -1629,17 +2124,17 @@ export class KulturFile extends Model {
     kultur: { type: 'belongs_to', key: 'kultur_id' },
   }
 
-  @field('kultur_id') kultur_id!: string | null
-  @field('file_id') file_id!: string | null
-  @field('file_mime_type') file_mime_type!: string | null
-  @field('name') name!: string | null
-  @field('beschreibung') beschreibung!: string | null
-  @field('changed') changed!: string | null
-  @field('_rev_at') _rev_at!: number | null
+  declare kultur_id: string | null
+  declare file_id: string | null
+  declare file_mime_type: string | null
+  declare name: string | null
+  declare beschreibung: string | null
+  declare changed: string | null
+  declare _rev_at: number | null
 
-  @relation('kultur', 'kultur_id') kultur!: Relation<Kultur>
+  declare kultur: Relation<Kultur>
 
-  @writer async edit({ field, value }: { field?: string; value?: unknown }) {
+  async edit({ field, value }: { field?: string; value?: unknown }) {
     // extract only the needed keys
     const {
       id,
@@ -1677,7 +2172,7 @@ export class KulturFile extends Model {
     })
     return
   }
-  @writer async delete() {
+  async delete() {
     try {
       await store.get(apiClientAtom)?.delete(`/kultur_file?id=eq.${this.id}`)
     } catch (error) {
@@ -1690,6 +2185,20 @@ export class KulturFile extends Model {
     await this.destroyPermanently()
   }
 }
+modelDecorators(
+  KulturFile,
+  {
+    kultur_id: field('kultur_id'),
+    file_id: field('file_id'),
+    file_mime_type: field('file_mime_type'),
+    name: field('name'),
+    beschreibung: field('beschreibung'),
+    changed: field('changed'),
+    _rev_at: field('_rev_at'),
+    kultur: relation('kultur', 'kultur_id'),
+  },
+  ['edit', 'delete'],
+)
 
 export class LieferungFile extends Model {
   static table = 'lieferung_file'
@@ -1697,17 +2206,17 @@ export class LieferungFile extends Model {
     lieferung: { type: 'belongs_to', key: 'lieferung_id' },
   }
 
-  @field('lieferung_id') lieferung_id!: string | null
-  @field('file_id') file_id!: string | null
-  @field('file_mime_type') file_mime_type!: string | null
-  @field('name') name!: string | null
-  @field('beschreibung') beschreibung!: string | null
-  @field('changed') changed!: string | null
-  @field('_rev_at') _rev_at!: number | null
+  declare lieferung_id: string | null
+  declare file_id: string | null
+  declare file_mime_type: string | null
+  declare name: string | null
+  declare beschreibung: string | null
+  declare changed: string | null
+  declare _rev_at: number | null
 
-  @relation('lieferung', 'lieferung_id') lieferung!: Relation<Lieferung>
+  declare lieferung: Relation<Lieferung>
 
-  @writer async edit({ field, value }: { field?: string; value?: unknown }) {
+  async edit({ field, value }: { field?: string; value?: unknown }) {
     // extract only the needed keys
     const {
       id,
@@ -1745,7 +2254,7 @@ export class LieferungFile extends Model {
     })
     return
   }
-  @writer async delete() {
+  async delete() {
     try {
       await store.get(apiClientAtom)?.delete(`/lieferung_file?id=eq.${this.id}`)
     } catch (error) {
@@ -1758,6 +2267,20 @@ export class LieferungFile extends Model {
     await this.destroyPermanently()
   }
 }
+modelDecorators(
+  LieferungFile,
+  {
+    lieferung_id: field('lieferung_id'),
+    file_id: field('file_id'),
+    file_mime_type: field('file_mime_type'),
+    name: field('name'),
+    beschreibung: field('beschreibung'),
+    changed: field('changed'),
+    _rev_at: field('_rev_at'),
+    lieferung: relation('lieferung', 'lieferung_id'),
+  },
+  ['edit', 'delete'],
+)
 
 export class PersonFile extends Model {
   static table = 'person_file'
@@ -1765,17 +2288,17 @@ export class PersonFile extends Model {
     person: { type: 'belongs_to', key: 'person_id' },
   }
 
-  @field('person_id') person_id!: string | null
-  @field('file_id') file_id!: string | null
-  @field('file_mime_type') file_mime_type!: string | null
-  @field('name') name!: string | null
-  @field('beschreibung') beschreibung!: string | null
-  @field('changed') changed!: string | null
-  @field('_rev_at') _rev_at!: number | null
+  declare person_id: string | null
+  declare file_id: string | null
+  declare file_mime_type: string | null
+  declare name: string | null
+  declare beschreibung: string | null
+  declare changed: string | null
+  declare _rev_at: number | null
 
-  @relation('person', 'person_id') person!: Relation<Person>
+  declare person: Relation<Person>
 
-  @writer async edit({ field, value }: { field?: string; value?: unknown }) {
+  async edit({ field, value }: { field?: string; value?: unknown }) {
     // extract only the needed keys
     const {
       id,
@@ -1813,7 +2336,7 @@ export class PersonFile extends Model {
     })
     return
   }
-  @writer async delete() {
+  async delete() {
     try {
       await store.get(apiClientAtom)?.delete(`/person_file?id=eq.${this.id}`)
     } catch (error) {
@@ -1826,6 +2349,20 @@ export class PersonFile extends Model {
     await this.destroyPermanently()
   }
 }
+modelDecorators(
+  PersonFile,
+  {
+    person_id: field('person_id'),
+    file_id: field('file_id'),
+    file_mime_type: field('file_mime_type'),
+    name: field('name'),
+    beschreibung: field('beschreibung'),
+    changed: field('changed'),
+    _rev_at: field('_rev_at'),
+    person: relation('person', 'person_id'),
+  },
+  ['edit', 'delete'],
+)
 
 export class SammlungFile extends Model {
   static table = 'sammlung_file'
@@ -1833,17 +2370,17 @@ export class SammlungFile extends Model {
     sammlung: { type: 'belongs_to', key: 'sammlung_id' },
   }
 
-  @field('sammlung_id') sammlung_id!: string | null
-  @field('file_id') file_id!: string | null
-  @field('file_mime_type') file_mime_type!: string | null
-  @field('name') name!: string | null
-  @field('beschreibung') beschreibung!: string | null
-  @field('changed') changed!: string | null
-  @field('_rev_at') _rev_at!: number | null
+  declare sammlung_id: string | null
+  declare file_id: string | null
+  declare file_mime_type: string | null
+  declare name: string | null
+  declare beschreibung: string | null
+  declare changed: string | null
+  declare _rev_at: number | null
 
-  @relation('sammlung', 'sammlung_id') sammlung!: Relation<Sammlung>
+  declare sammlung: Relation<Sammlung>
 
-  @writer async edit({ field, value }: { field?: string; value?: unknown }) {
+  async edit({ field, value }: { field?: string; value?: unknown }) {
     // extract only the needed keys
     const {
       id,
@@ -1881,7 +2418,7 @@ export class SammlungFile extends Model {
     })
     return
   }
-  @writer async delete() {
+  async delete() {
     try {
       await store.get(apiClientAtom)?.delete(`/sammlung_file?id=eq.${this.id}`)
     } catch (error) {
@@ -1894,24 +2431,38 @@ export class SammlungFile extends Model {
     await this.destroyPermanently()
   }
 }
+modelDecorators(
+  SammlungFile,
+  {
+    sammlung_id: field('sammlung_id'),
+    file_id: field('file_id'),
+    file_mime_type: field('file_mime_type'),
+    name: field('name'),
+    beschreibung: field('beschreibung'),
+    changed: field('changed'),
+    _rev_at: field('_rev_at'),
+    sammlung: relation('sammlung', 'sammlung_id'),
+  },
+  ['edit', 'delete'],
+)
 
 export class ArtQk extends Model {
   static table = 'art_qk'
 
-  @field('name') name!: string
-  @field('titel') titel!: string | null
-  @field('beschreibung') beschreibung!: string | null
-  @field('sort') sort!: number | null
-  @field('changed') changed!: string | null
-  @field('changed_by') changed_by!: string | null
-  @field('_rev') _rev!: string | null
-  @field('_parent_rev') _parent_rev!: string | null
-  @json('_revisions', dontSanitize) _revisions!: string[] | null
-  @field('_depth') _depth!: number | null
-  @field('_deleted') _deleted!: boolean | null
-  @json('_conflicts', dontSanitize) _conflicts!: string[] | null
+  declare name: string
+  declare titel: string | null
+  declare beschreibung: string | null
+  declare sort: number | null
+  declare changed: string | null
+  declare changed_by: string | null
+  declare _rev: string | null
+  declare _parent_rev: string | null
+  declare _revisions: string[] | null
+  declare _depth: number | null
+  declare _deleted: boolean | null
+  declare _conflicts: string[] | null
 
-  @writer async removeConflict(_rev: string) {
+  async removeConflict(_rev: string) {
     await this.update((row) => {
       row._conflicts = (this._conflicts ?? []).filter((r) => r !== _rev)
     })
@@ -1919,7 +2470,7 @@ export class ArtQk extends Model {
   // updates the row locally - ui and labels stay live.
   // the revision is created when the editing session on this row
   // ends (see modules/revAggregation.js), not per field change
-  @writer async edit({
+  async edit({
     field,
     value,
     values,
@@ -1943,10 +2494,28 @@ export class ArtQk extends Model {
       row.changed_by = store.get(userAtom)?.email ?? null
     })
   }
-  @writer async delete() {
+  async delete() {
     await this.callWriter(() => this.edit({ field: '_deleted', value: true }))
   }
 }
+modelDecorators(
+  ArtQk,
+  {
+    name: field('name'),
+    titel: field('titel'),
+    beschreibung: field('beschreibung'),
+    sort: field('sort'),
+    changed: field('changed'),
+    changed_by: field('changed_by'),
+    _rev: field('_rev'),
+    _parent_rev: field('_parent_rev'),
+    _revisions: json('_revisions', dontSanitize),
+    _depth: field('_depth'),
+    _deleted: field('_deleted'),
+    _conflicts: json('_conflicts', dontSanitize),
+  },
+  ['removeConflict', 'edit', 'delete'],
+)
 
 export class KulturOption extends Model {
   static table = 'kultur_option'
@@ -1954,30 +2523,29 @@ export class KulturOption extends Model {
     kultur: { type: 'belongs_to', key: 'id' },
   }
 
-  @field('z_bemerkungen') z_bemerkungen!: boolean | null
-  @field('tz_teilkultur_id') titel!: boolean | null
-  @field('tz_andere_menge') tz_andere_menge!: boolean | null
-  @field('tz_auspflanzbereit_beschreibung') tz_auspflanzbereit_beschreibung!:
-    boolean | null
-  @field('tz_bemerkungen') tz_bemerkungen!: boolean | null
-  @field('tk') tk!: boolean | null
-  @field('tk_bemerkungen') tk_bemerkungen!: boolean | null
-  @field('ev_teilkultur_id') ev_teilkultur_id!: boolean | null
-  @field('ev_geplant') ev_geplant!: boolean | null
-  @field('ev_person_id') ev_person_id!: boolean | null
-  @field('ev_datum') ev_datum!: boolean | null
-  @field('changed') changed!: string | null
-  @field('changed_by') changed_by!: string | null
-  @field('_rev') _rev!: string | null
-  @field('_parent_rev') _parent_rev!: string | null
-  @json('_revisions', dontSanitize) _revisions!: string[] | null
-  @field('_depth') _depth!: number | null
-  @field('_deleted') _deleted!: boolean | null
-  @json('_conflicts', dontSanitize) _conflicts!: string[] | null
+  declare z_bemerkungen: boolean | null
+  declare titel: boolean | null
+  declare tz_andere_menge: boolean | null
+  declare tz_auspflanzbereit_beschreibung: boolean | null
+  declare tz_bemerkungen: boolean | null
+  declare tk: boolean | null
+  declare tk_bemerkungen: boolean | null
+  declare ev_teilkultur_id: boolean | null
+  declare ev_geplant: boolean | null
+  declare ev_person_id: boolean | null
+  declare ev_datum: boolean | null
+  declare changed: string | null
+  declare changed_by: string | null
+  declare _rev: string | null
+  declare _parent_rev: string | null
+  declare _revisions: string[] | null
+  declare _depth: number | null
+  declare _deleted: boolean | null
+  declare _conflicts: string[] | null
 
-  @relation('kultur', 'id') kultur!: Relation<Kultur>
+  declare kultur: Relation<Kultur>
 
-  @writer async removeConflict(_rev: string) {
+  async removeConflict(_rev: string) {
     await this.update((row) => {
       row._conflicts = (this._conflicts ?? []).filter((r) => r !== _rev)
     })
@@ -1985,7 +2553,7 @@ export class KulturOption extends Model {
   // updates the row locally - ui and labels stay live.
   // the revision is created when the editing session on this row
   // ends (see modules/revAggregation.js), not per field change
-  @writer async edit({
+  async edit({
     field,
     value,
     values,
@@ -2009,28 +2577,54 @@ export class KulturOption extends Model {
       row.changed_by = store.get(userAtom)?.email ?? null
     })
   }
-  @writer async delete() {
+  async delete() {
     await this.callWriter(() => this.edit({ field: '_deleted', value: true }))
   }
 }
+modelDecorators(
+  KulturOption,
+  {
+    z_bemerkungen: field('z_bemerkungen'),
+    titel: field('tz_teilkultur_id'),
+    tz_andere_menge: field('tz_andere_menge'),
+    tz_auspflanzbereit_beschreibung: field('tz_auspflanzbereit_beschreibung'),
+    tz_bemerkungen: field('tz_bemerkungen'),
+    tk: field('tk'),
+    tk_bemerkungen: field('tk_bemerkungen'),
+    ev_teilkultur_id: field('ev_teilkultur_id'),
+    ev_geplant: field('ev_geplant'),
+    ev_person_id: field('ev_person_id'),
+    ev_datum: field('ev_datum'),
+    changed: field('changed'),
+    changed_by: field('changed_by'),
+    _rev: field('_rev'),
+    _parent_rev: field('_parent_rev'),
+    _revisions: json('_revisions', dontSanitize),
+    _depth: field('_depth'),
+    _deleted: field('_deleted'),
+    _conflicts: json('_conflicts', dontSanitize),
+    kultur: relation('kultur', 'id'),
+  },
+  ['removeConflict', 'edit', 'delete'],
+)
 
 export class KulturQk extends Model {
   static table = 'kultur_qk'
 
-  @field('name') name!: string
-  @field('titel') titel!: string | null
-  @field('beschreibung') beschreibung!: string | null
-  @field('sort') sort!: number | null
-  @field('changed') changed!: string | null
-  @field('changed_by') changed_by!: string | null
-  @field('_rev') _rev!: string | null
-  @field('_parent_rev') _parent_rev!: string | null
-  @json('_revisions', dontSanitize) _revisions!: string[] | null
-  @field('_depth') _depth!: number | null
-  @field('_deleted') _deleted!: boolean | null
-  @json('_conflicts', dontSanitize) _conflicts!: string[] | null
+  declare name: string
+  declare titel: string | null
+  declare beschreibung: string | null
+  declare sort: number | null
+  declare changed: string | null
+  declare changed_by: string | null
+  declare _rev: string | null
+  declare _parent_rev: string | null
+  declare _revisions: string[] | null
+  declare _depth: number | null
+  declare _deleted: boolean | null
+  declare _conflicts: string[] | null
 
-  @writer async removeConflict(_rev: string) {
+  async removeConflict(_rev: string) {
     await this.update((row) => {
       row._conflicts = (this._conflicts ?? []).filter((r) => r !== _rev)
     })
@@ -2038,7 +2632,7 @@ export class KulturQk extends Model {
   // updates the row locally - ui and labels stay live.
   // the revision is created when the editing session on this row
   // ends (see modules/revAggregation.js), not per field change
-  @writer async edit({
+  async edit({
     field,
     value,
     values,
@@ -2062,10 +2656,28 @@ export class KulturQk extends Model {
       row.changed_by = store.get(userAtom)?.email ?? null
     })
   }
-  @writer async delete() {
+  async delete() {
     await this.callWriter(() => this.edit({ field: '_deleted', value: true }))
   }
 }
+modelDecorators(
+  KulturQk,
+  {
+    name: field('name'),
+    titel: field('titel'),
+    beschreibung: field('beschreibung'),
+    sort: field('sort'),
+    changed: field('changed'),
+    changed_by: field('changed_by'),
+    _rev: field('_rev'),
+    _parent_rev: field('_parent_rev'),
+    _revisions: json('_revisions', dontSanitize),
+    _depth: field('_depth'),
+    _deleted: field('_deleted'),
+    _conflicts: json('_conflicts', dontSanitize),
+  },
+  ['removeConflict', 'edit', 'delete'],
+)
 
 export class PersonOption extends Model {
   static table = 'person_option'
@@ -2073,44 +2685,43 @@ export class PersonOption extends Model {
     person: { type: 'belongs_to', key: 'id' },
   }
 
-  @field('ar_name_deutsch') ar_name_deutsch!: boolean | null
-  @field('ga_strasse') ga_strasse!: boolean | null
-  @field('ga_plz') ga_plz!: boolean | null
-  @field('ga_ort') ga_ort!: boolean | null
-  @field('ga_geom_point') ga_geom_point!: boolean | null
-  @field('ga_lat_lng') ga_lat_lng!: boolean | null
-  @field('ga_aktiv') ga_aktiv!: boolean | null
-  @field('ga_bemerkungen') ga_bemerkungen!: boolean | null
-  @field('hk_kanton') hk_kanton!: boolean | null
-  @field('hk_land') hk_land!: boolean | null
-  @field('hk_bemerkungen') hk_bemerkungen!: boolean | null
-  @field('hk_geom_point') hk_geom_point!: boolean | null
-  @field('ku_zwischenlager') ku_zwischenlager!: boolean | null
-  @field('ku_erhaltungskultur') ku_erhaltungskultur!: boolean | null
-  @field('li_show_sl_felder') li_show_sl_felder!: boolean | null
-  @field('li_show_sl') li_show_sl!: boolean | null
-  @field('sl_show_empty_when_next_to_li') sl_show_empty_when_next_to_li!:
-    boolean | null
-  @field('sl_auto_copy_edits') sl_auto_copy_edits!: boolean | null
-  @field('tree_kultur') tree_kultur!: boolean | null
-  @field('tree_teilkultur') tree_teilkultur!: boolean | null
-  @field('tree_zaehlung') tree_zaehlung!: boolean | null
-  @field('tree_lieferung') tree_lieferung!: boolean | null
-  @field('tree_event') tree_event!: boolean | null
-  @json('art_qk_choosen', dontSanitize) art_qk_choosen!: string[] | null
-  @json('kultur_qk_choosen', dontSanitize) kultur_qk_choosen!: string[] | null
-  @field('changed') changed!: string | null
-  @field('changed_by') changed_by!: string | null
-  @field('_rev') _rev!: string | null
-  @field('_parent_rev') _parent_rev!: string | null
-  @json('_revisions', dontSanitize) _revisions!: string[] | null
-  @field('_depth') _depth!: number | null
-  @field('_deleted') _deleted!: boolean | null
-  @json('_conflicts', dontSanitize) _conflicts!: string[] | null
+  declare ar_name_deutsch: boolean | null
+  declare ga_strasse: boolean | null
+  declare ga_plz: boolean | null
+  declare ga_ort: boolean | null
+  declare ga_geom_point: boolean | null
+  declare ga_lat_lng: boolean | null
+  declare ga_aktiv: boolean | null
+  declare ga_bemerkungen: boolean | null
+  declare hk_kanton: boolean | null
+  declare hk_land: boolean | null
+  declare hk_bemerkungen: boolean | null
+  declare hk_geom_point: boolean | null
+  declare ku_zwischenlager: boolean | null
+  declare ku_erhaltungskultur: boolean | null
+  declare li_show_sl_felder: boolean | null
+  declare li_show_sl: boolean | null
+  declare sl_show_empty_when_next_to_li: boolean | null
+  declare sl_auto_copy_edits: boolean | null
+  declare tree_kultur: boolean | null
+  declare tree_teilkultur: boolean | null
+  declare tree_zaehlung: boolean | null
+  declare tree_lieferung: boolean | null
+  declare tree_event: boolean | null
+  declare art_qk_choosen: string[] | null
+  declare kultur_qk_choosen: string[] | null
+  declare changed: string | null
+  declare changed_by: string | null
+  declare _rev: string | null
+  declare _parent_rev: string | null
+  declare _revisions: string[] | null
+  declare _depth: number | null
+  declare _deleted: boolean | null
+  declare _conflicts: string[] | null
 
-  @relation('person', 'id') person!: Relation<Person>
+  declare person: Relation<Person>
 
-  @writer async removeConflict(_rev: string) {
+  async removeConflict(_rev: string) {
     await this.update((row) => {
       row._conflicts = (this._conflicts ?? []).filter((r) => r !== _rev)
     })
@@ -2118,7 +2729,7 @@ export class PersonOption extends Model {
   // updates the row locally - ui and labels stay live.
   // the revision is created when the editing session on this row
   // ends (see modules/revAggregation.js), not per field change
-  @writer async edit({
+  async edit({
     field,
     value,
     values,
@@ -2142,10 +2753,50 @@ export class PersonOption extends Model {
       row.changed_by = store.get(userAtom)?.email ?? null
     })
   }
-  @writer async delete() {
+  async delete() {
     await this.callWriter(() => this.edit({ field: '_deleted', value: true }))
   }
 }
+modelDecorators(
+  PersonOption,
+  {
+    ar_name_deutsch: field('ar_name_deutsch'),
+    ga_strasse: field('ga_strasse'),
+    ga_plz: field('ga_plz'),
+    ga_ort: field('ga_ort'),
+    ga_geom_point: field('ga_geom_point'),
+    ga_lat_lng: field('ga_lat_lng'),
+    ga_aktiv: field('ga_aktiv'),
+    ga_bemerkungen: field('ga_bemerkungen'),
+    hk_kanton: field('hk_kanton'),
+    hk_land: field('hk_land'),
+    hk_bemerkungen: field('hk_bemerkungen'),
+    hk_geom_point: field('hk_geom_point'),
+    ku_zwischenlager: field('ku_zwischenlager'),
+    ku_erhaltungskultur: field('ku_erhaltungskultur'),
+    li_show_sl_felder: field('li_show_sl_felder'),
+    li_show_sl: field('li_show_sl'),
+    sl_show_empty_when_next_to_li: field('sl_show_empty_when_next_to_li'),
+    sl_auto_copy_edits: field('sl_auto_copy_edits'),
+    tree_kultur: field('tree_kultur'),
+    tree_teilkultur: field('tree_teilkultur'),
+    tree_zaehlung: field('tree_zaehlung'),
+    tree_lieferung: field('tree_lieferung'),
+    tree_event: field('tree_event'),
+    art_qk_choosen: json('art_qk_choosen', dontSanitize),
+    kultur_qk_choosen: json('kultur_qk_choosen', dontSanitize),
+    changed: field('changed'),
+    changed_by: field('changed_by'),
+    _rev: field('_rev'),
+    _parent_rev: field('_parent_rev'),
+    _revisions: json('_revisions', dontSanitize),
+    _depth: field('_depth'),
+    _deleted: field('_deleted'),
+    _conflicts: json('_conflicts', dontSanitize),
+    person: relation('person', 'id'),
+  },
+  ['removeConflict', 'edit', 'delete'],
+)
 
 export class UserRole extends Model {
   static table = 'user_role'
@@ -2153,11 +2804,19 @@ export class UserRole extends Model {
     person: { type: 'has_many', foreignKey: 'user_role_id' },
   }
 
-  @field('name') name!: string
-  @field('label') label!: string | null
-  @field('sort') sort!: number | null
-  @field('comment') comment!: string | null
-  @field('changed') changed!: string | null
+  declare name: string
+  declare label: string | null
+  declare sort: number | null
+  declare comment: string | null
+  declare changed: string | null
 
-  @relation('person', 'user_role_id') person!: Relation<Person>
+  declare person: Relation<Person>
 }
+modelDecorators(UserRole, {
+  name: field('name'),
+  label: field('label'),
+  sort: field('sort'),
+  comment: field('comment'),
+  changed: field('changed'),
+  person: relation('person', 'user_role_id'),
+})
