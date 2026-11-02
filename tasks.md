@@ -17,6 +17,8 @@ I see there are still a few useMemo (and others?) usages. Are they still needed 
 
 ---
 
+migrating the nitromelondb models off legacy decorators would let you drop most of the babel pipeline — which is 88% of your build's transform time
+
 ---
 
 ---
