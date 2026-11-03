@@ -2,6 +2,25 @@
 <html lang="de">
   <head>
     <meta charset="UTF-8" />
+    <script>
+      // Runs during HTML parse, before any JS bundle. The hero image on
+      // / is the LCP element but is only requested after React has
+      // mounted - preload it early and with high priority. This file is
+      // the shell for every route, so only preload when actually on /.
+      // The placeholder in link.href is replaced at build time by the
+      // heroPreloadUrl plugin: Vite does not rewrite asset URLs inside
+      // inline scripts.
+      ;(() => {
+        if (window.location.pathname !== '/') return
+        const link = document.createElement('link')
+        link.rel = 'preload'
+        link.as = 'image'
+        link.type = 'image/webp'
+        link.href = '/assets/puls_vulg_2500-D9Yrew4x.webp'
+        link.setAttribute('fetchpriority', 'high')
+        document.head.appendChild(link)
+      })()
+    </script>
     <link
       rel="apple-touch-icon"
       sizes="192x192"
@@ -74,7 +93,7 @@
           ?.setAttribute('content', isDark ? '#121212' : '#2e0c58')
       })()
     </script>
-    <script type="module" crossorigin src="/assets/index-C6GvQtIK.js"></script>
+    <script type="module" crossorigin src="/assets/index-3rxM-dZJ.js"></script>
     <link rel="modulepreload" crossorigin href="/assets/rolldown-runtime-BCiCTKAo.js">
     <link rel="modulepreload" crossorigin href="/assets/vendor-mui-C26dYbaC.js">
     <link rel="modulepreload" crossorigin href="/assets/vendor-react-BHFujaUC.js">
@@ -104,7 +123,7 @@
     <link rel="modulepreload" crossorigin href="/assets/index.es-CR6uu1QS.js">
     <link rel="modulepreload" crossorigin href="/assets/vendor-firebase-BZPdVgws.js">
     <link rel="modulepreload" crossorigin href="/assets/syncPoller-CUHpoXdM.js">
-    <link rel="modulepreload" crossorigin href="/assets/package-CeTJ0zAw.js">
+    <link rel="modulepreload" crossorigin href="/assets/package-Ehfrf7IW.js">
     <link rel="stylesheet" crossorigin href="/assets/index-CZdF4nU9.css">
   <link rel="manifest" href="/manifest.webmanifest"></head>
   <body>
