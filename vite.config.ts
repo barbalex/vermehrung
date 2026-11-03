@@ -87,6 +87,34 @@ const sqliteWorkerDepUrl = (): Plugin => ({
   },
 })
 
+// index.html preloads the hero image on / from an inline script, but
+// Vite only rewrites asset URLs in html attributes, not inside inline
+// scripts. Replace the placeholder with the built (content-hashed) URL;
+// in dev, with the source path the dev server serves.
+const heroPreloadUrl = (): Plugin => ({
+  name: 'hero-preload-url',
+  transformIndexHtml: {
+    order: 'post',
+    handler(html, ctx) {
+      const builtUrl =
+        ctx.bundle ?
+          Object.keys(ctx.bundle).find(
+            (file) =>
+              file.startsWith('assets/puls_vulg_2500') &&
+              file.endsWith('.webp'),
+          )
+        : undefined
+      if (ctx.bundle && !builtUrl) {
+        throw new Error('puls_vulg_2500.webp missing from the build bundle')
+      }
+      return html.replaceAll(
+        '__HERO_PRELOAD_URL__',
+        builtUrl ? `/${builtUrl}` : '/src/images/puls_vulg_2500.webp',
+      )
+    },
+  },
+})
+
 // https://vitejs.dev/config/
 export default defineConfig({
   server: { port: 5175 },
@@ -108,6 +136,7 @@ export default defineConfig({
     sqliteWebDispatcher(),
     sqliteWasmStub(),
     sqliteWorkerDepUrl(),
+    heroPreloadUrl(),
     svgrPlugin({
       svgrOptions: {
         icon: true,

@@ -15,6 +15,7 @@ export const Home = () => (
         <ProgressiveImg
           src={image}
           placeholderSrc={placeholderSrc}
+          fetchPriority="high"
         />
         <div className={styles.scrollContainer}>
           <div className={styles.container}>
