@@ -1,29 +1,35 @@
 import { DateTime } from 'luxon'
-import type { Workbook } from 'exceljs'
+import type { Sheet } from 'write-excel-file/browser'
 
-import { addNotification } from '../store/index.ts'
+import { addNotification, setExportProgress } from '../store/index.ts'
+import { autoFilterFeature } from './autoFilterFeature.ts'
 
 /**
  * this function cann be used from higher up
- * that is why it _can_ recieve a workbook
+ * that is why it _can_ recieve sheets
  */
-export const downloadExceljsWorkbook = async ({
+export const downloadSheets = async ({
   fileName,
-  workbook,
+  sheets,
 }: {
   fileName: string
-  workbook: Workbook
+  sheets: Sheet<Blob>[]
 }) => {
-  let buffer: ArrayBuffer
+  let blob: Blob
   try {
-    buffer = await workbook.xlsx.writeBuffer()
+    setExportProgress({ message: 'Excel-Datei wird erstellt' })
+    const { default: writeXlsxFile } = await import('write-excel-file/browser')
+    blob = await writeXlsxFile(sheets, {
+      features: [autoFilterFeature],
+    }).toBlob()
   } catch (error) {
+    setExportProgress(null)
     return addNotification({
       message: (error as Error).message,
     })
   }
+  setExportProgress(null)
   const file = `${fileName}_${DateTime.now().toFormat('yyyy-LL-dd_HH-mm-ss')}`
-  const blob = new Blob([buffer], { type: 'application/octet-stream' })
   const url = URL.createObjectURL(blob)
   const anchor = document.createElement('a')
   anchor.href = url

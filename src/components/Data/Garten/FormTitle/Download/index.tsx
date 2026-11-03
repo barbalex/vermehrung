@@ -4,9 +4,16 @@ import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { FaDownload } from 'react-icons/fa'
 
-import { buildExceljsWorksheetsForDaten } from './buildExceljsWorksheetsForDaten.ts'
-import { buildExceljsWorksheetsForTzSums } from './buildExceljsWorksheetsForTzSums.ts'
-import { downloadExceljsWorkbook } from '../../../../../utils/downloadExceljsWorkbook.ts'
+import type { Sheet } from 'write-excel-file/browser'
+
+import {
+  store,
+  exportProgressAtom,
+  setExportProgress,
+} from '../../../../../store/index.ts'
+import { buildSheetsForDaten } from './buildSheetsForDaten.ts'
+import { buildSheetsForTzSums } from './buildSheetsForTzSums.ts'
+import { downloadSheets } from '../../../../../utils/downloadSheets.ts'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.tsx'
 
 import styles from './index.module.css'
@@ -17,31 +24,39 @@ export const GartenDownload = ({
   gartenId: string | undefined
 }) => {
   const onClickData = async () => {
-    const { Workbook } = await import('exceljs/dist/exceljs.min.js')
-    const workbook = new Workbook()
-    await buildExceljsWorksheetsForDaten({
-      garten_id: gartenId ?? '',
-      workbook,
-      calledFromHigherUp: false,
-    })
-    downloadExceljsWorkbook({
-      fileName: `Garten_${gartenId}_rohdaten`,
-      workbook,
-    })
+    if (store.get(exportProgressAtom)) return
+    const sheets: Sheet<Blob>[] = []
+    try {
+      await buildSheetsForDaten({
+        garten_id: gartenId ?? '',
+        sheets,
+        calledFromHigherUp: false,
+      })
+      await downloadSheets({
+        fileName: `Garten_${gartenId}_rohdaten`,
+        sheets,
+      })
+    } finally {
+      setExportProgress(null)
+    }
     setAnchorEl(null)
   }
 
   const onClickTzSums = async () => {
-    const { Workbook } = await import('exceljs/dist/exceljs.min.js')
-    const workbook = new Workbook()
-    await buildExceljsWorksheetsForTzSums({
-      garten_id: gartenId ?? '',
-      workbook,
-    })
-    downloadExceljsWorkbook({
-      fileName: `Garten_${gartenId}_teilzaehlungen_summen`,
-      workbook,
-    })
+    if (store.get(exportProgressAtom)) return
+    const sheets: Sheet<Blob>[] = []
+    try {
+      await buildSheetsForTzSums({
+        garten_id: gartenId ?? '',
+        sheets,
+      })
+      await downloadSheets({
+        fileName: `Garten_${gartenId}_teilzaehlungen_summen`,
+        sheets,
+      })
+    } finally {
+      setExportProgress(null)
+    }
     setAnchorEl(null)
   }
 

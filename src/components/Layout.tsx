@@ -4,6 +4,7 @@ import { Outlet } from 'react-router'
 
 import { setSingleColumnView, singleColumnViewAtom } from '../store/index.ts'
 import { constants } from '../utils/constants.ts'
+import { ExportProgress } from './ExportProgress/index.tsx'
 import { Fallback } from './shared/Fallback.tsx'
 
 const NavigationSyncController = lazy(async () => ({
@@ -42,6 +43,7 @@ export const Layout = () => {
         <Outlet />
       </Suspense>
       <NavigationSyncController />
+      <ExportProgress />
       <Notifications />
     </div>
   )

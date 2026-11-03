@@ -1,9 +1,10 @@
 import { sum } from 'es-toolkit'
-import { store, dbAtom } from '../../../../store/index.ts'
+import { store, dbAtom, setExportProgress } from '../../../../store/index.ts'
 import { Q } from 'nitromelondb'
 import { first as first$ } from 'rxjs/operators'
+import type { Sheet } from 'write-excel-file/browser'
 
-import { addWorksheetToExceljsWorkbook } from '../../../../utils/addWorksheetToExceljsWorkbook.ts'
+import { addSheetToSheets } from '../../../../utils/addSheetToSheets.ts'
 import { removeMetadataFromDataset } from '../../../../utils/removeMetadataFromDataset.ts'
 import { exists } from '../../../../utils/exists.ts'
 import { teilzaehlungsSortByTk } from '../../../../utils/teilzaehlungsSortByTk.ts'
@@ -13,22 +14,30 @@ import { personFullname } from '../../../../utils/personFullname.ts'
 
 /**
  * this function can be used from higher up
- * that is why it receives a workbook and _can_ receive calledFromHigherUp
+ * that is why it receives sheets and _can_ receive calledFromHigherUp
  */
-export const buildExceljsWorksheetsForKultur = async ({
+export const buildSheetsForKultur = async ({
   kultur_id,
   kultur_name,
-  workbook,
+  sheets,
   calledFromHigherUp,
 }: {
   kultur_id: string
   kultur_name: string | number | undefined
-  workbook: import('exceljs').Workbook
+  sheets: Sheet<Blob>[]
   calledFromHigherUp: boolean
 }) => {
   const db = store.get(dbAtom)
 
+  // when called from the Garten export, that one reports progress
+  const setSectionProgress = (section: number, message: string) => {
+    if (!calledFromHigherUp) {
+      setExportProgress({ message, done: section, total: 5 })
+    }
+  }
+
   // 1. Get Kultur
+  setSectionProgress(0, 'Kultur wird geladen')
   if (!calledFromHigherUp) {
     let kultur: import('../../../../dbModel.ts').Kultur | undefined
     try {
@@ -77,13 +86,14 @@ export const buildExceljsWorksheetsForKultur = async ({
       changed: kultur?.changed,
       changed_by: kultur?.changed_by,
     }
-    addWorksheetToExceljsWorkbook({
-      workbook,
+    addSheetToSheets({
+      sheets,
       title: calledFromHigherUp ? `Kultur_${kultur_id}` : 'Kultur',
       data: [newK],
     })
   }
   // 2. Get Zählungen
+  setSectionProgress(1, 'Zählungen werden geladen')
   const zaehlungs =
     (await db
       ?.get<import('../../../../dbModel.ts').Zaehlung>('zaehlung')
@@ -140,14 +150,15 @@ export const buildExceljsWorksheetsForKultur = async ({
     }),
   )
   if (zaehlungen.length) {
-    addWorksheetToExceljsWorkbook({
-      workbook,
+    addSheetToSheets({
+      sheets,
       title:
         calledFromHigherUp ? `Kultur_${kultur_name}_Zaehlungen` : 'Zaehlungen',
       data: zaehlungen,
     })
   }
   // 3. Get Teil-Zählungen
+  setSectionProgress(2, 'Teil-Zählungen werden geladen')
   const teilzaehlungs =
     (await db
       ?.get<import('../../../../dbModel.ts').Teilzaehlung>('teilzaehlung')
@@ -177,8 +188,8 @@ export const buildExceljsWorksheetsForKultur = async ({
     }),
   )
   if (teilzaehlungData.length) {
-    addWorksheetToExceljsWorkbook({
-      workbook,
+    addSheetToSheets({
+      sheets,
       title:
         calledFromHigherUp ?
           `Kultur_${kultur_name}_Teilzaehlungen`
@@ -187,6 +198,7 @@ export const buildExceljsWorksheetsForKultur = async ({
     })
   }
   // 4. Get An-Lieferungen
+  setSectionProgress(3, 'An-Lieferungen werden geladen')
   const anlieferungs =
     (await db
       ?.get<import('../../../../dbModel.ts').Lieferung>('lieferung')
@@ -354,8 +366,8 @@ export const buildExceljsWorksheetsForKultur = async ({
     }),
   )
   if (anlieferungData.length) {
-    addWorksheetToExceljsWorkbook({
-      workbook,
+    addSheetToSheets({
+      sheets,
       title:
         calledFromHigherUp ?
           `Kultur_${kultur_name}_Anlieferungen`
@@ -364,6 +376,7 @@ export const buildExceljsWorksheetsForKultur = async ({
     })
   }
   // 5. Get Aus-Lieferungen
+  setSectionProgress(4, 'Aus-Lieferungen werden geladen')
   let auslieferungs: import('../../../../dbModel.ts').Lieferung[] = []
   try {
     auslieferungs =
@@ -528,8 +541,8 @@ export const buildExceljsWorksheetsForKultur = async ({
     }),
   )
   if (auslieferungen.length) {
-    addWorksheetToExceljsWorkbook({
-      workbook,
+    addSheetToSheets({
+      sheets,
       title:
         calledFromHigherUp ?
           `Kultur_${kultur_name}_Auslieferungen`

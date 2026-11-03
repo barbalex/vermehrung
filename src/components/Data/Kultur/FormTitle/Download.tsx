@@ -2,8 +2,15 @@ import { FaDownload } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import MenuItem from '@mui/material/MenuItem'
 
-import { buildExceljsWorksheetsForKultur } from './buildExceljsWorksheets.ts'
-import { downloadExceljsWorkbook } from '../../../../utils/downloadExceljsWorkbook.ts'
+import type { Sheet } from 'write-excel-file/browser'
+
+import {
+  store,
+  exportProgressAtom,
+  setExportProgress,
+} from '../../../../store/index.ts'
+import { buildSheetsForKultur } from './buildSheets.ts'
+import { downloadSheets } from '../../../../utils/downloadSheets.ts'
 
 export const KulturDownload = ({
   row,
@@ -13,15 +20,19 @@ export const KulturDownload = ({
   asMenu?: boolean
 }) => {
   const onClickDownload = async () => {
-    const { Workbook } = await import('exceljs/dist/exceljs.min.js')
-    const workbook = new Workbook()
-    await buildExceljsWorksheetsForKultur({
-      kultur_id: row?.id ?? '',
-      kultur_name: undefined,
-      workbook,
-      calledFromHigherUp: false,
-    })
-    downloadExceljsWorkbook({ fileName: `Kultur_${row?.id}`, workbook })
+    if (store.get(exportProgressAtom)) return
+    const sheets: Sheet<Blob>[] = []
+    try {
+      await buildSheetsForKultur({
+        kultur_id: row?.id ?? '',
+        kultur_name: undefined,
+        sheets,
+        calledFromHigherUp: false,
+      })
+      await downloadSheets({ fileName: `Kultur_${row?.id}`, sheets })
+    } finally {
+      setExportProgress(null)
+    }
   }
 
   if (asMenu) {

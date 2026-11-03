@@ -1,0 +1,26 @@
+.container {
+  position: absolute;
+  bottom: 10px;
+  /* centered so it does not overlap the notifications bottom left */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  min-width: 280px;
+  max-width: 440px;
+  padding: 8px 12px;
+  border-radius: 4px;
+  background-color: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+
+.message {
+  font-size: 0.8rem;
+  margin-bottom: 6px;
+}
+
+.count {
+  font-size: 0.75rem;
+  color: rgba(0, 0, 0, 0.6);
+  margin-top: 4px;
+  text-align: right;
+}

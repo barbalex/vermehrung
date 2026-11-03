@@ -40,7 +40,6 @@
     "date-fns": "4.4.0",
     "diff": "9.0.0",
     "es-toolkit": "1.53.0",
-    "exceljs": "4.4.0",
     "firebase": "13.1.0",
     "framer-motion": "13.2.0",
     "fuse.js": "7.5.0",
@@ -63,7 +62,8 @@
     "react-window": "2.3.4",
     "recharts": "3.10.1",
     "rxjs": "7.8.2",
-    "uuid": "14.0.3"
+    "uuid": "14.0.3",
+    "write-excel-file": "4.1.1"
   },
   "devDependencies": {
     "@eslint/compat": "2.1.1",

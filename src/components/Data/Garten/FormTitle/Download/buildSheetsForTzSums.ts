@@ -1,19 +1,20 @@
 import { Q } from 'nitromelondb'
-import { store, dbAtom } from '../../../../../store/index.ts'
+import { store, dbAtom, setExportProgress } from '../../../../../store/index.ts'
+import type { Sheet } from 'write-excel-file/browser'
 
-import { addWorksheetToExceljsWorkbook } from '../../../../../utils/addWorksheetToExceljsWorkbook.ts'
+import { addSheetToSheets } from '../../../../../utils/addSheetToSheets.ts'
 import { teilzaehlungsSortByTk } from '../../../../../utils/teilzaehlungsSortByTk.ts'
 
 /**
  * this function cnn be used from higher up
- * that is why it receives a workbook and _can_ receive calledFromHigherUp
+ * that is why it receives sheets and _can_ receive calledFromHigherUp
  */
-export const buildExceljsWorksheetsForTzSums = async ({
+export const buildSheetsForTzSums = async ({
   garten_id,
-  workbook,
+  sheets,
 }: {
   garten_id: string
-  workbook: import('exceljs').Workbook
+  sheets: Sheet<Blob>[]
 }) => {
   const db = store.get(dbAtom)
 
@@ -30,6 +31,7 @@ export const buildExceljsWorksheetsForTzSums = async ({
         .fetch()) ?? []
   } catch {}
   const teilzaehlungsSorted = await teilzaehlungsSortByTk(teilzaehlungs)
+  let teilzaehlungsDone = 0
   const teilzaehlungsData = await Promise.all(
     teilzaehlungsSorted.map(async (z) => {
       let teilkultur
@@ -50,12 +52,18 @@ export const buildExceljsWorksheetsForTzSums = async ({
         bemerkungen: z.bemerkungen,
       }
 
+      teilzaehlungsDone += 1
+      setExportProgress({
+        message: 'Teil-Zählungen werden aufbereitet',
+        done: teilzaehlungsDone,
+        total: teilzaehlungsSorted.length,
+      })
       return newZ
     }),
   )
 
-  addWorksheetToExceljsWorkbook({
-    workbook,
+  addSheetToSheets({
+    sheets,
     title: `teilzahlungen_von_garten_${garten_id}`,
     data: teilzaehlungsData,
   })

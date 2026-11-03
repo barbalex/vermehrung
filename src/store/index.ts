@@ -491,6 +491,20 @@ export const removeAllNotifications = () => {
   store.set(notificationsAtom, [])
 }
 
+// === export progress ===
+export interface ExportProgress {
+  message: string
+  /** completed steps, when the total is known */
+  done?: number
+  total?: number
+}
+
+export const exportProgressAtom = atom<ExportProgress | null>(null)
+
+export const setExportProgress = (progress: ExportProgress | null) => {
+  store.set(exportProgressAtom, progress)
+}
+
 // === queued queries ===
 /**
  * This is a queue of all queries

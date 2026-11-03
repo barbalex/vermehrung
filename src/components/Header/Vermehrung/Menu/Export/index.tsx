@@ -4,9 +4,16 @@ import MenuItem from '@mui/material/MenuItem'
 import TextField from '@mui/material/TextField'
 import { FaChevronRight } from 'react-icons/fa'
 
-import { buildExceljsWorksheetsForLieferungenOfYear } from './buildExceljsWorksheetsForLieferungenOfYear.ts'
-import { buildExceljsWorksheetsForKulturBedarfsplanung } from './buildExceljsWorksheetsForKulturBedarfsplanung.ts'
-import { downloadExceljsWorkbook } from '../../../../../utils/downloadExceljsWorkbook.ts'
+import type { Sheet } from 'write-excel-file/browser'
+
+import {
+  store,
+  exportProgressAtom,
+  setExportProgress,
+} from '../../../../../store/index.ts'
+import { buildSheetsForLieferungenOfYear } from './buildSheetsForLieferungenOfYear.ts'
+import { buildSheetsForKulturBedarfsplanung } from './buildSheetsForKulturBedarfsplanung.ts'
+import { downloadSheets } from '../../../../../utils/downloadSheets.ts'
 
 import menuStyles from '../Menu.module.css'
 import styles from './index.module.css'
@@ -24,22 +31,29 @@ export const HeaderExportMenu = ({
   const onClickLieferungenDesJahrs = (event: { target: { value: string } }) => {
     const year = event.target.value
     if (year.length === 4) {
-      void buildExceljsWorksheetsForLieferungenOfYear({ year: Number(year) })
+      if (store.get(exportProgressAtom)) return
+      void buildSheetsForLieferungenOfYear({ year: Number(year) }).finally(() =>
+        setExportProgress(null),
+      )
       setAnchorEl(null)
       setGrandParentAnchorEl(null)
     }
   }
 
   const onClickKulturenFuerBedarfsplanung = async () => {
-    const { Workbook } = await import('exceljs/dist/exceljs.min.js')
-    const workbook = new Workbook()
-    await buildExceljsWorksheetsForKulturBedarfsplanung({
-      workbook,
-    })
-    downloadExceljsWorkbook({
-      fileName: `kulturenFuerBedarfsplanung`,
-      workbook,
-    })
+    if (store.get(exportProgressAtom)) return
+    const sheets: Sheet<Blob>[] = []
+    try {
+      await buildSheetsForKulturBedarfsplanung({
+        sheets,
+      })
+      await downloadSheets({
+        fileName: `kulturenFuerBedarfsplanung`,
+        sheets,
+      })
+    } finally {
+      setExportProgress(null)
+    }
     setAnchorEl(null)
     setGrandParentAnchorEl(null)
   }

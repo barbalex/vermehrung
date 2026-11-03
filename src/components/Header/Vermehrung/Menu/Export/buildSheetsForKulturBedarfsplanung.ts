@@ -1,20 +1,21 @@
 import { DateTime } from 'luxon'
-import { store, dbAtom } from '../../../../../store/index.ts'
+import { store, dbAtom, setExportProgress } from '../../../../../store/index.ts'
 import { sumBy } from 'es-toolkit'
 import { Q } from 'nitromelondb'
 import { first as first$ } from 'rxjs/operators'
+import type { Sheet } from 'write-excel-file/browser'
 
-import { addWorksheetToExceljsWorkbook } from '../../../../../utils/addWorksheetToExceljsWorkbook.ts'
+import { addSheetToSheets } from '../../../../../utils/addSheetToSheets.ts'
 import { exists } from '../../../../../utils/exists.ts'
 import { bedarfSort } from '../../../../../utils/bedarfSort.ts'
 import { kultursSortedFromKulturs } from '../../../../../utils/kultursSortedFromKulturs.ts'
 import { zaehlungSort } from '../../../../../utils/zaehlungSort.ts'
 import { lieferungSort } from '../../../../../utils/lieferungSort.ts'
 
-export const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
-  workbook,
+export const buildSheetsForKulturBedarfsplanung = async ({
+  sheets,
 }: {
-  workbook: import('exceljs').Workbook
+  sheets: Sheet<Blob>[]
 }) => {
   const db = store.get(dbAtom)
 
@@ -32,6 +33,7 @@ export const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
         .fetch()) ?? []
   } catch {}
   const kultursSorted = await kultursSortedFromKulturs(kulturs)
+  let kultursDone = 0
   const kultursData = await Promise.all(
     kultursSorted.map(async (kultur) => {
       let kulturLabel
@@ -436,14 +438,21 @@ export const buildExceljsWorksheetsForKulturBedarfsplanung = async ({
         neues_material_aktuelles_jahr,
       }
 
+      kultursDone += 1
+      setExportProgress({
+        message: 'Kulturen werden für die Bedarfsplanung aufbereitet',
+        done: kultursDone,
+        total: kultursSorted.length,
+      })
+
       return row
     }),
   )
 
   // console.log('kultursData:', kultursData)
 
-  addWorksheetToExceljsWorkbook({
-    workbook,
+  addSheetToSheets({
+    sheets,
     title: `Kulturen für Bedarfsplanung`,
     data: kultursData,
   })

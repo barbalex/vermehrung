@@ -1,26 +1,28 @@
 import { Q } from 'nitromelondb'
-import { store, dbAtom } from '../../../../../store/index.ts'
+import { store, dbAtom, setExportProgress } from '../../../../../store/index.ts'
 import { first as first$ } from 'rxjs/operators'
+import type { Sheet } from 'write-excel-file/browser'
 
-import { addWorksheetToExceljsWorkbook } from '../../../../../utils/addWorksheetToExceljsWorkbook.ts'
-import { buildExceljsWorksheetsForKultur } from '../../../Kultur/FormTitle/buildExceljsWorksheets.ts'
+import { addSheetToSheets } from '../../../../../utils/addSheetToSheets.ts'
+import { buildSheetsForKultur } from '../../../Kultur/FormTitle/buildSheets.ts'
 import { removeMetadataFromDataset } from '../../../../../utils/removeMetadataFromDataset.ts'
 import { kultursSortedFromKulturs } from '../../../../../utils/kultursSortedFromKulturs.ts'
 
 /**
  * this function can be used from higher up
- * that is why it receives a workbook and _can_ receive calledFromHigherUp
+ * that is why it receives sheets and _can_ receive calledFromHigherUp
  */
-export const buildExceljsWorksheetsForDaten = async ({
+export const buildSheetsForDaten = async ({
   garten_id,
-  workbook,
+  sheets,
   calledFromHigherUp,
 }: {
   garten_id: string
-  workbook: import('exceljs').Workbook
+  sheets: Sheet<Blob>[]
   calledFromHigherUp: boolean
 }) => {
   const db = store.get(dbAtom)
+  setExportProgress({ message: 'Garten wird geladen' })
 
   // 1. Get Garten
   let garten: import('../../../../../dbModel.ts').Garten | undefined
@@ -55,8 +57,8 @@ export const buildExceljsWorksheetsForDaten = async ({
     changed: garten?.changed,
     changed_by: garten?.changed_by,
   }
-  addWorksheetToExceljsWorkbook({
-    workbook,
+  addSheetToSheets({
+    sheets,
     title: calledFromHigherUp ? `Garten_${garten_id}` : 'Garten',
     data: [newGarten],
   })
@@ -74,6 +76,7 @@ export const buildExceljsWorksheetsForDaten = async ({
         .fetch()) ?? []
   } catch {}
   const kultursOfGartenSorted = await kultursSortedFromKulturs(kultursOfGarten)
+  setExportProgress({ message: 'Kulturen des Gartens werden aufbereitet' })
   const kulturData = await Promise.all(
     kultursOfGartenSorted.map(async (kultur) => {
       let art
@@ -129,24 +132,38 @@ export const buildExceljsWorksheetsForDaten = async ({
     }),
   )
   if (kulturData.length) {
-    addWorksheetToExceljsWorkbook({
-      workbook,
+    addSheetToSheets({
+      sheets,
       title: calledFromHigherUp ? `Garten_${garten_id}_Kulturen` : 'Kulturen',
       data: kulturData,
     })
-    // 3. for all kulturen, call Kultur/buildExceljsWorksheets
+    // 3. for all kulturen, call Kultur/buildSheets
     const myKulturIds = kulturData.map((k) => k.id)
     // need to pass index
     // as explained in https://stackoverflow.com/a/34349073/712005
     // because excel limits length of names and uuid is too long
-    for (const [index, kultur_id] of [myKulturIds].entries()) {
-      await buildExceljsWorksheetsForKultur({
-        kultur_id: kultur_id[0],
-        kultur_name: index + 1,
-        workbook,
-        calledFromHigherUp: true,
-      })
-    }
+    // build the sheets per kultur concurrently, each into own array
+    // so the sheet order follows the kulturen when appending
+    let kulturenDone = 0
+    const kulturSheetsArrays = await Promise.all(
+      myKulturIds.map(async (kultur_id, index) => {
+        const kulturSheets: Sheet<Blob>[] = []
+        await buildSheetsForKultur({
+          kultur_id,
+          kultur_name: index + 1,
+          sheets: kulturSheets,
+          calledFromHigherUp: true,
+        })
+        kulturenDone += 1
+        setExportProgress({
+          message: 'Kulturen werden exportiert',
+          done: kulturenDone,
+          total: myKulturIds.length,
+        })
+        return kulturSheets
+      }),
+    )
+    sheets.push(...kulturSheetsArrays.flat())
   }
   return
 }
