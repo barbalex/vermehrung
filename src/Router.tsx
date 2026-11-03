@@ -8,6 +8,8 @@ import {
 } from 'react-router'
 import { RouterProvider } from 'react-router/dom'
 
+import { Layout } from './components/Layout.tsx'
+
 const Home = lazy(async () => ({
   default: (await import('./routes/index.tsx')).Home,
 }))
@@ -16,9 +18,6 @@ const VermehrungIndex = lazy(async () => ({
 }))
 const FourOhFour = lazy(async () => ({
   default: (await import('./routes/404.tsx')).FourOhFour,
-}))
-const Layout = lazy(async () => ({
-  default: (await import('./components/Layout.tsx')).Layout,
 }))
 const Documentation = lazy(async () => ({
   default: (await import('./components/Documentation/index.tsx')).Documentation,

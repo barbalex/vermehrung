@@ -3,22 +3,37 @@
   <head>
     <meta charset="UTF-8" />
     <script>
-      // Runs during HTML parse, before any JS bundle. The hero image on
-      // / is the LCP element but is only requested after React has
-      // mounted - preload it early and with high priority. This file is
-      // the shell for every route, so only preload when actually on /.
-      // The placeholder in link.href is replaced at build time by the
-      // heroPreloadUrl plugin: Vite does not rewrite asset URLs inside
-      // inline scripts.
+      // Runs during HTML parse, before any JS bundle. The home page's
+      // critical requests (hero image, placeholder, route chunks) are
+      // only discovered after React has mounted - preload them early.
+      // This file is the shell for every route, so only preload when
+      // actually on /. The placeholders are replaced at build time by
+      // the homeCriticalPreloads plugin: Vite does not rewrite asset
+      // URLs inside inline scripts.
       ;(() => {
         if (window.location.pathname !== '/') return
-        const link = document.createElement('link')
-        link.rel = 'preload'
-        link.as = 'image'
-        link.type = 'image/webp'
-        link.href = '__HERO_PRELOAD_URL__'
-        link.setAttribute('fetchpriority', 'high')
-        document.head.appendChild(link)
+        const addLink = (attrs) => {
+          const link = document.createElement('link')
+          for (const [key, value] of Object.entries(attrs))
+            link.setAttribute(key, value)
+          document.head.appendChild(link)
+        }
+        // the full image is the LCP element
+        addLink({
+          rel: 'preload',
+          as: 'image',
+          type: 'image/webp',
+          href: '__HERO_URL__',
+          fetchpriority: 'high',
+        })
+        addLink({
+          rel: 'preload',
+          as: 'image',
+          type: 'image/webp',
+          href: '__PLACEHOLDER_URL__',
+        })
+        for (const href of __MODULE_URLS__)
+          addLink({ rel: 'modulepreload', crossorigin: '', href })
       })()
     </script>
     <link

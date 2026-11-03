@@ -87,30 +87,72 @@ const sqliteWorkerDepUrl = (): Plugin => ({
   },
 })
 
-// index.html preloads the hero image on / from an inline script, but
-// Vite only rewrites asset URLs in html attributes, not inside inline
-// scripts. Replace the placeholder with the built (content-hashed) URL;
-// in dev, with the source path the dev server serves.
-const heroPreloadUrl = (): Plugin => ({
-  name: 'hero-preload-url',
+// index.html preloads the home page's critical requests (hero image,
+// placeholder and the home route's chunk graph) from an inline script,
+// but Vite only rewrites asset URLs in html attributes, not inside
+// inline scripts. Replace the placeholders with the built
+// (content-hashed) URLs; in dev, with the source paths the dev server
+// serves.
+const homeCriticalPreloads = (): Plugin => ({
+  name: 'home-critical-preloads',
   transformIndexHtml: {
     order: 'post',
     handler(html, ctx) {
-      const builtUrl =
-        ctx.bundle ?
-          Object.keys(ctx.bundle).find(
-            (file) =>
-              file.startsWith('assets/puls_vulg_2500') &&
-              file.endsWith('.webp'),
-          )
-        : undefined
-      if (ctx.bundle && !builtUrl) {
-        throw new Error('puls_vulg_2500.webp missing from the build bundle')
+      if (!ctx.bundle) {
+        return html
+          .replaceAll('__HERO_URL__', '/src/images/puls_vulg_2500.webp')
+          .replaceAll('__PLACEHOLDER_URL__', '/src/images/puls_vulg_500.webp')
+          .replaceAll('__MODULE_URLS__', '[]')
       }
-      return html.replaceAll(
-        '__HERO_PRELOAD_URL__',
-        builtUrl ? `/${builtUrl}` : '/src/images/puls_vulg_2500.webp',
+      const bundle = ctx.bundle
+      const assetUrl = (
+        predicate: (file: string) => boolean,
+        label: string,
+      ) => {
+        const file = Object.keys(bundle).find(predicate)
+        if (!file) throw new Error(`${label} missing from the build bundle`)
+        return `/${file}`
+      }
+      const heroUrl = assetUrl(
+        (file) =>
+          file.startsWith('assets/puls_vulg_2500-') && file.endsWith('.webp'),
+        'puls_vulg_2500.webp',
       )
+      const placeholderUrl = assetUrl(
+        (file) =>
+          file.startsWith('assets/puls_vulg_500-') && file.endsWith('.webp'),
+        'puls_vulg_500.webp',
+      )
+      // modulepreload the home route chunk and its static import closure,
+      // minus the chunks index.html already references
+      const homeChunk = Object.values(bundle).find(
+        (file) =>
+          file.type === 'chunk' &&
+          file.facadeModuleId
+            ?.replaceAll('\\', '/')
+            .endsWith('src/routes/index.tsx'),
+      )
+      if (!homeChunk || homeChunk.type !== 'chunk') {
+        throw new Error('home route chunk missing from the build bundle')
+      }
+      const referenced = new Set(
+        [...html.matchAll(/\/(assets\/[^\s"']+\.js)/g)].map((m) => m[1]),
+      )
+      const moduleUrls = new Set<string>()
+      const collect = (fileName: string) => {
+        const name =
+          fileName.startsWith('assets/') ? fileName : `assets/${fileName}`
+        const chunk = bundle[name]
+        if (chunk?.type !== 'chunk' || referenced.has(name)) return
+        referenced.add(name)
+        moduleUrls.add(`/${name}`)
+        chunk.imports.forEach(collect)
+      }
+      collect(homeChunk.fileName)
+      return html
+        .replaceAll('__HERO_URL__', heroUrl)
+        .replaceAll('__PLACEHOLDER_URL__', placeholderUrl)
+        .replaceAll('__MODULE_URLS__', JSON.stringify([...moduleUrls]))
     },
   },
 })
@@ -136,7 +178,7 @@ export default defineConfig({
     sqliteWebDispatcher(),
     sqliteWasmStub(),
     sqliteWorkerDepUrl(),
-    heroPreloadUrl(),
+    homeCriticalPreloads(),
     svgrPlugin({
       svgrOptions: {
         icon: true,
