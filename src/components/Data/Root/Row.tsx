@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect } from 'react'
 import { atom, useAtomValue } from 'jotai'
 
 import {
@@ -28,10 +28,7 @@ export const RootRow = ({
 }) => {
   const db = useAtomValue(dbAtom)
   const apFilter = useAtomValue(apFilterAtom)
-  const filterAtom = useMemo(
-    () => filterTableAtoms[row?.table ?? ''] ?? atom({}),
-    [row?.table],
-  )
+  const filterAtom = filterTableAtoms[row?.table ?? ''] ?? atom({})
   const filter = useAtomValue(filterAtom)
 
   // query needs to be observable

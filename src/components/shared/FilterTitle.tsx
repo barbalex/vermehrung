@@ -1,4 +1,3 @@
-import { useMemo } from 'react'
 import { useAtomValue } from 'jotai'
 import {
   MdDeleteSweep as DeleteFilterIcon,
@@ -26,10 +25,7 @@ export const FilterTitle = ({
   totalCount: number | null
   filteredCount: number | null
 }) => {
-  const existsTableFilterAtom = useMemo(
-    () => tableIsFilteredAtom(table),
-    [table],
-  )
+  const existsTableFilterAtom = tableIsFilteredAtom(table)
   const existsTableFilter = useAtomValue(existsTableFilterAtom)
   const filtered = useAtomValue(filterFilteredAtom)
 

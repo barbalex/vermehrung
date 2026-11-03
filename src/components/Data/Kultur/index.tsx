@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect } from 'react'
 import { useAtomValue } from 'jotai'
 import { Allotment } from 'allotment'
 import { of as $of } from 'rxjs'
@@ -36,17 +36,13 @@ export const Kultur = ({
   const db = useAtomValue(dbAtom)
   const initialDataQueried = useAtomValue(initialDataQueriedAtom)
 
-  // removing useMemo causes: Maximum update depth exceeded
-  const observable = useMemo(
-    () =>
-      showFilter ? $of(undefined)
-      : initialDataQueried || !online ?
-        db
-          ?.get<import('../../../dbModel.ts').Kultur>('kultur')
-          .findAndObserve(id as string)
-      : $of(undefined),
-    [db, id, initialDataQueried, online, showFilter],
-  )
+  const observable =
+    showFilter ? $of(undefined)
+    : initialDataQueried || !online ?
+      db
+        ?.get<import('../../../dbModel.ts').Kultur>('kultur')
+        .findAndObserve(id as string)
+    : $of(undefined)
   const observedRow = useObservable(
     observable as unknown as
       | import('rxjs').Observable<

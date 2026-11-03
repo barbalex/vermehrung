@@ -1,4 +1,3 @@
-import { useMemo } from 'react'
 import { useAtomValue } from 'jotai'
 import { FaHistory } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
@@ -36,14 +35,10 @@ export const HistoryButton = ({
   const db = useAtomValue(dbAtom)
   const initialDataQueried = useAtomValue(initialDataQueriedAtom)
 
-  // removing useMemo causes: Maximum update depth exceeded
-  const observable = useMemo(
-    () =>
-      id && initialDataQueried && db ?
-        (db.get(table).findAndObserve(id) as unknown as Observable<GenericRow>)
-      : $of(null),
-    [db, id, initialDataQueried, table],
-  )
+  const observable =
+    id && initialDataQueried && db ?
+      (db.get(table).findAndObserve(id) as unknown as Observable<GenericRow>)
+    : $of(null)
   const row = useObservable(observable)
 
   const existMultipleRevisions =

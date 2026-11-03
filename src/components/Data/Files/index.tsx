@@ -43,7 +43,12 @@ export const Files = ({
 
   const [lightboxIsOpen, setLightboxIsOpen] = useState(false)
 
-  // removing useMemo causes: Maximum update depth exceeded
+  // this useMemo is load-bearing: react compiler bails out of this whole
+  // file (it cannot lower the template-literal computed key on newObject
+  // in onFileUploadSuccess below), so it is the only memoization here.
+  // without it, useObservable would receive a new observable on every
+  // render and resubscribe in an endless loop
+  // (Maximum update depth exceeded)
   const observable = useMemo(
     () =>
       parent?.files ?

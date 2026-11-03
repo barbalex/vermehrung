@@ -1,6 +1,5 @@
 import {
   Children,
-  useCallback,
   useEffect,
   useLayoutEffect,
   useRef,
@@ -40,7 +39,7 @@ export const HistorySlider = ({
 
   const slideCount = Children.count(children)
 
-  const goTo = useCallback((index: number) => {
+  const goTo = (index: number) => {
     const slideCount = trackRef.current?.children.length ?? 0
     if (index < 0 || index >= slideCount) return
     activeIndexRef.current = index
@@ -55,7 +54,7 @@ export const HistorySlider = ({
       track.scrollTo({ left, behavior: 'smooth' })
     }
     onSlideChangeRef.current?.(index)
-  }, [])
+  }
 
   useLayoutEffect(() => {
     if (initialIndex <= 0) return
