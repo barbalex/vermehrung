@@ -106,7 +106,7 @@ export const Home = () => (
                   Sie haben einen Garten und möchten bedrohte Pflanzen
                   vermehren? Fragen Sie&nbsp;
                   <a
-                    href="//toposmm.ch/index.php?option=com_content&view=article&id=21:vegapzh1&catid=8&Itemid=115"
+                    href="https://toposmm.ch/dienstleistungen/artenforderung/apflora-zwischenvermehrung"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
