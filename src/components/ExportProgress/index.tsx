@@ -1,5 +1,6 @@
 import { useAtomValue } from 'jotai'
 import LinearProgress from '@mui/material/LinearProgress'
+import Paper from '@mui/material/Paper'
 
 import { exportProgressAtom } from '../../store/index.ts'
 
@@ -13,7 +14,10 @@ export const ExportProgress = () => {
   const hasTotal = !!progress.total
 
   return (
-    <div className={styles.container}>
+    <Paper
+      className={styles.container}
+      elevation={4}
+    >
       <div className={styles.message}>{progress.message}</div>
       {hasTotal ?
         <LinearProgress
@@ -26,6 +30,6 @@ export const ExportProgress = () => {
           {progress.done ?? 0} / {progress.total}
         </div>
       )}
-    </div>
+    </Paper>
   )
 }

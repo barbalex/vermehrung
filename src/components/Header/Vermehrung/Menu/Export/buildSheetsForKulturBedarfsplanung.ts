@@ -18,6 +18,7 @@ export const buildSheetsForKulturBedarfsplanung = async ({
   sheets: Sheet<Blob>[]
 }) => {
   const db = store.get(dbAtom)
+  setExportProgress({ message: 'Kulturen werden geladen' })
 
   let kulturs: import('../../../../../dbModel.ts').Kultur[] = []
   try {
@@ -34,6 +35,11 @@ export const buildSheetsForKulturBedarfsplanung = async ({
   } catch {}
   const kultursSorted = await kultursSortedFromKulturs(kulturs)
   let kultursDone = 0
+  setExportProgress({
+    message: 'Kulturen werden für die Bedarfsplanung aufbereitet',
+    done: 0,
+    total: kultursSorted.length,
+  })
   const kultursData = await Promise.all(
     kultursSorted.map(async (kultur) => {
       let kulturLabel

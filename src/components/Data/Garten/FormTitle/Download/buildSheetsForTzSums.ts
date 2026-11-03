@@ -17,6 +17,7 @@ export const buildSheetsForTzSums = async ({
   sheets: Sheet<Blob>[]
 }) => {
   const db = store.get(dbAtom)
+  setExportProgress({ message: 'Teil-Zählungen werden geladen' })
 
   let teilzaehlungs: import('../../../../../dbModel.ts').Teilzaehlung[] = []
   try {
@@ -32,6 +33,11 @@ export const buildSheetsForTzSums = async ({
   } catch {}
   const teilzaehlungsSorted = await teilzaehlungsSortByTk(teilzaehlungs)
   let teilzaehlungsDone = 0
+  setExportProgress({
+    message: 'Teil-Zählungen werden aufbereitet',
+    done: 0,
+    total: teilzaehlungsSorted.length,
+  })
   const teilzaehlungsData = await Promise.all(
     teilzaehlungsSorted.map(async (z) => {
       let teilkultur
