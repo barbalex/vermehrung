@@ -3,22 +3,37 @@
   <head>
     <meta charset="UTF-8" />
     <script>
-      // Runs during HTML parse, before any JS bundle. The hero image on
-      // / is the LCP element but is only requested after React has
-      // mounted - preload it early and with high priority. This file is
-      // the shell for every route, so only preload when actually on /.
-      // The placeholder in link.href is replaced at build time by the
-      // heroPreloadUrl plugin: Vite does not rewrite asset URLs inside
-      // inline scripts.
+      // Runs during HTML parse, before any JS bundle. The home page's
+      // critical requests (hero image, placeholder, route chunks) are
+      // only discovered after React has mounted - preload them early.
+      // This file is the shell for every route, so only preload when
+      // actually on /. The placeholders are replaced at build time by
+      // the homeCriticalPreloads plugin: Vite does not rewrite asset
+      // URLs inside inline scripts.
       ;(() => {
         if (window.location.pathname !== '/') return
-        const link = document.createElement('link')
-        link.rel = 'preload'
-        link.as = 'image'
-        link.type = 'image/webp'
-        link.href = '/assets/puls_vulg_2500-D9Yrew4x.webp'
-        link.setAttribute('fetchpriority', 'high')
-        document.head.appendChild(link)
+        const addLink = (attrs) => {
+          const link = document.createElement('link')
+          for (const [key, value] of Object.entries(attrs))
+            link.setAttribute(key, value)
+          document.head.appendChild(link)
+        }
+        // the full image is the LCP element
+        addLink({
+          rel: 'preload',
+          as: 'image',
+          type: 'image/webp',
+          href: '/assets/puls_vulg_2500-D9Yrew4x.webp',
+          fetchpriority: 'high',
+        })
+        addLink({
+          rel: 'preload',
+          as: 'image',
+          type: 'image/webp',
+          href: '/assets/puls_vulg_500-DDVuhdG7.webp',
+        })
+        for (const href of ["/assets/routes-CCw1R6S-.js","/assets/ProgressiveImg-DrOtY1Rl.js","/assets/puls_vulg_500-tql3nINM.js"])
+          addLink({ rel: 'modulepreload', crossorigin: '', href })
       })()
     </script>
     <link
@@ -93,38 +108,64 @@
           ?.setAttribute('content', isDark ? '#121212' : '#2e0c58')
       })()
     </script>
-    <script type="module" crossorigin src="/assets/index-y10mwkm0.js"></script>
+    <script type="module" crossorigin src="/assets/index-BIVyU22N.js"></script>
     <link rel="modulepreload" crossorigin href="/assets/rolldown-runtime-BCiCTKAo.js">
-    <link rel="modulepreload" crossorigin href="/assets/vendor-mui-C26dYbaC.js">
-    <link rel="modulepreload" crossorigin href="/assets/vendor-react-BHFujaUC.js">
+    <link rel="modulepreload" crossorigin href="/assets/vendor-mui-DLA7hGkU.js">
+    <link rel="modulepreload" crossorigin href="/assets/vendor-react-Bjr1AQeo.js">
     <link rel="modulepreload" crossorigin href="/assets/store-BrZxldW3.js">
-    <link rel="modulepreload" crossorigin href="/assets/useAtomValue-CCelnGbK.js">
+    <link rel="modulepreload" crossorigin href="/assets/useAtomValue-B9Ob-IvJ.js">
     <link rel="modulepreload" crossorigin href="/assets/exists-CWJw3kuy.js">
+    <link rel="modulepreload" crossorigin href="/assets/vendor-watermelondb-BXipaFN3.js">
+    <link rel="modulepreload" crossorigin href="/assets/tableFilter-Bw-7z9In.js">
+    <link rel="modulepreload" crossorigin href="/assets/of-Bvc6pnID.js">
+    <link rel="modulepreload" crossorigin href="/assets/debounce-CoJgRzLL.js">
+    <link rel="modulepreload" crossorigin href="/assets/personFullname-CoGI2O5E.js">
+    <link rel="modulepreload" crossorigin href="/assets/personLabelFromPerson-DQoGSA6n.js">
+    <link rel="modulepreload" crossorigin href="/assets/teilkulturLabelFromTeilkultur-BiF1DIMv.js">
+    <link rel="modulepreload" crossorigin href="/assets/luxon-CnRqhQiE.js">
+    <link rel="modulepreload" crossorigin href="/assets/zaehlungLabelFromZaehlung-BLxunlIq.js">
+    <link rel="modulepreload" crossorigin href="/assets/herkunftLabelFromHerkunft-B504komW.js">
+    <link rel="modulepreload" crossorigin href="/assets/useRowLabel-D0HpHHO_.js">
     <link rel="modulepreload" crossorigin href="/assets/first-DHoCsMea.js">
-    <link rel="modulepreload" crossorigin href="/assets/vendor-watermelondb-Bw5PYfAn.js">
     <link rel="modulepreload" crossorigin href="/assets/md5-B-OSIrXV.js">
     <link rel="modulepreload" crossorigin href="/assets/toPgArray-yBn_wJVf.js">
     <link rel="modulepreload" crossorigin href="/assets/revAggregation-CYP0Wf2a.js">
-    <link rel="modulepreload" crossorigin href="/assets/schema-Bxi5lGPt.js">
-    <link rel="modulepreload" crossorigin href="/assets/luxon-CnRqhQiE.js">
-    <link rel="modulepreload" crossorigin href="/assets/personFullname-CoGI2O5E.js">
-    <link rel="modulepreload" crossorigin href="/assets/personLabelFromPerson-DQoGSA6n.js">
+    <link rel="modulepreload" crossorigin href="/assets/schema-CqKzecbN.js">
     <link rel="modulepreload" crossorigin href="/assets/gartenLabelFromGarten-D0nX_0C2.js">
     <link rel="modulepreload" crossorigin href="/assets/bedarfLabelFromBedarf-lbmvqqlx.js">
     <link rel="modulepreload" crossorigin href="/assets/lieferungLabelFromLieferung-wosTF3ok.js">
-    <link rel="modulepreload" crossorigin href="/assets/teilkulturLabelFromTeilkultur-BiF1DIMv.js">
-    <link rel="modulepreload" crossorigin href="/assets/zaehlungLabelFromZaehlung-BLxunlIq.js">
     <link rel="modulepreload" crossorigin href="/assets/constants-BHu7lkmv.js">
     <link rel="modulepreload" crossorigin href="/assets/fetchWithTimeout-DH6tjHAH.js">
     <link rel="modulepreload" crossorigin href="/assets/deleteAccount-D-odIp02.js">
-    <link rel="modulepreload" crossorigin href="/assets/migrations-D6xHowuX.js">
-    <link rel="modulepreload" crossorigin href="/assets/initiateDb-BH6-enxc.js">
-    <link rel="modulepreload" crossorigin href="/assets/floating-ui.dom-DfnWUsYb.js">
-    <link rel="modulepreload" crossorigin href="/assets/index.es-CR6uu1QS.js">
+    <link rel="modulepreload" crossorigin href="/assets/migrations-CREEGPD4.js">
+    <link rel="modulepreload" crossorigin href="/assets/initiateDb-BCQCRL44.js">
+    <link rel="modulepreload" crossorigin href="/assets/useStateManager-7e1e8489.esm-Cszq3jCZ.js">
+    <link rel="modulepreload" crossorigin href="/assets/index.es-BCzna60j.js">
+    <link rel="modulepreload" crossorigin href="/assets/sumBy-DjWpnpCi.js">
     <link rel="modulepreload" crossorigin href="/assets/vendor-firebase-BZPdVgws.js">
-    <link rel="modulepreload" crossorigin href="/assets/syncPoller-CUHpoXdM.js">
-    <link rel="modulepreload" crossorigin href="/assets/package-CgndoTGI.js">
-    <link rel="stylesheet" crossorigin href="/assets/index-CZdF4nU9.css">
+    <link rel="modulepreload" crossorigin href="/assets/syncPoller-DiG3F7Ps.js">
+    <link rel="modulepreload" crossorigin href="/assets/ErrorBoundary.module-BK5QB6RG.js">
+    <link rel="modulepreload" crossorigin href="/assets/ErrorBoundary-C73w39VT.js">
+    <link rel="modulepreload" crossorigin href="/assets/iconBase-B3abVN7k.js">
+    <link rel="modulepreload" crossorigin href="/assets/fa-DQsGGngQ.js">
+    <link rel="modulepreload" crossorigin href="/assets/useResizeDetector-BKLR0zqR.js">
+    <link rel="modulepreload" crossorigin href="/assets/md-D5Bkkg-F.js">
+    <link rel="modulepreload" crossorigin href="/assets/logout-C1oGtAGK.js">
+    <link rel="modulepreload" crossorigin href="/assets/downloadSheets-B8drr3wk.js">
+    <link rel="modulepreload" crossorigin href="/assets/lieferungSort-BsJb_h9G.js">
+    <link rel="modulepreload" crossorigin href="/assets/bedarfSort-CfknRuSV.js">
+    <link rel="modulepreload" crossorigin href="/assets/kultursSortedFromKulturs-B9SsvCbq.js">
+    <link rel="modulepreload" crossorigin href="/assets/zaehlungSort-BsJb_h9G.js">
+    <link rel="modulepreload" crossorigin href="/assets/Menu-DhpE8RzH.js">
+    <link rel="modulepreload" crossorigin href="/assets/react-select-async.esm-C_qcRPAx.js">
+    <link rel="modulepreload" crossorigin href="/assets/gartensSortedFromGartens-DF-3m6Gh.js">
+    <link rel="modulepreload" crossorigin href="/assets/sammlungsSortedFromSammlungs-D4IE31KY.js">
+    <link rel="modulepreload" crossorigin href="/assets/artsSortedFromArts-CF2lXle-.js">
+    <link rel="modulepreload" crossorigin href="/assets/herkunftSort-mcU_SRCH.js">
+    <link rel="modulepreload" crossorigin href="/assets/personSort-BsGv6jO0.js">
+    <link rel="stylesheet" crossorigin href="/assets/useRowLabel-DRTyTuJ9.css">
+    <link rel="stylesheet" crossorigin href="/assets/ErrorBoundary-BmS1UkJa.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-CMZNR6_U.css">
   <link rel="manifest" href="/manifest.webmanifest"></head>
   <body>
     <div id="root"></div>
