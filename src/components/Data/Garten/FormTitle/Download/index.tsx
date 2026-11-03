@@ -24,6 +24,7 @@ export const GartenDownload = ({
   gartenId: string | undefined
 }) => {
   const onClickData = async () => {
+    setAnchorEl(null)
     if (store.get(exportProgressAtom)) return
     const sheets: Sheet<Blob>[] = []
     try {
@@ -39,10 +40,10 @@ export const GartenDownload = ({
     } finally {
       setExportProgress(null)
     }
-    setAnchorEl(null)
   }
 
   const onClickTzSums = async () => {
+    setAnchorEl(null)
     if (store.get(exportProgressAtom)) return
     const sheets: Sheet<Blob>[] = []
     try {
@@ -57,7 +58,6 @@ export const GartenDownload = ({
     } finally {
       setExportProgress(null)
     }
-    setAnchorEl(null)
   }
 
   const [anchorEl, setAnchorEl] = useState<HTMLElement | undefined | null>(null)

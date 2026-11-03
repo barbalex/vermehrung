@@ -42,6 +42,9 @@ export const HeaderExportMenu = ({
 
   const onClickKulturenFuerBedarfsplanung = async () => {
     if (store.get(exportProgressAtom)) return
+    setAnchorEl(null)
+    setGrandParentAnchorEl(null)
+    if (store.get(exportProgressAtom)) return
     const sheets: Sheet<Blob>[] = []
     try {
       await buildSheetsForKulturBedarfsplanung({
@@ -54,8 +57,6 @@ export const HeaderExportMenu = ({
     } finally {
       setExportProgress(null)
     }
-    setAnchorEl(null)
-    setGrandParentAnchorEl(null)
   }
 
   const onClose = () => setAnchorEl(null)
