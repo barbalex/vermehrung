@@ -140,7 +140,8 @@ const CrumbItem = ({
           underline="hover"
         >
           {crumb.label}
-        </Link>}
+        </Link>
+      }
     </span>
   )
 }
@@ -229,9 +230,7 @@ export const Breadcrumbs = () => {
       setExitingCrumbs((prev) => [...prev, ...removed])
       for (const crumb of removed) {
         setTimeout(() => {
-          setExitingCrumbs((prev) =>
-            prev.filter((c) => c.key !== crumb.key),
-          )
+          setExitingCrumbs((prev) => prev.filter((c) => c.key !== crumb.key))
         }, ANIM_DURATION)
       }
     }
