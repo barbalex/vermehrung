@@ -2,9 +2,9 @@ import { useState } from 'react'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
-import { motion, useAnimation } from 'framer-motion'
 
 import { Pflanzen } from './Pflanzen/index.tsx'
+import { Collapsible } from '../../../../shared/Collapsible.tsx'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.tsx'
 import { constants } from '../../../../../utils/constants.ts'
 
@@ -16,8 +16,6 @@ export const Timeline = ({
   artId: string | null | undefined
 }) => {
   const [open, setOpen] = useState(false)
-
-  const anim = useAnimation()
 
   const openDocs = (e: {
     target: { name?: string; value: unknown }
@@ -33,7 +31,7 @@ export const Timeline = ({
     }
     window.open(url)
   }
-  const onClickToggle = async (e: {
+  const onClickToggle = (e: {
     target: { name?: string; value: unknown }
     currentTarget?: HTMLElement
     preventDefault?: () => void
@@ -41,18 +39,7 @@ export const Timeline = ({
     key?: string
   }) => {
     e.stopPropagation?.()
-    if (open) {
-      const was = open
-      await anim.start({ opacity: 0 })
-      await anim.start({ height: 0 })
-      setOpen(!was)
-    } else {
-      setOpen(!open)
-      setTimeout(async () => {
-        await anim.start({ height: 'auto' })
-        await anim.start({ opacity: 1 })
-      })
-    }
+    setOpen(!open)
   }
 
   return (
@@ -86,17 +73,12 @@ export const Timeline = ({
           </IconButton>
         </div>
       </section>
-      <motion.div
-        animate={anim}
-        transition={{ duration: 0.2 }}
-      >
-        {open && (
-          <Pflanzen
-            key={artId ?? ''}
-            artId={artId ?? undefined}
-          />
-        )}
-      </motion.div>
+      <Collapsible open={open}>
+        <Pflanzen
+          key={artId ?? ''}
+          artId={artId ?? undefined}
+        />
+      </Collapsible>
     </ErrorBoundary>
   )
 }

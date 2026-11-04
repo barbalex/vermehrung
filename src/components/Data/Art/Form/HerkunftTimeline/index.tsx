@@ -3,11 +3,11 @@ import { useAtomValue } from 'jotai'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import { uniq } from 'es-toolkit'
-import { motion, useAnimation } from 'framer-motion'
 import { combineLatest } from 'rxjs'
 import { Q } from 'nitromelondb'
 
 import { Pflanzen } from './Pflanzen/index.tsx'
+import { Collapsible } from '../../../../shared/Collapsible.tsx'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.tsx'
 import { dbAtom, filterHerkunftAtom } from '../../../../../store/index.ts'
 import { herkunftSort } from '../../../../../utils/herkunftSort.ts'
@@ -61,8 +61,7 @@ export const HerkunftTimeline = ({
   }, [artId, db, herkunftFilter._deleted])
 
   const [open, setOpen] = useState(false)
-  const anim = useAnimation()
-  const onClickToggle = async (e: {
+  const onClickToggle = (e: {
     target: { name?: string; value: unknown }
     currentTarget?: HTMLElement
     preventDefault?: () => void
@@ -70,18 +69,7 @@ export const HerkunftTimeline = ({
     key?: string
   }) => {
     e.stopPropagation?.()
-    if (open) {
-      const was = open
-      await anim.start?.({ opacity: 0 })
-      await anim.start?.({ height: 0 })
-      setOpen(!was)
-    } else {
-      setOpen(!open)
-      setTimeout(async () => {
-        await anim.start?.({ height: 'auto' })
-        await anim.start?.({ opacity: 1 })
-      })
-    }
+    setOpen(!open)
   }
 
   return (
@@ -109,19 +97,15 @@ export const HerkunftTimeline = ({
           </IconButton>
         </div>
       </section>
-      <motion.div
-        animate={anim}
-        transition={{ duration: 0.2 }}
-      >
-        {open &&
-          herkunfts.map((herkunft) => (
-            <Pflanzen
-              key={herkunft.id}
-              artId={artId}
-              herkunft={herkunft}
-            />
-          ))}
-      </motion.div>
+      <Collapsible open={open}>
+        {herkunfts.map((herkunft) => (
+          <Pflanzen
+            key={herkunft.id}
+            artId={artId}
+            herkunft={herkunft}
+          />
+        ))}
+      </Collapsible>
     </ErrorBoundary>
   )
 }

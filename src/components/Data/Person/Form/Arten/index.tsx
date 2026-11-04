@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react'
 import { useAtomValue } from 'jotai'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
-import { motion, useAnimation } from 'framer-motion'
 import { Q } from 'nitromelondb'
 import { first as first$ } from 'rxjs/operators'
 import { combineLatest } from 'rxjs'
@@ -11,6 +10,7 @@ import { dbAtom, store, filterArtAtom } from '../../../../../store/index.ts'
 import { insertAvRev } from '../../../../../modules/insertRev.ts'
 import { PersonArt as Art } from './Art.tsx'
 import { Select } from '../../../../shared/Select/index.tsx'
+import { Collapsible } from '../../../../shared/Collapsible.tsx'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.tsx'
 import { artsSortedFromArts } from '../../../../../utils/artsSortedFromArts.ts'
 import { avsSortByArt } from '../../../../../utils/avsSortByArt.ts'
@@ -28,8 +28,7 @@ export const PersonArten = ({
   useEffect(() => setErrors({}), [person])
 
   const [open, setOpen] = useState(false)
-  const anim = useAnimation()
-  const onClickToggle = async (e: {
+  const onClickToggle = (e: {
     target: { name?: string; value: unknown }
     currentTarget?: HTMLElement
     preventDefault?: () => void
@@ -37,18 +36,7 @@ export const PersonArten = ({
     key?: string
   }) => {
     e.stopPropagation?.()
-    if (open) {
-      const was = open
-      await anim.start({ opacity: 0 })
-      await anim.start({ height: 0 })
-      setOpen(!was)
-    } else {
-      setOpen(!open)
-      setTimeout(async () => {
-        await anim.start({ height: 'auto' })
-        await anim.start({ opacity: 1 })
-      })
-    }
+    setOpen(!open)
   }
 
   const [dataState, setDataState] = useState<{
@@ -144,39 +132,30 @@ export const PersonArten = ({
           </IconButton>
         </div>
       </section>
-      <motion.div
-        animate={anim}
-        transition={{ duration: 0.2 }}
-        className={styles.motionDiv}
-      >
-        {open && (
-          <>
-            <div className={styles.avsClass}>
-              {avs.map((av, index) => (
-                <Art
-                  key={`${av.person_id}/${av.art_id}/${index}`}
-                  av={av}
-                />
-              ))}
-            </div>
-            {!!artWerte.length && (
-              <Select
-                name="art_id"
-                value={''}
-                field="art_id"
-                label="Art hinzufügen"
-                options={artWerte}
-                saveToDb={saveToDb}
-                isClearable={false}
-                error={
-                  (errors as Record<string, unknown>).art_id as
-                    string | undefined
-                }
-              />
-            )}
-          </>
+      <Collapsible open={open}>
+        <div className={styles.avsClass}>
+          {avs.map((av, index) => (
+            <Art
+              key={`${av.person_id}/${av.art_id}/${index}`}
+              av={av}
+            />
+          ))}
+        </div>
+        {!!artWerte.length && (
+          <Select
+            name="art_id"
+            value={''}
+            field="art_id"
+            label="Art hinzufügen"
+            options={artWerte}
+            saveToDb={saveToDb}
+            isClearable={false}
+            error={
+              (errors as Record<string, unknown>).art_id as string | undefined
+            }
+          />
         )}
-      </motion.div>
+      </Collapsible>
     </ErrorBoundary>
   )
 }

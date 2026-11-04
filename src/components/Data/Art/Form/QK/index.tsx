@@ -5,12 +5,12 @@ import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
-import { motion, useAnimation } from 'framer-motion'
 import { combineLatest, of as $of } from 'rxjs'
 import { Q } from 'nitromelondb'
 
 import { ArtQk as Qk } from './Qk/index.tsx'
 import { Choose } from './Choose/index.tsx'
+import { Collapsible } from '../../../../shared/Collapsible.tsx'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.tsx'
 import { dbAtom, userAtom } from '../../../../../store/index.ts'
 import { constants } from '../../../../../utils/constants.ts'
@@ -94,8 +94,7 @@ export const ArtQkWrapper = ({ artId }: { artId: string | undefined }) => {
   }
 
   const [open, setOpen] = useState(false)
-  const anim = useAnimation()
-  const onClickToggle = async (e: {
+  const onClickToggle = (e: {
     target: { name?: string; value: unknown }
     currentTarget?: HTMLElement
     preventDefault?: () => void
@@ -103,18 +102,7 @@ export const ArtQkWrapper = ({ artId }: { artId: string | undefined }) => {
     key?: string
   }) => {
     e.stopPropagation?.()
-    if (open) {
-      const was = open
-      await anim.start({ opacity: 0 })
-      await anim.start({ height: 0 })
-      setOpen(!was)
-    } else {
-      setOpen(!open)
-      setTimeout(async () => {
-        await anim.start({ height: 'auto' })
-        await anim.start({ opacity: 1 })
-      })
-    }
+    setOpen(!open)
   }
 
   return (
@@ -150,44 +138,40 @@ export const ArtQkWrapper = ({ artId }: { artId: string | undefined }) => {
           </IconButton>
         </div>
       </section>
-      <motion.div
-        animate={anim}
-        transition={{ duration: 0.4 }}
+      <Collapsible
+        open={open}
+        duration={0.4}
+        className={styles.collapsible}
       >
-        {open && (
-          <>
-            <Tabs
-              value={tab}
-              onChange={onChangeTab}
-              indicatorColor="primary"
-              textColor="primary"
-              centered
-              className={styles.tabs}
-            >
-              <Tab
-                label="ausführen"
-                value="qk"
-                data-id="qk"
-              />
-              <Tab
-                label={`auswählen${
-                  qkCount ? ` (${qkChoosenCount}/${qkCount})` : ''
-                }`}
-                value="waehlen"
-                data-id="waehlen"
-              />
-            </Tabs>
-            <div className={styles.body}>
-              {tab === 'qk' ?
-                <Qk
-                  artId={artId}
-                  qkChoosens={qkChoosens}
-                />
-              : <Choose qks={qks} />}
-            </div>
-          </>
-        )}
-      </motion.div>
+        <Tabs
+          value={tab}
+          onChange={onChangeTab}
+          indicatorColor="primary"
+          textColor="primary"
+          centered
+        >
+          <Tab
+            label="ausführen"
+            value="qk"
+            data-id="qk"
+          />
+          <Tab
+            label={`auswählen${
+              qkCount ? ` (${qkChoosenCount}/${qkCount})` : ''
+            }`}
+            value="waehlen"
+            data-id="waehlen"
+          />
+        </Tabs>
+        <div className={styles.body}>
+          {tab === 'qk' ?
+            <Qk
+              artId={artId}
+              qkChoosens={qkChoosens}
+            />
+          : <Choose qks={qks} />}
+        </div>
+      </Collapsible>
     </ErrorBoundary>
   )
 }

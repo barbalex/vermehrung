@@ -1,0 +1,40 @@
+.collapsible {
+  --collapsible-duration: 0.2s;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  /* keep collapsed content out of the tab order and accessibility tree */
+  visibility: hidden;
+  /* closing: fade out first, then collapse (delay = one phase) */
+  transition:
+    grid-template-rows var(--collapsible-duration) ease
+      var(--collapsible-duration),
+    opacity var(--collapsible-duration) ease,
+    visibility 0s linear calc(2 * var(--collapsible-duration));
+}
+
+.open {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  visibility: visible;
+  /* opening: expand first, then fade in */
+  transition:
+    grid-template-rows var(--collapsible-duration) ease,
+    opacity var(--collapsible-duration) ease var(--collapsible-duration),
+    visibility 0s;
+}
+
+.inner {
+  box-sizing: border-box;
+  /* required for the 0fr row to collapse the content */
+  overflow: hidden;
+  min-height: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .collapsible,
+  .open {
+    transition: visibility 0s;
+  }
+}

@@ -6,7 +6,7 @@
   justify-content: space-between !important;
   margin-left: -10px;
   margin-right: -10px;
-  margin-bottom: 10px;
+  margin-bottom: 0;
   padding: 0 10px;
   cursor: pointer;
   user-select: none;
@@ -24,8 +24,10 @@
   margin-bottom: auto;
 }
 
-.tabs {
-  margin-top: -10px;
+/* keeps the 10px gap below the title row that the tabs' former
+   margin-top: -10px used to cancel out */
+.collapsible {
+  margin-bottom: 10px;
 }
 
 .body {
