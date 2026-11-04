@@ -1,4 +1,10 @@
-import { useEffect, useRef, type ReactNode } from 'react'
+import {
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type ReactNode,
+} from 'react'
 import { useAtomValue } from 'jotai'
 import MuiBreadcrumbs from '@mui/material/Breadcrumbs'
 import Link from '@mui/material/Link'
@@ -35,6 +41,49 @@ interface Crumb {
   key: string
   label: ReactNode
   url: string[]
+}
+
+// must stay in sync with the delayed unmount in Breadcrumbs
+const EXIT_DURATION = 700
+
+// a removed crumb kept mounted while it fades and collapses, so the trail
+// slides instead of jumping - same behavior as ps's breadcrumbs.
+// The divider comes along so the trail reads continuously while it slides.
+const ExitingCrumb = ({ crumb }: { crumb: Crumb }) => {
+  const ref = useRef<HTMLSpanElement>(null)
+
+  useLayoutEffect(() => {
+    const element = ref.current
+    if (!element) return
+
+    // freeze the measured footprint so flex shrink, the automatic minimum
+    // size and content-box width cannot fight the animation
+    element.style.boxSizing = 'border-box'
+    element.style.flexShrink = '0'
+    element.style.minWidth = '0px'
+
+    const duration = matchMedia('(prefers-reduced-motion: reduce)').matches
+      ? 0
+      : EXIT_DURATION
+    const animation = element.animate(
+      [
+        { width: `${element.offsetWidth}px`, opacity: 1 },
+        { width: '0px', opacity: 0 },
+      ],
+      { duration, easing: 'ease-in-out', fill: 'forwards' },
+    )
+    return () => animation.cancel()
+  }, [])
+
+  return (
+    <span
+      className={styles.exitingItem}
+      ref={ref}
+    >
+      <span className={styles.divider} />
+      <span className={styles.exitingLabel}>{crumb.label}</span>
+    </span>
+  )
 }
 
 // always-visible strip below the app bar (ps-style, as opposed to apf2's
@@ -103,6 +152,30 @@ export const Breadcrumbs = () => {
     })
   }
 
+  // keep removed crumbs mounted (with their label) while they fade and
+  // collapse; the diff runs during render so removed crumbs never miss a
+  // frame. Keys are positional, so a path change at some level removes all
+  // the deeper crumbs at once - exactly the ones that should animate out.
+  const [exitingCrumbs, setExitingCrumbs] = useState<Crumb[]>([])
+  const prevCrumbsRef = useRef<Crumb[]>(crumbs)
+  if (prevCrumbsRef.current !== crumbs) {
+    const currentKeys = new Set(crumbs.map((crumb) => crumb.key))
+    const removed = prevCrumbsRef.current.filter(
+      (crumb) => !currentKeys.has(crumb.key),
+    )
+    prevCrumbsRef.current = crumbs
+    if (removed.length) {
+      setExitingCrumbs((prev) => [...prev, ...removed])
+      for (const crumb of removed) {
+        setTimeout(() => {
+          setExitingCrumbs((prev) =>
+            prev.filter((c) => c.key !== crumb.key),
+          )
+        }, EXIT_DURATION)
+      }
+    }
+  }
+
   return (
     <div
       className={
@@ -138,6 +211,14 @@ export const Breadcrumbs = () => {
             </Link>,
         )}
       </MuiBreadcrumbs>
+      {/* exiting crumbs render to the right of the trail, where the removed
+          ones came from; the live trail slides right as they collapse */}
+      {exitingCrumbs.map((crumb) => (
+        <ExitingCrumb
+          key={`exiting-${crumb.key}`}
+          crumb={crumb}
+        />
+      ))}
     </div>
   )
 }

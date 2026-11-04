@@ -60,3 +60,18 @@
   color: var(--crumb-text);
   font-weight: 500;
 }
+
+/* a removed crumb, kept mounted while it fades and collapses (see
+   ExitingCrumb in index.tsx) */
+.exitingItem {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+  white-space: nowrap;
+  /* clip the divider and label as the box collapses */
+  overflow: hidden;
+}
+
+.exitingLabel {
+  color: var(--crumb-text);
+}
