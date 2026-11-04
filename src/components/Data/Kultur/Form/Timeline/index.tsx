@@ -14,7 +14,7 @@ import {
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import IconButton from '@mui/material/IconButton'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
-import { useResizeDetector } from 'react-resize-detector'
+import { useElementWidth } from '../../../../shared/useElementWidth.ts'
 import { motion, useAnimation } from 'framer-motion'
 
 import { KulturTooltip } from './Tooltip.tsx'
@@ -33,7 +33,7 @@ export const KulturTimeline = ({
 }: {
   row: import('../../../../../dbModel.ts').Kultur | null | undefined
 }) => {
-  const { width, ref } = useResizeDetector()
+  const { width, ref } = useElementWidth<HTMLElement>()
   // TODO: calc runs on every render of kultur
   // need to only run when open
   const [allData, setAllData] = useState<Record<string, unknown>[]>([])

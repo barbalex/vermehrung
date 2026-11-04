@@ -13,7 +13,7 @@ import {
   ResponsiveContainer,
   Scatter,
 } from 'recharts'
-import { useResizeDetector } from 'react-resize-detector'
+import { useElementWidth } from '../../../../../shared/useElementWidth.ts'
 
 import { CustomTooltip } from './Tooltip.tsx'
 import { LabelLieferung } from './LabelLieferung.tsx'
@@ -28,7 +28,7 @@ import styles from './index.module.css'
 export const Pflanzen = ({ artId }: { artId: string | undefined }) => {
   const db = useAtomValue(dbAtom)
 
-  const { width, ref } = useResizeDetector()
+  const { width, ref } = useElementWidth<HTMLDivElement>()
   const isNarrow = (width ?? 0) < 1100
 
   const [data, setData] = useState<Record<string, unknown>[] | null>(null)

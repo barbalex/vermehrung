@@ -13,7 +13,7 @@ import {
   ResponsiveContainer,
   Scatter,
 } from 'recharts'
-import { useResizeDetector } from 'react-resize-detector'
+import { useElementWidth } from '../../../../../shared/useElementWidth.ts'
 
 import { CustomTooltip } from './Tooltip.tsx'
 import { LabelLieferung } from './LabelLieferung.tsx'
@@ -36,7 +36,7 @@ export const Pflanzen = ({
   const db = useAtomValue(dbAtom)
   const herkunftId = herkunft.id
 
-  const { width, ref } = useResizeDetector()
+  const { width, ref } = useElementWidth<HTMLDivElement>()
 
   const [data, setData] = useState<Record<string, unknown>[] | null>(null)
   useEffect(() => {

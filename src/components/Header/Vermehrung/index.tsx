@@ -1,6 +1,6 @@
 import AppBar from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
-import { useResizeDetector } from 'react-resize-detector'
+import { useElementWidth } from '../../shared/useElementWidth.ts'
 
 import Account from './Account.tsx'
 import { ThemeChooser } from '../../shared/ThemeChooser.tsx'
@@ -30,7 +30,7 @@ const FOLD_BELOW_WIDTH = {
 }
 
 export const HeaderVermehrung = () => {
-  const { width, ref } = useResizeDetector()
+  const { width, ref } = useElementWidth<HTMLElement>()
 
   const fold = {
     docu: (width ?? 0) < FOLD_BELOW_WIDTH.docu,

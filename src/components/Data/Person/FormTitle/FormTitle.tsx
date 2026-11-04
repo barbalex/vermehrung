@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useAtomValue } from 'jotai'
-import { useResizeDetector } from 'react-resize-detector'
+import { useElementWidth } from '../../../shared/useElementWidth.ts'
 import { Q } from 'nitromelondb'
 
 import { dbAtom, userAtom } from '../../../../store/index.ts'
@@ -29,7 +29,7 @@ export const PersonFormTitle = ({
   const user = useAtomValue(userAtom)
   const db = useAtomValue(dbAtom)
 
-  const { width, ref } = useResizeDetector()
+  const { width, ref } = useElementWidth<HTMLDivElement>()
 
   const [userRole, setUserRole] = useState<
     import('../../../../dbModel.ts').UserRole | undefined

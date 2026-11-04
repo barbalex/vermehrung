@@ -4,7 +4,7 @@ import Button from '@mui/material/Button'
 import IconButton from '@mui/material/IconButton'
 import { FaHome } from 'react-icons/fa'
 import { Link } from 'react-router'
-import { useResizeDetector } from 'react-resize-detector'
+import { useElementWidth } from '../shared/useElementWidth.ts'
 
 import { ErrorBoundary } from '../shared/ErrorBoundary.tsx'
 import { ThemeChooser } from '../shared/ThemeChooser.tsx'
@@ -17,7 +17,7 @@ export const HeaderHome = ({
 }: {
   location: { pathname: string }
 }) => {
-  const { width, ref } = useResizeDetector()
+  const { width, ref } = useElementWidth<HTMLElement>()
   const mobile = width && width < constants?.tree?.minimalWindowWidth
   const { pathname } = location
   const isHome = pathname === '/'

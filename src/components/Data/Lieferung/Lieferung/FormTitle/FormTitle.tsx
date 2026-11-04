@@ -1,6 +1,6 @@
 import { useAtomValue } from 'jotai'
 import IconButton from '@mui/material/IconButton'
-import { useResizeDetector } from 'react-resize-detector'
+import { useElementWidth } from '../../../../shared/useElementWidth.ts'
 
 import {
   activeNodeArrayAtom,
@@ -33,7 +33,7 @@ export const LieferungFormTitle = ({
 }) => {
   const activeNodeArray = useAtomValue(activeNodeArrayAtom)
 
-  const { width, ref } = useResizeDetector()
+  const { width, ref } = useElementWidth<HTMLDivElement>()
 
   const onClickUp = () => {
     removeOpenNode(activeNodeArray)

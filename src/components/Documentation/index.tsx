@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useAtomValue } from 'jotai'
-import { useResizeDetector } from 'react-resize-detector'
+import { useElementWidth } from '../shared/useElementWidth.ts'
 import { Allotment } from 'allotment'
 import { Outlet, useLocation } from 'react-router'
 
@@ -58,7 +58,7 @@ export const Documentation = () => {
   const { pathname } = useLocation()
   const docFilter = useAtomValue(docFilterAtom)
 
-  const { width, ref } = useResizeDetector()
+  const { width, ref } = useElementWidth<HTMLDivElement>()
 
   const path = pathname.split('/').filter((e) => !!e)
 

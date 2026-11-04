@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useAtomValue } from 'jotai'
-import { useResizeDetector } from 'react-resize-detector'
+import { useElementWidth } from '../../../shared/useElementWidth.ts'
 import { of as $of } from 'rxjs'
 import { Q } from 'nitromelondb'
 
@@ -48,7 +48,7 @@ export const SammelLieferungFormTitle = ({
   const activeNodeArray = useAtomValue(activeNodeArrayAtom)
   const filterShow = useAtomValue(filterShowAtom)
 
-  const { width, ref } = useResizeDetector()
+  const { width, ref } = useElementWidth<HTMLDivElement>()
 
   const [userPersonOption, setUserPersonOption] = useState<
     import('../../../../dbModel.ts').PersonOption | undefined

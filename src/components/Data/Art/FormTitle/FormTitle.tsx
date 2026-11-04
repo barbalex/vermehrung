@@ -1,4 +1,4 @@
-import { useResizeDetector } from 'react-resize-detector'
+import { useElementWidth } from '../../../shared/useElementWidth.ts'
 
 import { DeleteButton } from './DeleteButton.tsx'
 import { AddButton } from './AddButton.tsx'
@@ -21,7 +21,7 @@ export const FormTitle = ({
   filteredCount: number
   showHistory: boolean
 }) => {
-  const { width, ref } = useResizeDetector()
+  const { width, ref } = useElementWidth<HTMLDivElement>()
 
   return (
     <div
