@@ -16,8 +16,6 @@ import { Menu } from '../../shared/Menu.tsx'
 
 import styles from './index.module.css'
 
-// TODO: use media queries instead of resize detector?
-
 // items fold into the more-menu (an icon button is ~48px wide),
 // least needed first, as the window gets narrower
 const FOLD_BELOW_WIDTH = {
