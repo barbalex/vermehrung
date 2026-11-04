@@ -44,14 +44,22 @@
   clip-path: polygon(0 0, 45% 0, 100% 50%, 45% 100%, 0 100%, 55% 50%);
 }
 
-.trail ol > li > a,
-.trail ol > li > span {
+/* one live crumb: keeps a stable element across the link/current flip and
+   clips its content while a new crumb grows in from zero width */
+.item {
+  display: inline-flex;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.trail ol > li a,
+.trail ol > li span {
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 /* crumbs in the header's brand purple (lightened in dark mode) */
-.trail ol > li > a {
+.trail ol > li a {
   color: var(--crumb-text);
 }
 

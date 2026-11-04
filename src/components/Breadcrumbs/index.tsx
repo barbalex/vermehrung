@@ -43,8 +43,13 @@ interface Crumb {
   url: string[]
 }
 
-// must stay in sync with the delayed unmount in Breadcrumbs
-const EXIT_DURATION = 700
+// shared by the enter and exit animations; must stay in sync with the
+// delayed unmount in Breadcrumbs
+const ANIM_DURATION = 700
+
+// reduced-motion users get no movement at all
+const animDuration = () =>
+  matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : ANIM_DURATION
 
 // a removed crumb kept mounted while it fades and collapses, so the trail
 // slides instead of jumping - same behavior as ps's breadcrumbs.
@@ -62,15 +67,14 @@ const ExitingCrumb = ({ crumb }: { crumb: Crumb }) => {
     element.style.flexShrink = '0'
     element.style.minWidth = '0px'
 
-    const duration = matchMedia('(prefers-reduced-motion: reduce)').matches
-      ? 0
-      : EXIT_DURATION
+    // margins are left alone on purpose: the first-of-type margin-right
+    // transfers to the next crumb when this one unmounts
     const animation = element.animate(
       [
         { width: `${element.offsetWidth}px`, opacity: 1 },
         { width: '0px', opacity: 0 },
       ],
-      { duration, easing: 'ease-in-out', fill: 'forwards' },
+      { duration: animDuration(), easing: 'ease-in-out', fill: 'forwards' },
     )
     return () => animation.cancel()
   }, [])
@@ -82,6 +86,61 @@ const ExitingCrumb = ({ crumb }: { crumb: Crumb }) => {
     >
       <span className={styles.divider} />
       <span className={styles.exitingLabel}>{crumb.label}</span>
+    </span>
+  )
+}
+
+// one live crumb: the current node (plain text) or a link to its list.
+// The wrapper span gives every crumb a stable element across the
+// link/current flip, so React never remounts a crumb that stays.
+// New crumbs (enter) fade in and grow from zero width so the trail
+// extends smoothly - the counterpart to ExitingCrumb's collapse.
+const CrumbItem = ({
+  crumb,
+  isCurrent,
+  enter,
+}: {
+  crumb: Crumb
+  isCurrent: boolean
+  enter: boolean
+}) => {
+  const ref = useRef<HTMLSpanElement>(null)
+
+  useLayoutEffect(() => {
+    if (!enter) return
+    const element = ref.current
+    if (!element) return
+
+    // box-sizing/min-width so the box can start at zero despite the
+    // content and the automatic minimum size; fill stays 'none' - row
+    // labels resolve asynchronously and change the natural width
+    element.style.boxSizing = 'border-box'
+    element.style.minWidth = '0px'
+    const width = element.offsetWidth
+    const animation = element.animate(
+      [
+        { width: '0px', opacity: 0 },
+        { width: `${width}px`, opacity: 1 },
+      ],
+      { duration: animDuration(), easing: 'ease-in-out' },
+    )
+    return () => animation.cancel()
+  }, [enter])
+
+  return (
+    <span
+      className={styles.item}
+      ref={ref}
+    >
+      {isCurrent ?
+        <span className={styles.current}>{crumb.label}</span>
+      : <Link
+          component={RouterLink}
+          to={`/Vermehrung/${crumb.url.join('/')}`}
+          underline="hover"
+        >
+          {crumb.label}
+        </Link>}
     </span>
   )
 }
@@ -156,8 +215,10 @@ export const Breadcrumbs = () => {
   // collapse; the diff runs during render so removed crumbs never miss a
   // frame. Keys are positional, so a path change at some level removes all
   // the deeper crumbs at once - exactly the ones that should animate out.
+  // prevKeys is captured first: crumbs without one are new and grow in.
   const [exitingCrumbs, setExitingCrumbs] = useState<Crumb[]>([])
   const prevCrumbsRef = useRef<Crumb[]>(crumbs)
+  const prevKeys = new Set(prevCrumbsRef.current.map((crumb) => crumb.key))
   if (prevCrumbsRef.current !== crumbs) {
     const currentKeys = new Set(crumbs.map((crumb) => crumb.key))
     const removed = prevCrumbsRef.current.filter(
@@ -171,7 +232,7 @@ export const Breadcrumbs = () => {
           setExitingCrumbs((prev) =>
             prev.filter((c) => c.key !== crumb.key),
           )
-        }, EXIT_DURATION)
+        }, ANIM_DURATION)
       }
     }
   }
@@ -193,23 +254,14 @@ export const Breadcrumbs = () => {
         // horizontally and is pinned to the current node
         maxItems={100}
       >
-        {crumbs.map((crumb, index) =>
-          index === crumbs.length - 1 ?
-            <span
-              key={crumb.key}
-              className={styles.current}
-            >
-              {crumb.label}
-            </span>
-          : <Link
-              key={crumb.key}
-              component={RouterLink}
-              to={`/Vermehrung/${crumb.url.join('/')}`}
-              underline="hover"
-            >
-              {crumb.label}
-            </Link>,
-        )}
+        {crumbs.map((crumb, index) => (
+          <CrumbItem
+            key={crumb.key}
+            crumb={crumb}
+            isCurrent={index === crumbs.length - 1}
+            enter={!prevKeys.has(crumb.key)}
+          />
+        ))}
       </MuiBreadcrumbs>
       {/* exiting crumbs render to the right of the trail, where the removed
           ones came from; the live trail slides right as they collapse */}
