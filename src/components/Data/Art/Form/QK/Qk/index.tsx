@@ -131,7 +131,8 @@ export const ArtQk = ({
           ))}
         </Paper>
       ))}
-      {!messageGroups?.length && (
+      {/* only once loading finished (messageGroups !== null): */}
+      {messageGroups && !messageGroups.length && (
         <div>Juhui. Offenbar gibt es nichts zu meckern!</div>
       )}
     </div>
