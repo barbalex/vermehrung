@@ -85,11 +85,6 @@ SYNC_TABLES = {
         'neues_material', 'changed', 'changed_by', '_rev', '_parent_rev',
         '_revisions', '_depth', '_conflicts', '_deleted',
     ],
-    'event': [
-        'id', 'kultur_id', 'teilkultur_id', 'person_id', 'beschreibung',
-        'geplant', 'datum', 'changed', 'changed_by', '_rev', '_parent_rev',
-        '_revisions', '_depth', '_conflicts', '_deleted',
-    ],
     'garten': [
         'id', 'name', 'person_id', 'strasse', 'plz', 'ort', 'aktiv',
         'bemerkungen', 'geom_point', 'lv95_x', 'lv95_y', 'wgs84_lat',
@@ -712,10 +707,15 @@ def generate():
     w('-- subscriptions: returns rows changed since the per-table cursors')
     w('-- passed in p_since (epoch seconds), plus the server time the sync')
     w('-- ran (synced_at), which becomes the next cursor.')
+    w('-- p_tables optionally restricts the result to the named tables:')
+    w('-- the initial sync fetches one table per request so a dump stays')
+    w('-- within the request timeout and progress survives per table.')
     w('--')
     w('-- security invoker: row level security of the calling role applies.')
     w('')
-    w('create or replace function public.sync(p_since jsonb default \'{}\'::jsonb)')
+    w('drop function if exists public.sync(jsonb);')
+    w('')
+    w('create or replace function public.sync(p_since jsonb default \'{}\'::jsonb, p_tables text[] default null)')
     w('  returns jsonb')
     w('  language plpgsql')
     w('  stable')
@@ -744,37 +744,39 @@ def generate():
             col_expr(c) for c in cols if c not in HERKUNFT_GAERTNER_EXCLUDED
         )
         w(f'  -- {table}')
-        w(f"  v_since := coalesce((p_since ->> '{table}')::numeric, 0);")
+        w(f"  if p_tables is null or '{table}' = any(p_tables) then")
+        w(f"    v_since := coalesce((p_since ->> '{table}')::numeric, 0);")
         if table == 'herkunft':
-            w(f"  if v_role = 'gaertner' then")
+            w(f"    if v_role = 'gaertner' then")
             w(
-                f"    select coalesce(jsonb_agg(to_jsonb(s)), '[]'::jsonb) into v_rows"
+                f"      select coalesce(jsonb_agg(to_jsonb(s)), '[]'::jsonb) into v_rows"
             )
             w(
-                f'      from (select {gaertner_col_list} from herkunft s where s._rev_at > v_since) s;'
+                f'        from (select {gaertner_col_list} from herkunft s where s._rev_at > v_since) s;'
             )
-            w('  else')
+            w('    else')
             w(
-                f"    select coalesce(jsonb_agg(to_jsonb(s)), '[]'::jsonb) into v_rows"
+                f"      select coalesce(jsonb_agg(to_jsonb(s)), '[]'::jsonb) into v_rows"
             )
             w(
-                f'      from (select {col_list} from herkunft s where s._rev_at > v_since) s;'
+                f'        from (select {col_list} from herkunft s where s._rev_at > v_since) s;'
             )
-            w('  end if;')
+            w('    end if;')
         else:
             w(
-                f"  select coalesce(jsonb_agg(to_jsonb(s)), '[]'::jsonb) into v_rows"
+                f"      select coalesce(jsonb_agg(to_jsonb(s)), '[]'::jsonb) into v_rows"
             )
             w(
-                f'    from (select {col_list} from {q(table)} s where s._rev_at > v_since) s;'
+                f'        from (select {col_list} from {q(table)} s where s._rev_at > v_since) s;'
             )
-        w(f"  v_result := v_result || jsonb_build_object('{table}', v_rows);")
+        w(f"    v_result := v_result || jsonb_build_object('{table}', v_rows);")
+        w('  end if;')
     w('  return v_result;')
     w('end;')
     w('$$;')
     w('')
-    w('revoke execute on function public.sync(jsonb) from public;')
-    w(f"grant execute on function public.sync(jsonb) to {', '.join(APP_ROLES)};")
+    w('revoke execute on function public.sync(jsonb, text[]) from public;')
+    w(f"grant execute on function public.sync(jsonb, text[]) to {', '.join(APP_ROLES)};")
 
     OUT_SYNC.write_text('\n'.join(s) + '\n')
 

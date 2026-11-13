@@ -2,6 +2,7 @@ import {
   store,
   apiClientAtom,
   authorizingAtom,
+  initiallyQueriedAtom,
   lastUpdatedAtom,
   onlineAtom,
   setOnline,
@@ -62,21 +63,44 @@ const poll = async () => {
 
   polling = true
   try {
-    const since = store.get(lastUpdatedAtom)
-    const result = await apiClient.post<SyncResult>('/rpc/sync', {
-      p_since: since,
-    })
-    // reaching the api means we are online
-    if (!store.get(onlineAtom)) setOnline(true)
-    setShortTermOnline(true)
-    backoffMs = 0
-    const watermark = result.synced_at - WATERMARK_SAFETY_S
-    for (const table of tables) {
-      await processSubscriptionResult({
-        data: (result[table] ?? []) as unknown as Row[],
-        table,
-        lastUpdatedValue: watermark,
-      })
+    // initial sync: one table per request. A single >10k-row table dump
+    // then stays within the request timeout, and every completed table
+    // keeps its cursor - a failure resumes at the pending tables
+    // instead of restarting the whole import
+    const pendingTables = tables.filter(
+      (table) => !store.get(initiallyQueriedAtom)[table],
+    )
+    const requests =
+      pendingTables.length > 0 ?
+        pendingTables.map((table) => ({
+          tables: [table] as const,
+          // full cursor map in every request: p_tables limits the
+          // result, the server reads only the requested table's cursor
+          body: {
+            p_since: store.get(lastUpdatedAtom),
+            p_tables: [table],
+          },
+        }))
+      : [
+          {
+            tables,
+            body: { p_since: store.get(lastUpdatedAtom) },
+          },
+        ]
+    for (const request of requests) {
+      const result = await apiClient.post<SyncResult>('/rpc/sync', request.body)
+      // reaching the api means we are online
+      if (!store.get(onlineAtom)) setOnline(true)
+      setShortTermOnline(true)
+      backoffMs = 0
+      const watermark = result.synced_at - WATERMARK_SAFETY_S
+      for (const table of request.tables) {
+        await processSubscriptionResult({
+          data: (result[table] ?? []) as unknown as Row[],
+          table,
+          lastUpdatedValue: watermark,
+        })
+      }
     }
   } catch (error) {
     console.log('sync poll failed:', error)

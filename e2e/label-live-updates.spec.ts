@@ -163,11 +163,25 @@ const loginWithSync = async (page: Page, payload: () => object) => {
     const url = new URL(route.request().url())
     if (url.pathname === '/rpc/sync') {
       syncCalls += 1
+      // emulate the p_tables contract: the initial sync fetches one
+      // table per request and only the requested tables are returned;
+      // plain delta calls (no p_tables) get the full payload once,
+      // empty deltas after
+      const body = route.request().postDataJSON() ?? {}
+      const full = payload()
+      const result =
+        Array.isArray(body.p_tables) ?
+          {
+            synced_at: nowEpoch(),
+            ...Object.fromEntries(
+              body.p_tables.map((table: string) => [table, full[table] ?? []]),
+            ),
+          }
+        : syncCalls === 1 ? full
+        : { synced_at: nowEpoch() }
       return route.fulfill({
         contentType: 'application/json',
-        body: JSON.stringify(
-          syncCalls === 1 ? payload() : { synced_at: nowEpoch() },
-        ),
+        body: JSON.stringify(result),
       })
     }
     if (url.pathname === '/person') {

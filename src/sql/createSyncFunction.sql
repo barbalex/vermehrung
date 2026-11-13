@@ -4,10 +4,15 @@
 -- subscriptions: returns rows changed since the per-table cursors
 -- passed in p_since (epoch seconds), plus the server time the sync
 -- ran (synced_at), which becomes the next cursor.
+-- p_tables optionally restricts the result to the named tables:
+-- the initial sync fetches one table per request so a dump stays
+-- within the request timeout and progress survives per table.
 --
 -- security invoker: row level security of the calling role applies.
 
-create or replace function public.sync(p_since jsonb default '{}'::jsonb)
+drop function if exists public.sync(jsonb);
+
+create or replace function public.sync(p_since jsonb default '{}'::jsonb, p_tables text[] default null)
   returns jsonb
   language plpgsql
   stable
@@ -21,153 +26,202 @@ declare
   v_rows jsonb;
 begin
   -- ae_art
-  v_since := coalesce((p_since ->> 'ae_art')::numeric, 0);
-  select coalesce(jsonb_agg(to_jsonb(s)), '[]'::jsonb) into v_rows
-    from (select "id", "name", "taxonomy", "changed" from "ae_art" s where s._rev_at > v_since) s;
-  v_result := v_result || jsonb_build_object('ae_art', v_rows);
-  -- art
-  v_since := coalesce((p_since ->> 'art')::numeric, 0);
-  select coalesce(jsonb_agg(to_jsonb(s)), '[]'::jsonb) into v_rows
-    from (select "id", "ae_id", "set", "apflora_av", "apflora_ap", "changed", "changed_by", "_rev", "_parent_rev", "_revisions", "_depth", "_conflicts", "_deleted" from "art" s where s._rev_at > v_since) s;
-  v_result := v_result || jsonb_build_object('art', v_rows);
-  -- art_file
-  v_since := coalesce((p_since ->> 'art_file')::numeric, 0);
-  select coalesce(jsonb_agg(to_jsonb(s)), '[]'::jsonb) into v_rows
-    from (select "id", "art_id", "file_id", "file_mime_type", "name", "beschreibung", "changed", "_rev_at" from "art_file" s where s._rev_at > v_since) s;
-  v_result := v_result || jsonb_build_object('art_file', v_rows);
-  -- art_qk
-  v_since := coalesce((p_since ->> 'art_qk')::numeric, 0);
-  select coalesce(jsonb_agg(to_jsonb(s)), '[]'::jsonb) into v_rows
-    from (select "id", "name", "titel", "beschreibung", "sort", "changed", "changed_by", "_rev", "_parent_rev", "_revisions", "_depth", "_conflicts", "_deleted" from "art_qk" s where s._rev_at > v_since) s;
-  v_result := v_result || jsonb_build_object('art_qk', v_rows);
-  -- av
-  v_since := coalesce((p_since ->> 'av')::numeric, 0);
-  select coalesce(jsonb_agg(to_jsonb(s)), '[]'::jsonb) into v_rows
-    from (select "id", "art_id", "person_id", "changed", "changed_by", "_rev", "_parent_rev", "_revisions", "_depth", "_conflicts", "_deleted" from "av" s where s._rev_at > v_since) s;
-  v_result := v_result || jsonb_build_object('av', v_rows);
-  -- bedarf
-  v_since := coalesce((p_since ->> 'bedarf')::numeric, 0);
-  select coalesce(jsonb_agg(to_jsonb(s)), '[]'::jsonb) into v_rows
-    from (select "id", "kultur_id", "person_id", "jahr", "beschreibung", "bemerkungen", "neues_material", "changed", "changed_by", "_rev", "_parent_rev", "_revisions", "_depth", "_conflicts", "_deleted" from "bedarf" s where s._rev_at > v_since) s;
-  v_result := v_result || jsonb_build_object('bedarf', v_rows);
-  -- event
-  v_since := coalesce((p_since ->> 'event')::numeric, 0);
-  select coalesce(jsonb_agg(to_jsonb(s)), '[]'::jsonb) into v_rows
-    from (select "id", "kultur_id", "teilkultur_id", "person_id", "beschreibung", "geplant", "datum", "changed", "changed_by", "_rev", "_parent_rev", "_revisions", "_depth", "_conflicts", "_deleted" from "event" s where s._rev_at > v_since) s;
-  v_result := v_result || jsonb_build_object('event', v_rows);
-  -- garten
-  v_since := coalesce((p_since ->> 'garten')::numeric, 0);
-  select coalesce(jsonb_agg(to_jsonb(s)), '[]'::jsonb) into v_rows
-    from (select "id", "name", "person_id", "strasse", "plz", "ort", "aktiv", "bemerkungen", (case when s."geom_point" is null then null else to_jsonb(s."geom_point") || '{"crs":{"type":"name","properties":{"name":"urn:ogc:def:crs:EPSG::4326"}}}'::jsonb end) as "geom_point", "lv95_x", "lv95_y", "wgs84_lat", "wgs84_long", "changed", "changed_by", "_rev", "_parent_rev", "_revisions", "_depth", "_conflicts", "_deleted" from "garten" s where s._rev_at > v_since) s;
-  v_result := v_result || jsonb_build_object('garten', v_rows);
-  -- garten_file
-  v_since := coalesce((p_since ->> 'garten_file')::numeric, 0);
-  select coalesce(jsonb_agg(to_jsonb(s)), '[]'::jsonb) into v_rows
-    from (select "id", "garten_id", "file_id", "file_mime_type", "name", "beschreibung", "changed", "_rev_at" from "garten_file" s where s._rev_at > v_since) s;
-  v_result := v_result || jsonb_build_object('garten_file', v_rows);
-  -- gv
-  v_since := coalesce((p_since ->> 'gv')::numeric, 0);
-  select coalesce(jsonb_agg(to_jsonb(s)), '[]'::jsonb) into v_rows
-    from (select "id", "garten_id", "person_id", "changed", "changed_by", "_rev", "_parent_rev", "_revisions", "_depth", "_conflicts", "_deleted" from "gv" s where s._rev_at > v_since) s;
-  v_result := v_result || jsonb_build_object('gv', v_rows);
-  -- herkunft
-  v_since := coalesce((p_since ->> 'herkunft')::numeric, 0);
-  if v_role = 'gaertner' then
-    select coalesce(jsonb_agg(to_jsonb(s)), '[]'::jsonb) into v_rows
-      from (select "id", "nr", "gemeinde", "kanton", "land", "bemerkungen", "changed", "changed_by", "_rev", "_parent_rev", "_revisions", "_depth", "_conflicts", "_deleted" from herkunft s where s._rev_at > v_since) s;
-  else
-    select coalesce(jsonb_agg(to_jsonb(s)), '[]'::jsonb) into v_rows
-      from (select "id", "nr", "lokalname", "gemeinde", "kanton", "land", "bemerkungen", (case when s."geom_point" is null then null else to_jsonb(s."geom_point") || '{"crs":{"type":"name","properties":{"name":"urn:ogc:def:crs:EPSG::4326"}}}'::jsonb end) as "geom_point", "lv95_x", "lv95_y", "wgs84_lat", "wgs84_long", "changed", "changed_by", "_rev", "_parent_rev", "_revisions", "_depth", "_conflicts", "_deleted" from herkunft s where s._rev_at > v_since) s;
+  if p_tables is null or 'ae_art' = any(p_tables) then
+    v_since := coalesce((p_since ->> 'ae_art')::numeric, 0);
+      select coalesce(jsonb_agg(to_jsonb(s)), '[]'::jsonb) into v_rows
+        from (select "id", "name", "taxonomy", "changed" from "ae_art" s where s._rev_at > v_since) s;
+    v_result := v_result || jsonb_build_object('ae_art', v_rows);
   end if;
-  v_result := v_result || jsonb_build_object('herkunft', v_rows);
+  -- art
+  if p_tables is null or 'art' = any(p_tables) then
+    v_since := coalesce((p_since ->> 'art')::numeric, 0);
+      select coalesce(jsonb_agg(to_jsonb(s)), '[]'::jsonb) into v_rows
+        from (select "id", "ae_id", "set", "apflora_av", "apflora_ap", "changed", "changed_by", "_rev", "_parent_rev", "_revisions", "_depth", "_conflicts", "_deleted" from "art" s where s._rev_at > v_since) s;
+    v_result := v_result || jsonb_build_object('art', v_rows);
+  end if;
+  -- art_file
+  if p_tables is null or 'art_file' = any(p_tables) then
+    v_since := coalesce((p_since ->> 'art_file')::numeric, 0);
+      select coalesce(jsonb_agg(to_jsonb(s)), '[]'::jsonb) into v_rows
+        from (select "id", "art_id", "file_id", "file_mime_type", "name", "beschreibung", "changed", "_rev_at" from "art_file" s where s._rev_at > v_since) s;
+    v_result := v_result || jsonb_build_object('art_file', v_rows);
+  end if;
+  -- art_qk
+  if p_tables is null or 'art_qk' = any(p_tables) then
+    v_since := coalesce((p_since ->> 'art_qk')::numeric, 0);
+      select coalesce(jsonb_agg(to_jsonb(s)), '[]'::jsonb) into v_rows
+        from (select "id", "name", "titel", "beschreibung", "sort", "changed", "changed_by", "_rev", "_parent_rev", "_revisions", "_depth", "_conflicts", "_deleted" from "art_qk" s where s._rev_at > v_since) s;
+    v_result := v_result || jsonb_build_object('art_qk', v_rows);
+  end if;
+  -- av
+  if p_tables is null or 'av' = any(p_tables) then
+    v_since := coalesce((p_since ->> 'av')::numeric, 0);
+      select coalesce(jsonb_agg(to_jsonb(s)), '[]'::jsonb) into v_rows
+        from (select "id", "art_id", "person_id", "changed", "changed_by", "_rev", "_parent_rev", "_revisions", "_depth", "_conflicts", "_deleted" from "av" s where s._rev_at > v_since) s;
+    v_result := v_result || jsonb_build_object('av', v_rows);
+  end if;
+  -- bedarf
+  if p_tables is null or 'bedarf' = any(p_tables) then
+    v_since := coalesce((p_since ->> 'bedarf')::numeric, 0);
+      select coalesce(jsonb_agg(to_jsonb(s)), '[]'::jsonb) into v_rows
+        from (select "id", "kultur_id", "person_id", "jahr", "beschreibung", "bemerkungen", "neues_material", "changed", "changed_by", "_rev", "_parent_rev", "_revisions", "_depth", "_conflicts", "_deleted" from "bedarf" s where s._rev_at > v_since) s;
+    v_result := v_result || jsonb_build_object('bedarf', v_rows);
+  end if;
+  -- garten
+  if p_tables is null or 'garten' = any(p_tables) then
+    v_since := coalesce((p_since ->> 'garten')::numeric, 0);
+      select coalesce(jsonb_agg(to_jsonb(s)), '[]'::jsonb) into v_rows
+        from (select "id", "name", "person_id", "strasse", "plz", "ort", "aktiv", "bemerkungen", (case when s."geom_point" is null then null else to_jsonb(s."geom_point") || '{"crs":{"type":"name","properties":{"name":"urn:ogc:def:crs:EPSG::4326"}}}'::jsonb end) as "geom_point", "lv95_x", "lv95_y", "wgs84_lat", "wgs84_long", "changed", "changed_by", "_rev", "_parent_rev", "_revisions", "_depth", "_conflicts", "_deleted" from "garten" s where s._rev_at > v_since) s;
+    v_result := v_result || jsonb_build_object('garten', v_rows);
+  end if;
+  -- garten_file
+  if p_tables is null or 'garten_file' = any(p_tables) then
+    v_since := coalesce((p_since ->> 'garten_file')::numeric, 0);
+      select coalesce(jsonb_agg(to_jsonb(s)), '[]'::jsonb) into v_rows
+        from (select "id", "garten_id", "file_id", "file_mime_type", "name", "beschreibung", "changed", "_rev_at" from "garten_file" s where s._rev_at > v_since) s;
+    v_result := v_result || jsonb_build_object('garten_file', v_rows);
+  end if;
+  -- gv
+  if p_tables is null or 'gv' = any(p_tables) then
+    v_since := coalesce((p_since ->> 'gv')::numeric, 0);
+      select coalesce(jsonb_agg(to_jsonb(s)), '[]'::jsonb) into v_rows
+        from (select "id", "garten_id", "person_id", "changed", "changed_by", "_rev", "_parent_rev", "_revisions", "_depth", "_conflicts", "_deleted" from "gv" s where s._rev_at > v_since) s;
+    v_result := v_result || jsonb_build_object('gv', v_rows);
+  end if;
+  -- herkunft
+  if p_tables is null or 'herkunft' = any(p_tables) then
+    v_since := coalesce((p_since ->> 'herkunft')::numeric, 0);
+    if v_role = 'gaertner' then
+      select coalesce(jsonb_agg(to_jsonb(s)), '[]'::jsonb) into v_rows
+        from (select "id", "nr", "gemeinde", "kanton", "land", "bemerkungen", "changed", "changed_by", "_rev", "_parent_rev", "_revisions", "_depth", "_conflicts", "_deleted" from herkunft s where s._rev_at > v_since) s;
+    else
+      select coalesce(jsonb_agg(to_jsonb(s)), '[]'::jsonb) into v_rows
+        from (select "id", "nr", "lokalname", "gemeinde", "kanton", "land", "bemerkungen", (case when s."geom_point" is null then null else to_jsonb(s."geom_point") || '{"crs":{"type":"name","properties":{"name":"urn:ogc:def:crs:EPSG::4326"}}}'::jsonb end) as "geom_point", "lv95_x", "lv95_y", "wgs84_lat", "wgs84_long", "changed", "changed_by", "_rev", "_parent_rev", "_revisions", "_depth", "_conflicts", "_deleted" from herkunft s where s._rev_at > v_since) s;
+    end if;
+    v_result := v_result || jsonb_build_object('herkunft', v_rows);
+  end if;
   -- herkunft_file
-  v_since := coalesce((p_since ->> 'herkunft_file')::numeric, 0);
-  select coalesce(jsonb_agg(to_jsonb(s)), '[]'::jsonb) into v_rows
-    from (select "id", "herkunft_id", "file_id", "file_mime_type", "name", "beschreibung", "changed", "_rev_at" from "herkunft_file" s where s._rev_at > v_since) s;
-  v_result := v_result || jsonb_build_object('herkunft_file', v_rows);
+  if p_tables is null or 'herkunft_file' = any(p_tables) then
+    v_since := coalesce((p_since ->> 'herkunft_file')::numeric, 0);
+      select coalesce(jsonb_agg(to_jsonb(s)), '[]'::jsonb) into v_rows
+        from (select "id", "herkunft_id", "file_id", "file_mime_type", "name", "beschreibung", "changed", "_rev_at" from "herkunft_file" s where s._rev_at > v_since) s;
+    v_result := v_result || jsonb_build_object('herkunft_file', v_rows);
+  end if;
   -- kultur
-  v_since := coalesce((p_since ->> 'kultur')::numeric, 0);
-  select coalesce(jsonb_agg(to_jsonb(s)), '[]'::jsonb) into v_rows
-    from (select "id", "art_id", "herkunft_id", "garten_id", "zwischenlager", "erhaltungskultur", "von_anzahl_individuen", "aktiv", "bemerkungen", "changed", "changed_by", "_rev", "_parent_rev", "_revisions", "_depth", "_conflicts", "_deleted" from "kultur" s where s._rev_at > v_since) s;
-  v_result := v_result || jsonb_build_object('kultur', v_rows);
+  if p_tables is null or 'kultur' = any(p_tables) then
+    v_since := coalesce((p_since ->> 'kultur')::numeric, 0);
+      select coalesce(jsonb_agg(to_jsonb(s)), '[]'::jsonb) into v_rows
+        from (select "id", "art_id", "herkunft_id", "garten_id", "zwischenlager", "erhaltungskultur", "von_anzahl_individuen", "aktiv", "bemerkungen", "changed", "changed_by", "_rev", "_parent_rev", "_revisions", "_depth", "_conflicts", "_deleted" from "kultur" s where s._rev_at > v_since) s;
+    v_result := v_result || jsonb_build_object('kultur', v_rows);
+  end if;
   -- kultur_file
-  v_since := coalesce((p_since ->> 'kultur_file')::numeric, 0);
-  select coalesce(jsonb_agg(to_jsonb(s)), '[]'::jsonb) into v_rows
-    from (select "id", "kultur_id", "file_id", "file_mime_type", "name", "beschreibung", "changed", "_rev_at" from "kultur_file" s where s._rev_at > v_since) s;
-  v_result := v_result || jsonb_build_object('kultur_file', v_rows);
+  if p_tables is null or 'kultur_file' = any(p_tables) then
+    v_since := coalesce((p_since ->> 'kultur_file')::numeric, 0);
+      select coalesce(jsonb_agg(to_jsonb(s)), '[]'::jsonb) into v_rows
+        from (select "id", "kultur_id", "file_id", "file_mime_type", "name", "beschreibung", "changed", "_rev_at" from "kultur_file" s where s._rev_at > v_since) s;
+    v_result := v_result || jsonb_build_object('kultur_file', v_rows);
+  end if;
   -- kultur_option
-  v_since := coalesce((p_since ->> 'kultur_option')::numeric, 0);
-  select coalesce(jsonb_agg(to_jsonb(s)), '[]'::jsonb) into v_rows
-    from (select "id", "ev_datum", "ev_geplant", "ev_person_id", "ev_teilkultur_id", "tk", "tk_bemerkungen", "tz_andere_menge", "tz_auspflanzbereit_beschreibung", "tz_teilkultur_id", "tz_bemerkungen", "z_bemerkungen", "_rev", "_parent_rev", "_revisions", "_depth", "_conflicts", "_deleted" from "kultur_option" s where s._rev_at > v_since) s;
-  v_result := v_result || jsonb_build_object('kultur_option', v_rows);
+  if p_tables is null or 'kultur_option' = any(p_tables) then
+    v_since := coalesce((p_since ->> 'kultur_option')::numeric, 0);
+      select coalesce(jsonb_agg(to_jsonb(s)), '[]'::jsonb) into v_rows
+        from (select "id", "ev_datum", "ev_geplant", "ev_person_id", "ev_teilkultur_id", "tk", "tk_bemerkungen", "tz_andere_menge", "tz_auspflanzbereit_beschreibung", "tz_teilkultur_id", "tz_bemerkungen", "z_bemerkungen", "_rev", "_parent_rev", "_revisions", "_depth", "_conflicts", "_deleted" from "kultur_option" s where s._rev_at > v_since) s;
+    v_result := v_result || jsonb_build_object('kultur_option', v_rows);
+  end if;
   -- kultur_qk
-  v_since := coalesce((p_since ->> 'kultur_qk')::numeric, 0);
-  select coalesce(jsonb_agg(to_jsonb(s)), '[]'::jsonb) into v_rows
-    from (select "id", "name", "titel", "beschreibung", "sort", "changed", "changed_by", "_rev", "_parent_rev", "_revisions", "_depth", "_conflicts", "_deleted" from "kultur_qk" s where s._rev_at > v_since) s;
-  v_result := v_result || jsonb_build_object('kultur_qk', v_rows);
+  if p_tables is null or 'kultur_qk' = any(p_tables) then
+    v_since := coalesce((p_since ->> 'kultur_qk')::numeric, 0);
+      select coalesce(jsonb_agg(to_jsonb(s)), '[]'::jsonb) into v_rows
+        from (select "id", "name", "titel", "beschreibung", "sort", "changed", "changed_by", "_rev", "_parent_rev", "_revisions", "_depth", "_conflicts", "_deleted" from "kultur_qk" s where s._rev_at > v_since) s;
+    v_result := v_result || jsonb_build_object('kultur_qk', v_rows);
+  end if;
   -- lieferung
-  v_since := coalesce((p_since ->> 'lieferung')::numeric, 0);
-  select coalesce(jsonb_agg(to_jsonb(s)), '[]'::jsonb) into v_rows
-    from (select "id", "sammel_lieferung_id", "art_id", "person_id", "von_sammlung_id", "von_kultur_id", "datum", "nach_kultur_id", "nach_ausgepflanzt", "von_anzahl_individuen", "anzahl_pflanzen", "anzahl_auspflanzbereit", "gramm_samen", "andere_menge", "geplant", "bemerkungen", "changed", "changed_by", "_rev", "_parent_rev", "_revisions", "_depth", "_conflicts", "_deleted" from "lieferung" s where s._rev_at > v_since) s;
-  v_result := v_result || jsonb_build_object('lieferung', v_rows);
+  if p_tables is null or 'lieferung' = any(p_tables) then
+    v_since := coalesce((p_since ->> 'lieferung')::numeric, 0);
+      select coalesce(jsonb_agg(to_jsonb(s)), '[]'::jsonb) into v_rows
+        from (select "id", "sammel_lieferung_id", "art_id", "person_id", "von_sammlung_id", "von_kultur_id", "datum", "nach_kultur_id", "nach_ausgepflanzt", "von_anzahl_individuen", "anzahl_pflanzen", "anzahl_auspflanzbereit", "gramm_samen", "andere_menge", "geplant", "bemerkungen", "changed", "changed_by", "_rev", "_parent_rev", "_revisions", "_depth", "_conflicts", "_deleted" from "lieferung" s where s._rev_at > v_since) s;
+    v_result := v_result || jsonb_build_object('lieferung', v_rows);
+  end if;
   -- lieferung_file
-  v_since := coalesce((p_since ->> 'lieferung_file')::numeric, 0);
-  select coalesce(jsonb_agg(to_jsonb(s)), '[]'::jsonb) into v_rows
-    from (select "id", "lieferung_id", "file_id", "file_mime_type", "name", "beschreibung", "changed", "_rev_at" from "lieferung_file" s where s._rev_at > v_since) s;
-  v_result := v_result || jsonb_build_object('lieferung_file', v_rows);
+  if p_tables is null or 'lieferung_file' = any(p_tables) then
+    v_since := coalesce((p_since ->> 'lieferung_file')::numeric, 0);
+      select coalesce(jsonb_agg(to_jsonb(s)), '[]'::jsonb) into v_rows
+        from (select "id", "lieferung_id", "file_id", "file_mime_type", "name", "beschreibung", "changed", "_rev_at" from "lieferung_file" s where s._rev_at > v_since) s;
+    v_result := v_result || jsonb_build_object('lieferung_file', v_rows);
+  end if;
   -- person
-  v_since := coalesce((p_since ->> 'person')::numeric, 0);
-  select coalesce(jsonb_agg(to_jsonb(s)), '[]'::jsonb) into v_rows
-    from (select "id", "nr", "vorname", "name", "adresszusatz", "strasse", "plz", "ort", "telefon_privat", "telefon_geschaeft", "telefon_mobile", "email", "kein_email", "bemerkungen", "account_id", "user_role_id", "kommerziell", "info", "aktiv", "changed", "changed_by", "_rev", "_parent_rev", "_revisions", "_depth", "_conflicts", "_deleted" from "person" s where s._rev_at > v_since) s;
-  v_result := v_result || jsonb_build_object('person', v_rows);
+  if p_tables is null or 'person' = any(p_tables) then
+    v_since := coalesce((p_since ->> 'person')::numeric, 0);
+      select coalesce(jsonb_agg(to_jsonb(s)), '[]'::jsonb) into v_rows
+        from (select "id", "nr", "vorname", "name", "adresszusatz", "strasse", "plz", "ort", "telefon_privat", "telefon_geschaeft", "telefon_mobile", "email", "kein_email", "bemerkungen", "account_id", "user_role_id", "kommerziell", "info", "aktiv", "changed", "changed_by", "_rev", "_parent_rev", "_revisions", "_depth", "_conflicts", "_deleted" from "person" s where s._rev_at > v_since) s;
+    v_result := v_result || jsonb_build_object('person', v_rows);
+  end if;
   -- person_file
-  v_since := coalesce((p_since ->> 'person_file')::numeric, 0);
-  select coalesce(jsonb_agg(to_jsonb(s)), '[]'::jsonb) into v_rows
-    from (select "id", "person_id", "file_id", "file_mime_type", "name", "beschreibung", "changed", "_rev_at" from "person_file" s where s._rev_at > v_since) s;
-  v_result := v_result || jsonb_build_object('person_file', v_rows);
+  if p_tables is null or 'person_file' = any(p_tables) then
+    v_since := coalesce((p_since ->> 'person_file')::numeric, 0);
+      select coalesce(jsonb_agg(to_jsonb(s)), '[]'::jsonb) into v_rows
+        from (select "id", "person_id", "file_id", "file_mime_type", "name", "beschreibung", "changed", "_rev_at" from "person_file" s where s._rev_at > v_since) s;
+    v_result := v_result || jsonb_build_object('person_file', v_rows);
+  end if;
   -- person_option
-  v_since := coalesce((p_since ->> 'person_option')::numeric, 0);
-  select coalesce(jsonb_agg(to_jsonb(s)), '[]'::jsonb) into v_rows
-    from (select "id", "ar_name_deutsch", "ga_strasse", "ga_plz", "ga_ort", "ga_geom_point", "ga_lat_lng", "ga_aktiv", "ga_bemerkungen", "hk_kanton", "hk_land", "hk_bemerkungen", "hk_geom_point", "ku_zwischenlager", "ku_erhaltungskultur", "li_show_sl_felder", "li_show_sl", "sl_show_empty_when_next_to_li", "sl_auto_copy_edits", "tree_kultur", "tree_teilkultur", "tree_zaehlung", "tree_lieferung", "tree_event", "art_qk_choosen", "kultur_qk_choosen", "_rev", "_parent_rev", "_revisions", "_depth", "_conflicts", "_deleted" from "person_option" s where s._rev_at > v_since) s;
-  v_result := v_result || jsonb_build_object('person_option', v_rows);
+  if p_tables is null or 'person_option' = any(p_tables) then
+    v_since := coalesce((p_since ->> 'person_option')::numeric, 0);
+      select coalesce(jsonb_agg(to_jsonb(s)), '[]'::jsonb) into v_rows
+        from (select "id", "ar_name_deutsch", "ga_strasse", "ga_plz", "ga_ort", "ga_geom_point", "ga_lat_lng", "ga_aktiv", "ga_bemerkungen", "hk_kanton", "hk_land", "hk_bemerkungen", "hk_geom_point", "ku_zwischenlager", "ku_erhaltungskultur", "li_show_sl_felder", "li_show_sl", "sl_show_empty_when_next_to_li", "sl_auto_copy_edits", "tree_kultur", "tree_teilkultur", "tree_zaehlung", "tree_lieferung", "tree_event", "art_qk_choosen", "kultur_qk_choosen", "_rev", "_parent_rev", "_revisions", "_depth", "_conflicts", "_deleted" from "person_option" s where s._rev_at > v_since) s;
+    v_result := v_result || jsonb_build_object('person_option', v_rows);
+  end if;
   -- sammel_lieferung
-  v_since := coalesce((p_since ->> 'sammel_lieferung')::numeric, 0);
-  select coalesce(jsonb_agg(to_jsonb(s)), '[]'::jsonb) into v_rows
-    from (select "id", "art_id", "person_id", "von_sammlung_id", "von_kultur_id", "datum", "nach_kultur_id", "nach_ausgepflanzt", "von_anzahl_individuen", "anzahl_pflanzen", "anzahl_auspflanzbereit", "gramm_samen", "andere_menge", "geplant", "bemerkungen", "_rev", "_parent_rev", "_revisions", "_depth", "_conflicts", "_deleted" from "sammel_lieferung" s where s._rev_at > v_since) s;
-  v_result := v_result || jsonb_build_object('sammel_lieferung', v_rows);
+  if p_tables is null or 'sammel_lieferung' = any(p_tables) then
+    v_since := coalesce((p_since ->> 'sammel_lieferung')::numeric, 0);
+      select coalesce(jsonb_agg(to_jsonb(s)), '[]'::jsonb) into v_rows
+        from (select "id", "art_id", "person_id", "von_sammlung_id", "von_kultur_id", "datum", "nach_kultur_id", "nach_ausgepflanzt", "von_anzahl_individuen", "anzahl_pflanzen", "anzahl_auspflanzbereit", "gramm_samen", "andere_menge", "geplant", "bemerkungen", "_rev", "_parent_rev", "_revisions", "_depth", "_conflicts", "_deleted" from "sammel_lieferung" s where s._rev_at > v_since) s;
+    v_result := v_result || jsonb_build_object('sammel_lieferung', v_rows);
+  end if;
   -- sammlung
-  v_since := coalesce((p_since ->> 'sammlung')::numeric, 0);
-  select coalesce(jsonb_agg(to_jsonb(s)), '[]'::jsonb) into v_rows
-    from (select "id", "art_id", "person_id", "herkunft_id", "nr", "datum", "von_anzahl_individuen", "anzahl_pflanzen", "gramm_samen", "andere_menge", "geplant", "bemerkungen", (case when s."geom_point" is null then null else to_jsonb(s."geom_point") || '{"crs":{"type":"name","properties":{"name":"urn:ogc:def:crs:EPSG::4326"}}}'::jsonb end) as "geom_point", "lv95_x", "lv95_y", "wgs84_lat", "wgs84_long", "changed", "changed_by", "_rev", "_parent_rev", "_revisions", "_depth", "_conflicts", "_deleted" from "sammlung" s where s._rev_at > v_since) s;
-  v_result := v_result || jsonb_build_object('sammlung', v_rows);
+  if p_tables is null or 'sammlung' = any(p_tables) then
+    v_since := coalesce((p_since ->> 'sammlung')::numeric, 0);
+      select coalesce(jsonb_agg(to_jsonb(s)), '[]'::jsonb) into v_rows
+        from (select "id", "art_id", "person_id", "herkunft_id", "nr", "datum", "von_anzahl_individuen", "anzahl_pflanzen", "gramm_samen", "andere_menge", "geplant", "bemerkungen", (case when s."geom_point" is null then null else to_jsonb(s."geom_point") || '{"crs":{"type":"name","properties":{"name":"urn:ogc:def:crs:EPSG::4326"}}}'::jsonb end) as "geom_point", "lv95_x", "lv95_y", "wgs84_lat", "wgs84_long", "changed", "changed_by", "_rev", "_parent_rev", "_revisions", "_depth", "_conflicts", "_deleted" from "sammlung" s where s._rev_at > v_since) s;
+    v_result := v_result || jsonb_build_object('sammlung', v_rows);
+  end if;
   -- sammlung_file
-  v_since := coalesce((p_since ->> 'sammlung_file')::numeric, 0);
-  select coalesce(jsonb_agg(to_jsonb(s)), '[]'::jsonb) into v_rows
-    from (select "id", "sammlung_id", "file_id", "file_mime_type", "name", "beschreibung", "changed", "_rev_at" from "sammlung_file" s where s._rev_at > v_since) s;
-  v_result := v_result || jsonb_build_object('sammlung_file', v_rows);
+  if p_tables is null or 'sammlung_file' = any(p_tables) then
+    v_since := coalesce((p_since ->> 'sammlung_file')::numeric, 0);
+      select coalesce(jsonb_agg(to_jsonb(s)), '[]'::jsonb) into v_rows
+        from (select "id", "sammlung_id", "file_id", "file_mime_type", "name", "beschreibung", "changed", "_rev_at" from "sammlung_file" s where s._rev_at > v_since) s;
+    v_result := v_result || jsonb_build_object('sammlung_file', v_rows);
+  end if;
   -- teilkultur
-  v_since := coalesce((p_since ->> 'teilkultur')::numeric, 0);
-  select coalesce(jsonb_agg(to_jsonb(s)), '[]'::jsonb) into v_rows
-    from (select "id", "kultur_id", "name", "ort1", "ort2", "ort3", "bemerkungen", "changed", "changed_by", "_rev", "_parent_rev", "_revisions", "_depth", "_conflicts", "_deleted" from "teilkultur" s where s._rev_at > v_since) s;
-  v_result := v_result || jsonb_build_object('teilkultur', v_rows);
+  if p_tables is null or 'teilkultur' = any(p_tables) then
+    v_since := coalesce((p_since ->> 'teilkultur')::numeric, 0);
+      select coalesce(jsonb_agg(to_jsonb(s)), '[]'::jsonb) into v_rows
+        from (select "id", "kultur_id", "name", "ort1", "ort2", "ort3", "bemerkungen", "changed", "changed_by", "_rev", "_parent_rev", "_revisions", "_depth", "_conflicts", "_deleted" from "teilkultur" s where s._rev_at > v_since) s;
+    v_result := v_result || jsonb_build_object('teilkultur', v_rows);
+  end if;
   -- teilzaehlung
-  v_since := coalesce((p_since ->> 'teilzaehlung')::numeric, 0);
-  select coalesce(jsonb_agg(to_jsonb(s)), '[]'::jsonb) into v_rows
-    from (select "id", "zaehlung_id", "teilkultur_id", "anzahl_pflanzen", "anzahl_auspflanzbereit", "anzahl_mutterpflanzen", "andere_menge", "auspflanzbereit_beschreibung", "bemerkungen", "changed", "changed_by", "_rev", "_parent_rev", "_revisions", "_depth", "_conflicts", "_deleted" from "teilzaehlung" s where s._rev_at > v_since) s;
-  v_result := v_result || jsonb_build_object('teilzaehlung', v_rows);
+  if p_tables is null or 'teilzaehlung' = any(p_tables) then
+    v_since := coalesce((p_since ->> 'teilzaehlung')::numeric, 0);
+      select coalesce(jsonb_agg(to_jsonb(s)), '[]'::jsonb) into v_rows
+        from (select "id", "zaehlung_id", "teilkultur_id", "anzahl_pflanzen", "anzahl_auspflanzbereit", "anzahl_mutterpflanzen", "andere_menge", "auspflanzbereit_beschreibung", "bemerkungen", "changed", "changed_by", "_rev", "_parent_rev", "_revisions", "_depth", "_conflicts", "_deleted" from "teilzaehlung" s where s._rev_at > v_since) s;
+    v_result := v_result || jsonb_build_object('teilzaehlung', v_rows);
+  end if;
   -- user_role
-  v_since := coalesce((p_since ->> 'user_role')::numeric, 0);
-  select coalesce(jsonb_agg(to_jsonb(s)), '[]'::jsonb) into v_rows
-    from (select "id", "name", "label", "sort", "comment", "changed" from "user_role" s where s._rev_at > v_since) s;
-  v_result := v_result || jsonb_build_object('user_role', v_rows);
+  if p_tables is null or 'user_role' = any(p_tables) then
+    v_since := coalesce((p_since ->> 'user_role')::numeric, 0);
+      select coalesce(jsonb_agg(to_jsonb(s)), '[]'::jsonb) into v_rows
+        from (select "id", "name", "label", "sort", "comment", "changed" from "user_role" s where s._rev_at > v_since) s;
+    v_result := v_result || jsonb_build_object('user_role', v_rows);
+  end if;
   -- zaehlung
-  v_since := coalesce((p_since ->> 'zaehlung')::numeric, 0);
-  select coalesce(jsonb_agg(to_jsonb(s)), '[]'::jsonb) into v_rows
-    from (select "id", "kultur_id", "datum", "prognose", "bemerkungen", "changed", "changed_by", "_rev", "_parent_rev", "_revisions", "_depth", "_conflicts", "_deleted" from "zaehlung" s where s._rev_at > v_since) s;
-  v_result := v_result || jsonb_build_object('zaehlung', v_rows);
+  if p_tables is null or 'zaehlung' = any(p_tables) then
+    v_since := coalesce((p_since ->> 'zaehlung')::numeric, 0);
+      select coalesce(jsonb_agg(to_jsonb(s)), '[]'::jsonb) into v_rows
+        from (select "id", "kultur_id", "datum", "prognose", "bemerkungen", "changed", "changed_by", "_rev", "_parent_rev", "_revisions", "_depth", "_conflicts", "_deleted" from "zaehlung" s where s._rev_at > v_since) s;
+    v_result := v_result || jsonb_build_object('zaehlung', v_rows);
+  end if;
   return v_result;
 end;
 $$;
 
-revoke execute on function public.sync(jsonb) from public;
-grant execute on function public.sync(jsonb) to artverantwortlich, gaertner, manager;
+revoke execute on function public.sync(jsonb, text[]) from public;
+grant execute on function public.sync(jsonb, text[]) to artverantwortlich, gaertner, manager;
