@@ -10,6 +10,7 @@ import { initiateDb } from './utils/initiateDb.ts'
 import { apiClientAtom, dbAtom, setDb, themeModeAtom } from './store/index.ts'
 import { Router } from './Router.tsx'
 import { QueuedQueriesObserver } from './components/QueuedQueriesObserver.tsx'
+import { VersionCheck } from './components/VersionCheck/index.tsx'
 import { version as appVersion } from '../package.json'
 
 export const App = () => {
@@ -103,6 +104,7 @@ export const App = () => {
           <QueuedQueriesObserver />
           <Suspense fallback={null}>
             <Router />
+            <VersionCheck />
           </Suspense>
         </ThemeProvider>
       </StyledEngineProvider>

@@ -9,6 +9,8 @@ import svgrPlugin from 'vite-plugin-svgr'
 
 const rootDir = dirname(fileURLToPath(import.meta.url))
 
+const pkg = JSON.parse(readFileSync('./package.json', 'utf8'))
+
 const sqliteWorkerRuntimeFile = `${rootDir}/node_modules/nitromelondb/adapters/sqlite/sqlite-wasm/workerRuntime.js`
 
 // the sqlite adapter's makeDispatcher entry unconditionally requires the
@@ -175,6 +177,25 @@ export default defineConfig({
     exclude: ['**/node_modules/**', '**/dist/**', 'e2e/**', 'api-tests/**'],
   },
   plugins: [
+    // the version-check banner fetches /version.json to compare the
+    // deployed version against the running bundle (src/components/
+    // VersionCheck). The file must never be cached — neither by the
+    // service worker (globIgnores in the workbox options below) nor
+    // by Firebase Hosting (headers in firebase.json).
+    {
+      name: 'emit-version-json',
+      apply: 'build',
+      generateBundle() {
+        this.emitFile({
+          type: 'asset',
+          fileName: 'version.json',
+          source: JSON.stringify({
+            version: pkg.version,
+            versionDate: pkg.versionDate,
+          }),
+        })
+      },
+    },
     sqliteWebDispatcher(),
     sqliteWasmStub(),
     sqliteWorkerDepUrl(),
@@ -191,6 +212,9 @@ export default defineConfig({
         globPatterns: [
           '**/*.{js,jsx,ts,tsx,css,html,ico,png,svg,webp,json,woff2,woff,wasm}',
         ],
+        // version.json must always come from the network (see
+        // emit-version-json above)
+        globIgnores: ['version.json'],
         maximumFileSizeToCacheInBytes: 1000000000,
       },
       registerType: 'autoUpdate',

@@ -1,0 +1,43 @@
+/* the banner must not be missed: sit above the app bar and drawers,
+   but let modals and snacks (higher z-index) still cover it */
+.banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1300;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 8px 16px;
+  background-color: #2e7d32;
+  color: #fff;
+}
+
+.text {
+  flex: 1;
+  font-size: 0.9rem;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+/* replaces the buttons while an update is in flight: signals that
+   the click worked even though the reload may still be seconds away */
+.progress {
+  flex-shrink: 0;
+  width: 120px;
+  color: #fff;
+}
+
+.button {
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.5);
+
+  &:hover {
+    border-color: #fff;
+  }
+}
