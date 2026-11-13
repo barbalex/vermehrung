@@ -673,7 +673,7 @@ export const createMessageFunctions = async ({
               Q.experimentalNestedJoin('kultur', 'art'),
               Q.on('kultur', Q.on('art', 'id', artId)),
               delQuery,
-              Q.where('datum', Q.notEq(null)),
+              Q.where('datum', null),
             )
             .fetch()) ?? []
       } catch {}
