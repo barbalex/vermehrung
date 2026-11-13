@@ -1,10 +1,8 @@
-import { useState, useEffect } from 'react'
 import { useAtomValue } from 'jotai'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import { List } from 'react-window'
 import { Q } from 'nitromelondb'
-import { combineLatest } from 'rxjs'
 
 import {
   dbAtom,
@@ -12,7 +10,6 @@ import {
   personIdInActiveNodeArrayAtom,
   sammelLieferungIdInActiveNodeArrayAtom,
   sammlungIdInActiveNodeArrayAtom,
-  filterLieferungAtom,
   activeNodeArrayAtom,
 } from '../../../store/index.ts'
 import { insertLieferungRev } from '../../../modules/insertRev.ts'
@@ -21,12 +18,11 @@ import { LieferungRow as Row } from './Row.tsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
 import { FilterNumbers } from '../../shared/FilterNumbers.tsx'
 import { exists } from '../../../utils/exists.ts'
-import { tableFilter } from '../../../utils/tableFilter.ts'
 import { lieferungSort } from '../../../utils/lieferungSort.ts'
 import { constants } from '../../../utils/constants.ts'
+import { useEntityList } from '../../../utils/useEntityList.ts'
 
 import artStyles from '../Arten/index.module.css'
-import { triStateDeletedQuery } from '../../../utils/triStateDeletedQuery.ts'
 
 export const Lieferungen = ({ filter: showFilter = false }) => {
   const db = useAtomValue(dbAtom)
@@ -38,86 +34,59 @@ export const Lieferungen = ({ filter: showFilter = false }) => {
   const sammlungIdInActiveNodeArray = useAtomValue(
     sammlungIdInActiveNodeArrayAtom,
   )
-  const lieferungFilter = useAtomValue(filterLieferungAtom)
   const activeNodeArray = useAtomValue(activeNodeArrayAtom)
 
-  const [dataState, setDataState] = useState<{
-    lieferungs: import('../../../dbModel.ts').Lieferung[]
-    totalCount: number
-  }>({ lieferungs: [], totalCount: 0 })
-  useEffect(() => {
-    let kulturOnField = 'von_kultur_id'
-    const hierarchyQuery = []
-    if (kulturIdInActiveNodeArray) {
-      const lastAnAElement = activeNodeArray[activeNodeArray.length - 1]
-      if (lastAnAElement === 'An-Lieferungen') kulturOnField = 'nach_kultur_id'
-      // this should get kulturen connected by von_kultur_id or nach_kultur_id
-      // depending on activeNodeArray[last] being 'An-Lieferung' or 'Aus-Lieferung'
-      // Q.on did not work because only one association can be declared per table
-      hierarchyQuery.push(Q.where(kulturOnField, kulturIdInActiveNodeArray))
-    }
-    if (sammelLieferungIdInActiveNodeArray) {
-      hierarchyQuery.push(Q.experimentalJoinTables(['sammel_lieferung']))
-      hierarchyQuery.push(
-        Q.on('sammel_lieferung', 'id', sammelLieferungIdInActiveNodeArray),
-      )
-    }
-    if (personIdInActiveNodeArray) {
-      hierarchyQuery.push(Q.experimentalJoinTables(['person']))
-      hierarchyQuery.push(Q.on('person', 'id', personIdInActiveNodeArray))
-    }
-    if (sammlungIdInActiveNodeArray) {
-      hierarchyQuery.push(Q.experimentalJoinTables(['sammlung']))
-      hierarchyQuery.push(Q.on('sammlung', 'id', sammlungIdInActiveNodeArray))
-    }
-    const collection =
-      db?.get<import('../../../dbModel.ts').Lieferung>('lieferung')
-    if (!collection) return
-    const lieferungDelQuery = triStateDeletedQuery(lieferungFilter._deleted)
-    const countObservable = collection
-      .query(lieferungDelQuery, ...hierarchyQuery)
-      .observeCount()
-    const dataObservable = collection
-      .query(
-        ...tableFilter({
-          table: 'lieferung',
-        }),
-        ...hierarchyQuery,
-      )
-      .observeWithColumns([
-        'datum',
-        'anzahl_pflanzen',
-        'anzahl_auspflanzbereit',
-        'geplant',
-      ])
-    const combinedObservables = combineLatest([countObservable, dataObservable])
-    const subscription = combinedObservables.subscribe(
-      ([totalCount, lieferungs]) => {
-        setDataState({
-          lieferungs: lieferungs.sort(lieferungSort),
-          totalCount,
-        })
-      },
-    )
-
-    return () => subscription?.unsubscribe?.()
-  }, [
-    db,
-    // need to rerender if any of the values of lieferungFilter changes
-
-    lieferungFilter,
-    kulturIdInActiveNodeArray,
-    personIdInActiveNodeArray,
-    sammelLieferungIdInActiveNodeArray,
-    sammlungIdInActiveNodeArray,
-    activeNodeArray,
-    // need to rerender if last element of activeNodeArray changes
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    activeNodeArray[activeNodeArray.length - 1],
-  ])
-
-  const { lieferungs, totalCount } = dataState
-  const filteredCount = lieferungs.length
+  const {
+    rows: lieferungs,
+    totalCount,
+    filteredCount,
+  } = useEntityList<import('../../../dbModel.ts').Lieferung>({
+    table: 'lieferung',
+    observeColumns: [
+      'datum',
+      'anzahl_pflanzen',
+      'anzahl_auspflanzbereit',
+      'geplant',
+    ],
+    sort: (rows) => rows.sort(lieferungSort),
+    buildClauses: () => {
+      const hierarchyQuery = []
+      if (kulturIdInActiveNodeArray) {
+        // kulturen connected by von_kultur_id or nach_kultur_id
+        // depending on the url ending in Aus-Lieferungen or
+        // An-Lieferungen. Q.on did not work because only one
+        // association can be declared per table
+        const kulturOnField =
+          activeNodeArray[activeNodeArray.length - 1] === 'An-Lieferungen' ?
+            'nach_kultur_id'
+          : 'von_kultur_id'
+        hierarchyQuery.push(Q.where(kulturOnField, kulturIdInActiveNodeArray))
+      }
+      if (sammelLieferungIdInActiveNodeArray) {
+        hierarchyQuery.push(Q.experimentalJoinTables(['sammel_lieferung']))
+        hierarchyQuery.push(
+          Q.on('sammel_lieferung', 'id', sammelLieferungIdInActiveNodeArray),
+        )
+      }
+      if (personIdInActiveNodeArray) {
+        hierarchyQuery.push(Q.experimentalJoinTables(['person']))
+        hierarchyQuery.push(Q.on('person', 'id', personIdInActiveNodeArray))
+      }
+      if (sammlungIdInActiveNodeArray) {
+        hierarchyQuery.push(Q.experimentalJoinTables(['sammlung']))
+        hierarchyQuery.push(Q.on('sammlung', 'id', sammlungIdInActiveNodeArray))
+      }
+      return hierarchyQuery
+    },
+    clauseDeps: [
+      kulturIdInActiveNodeArray,
+      sammelLieferungIdInActiveNodeArray,
+      personIdInActiveNodeArray,
+      sammlungIdInActiveNodeArray,
+      // the von/nach switch depends on the last url element
+      activeNodeArray[activeNodeArray.length - 1],
+    ],
+  })
 
   const add = async () => {
     const isSammelLieferung =
@@ -159,6 +128,7 @@ export const Lieferungen = ({ filter: showFilter = false }) => {
     }
     insertLieferungRev({ values: {} })
   }
+
   return (
     <ErrorBoundary>
       <div

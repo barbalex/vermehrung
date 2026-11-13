@@ -25,6 +25,8 @@ export const useEntityList = <T extends Model>({
   // values the clause builder closes over (active ids from the url) -
   // a change re-subscribes
   clauseDeps = [],
+  // only the art list: filter to apflora arts when the ap filter is on
+  apFilter,
 }: {
   table: TableName
   // the row's own columns the list must re-emit on (label/sort fields)
@@ -33,6 +35,7 @@ export const useEntityList = <T extends Model>({
   sort: (rows: T[]) => T[] | Promise<T[]>
   buildClauses?: (filter: Record<string, unknown>) => Clause[]
   clauseDeps?: unknown[]
+  apFilter?: boolean
 }) => {
   const db = useAtomValue(dbAtom)
   const filter = useAtomValue(filterTableAtoms[table])
@@ -47,7 +50,7 @@ export const useEntityList = <T extends Model>({
       .query(triStateDeletedQuery(filter._deleted), ...extraClauses)
       .observeCount()
     const dataObservable = collection
-      .query(...tableFilter({ table }), ...extraClauses)
+      .query(...tableFilter({ table, apFilter }), ...extraClauses)
       .observeWithColumns(observeColumns)
     const subscription = combineLatest([
       countObservable,
@@ -60,7 +63,7 @@ export const useEntityList = <T extends Model>({
     return () => subscription.unsubscribe()
     // clauseDeps covers the values buildClauses closes over
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [db, filter, ...clauseDeps])
+  }, [db, filter, apFilter, ...clauseDeps])
 
   return { rows, totalCount, filteredCount: rows.length }
 }

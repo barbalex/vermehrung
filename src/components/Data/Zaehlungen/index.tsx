@@ -1,81 +1,43 @@
-import { useEffect, useState } from 'react'
 import { useAtomValue } from 'jotai'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import { List } from 'react-window'
 import { Q } from 'nitromelondb'
-import { combineLatest } from 'rxjs'
 
-import {
-  dbAtom,
-  filterZaehlungAtom,
-  kulturIdInActiveNodeArrayAtom,
-} from '../../../store/index.ts'
+import { kulturIdInActiveNodeArrayAtom } from '../../../store/index.ts'
 import { insertZaehlungRev } from '../../../modules/insertRev.ts'
 import { FilterTitle } from '../../shared/FilterTitle.tsx'
 import { ZaehlungRow as Row } from './Row.tsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
 import { FilterNumbers } from '../../shared/FilterNumbers.tsx'
-import { tableFilter } from '../../../utils/tableFilter.ts'
 import { zaehlungSort } from '../../../utils/zaehlungSort.ts'
 import { constants } from '../../../utils/constants.ts'
+import { useEntityList } from '../../../utils/useEntityList.ts'
 
 import artStyles from '../Arten/index.module.css'
-import { triStateDeletedQuery } from '../../../utils/triStateDeletedQuery.ts'
 
 export const Zaehlungen = ({ filter: showFilter = false }) => {
-  const db = useAtomValue(dbAtom)
   const kulturIdInActiveNodeArray = useAtomValue(kulturIdInActiveNodeArrayAtom)
-  const zaehlungFilter = useAtomValue(filterZaehlungAtom)
 
-  const [dataState, setDataState] = useState<{
-    zaehlungs: import('../../../dbModel.ts').Zaehlung[]
-    totalCount: number
-  }>({ zaehlungs: [], totalCount: 0 })
-  useEffect(() => {
-    const hierarchyQuery =
+  const {
+    rows: zaehlungs,
+    totalCount,
+    filteredCount,
+  } = useEntityList<import('../../../dbModel.ts').Zaehlung>({
+    table: 'zaehlung',
+    observeColumns: ['datum', 'anzahl_pflanzen'],
+    sort: (rows) => rows.sort(zaehlungSort),
+    // only rows of the kultur in the url, if any
+    buildClauses: () =>
       kulturIdInActiveNodeArray ?
         [
           Q.experimentalJoinTables(['kultur']),
           Q.on('kultur', 'id', kulturIdInActiveNodeArray),
         ]
-      : []
-    const collection =
-      db?.get<import('../../../dbModel.ts').Zaehlung>('zaehlung')
-    if (!collection) return
-    const zaehlungDelQuery = triStateDeletedQuery(zaehlungFilter._deleted)
-    const countObservable = collection
-      .query(zaehlungDelQuery, ...hierarchyQuery)
-      .observeCount()
-    const dataObservable = collection
-      .query(
-        ...tableFilter({
-          table: 'zaehlung',
-        }),
-        ...hierarchyQuery,
-      )
-      .observeWithColumns(['datum', 'anzahl_pflanzen'])
+      : [],
+    clauseDeps: [kulturIdInActiveNodeArray],
+  })
 
-    const combinedObservables = combineLatest([countObservable, dataObservable])
-    const subscription = combinedObservables.subscribe(
-      ([totalCount, zaehlungs]) => {
-        setDataState({
-          zaehlungs: zaehlungs.sort(zaehlungSort),
-          totalCount,
-        })
-      },
-    )
-
-    return () => subscription?.unsubscribe?.()
-  }, [
-    db,
-    // need to rerun if any of the values of zaehlungFilter changes
-    zaehlungFilter,
-    kulturIdInActiveNodeArray,
-  ])
-
-  const { zaehlungs, totalCount } = dataState
-  const filteredCount = zaehlungs.length
   return (
     <ErrorBoundary>
       <div

@@ -1,68 +1,29 @@
-import { useState, useEffect } from 'react'
-import { useAtomValue } from 'jotai'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import { List } from 'react-window'
-import { combineLatest } from 'rxjs'
 
-import { dbAtom, filterSammelLieferungAtom } from '../../../store/index.ts'
 import { insertSammelLieferungRev } from '../../../modules/insertRev.ts'
 import { FilterTitle } from '../../shared/FilterTitle.tsx'
 import { SammelLieferungRow as Row } from './Row.tsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
 import { FilterNumbers } from '../../shared/FilterNumbers.tsx'
-import { tableFilter } from '../../../utils/tableFilter.ts'
 import { lieferungSort } from '../../../utils/lieferungSort.ts'
 import { constants } from '../../../utils/constants.ts'
+import { useEntityList } from '../../../utils/useEntityList.ts'
 
 import artStyles from '../Arten/index.module.css'
-import { triStateDeletedQuery } from '../../../utils/triStateDeletedQuery.ts'
 
 export const SammelLieferungen = ({ filter: showFilter = false }) => {
-  const db = useAtomValue(dbAtom)
-  const sammelLieferungFilter = useAtomValue(filterSammelLieferungAtom)
+  const {
+    rows: sammelLieferungs,
+    totalCount,
+    filteredCount,
+  } = useEntityList<import('../../../dbModel.ts').SammelLieferung>({
+    table: 'sammel_lieferung',
+    observeColumns: ['datum', 'anzahl_pflanzen'],
+    sort: (rows) => rows.sort(lieferungSort),
+  })
 
-  const [dataState, setDataState] = useState<{
-    sammelLieferungs: import('../../../dbModel.ts').SammelLieferung[]
-    totalCount: number
-  }>({ sammelLieferungs: [], totalCount: 0 })
-  useEffect(() => {
-    const collection =
-      db?.get<import('../../../dbModel.ts').SammelLieferung>('sammel_lieferung')
-    if (!collection) return
-    const sammelLieferungDelQuery = triStateDeletedQuery(
-      sammelLieferungFilter._deleted,
-    )
-    const countObservable = collection
-      .query(sammelLieferungDelQuery)
-      .observeCount()
-    const dataObservable = collection
-      .query(
-        ...tableFilter({
-          table: 'sammel_lieferung',
-        }),
-      )
-      .observeWithColumns(['datum', 'anzahl_pflanzen'])
-    const combinedObservables = combineLatest([countObservable, dataObservable])
-    const subscription = combinedObservables.subscribe(
-      ([totalCount, sammelLieferungs]) => {
-        setDataState({
-          sammelLieferungs: sammelLieferungs.sort(lieferungSort),
-          totalCount,
-        })
-      },
-    )
-
-    return () => subscription?.unsubscribe?.()
-  }, [
-    db,
-    // need to rerender if any of the values of sammelLieferungFilter changes
-
-    sammelLieferungFilter,
-  ])
-
-  const { sammelLieferungs, totalCount } = dataState
-  const filteredCount = sammelLieferungs.length
   return (
     <ErrorBoundary>
       <div

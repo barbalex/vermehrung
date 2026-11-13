@@ -1,75 +1,43 @@
-import { useEffect, useState } from 'react'
 import { useAtomValue } from 'jotai'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import { List } from 'react-window'
 import { Q } from 'nitromelondb'
-import { combineLatest } from 'rxjs'
 
-import {
-  dbAtom,
-  filterTeilkulturAtom,
-  kulturIdInActiveNodeArrayAtom,
-} from '../../../store/index.ts'
+import { kulturIdInActiveNodeArrayAtom } from '../../../store/index.ts'
 import { insertTeilkulturRev } from '../../../modules/insertRev.ts'
 import { FilterTitle } from '../../shared/FilterTitle.tsx'
 import { TeilkulturRow as Row } from './Row.tsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
 import { FilterNumbers } from '../../shared/FilterNumbers.tsx'
-import { tableFilter } from '../../../utils/tableFilter.ts'
 import { teilkulturSort } from '../../../utils/teilkulturSort.ts'
 import { constants } from '../../../utils/constants.ts'
+import { useEntityList } from '../../../utils/useEntityList.ts'
 
 import artStyles from '../Arten/index.module.css'
-import { triStateDeletedQuery } from '../../../utils/triStateDeletedQuery.ts'
 
 export const Teilkulturen = ({ filter: showFilter = false }) => {
-  const db = useAtomValue(dbAtom)
   const kulturIdInActiveNodeArray = useAtomValue(kulturIdInActiveNodeArrayAtom)
-  const teilkulturFilter = useAtomValue(filterTeilkulturAtom)
 
-  const [dataState, setDataState] = useState<{
-    teilkulturs: import('../../../dbModel.ts').Teilkultur[]
-    totalCount: number
-  }>({ teilkulturs: [], totalCount: 0 })
-  useEffect(() => {
-    const hierarchyQuery =
+  const {
+    rows: teilkulturs,
+    totalCount,
+    filteredCount,
+  } = useEntityList<import('../../../dbModel.ts').Teilkultur>({
+    table: 'teilkultur',
+    observeColumns: ['name', 'ort1', 'ort2', 'ort3'],
+    sort: (rows) => rows.sort(teilkulturSort),
+    // only rows of the kultur in the url, if any
+    buildClauses: () =>
       kulturIdInActiveNodeArray ?
         [
           Q.experimentalJoinTables(['kultur']),
           Q.on('kultur', 'id', kulturIdInActiveNodeArray),
         ]
-      : []
-    const collection =
-      db?.get<import('../../../dbModel.ts').Teilkultur>('teilkultur')
-    if (!collection) return
-    const teilkulturDelQuery = triStateDeletedQuery(teilkulturFilter._deleted)
-    const countObservable = collection
-      .query(teilkulturDelQuery, ...hierarchyQuery)
-      .observeCount()
-    const dataObservable = collection
-      .query(...tableFilter({ table: 'teilkultur' }), ...hierarchyQuery)
-      .observeWithColumns(['name', 'ort1', 'ort2', 'ort3'])
-    const combinedObservables = combineLatest([countObservable, dataObservable])
-    const subscription = combinedObservables.subscribe(
-      ([totalCount, teilkulturs]) => {
-        setDataState({
-          teilkulturs: teilkulturs.sort(teilkulturSort),
-          totalCount,
-        })
-      },
-    )
+      : [],
+    clauseDeps: [kulturIdInActiveNodeArray],
+  })
 
-    return () => subscription?.unsubscribe?.()
-  }, [
-    db,
-    // need to rerun if any of the values of teilkulturFilter changes
-    teilkulturFilter,
-    kulturIdInActiveNodeArray,
-  ])
-
-  const { teilkulturs, totalCount } = dataState
-  const filteredCount = teilkulturs.length
   return (
     <ErrorBoundary>
       <div

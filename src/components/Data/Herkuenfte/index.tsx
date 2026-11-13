@@ -1,45 +1,42 @@
-import { useEffect, useState } from 'react'
 import { useAtomValue } from 'jotai'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import { List } from 'react-window'
 import { Q } from 'nitromelondb'
-import { combineLatest } from 'rxjs'
 
 import {
-  dbAtom,
   activeNodeArrayAtom,
   sammlungIdInActiveNodeArrayAtom,
   artIdInActiveNodeArrayAtom,
-  filterHerkunftAtom,
 } from '../../../store/index.ts'
 import { insertHerkunftRev } from '../../../modules/insertRev.ts'
 import { FilterTitle } from '../../shared/FilterTitle.tsx'
 import { HerkunftRow as Row } from './Row.tsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
 import { FilterNumbers } from '../../shared/FilterNumbers.tsx'
-import { tableFilter } from '../../../utils/tableFilter.ts'
 import { herkunftSort } from '../../../utils/herkunftSort.ts'
 import { constants } from '../../../utils/constants.ts'
+import { useEntityList } from '../../../utils/useEntityList.ts'
 
 import artStyles from '../Arten/index.module.css'
-import { triStateDeletedQuery } from '../../../utils/triStateDeletedQuery.ts'
 
 export const Herkuenfte = ({ filter: showFilter }: { filter?: boolean }) => {
-  const db = useAtomValue(dbAtom)
   const activeNodeArray = useAtomValue(activeNodeArrayAtom)
   const sammlungIdInActiveNodeArray = useAtomValue(
     sammlungIdInActiveNodeArrayAtom,
   )
   const artIdInActiveNodeArray = useAtomValue(artIdInActiveNodeArrayAtom)
-  const herkunftFilter = useAtomValue(filterHerkunftAtom)
 
-  const [dataState, setDataState] = useState<{
-    herkunfts: import('../../../dbModel.ts').Herkunft[]
-    totalCount: number
-  }>({ herkunfts: [], totalCount: 0 })
-  useEffect(() => {
-    const hierarchyQuery =
+  const {
+    rows: herkunfts,
+    totalCount,
+    filteredCount,
+  } = useEntityList<import('../../../dbModel.ts').Herkunft>({
+    table: 'herkunft',
+    observeColumns: ['gemeinde', 'lokalname', 'nr'],
+    sort: (rows) => rows.sort(herkunftSort),
+    // only rows of the sammlung (or the art's sammlungs) in the url
+    buildClauses: () =>
       sammlungIdInActiveNodeArray ?
         [
           Q.experimentalJoinTables(['sammlung']),
@@ -50,31 +47,10 @@ export const Herkuenfte = ({ filter: showFilter }: { filter?: boolean }) => {
           Q.experimentalJoinTables(['sammlung']),
           Q.on('sammlung', 'art_id', artIdInActiveNodeArray),
         ]
-      : []
-    const collection =
-      db?.get<import('../../../dbModel.ts').Herkunft>('herkunft')
-    if (!collection) return
-    const delQuery = triStateDeletedQuery(herkunftFilter._deleted)
-    const countObservable = collection
-      .query(delQuery, ...hierarchyQuery)
-      .observeCount()
-    const herkunftsObservable = collection
-      .query(...tableFilter({ table: 'herkunft' }), ...hierarchyQuery)
-      .observeWithColumns(['gemeinde', 'lokalname', 'nr'])
-    const combinedObservables = combineLatest([
-      countObservable,
-      herkunftsObservable,
-    ])
-    const subscription = combinedObservables.subscribe(
-      ([totalCount, herkunfts]) =>
-        setDataState({ herkunfts: herkunfts.sort(herkunftSort), totalCount }),
-    )
+      : [],
+    clauseDeps: [sammlungIdInActiveNodeArray, artIdInActiveNodeArray],
+  })
 
-    return () => subscription?.unsubscribe?.()
-  }, [db, sammlungIdInActiveNodeArray, herkunftFilter, artIdInActiveNodeArray])
-
-  const { herkunfts, totalCount } = dataState
-  const filteredCount = herkunfts.length
   // herkuenfte is top node
   // never enable adding below that
   const showPlus = activeNodeArray.length < 2

@@ -1,14 +1,10 @@
-import { useEffect, useState } from 'react'
 import { useAtomValue } from 'jotai'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import { List } from 'react-window'
 import { Q } from 'nitromelondb'
-import { combineLatest } from 'rxjs'
 
 import {
-  dbAtom,
-  filterKulturAtom,
   artIdInActiveNodeArrayAtom,
   gartenIdInActiveNodeArrayAtom,
   herkunftIdInActiveNodeArrayAtom,
@@ -18,86 +14,52 @@ import { FilterTitle } from '../../shared/FilterTitle.tsx'
 import { KulturRow as Row } from './Row.tsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
 import { FilterNumbers } from '../../shared/FilterNumbers.tsx'
-import { tableFilter } from '../../../utils/tableFilter.ts'
 import { kultursSortedFromKulturs } from '../../../utils/kultursSortedFromKulturs.ts'
 import { constants } from '../../../utils/constants.ts'
+import { useEntityList } from '../../../utils/useEntityList.ts'
+import { triStateQuery } from '../../../utils/triStateDeletedQuery.ts'
 
 import artStyles from '../Arten/index.module.css'
-import { triStateDeletedQuery } from '../../../utils/triStateDeletedQuery.ts'
 
 export const Kulturen = ({ filter: showFilter = false }) => {
-  const db = useAtomValue(dbAtom)
   const artIdInActiveNodeArray = useAtomValue(artIdInActiveNodeArrayAtom)
   const gartenIdInActiveNodeArray = useAtomValue(gartenIdInActiveNodeArrayAtom)
   const herkunftIdInActiveNodeArray = useAtomValue(
     herkunftIdInActiveNodeArrayAtom,
   )
-  const kulturFilter = useAtomValue(filterKulturAtom)
 
-  const [dataState, setDataState] = useState<{
-    kulturs: import('../../../dbModel.ts').Kultur[]
-    totalCount: number
-  }>({ kulturs: [], totalCount: 0 })
-  useEffect(() => {
-    const hierarchyQuery = []
-    if (gartenIdInActiveNodeArray) {
-      hierarchyQuery.push(Q.experimentalJoinTables(['garten']))
-      hierarchyQuery.push(Q.on('garten', 'id', gartenIdInActiveNodeArray))
-    }
-    if (artIdInActiveNodeArray) {
-      hierarchyQuery.push(Q.experimentalJoinTables(['art']))
-      hierarchyQuery.push(Q.on('art', 'id', artIdInActiveNodeArray))
-    }
-    if (herkunftIdInActiveNodeArray) {
-      hierarchyQuery.push(Q.experimentalJoinTables(['herkunft']))
-      hierarchyQuery.push(Q.on('herkunft', 'id', herkunftIdInActiveNodeArray))
-    }
-    const collection = db?.get<import('../../../dbModel.ts').Kultur>('kultur')
-    if (!collection) return
-    const kulturDelQuery = triStateDeletedQuery(kulturFilter._deleted)
-    const kulturAktivQuery =
-      kulturFilter.aktiv === false ? Q.where('aktiv', false)
-      : kulturFilter.aktiv === true ? Q.where('aktiv', true)
-      : Q.or(
-          Q.where('aktiv', false),
-          Q.where('aktiv', true),
-          Q.where('aktiv', null),
-        )
-    const countObservable = collection
-      .query(kulturDelQuery, kulturAktivQuery, ...hierarchyQuery)
-      .observeCount()
-    const dataObservable = collection
-      .query(...tableFilter({ table: 'kultur' }), ...hierarchyQuery)
-      .observeWithColumns([
-        'art_id',
-        'herkunft_id',
-        'garten_id',
-        'zwischenlager',
-      ])
-    const combinedObservables = combineLatest([countObservable, dataObservable])
-    const subscription = (
-      combinedObservables as unknown as import('rxjs').Observable<
-        [number, import('../../../dbModel.ts').Kultur[]]
-      >
-    ).subscribe(async ([totalCount, kulturs]) => {
-      const kultursSorted = await kultursSortedFromKulturs(kulturs)
-      setDataState({
-        kulturs: kultursSorted,
-        totalCount,
-      })
-    })
+  const {
+    rows: kulturs,
+    totalCount,
+    filteredCount,
+  } = useEntityList<import('../../../dbModel.ts').Kultur>({
+    table: 'kultur',
+    observeColumns: ['art_id', 'herkunft_id', 'garten_id', 'zwischenlager'],
+    sort: kultursSortedFromKulturs,
+    buildClauses: (filter) => {
+      // only rows of the art/garten/herkunft in the url, if any
+      const hierarchyQuery = []
+      if (gartenIdInActiveNodeArray) {
+        hierarchyQuery.push(Q.experimentalJoinTables(['garten']))
+        hierarchyQuery.push(Q.on('garten', 'id', gartenIdInActiveNodeArray))
+      }
+      if (artIdInActiveNodeArray) {
+        hierarchyQuery.push(Q.experimentalJoinTables(['art']))
+        hierarchyQuery.push(Q.on('art', 'id', artIdInActiveNodeArray))
+      }
+      if (herkunftIdInActiveNodeArray) {
+        hierarchyQuery.push(Q.experimentalJoinTables(['herkunft']))
+        hierarchyQuery.push(Q.on('herkunft', 'id', herkunftIdInActiveNodeArray))
+      }
+      return [triStateQuery('aktiv', filter.aktiv), ...hierarchyQuery]
+    },
+    clauseDeps: [
+      gartenIdInActiveNodeArray,
+      artIdInActiveNodeArray,
+      herkunftIdInActiveNodeArray,
+    ],
+  })
 
-    return () => subscription?.unsubscribe?.()
-  }, [
-    db,
-    kulturFilter,
-    gartenIdInActiveNodeArray,
-    artIdInActiveNodeArray,
-    herkunftIdInActiveNodeArray,
-  ])
-
-  const { kulturs, totalCount } = dataState
-  const filteredCount = kulturs.length
   return (
     <ErrorBoundary>
       <div

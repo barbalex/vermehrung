@@ -1,88 +1,46 @@
-import { useEffect, useState } from 'react'
 import { useAtomValue } from 'jotai'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import { List } from 'react-window'
 import { Q } from 'nitromelondb'
-import { combineLatest } from 'rxjs'
 
-import {
-  dbAtom,
-  filterGartenAtom,
-  personIdInActiveNodeArrayAtom,
-} from '../../../store/index.ts'
+import { personIdInActiveNodeArrayAtom } from '../../../store/index.ts'
 import { insertGartenRev } from '../../../modules/insertRev.ts'
 import { FilterTitle } from '../../shared/FilterTitle.tsx'
 import { GartenRow as Row } from './Row.tsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
 import { FilterNumbers } from '../../shared/FilterNumbers.tsx'
-import { tableFilter } from '../../../utils/tableFilter.ts'
 import { gartensSortedFromGartens } from '../../../utils/gartensSortedFromGartens.ts'
 import { constants } from '../../../utils/constants.ts'
+import { useEntityList } from '../../../utils/useEntityList.ts'
+import { triStateQuery } from '../../../utils/triStateDeletedQuery.ts'
 
 import artStyles from '../Arten/index.module.css'
-import { triStateDeletedQuery } from '../../../utils/triStateDeletedQuery.ts'
 
 export const Gaerten = ({ filter: showFilter = false }) => {
-  const db = useAtomValue(dbAtom)
   const personIdInActiveNodeArray = useAtomValue(personIdInActiveNodeArrayAtom)
-  const gartenFilter = useAtomValue(filterGartenAtom)
 
-  const [dataState, setDataState] = useState<{
-    gartens: import('../../../dbModel.ts').Garten[]
-    totalCount: number
-  }>({ gartens: [], totalCount: 0 })
-  useEffect(() => {
-    const hierarchyQuery =
-      personIdInActiveNodeArray ?
+  const {
+    rows: gartens,
+    totalCount,
+    filteredCount,
+  } = useEntityList<import('../../../dbModel.ts').Garten>({
+    table: 'garten',
+    observeColumns: ['name', 'person_id'],
+    sort: gartensSortedFromGartens,
+    buildClauses: (filter) => [
+      triStateQuery('aktiv', filter.aktiv),
+      // only rows of the person in the url, if any
+      ...(personIdInActiveNodeArray ?
         [
           Q.experimentalJoinTables(['person']),
           Q.on('person', 'id', personIdInActiveNodeArray),
         ]
-      : []
-    const collection = db?.get<import('../../../dbModel.ts').Garten>('garten')
-    if (!collection) return
-    const delQuery = triStateDeletedQuery(gartenFilter._deleted)
-    const aktivQuery =
-      gartenFilter?.aktiv === true ? Q.where('aktiv', true)
-      : gartenFilter?.aktiv === false ? Q.where('aktiv', false)
-      : Q.or(
-          Q.where('aktiv', false),
-          Q.where('aktiv', true),
-          Q.where('aktiv', null),
-        )
-    const totalCountObservable = collection
-      .query(delQuery, aktivQuery, ...hierarchyQuery)
-      .observeCount()
-    const gartenObservable = collection
-      .query(...tableFilter({ table: 'garten' }), ...hierarchyQuery)
-      .observeWithColumns(['name', 'person_id'])
-    const combinedObservables = combineLatest([
-      totalCountObservable,
-      gartenObservable,
-    ])
-    const subscription = (
-      combinedObservables as unknown as import('rxjs').Observable<
-        [number, import('../../../dbModel.ts').Garten[]]
-      >
-    ).subscribe(async ([totalCount, gartens]) => {
-      const gartensSorted = await gartensSortedFromGartens(gartens)
-      setDataState({
-        gartens: gartensSorted,
-        totalCount,
-      })
-    })
+      : []),
+    ],
+    clauseDeps: [personIdInActiveNodeArray],
+  })
 
-    return () => subscription?.unsubscribe?.()
-  }, [
-    db,
-    personIdInActiveNodeArray,
-    // need to rerun if any of the values of gartenFilter changes
-    gartenFilter,
-  ])
-
-  const { gartens, totalCount } = dataState
-  const filteredCount = gartens.length
   return (
     <ErrorBoundary>
       <div
