@@ -83,6 +83,45 @@ export const createKulturMessageFunctions = async ({
         .fetch()) ?? []
   } catch {}
   const zaehlungsSorted = zaehlungs.sort(zaehlungSort)
+  // the scope kultur: every zaehlung message needs its art_id and label
+  let kulturRow: import('../../../../../../dbModel.ts').Kultur | null = null
+  try {
+    kulturRow =
+      (await db
+        ?.get<import('../../../../../../dbModel.ts').Kultur>('kultur')
+        .find(kulturId)) ?? null
+  } catch {}
+  let kulturLabel = ''
+  try {
+    kulturLabel =
+      (await kulturRow?.label.pipe(first$()).toPromise()) ?? '(keine Kultur)'
+  } catch {}
+  const zaehlungUrl = (z: { id: string }) =>
+    [
+      'Arten',
+      kulturRow?.art_id,
+      'Kulturen',
+      kulturId,
+      'Zaehlungen',
+      z.id,
+    ] as string[]
+  const zaehlungText = (z: import('../../../../../../dbModel.ts').Zaehlung) => {
+    const zaehlungLabel =
+      z.datum ?
+        `Zählung am ${DateTime.fromJSDate(new Date(z.datum)).toFormat('yyyy.LL.dd')}`
+      : `Zählung-ID: ${z.id}`
+    const anzTz = teilzaehlungs
+      .filter(
+        (tz: import('../../../../../../dbModel.ts').Teilzaehlung) =>
+          tz.zaehlung_id === z.id,
+      )
+      .filter(
+        (tz: import('../../../../../../dbModel.ts').Teilzaehlung) =>
+          !tz._deleted,
+      ).length
+    const teilzaehlung = anzTz > 1 ? ` (${anzTz} Teilzählungen)` : ''
+    return `${kulturLabel ?? '(keine Kultur)'}, ${zaehlungLabel}${teilzaehlung}`
+  }
   let teilzaehlungs: import('../../../../../../dbModel.ts').Teilzaehlung[] = []
   try {
     teilzaehlungs =
@@ -117,442 +156,222 @@ export const createKulturMessageFunctions = async ({
         buildText: (k) => labelOf(k),
       }),
     kultursWithoutZaehlungThisYear: async () =>
-      await Promise.all(
-        kultursSorted
-          .filter((k) => k.id === kulturId)
-          .filter(
-            (k) =>
-              zaehlungs
-                .filter(
-                  (z: import('../../../../../../dbModel.ts').Zaehlung) =>
-                    z.kultur_id === k.id,
-                )
-                .filter(
-                  (z: import('../../../../../../dbModel.ts').Zaehlung) =>
-                    !z._deleted,
-                )
-                .filter(
-                  (z: import('../../../../../../dbModel.ts').Zaehlung) =>
-                    z.datum && z.datum > startYear && z.datum < startNextYear,
-                ).length === 0,
-          )
-          .map(async (k) => {
-            let text
-            try {
-              text = await k.label.pipe(first$()).toPromise()
-            } catch {}
-
-            return {
-              url: ['Kulturen', kulturId, 'Kultur'],
-              text,
-            }
-          }),
-      ),
-    teilkultursWithoutName: async () =>
-      await Promise.all(
-        teilkultursSorted
-          .filter(
-            (tk: import('../../../../../../dbModel.ts').Teilkultur) =>
-              tk.kultur_id === kulturId,
-          )
-          .filter(
-            (tk: import('../../../../../../dbModel.ts').Teilkultur) => !tk.name,
-          )
-          .map(
-            async (tk: import('../../../../../../dbModel.ts').Teilkultur) => {
-              let kultur
-              try {
-                kultur = await tk.kultur.fetch()
-              } catch {}
-              let kulturLabel
-              try {
-                kulturLabel = await kultur?.label.pipe(first$()).toPromise()
-              } catch {}
-
-              return {
-                url: ['Kulturen', kulturId, 'Teilkulturen', tk.id],
-                text: `${kulturLabel ?? '(keine Kultur)'}, Teilkultur-ID: ${
-                  tk.id
-                }`,
-              }
-            },
-          ),
-      ),
-    zaehlungsInFutureNotPrognose: async () =>
-      await Promise.all(
-        zaehlungsSorted
-          .filter(
-            (z: import('../../../../../../dbModel.ts').Zaehlung) =>
-              z.kultur_id === kulturId,
-          )
-          .filter(
-            (z: import('../../../../../../dbModel.ts').Zaehlung) => !!z.datum,
-          )
-          .filter((z: import('../../../../../../dbModel.ts').Zaehlung) =>
-            z.datum ? new Date(z.datum).getTime() > now : false,
-          )
-          .map(async (z: import('../../../../../../dbModel.ts').Zaehlung) => {
-            let kultur
-            try {
-              kultur = await z.kultur.fetch()
-            } catch {}
-            let kulturLabel
-            try {
-              kulturLabel = await kultur?.label.pipe(first$()).toPromise()
-            } catch {}
-
-            return {
-              url: [
-                'Arten',
-                kultur?.art_id,
-                'Kulturen',
-                kulturId,
-                'Zaehlungen',
-                z.id,
-              ],
-              text: `${kulturLabel ?? '(keine Kultur)'}, Zählung-ID: ${z.id}`,
-            }
-          }),
-      ),
-    zaehlungsWithoutDatum: async () =>
-      await Promise.all(
-        zaehlungsSorted
-          .filter(
-            (z: import('../../../../../../dbModel.ts').Zaehlung) =>
-              z.kultur_id === kulturId,
-          )
-          .filter(
-            (z: import('../../../../../../dbModel.ts').Zaehlung) => !z.datum,
-          )
-          .map(async (z: import('../../../../../../dbModel.ts').Zaehlung) => {
-            let kultur
-            try {
-              kultur = await z.kultur.fetch()
-            } catch {}
-            let kulturLabel
-            try {
-              kulturLabel = await kultur?.label.pipe(first$()).toPromise()
-            } catch {}
-
-            return {
-              url: [
-                'Arten',
-                kultur?.art_id,
-                'Kulturen',
-                kulturId,
-                'Zaehlungen',
-                z.id,
-              ],
-              text: `${kulturLabel ?? '(keine Kultur)'}, Zählung-ID: ${z.id}`,
-            }
-          }),
-      ),
-    zaehlungsWithoutAnzahlPflanzen: async () =>
-      await Promise.all(
-        zaehlungsSorted
-          .filter(
-            (z: import('../../../../../../dbModel.ts').Zaehlung) =>
-              z.kultur_id === kulturId,
-          )
-          .filter(
-            (z: import('../../../../../../dbModel.ts').Zaehlung) =>
-              teilzaehlungs
-                .filter(
-                  (tz: import('../../../../../../dbModel.ts').Teilzaehlung) =>
-                    tz.zaehlung_id === z.id,
-                )
-                .filter(
-                  (tz: import('../../../../../../dbModel.ts').Teilzaehlung) =>
-                    !tz._deleted,
-                )
-                .filter(
-                  (tz: import('../../../../../../dbModel.ts').Teilzaehlung) =>
-                    !exists(tz.anzahl_pflanzen),
-                ).length,
-          )
-          .map(async (z: import('../../../../../../dbModel.ts').Zaehlung) => {
-            let kultur
-            try {
-              kultur = await z.kultur.fetch()
-            } catch {}
-            let kulturLabel
-            try {
-              kulturLabel = await kultur?.label.pipe(first$()).toPromise()
-            } catch {}
-            const zaehlungLabel =
-              z.datum ?
-                `Zählung am ${DateTime.fromJSDate(new Date(z.datum)).toFormat('yyyy.LL.dd')}`
-              : `Zählung-ID: ${z.id}`
-            const tzs =
-              z.teilzaehlungs ?
-                await z.teilzaehlungs.extend(notDeletedQuery)?.fetch()
-              : []
-            const anzTz = tzs.length
-            const teilzaehlung = anzTz > 1 ? ` (${anzTz} Teilzählungen)` : ''
-            const text = `${
-              kulturLabel ?? '(keine Kultur)'
-            }, ${zaehlungLabel}${teilzaehlung}`
-
-            return {
-              url: [
-                'Arten',
-                kultur?.art_id,
-                'Kulturen',
-                kulturId,
-                'Zaehlungen',
-                z.id,
-              ],
-              text,
-            }
-          }),
-      ),
-    zaehlungsWithoutAnzahlAuspflanzbereit: async () =>
-      await Promise.all(
-        zaehlungsSorted
-          .filter(
-            (z: import('../../../../../../dbModel.ts').Zaehlung) =>
-              z.kultur_id === kulturId,
-          )
-          .filter(
-            (z: import('../../../../../../dbModel.ts').Zaehlung) =>
-              teilzaehlungs
-                .filter(
-                  (tz: import('../../../../../../dbModel.ts').Teilzaehlung) =>
-                    tz.zaehlung_id === z.id,
-                )
-                .filter(
-                  (tz: import('../../../../../../dbModel.ts').Teilzaehlung) =>
-                    !tz._deleted,
-                )
-                .filter(
-                  (tz: import('../../../../../../dbModel.ts').Teilzaehlung) =>
-                    !exists(tz.anzahl_auspflanzbereit),
-                ).length,
-          )
-          .map(async (z: import('../../../../../../dbModel.ts').Zaehlung) => {
-            let kultur
-            try {
-              kultur = await z.kultur.fetch()
-            } catch {}
-            let kulturLabel
-            try {
-              kulturLabel = await kultur?.label.pipe(first$()).toPromise()
-            } catch {}
-            const zaehlung =
-              z.datum ?
-                `Zählung am ${DateTime.fromJSDate(new Date(z.datum)).toFormat('yyyy.LL.dd')}`
-              : `Zählung-ID: ${z.id}`
-            const anzTz = teilzaehlungs
-              .filter(
-                (tz: import('../../../../../../dbModel.ts').Teilzaehlung) =>
-                  tz.zaehlung_id === z.id,
-              )
-              .filter(
-                (tz: import('../../../../../../dbModel.ts').Teilzaehlung) =>
-                  !tz._deleted,
-              ).length
-            const teilzaehlung = anzTz > 1 ? ` (${anzTz} Teilzählungen)` : ''
-            const text = `${
-              kulturLabel ?? '(keine Kultur)'
-            }, ${zaehlung}${teilzaehlung}`
-
-            return {
-              url: [
-                'Arten',
-                kultur?.art_id,
-                'Kulturen',
-                kulturId,
-                'Zaehlungen',
-                z.id,
-              ],
-              text,
-            }
-          }),
-      ),
-    zaehlungsWithoutAnzahlMutterpflanzen: async () =>
-      await Promise.all(
-        zaehlungsSorted
-          .filter(
-            (z: import('../../../../../../dbModel.ts').Zaehlung) =>
-              z.kultur_id === kulturId,
-          )
-          .filter(
-            (z: import('../../../../../../dbModel.ts').Zaehlung) =>
-              teilzaehlungs
-                .filter(
-                  (tz: import('../../../../../../dbModel.ts').Teilzaehlung) =>
-                    tz.zaehlung_id === z.id,
-                )
-                .filter(
-                  (tz: import('../../../../../../dbModel.ts').Teilzaehlung) =>
-                    !tz._deleted,
-                )
-                .filter(
-                  (tz: import('../../../../../../dbModel.ts').Teilzaehlung) =>
-                    !exists(tz.anzahl_mutterpflanzen),
-                ).length,
-          )
-          .map(async (z: import('../../../../../../dbModel.ts').Zaehlung) => {
-            let kultur
-            try {
-              kultur = await z.kultur.fetch()
-            } catch {}
-            let kulturLabel
-            try {
-              kulturLabel = await kultur?.label.pipe(first$()).toPromise()
-            } catch {}
-            const zaehlung =
-              z.datum ?
-                `Zählung am ${DateTime.fromJSDate(new Date(z.datum)).toFormat('yyyy.LL.dd')}`
-              : `Zählung-ID: ${z.id}`
-            const anzTz = teilzaehlungs
-              .filter(
-                (tz: import('../../../../../../dbModel.ts').Teilzaehlung) =>
-                  tz.zaehlung_id === z.id,
-              )
-              .filter(
-                (tz: import('../../../../../../dbModel.ts').Teilzaehlung) =>
-                  !tz._deleted,
-              ).length
-            const teilzaehlung = anzTz > 1 ? ` (${anzTz} Teilzählungen)` : ''
-            const text = `${
-              kulturLabel ?? '(keine Kultur)'
-            }, ${zaehlung}${teilzaehlung}`
-
-            return {
-              url: [
-                'Arten',
-                kultur?.art_id,
-                'Kulturen',
-                kulturId,
-                'Zaehlungen',
-                z.id,
-              ],
-              text,
-            }
-          }),
-      ),
-    zaehlungsWithTeilzaehlungsWithoutTeilkulturThoughTeilkulturIsChoosen:
-      async () =>
-        await Promise.all(
-          zaehlungsSorted
+      await buildQkMessages({
+        rows: kultursSorted.filter(
+          (k: import('../../../../../../dbModel.ts').Kultur) =>
+            k.id === kulturId,
+        ),
+        failsCheck: (k: import('../../../../../../dbModel.ts').Kultur) =>
+          zaehlungs
             .filter(
               (z: import('../../../../../../dbModel.ts').Zaehlung) =>
-                z.kultur_id === kulturId,
+                z.kultur_id === k.id,
             )
             .filter(
-              async (z: import('../../../../../../dbModel.ts').Zaehlung) => {
-                let kulturOption
-                try {
-                  kulturOption = await z.kultur_option.fetch()
-                } catch {}
-
-                return !!kulturOption?.tk
-              },
+              (z: import('../../../../../../dbModel.ts').Zaehlung) =>
+                !z._deleted,
             )
-            .filter((z: import('../../../../../../dbModel.ts').Zaehlung) => {
-              const tzs = teilzaehlungs
-                .filter(
-                  (tz: import('../../../../../../dbModel.ts').Teilzaehlung) =>
-                    tz.zaehlung_id === z.id,
-                )
-                .filter(
-                  (tz: import('../../../../../../dbModel.ts').Teilzaehlung) =>
-                    !tz._deleted,
-                )
-              return (
-                tzs.length &&
-                tzs.filter(
-                  (tz: import('../../../../../../dbModel.ts').Teilzaehlung) =>
-                    !tz.teilkultur_id,
-                ).length
-              )
-            })
-            .map(async (z: import('../../../../../../dbModel.ts').Zaehlung) => {
-              let kultur
-              try {
-                kultur = await z.kultur.fetch()
-              } catch {}
-              let kulturLabel
-              try {
-                kulturLabel = await kultur?.label.pipe(first$()).toPromise()
-              } catch {}
-              const zaehlung =
-                z.datum ?
-                  `Zählung am ${DateTime.fromJSDate(new Date(z.datum)).toFormat('yyyy.LL.dd')}`
-                : `Zählung-ID: ${z.id}`
-              const anzTz = teilzaehlungs
-                .filter(
-                  (tz: import('../../../../../../dbModel.ts').Teilzaehlung) =>
-                    tz.zaehlung_id === z.id,
-                )
-                .filter(
-                  (tz: import('../../../../../../dbModel.ts').Teilzaehlung) =>
-                    !tz._deleted,
-                ).length
-              const teilzaehlung = anzTz > 1 ? ` (${anzTz} Teilzählungen)` : ''
-
-              return {
-                url: [
-                  'Arten',
-                  kultur?.art_id,
-                  'Kulturen',
-                  kultur?.id,
-                  'Zaehlungen',
-                  z.id,
-                ],
-                text: `${
-                  kulturLabel ?? '(keine Kultur)'
-                }, ${zaehlung}${teilzaehlung}`,
-              }
-            }),
+            .filter(
+              (z: import('../../../../../../dbModel.ts').Zaehlung) =>
+                z.datum && z.datum > startYear && z.datum < startNextYear,
+            ).length === 0,
+        buildUrl: () => ['Kulturen', kulturId],
+        buildText: (k: import('../../../../../../dbModel.ts').Kultur) =>
+          labelOf(k),
+      }),
+    teilkultursWithoutName: async () =>
+      await buildQkMessages({
+        rows: teilkultursSorted.filter(
+          (tk: import('../../../../../../dbModel.ts').Teilkultur) =>
+            tk.kultur_id === kulturId,
         ),
+        failsCheck: (tk: import('../../../../../../dbModel.ts').Teilkultur) =>
+          !tk.name,
+        buildUrl: (tk: import('../../../../../../dbModel.ts').Teilkultur) => [
+          'Kulturen',
+          kulturId,
+          'Teilkulturen',
+          tk.id,
+        ],
+        buildText: (tk: import('../../../../../../dbModel.ts').Teilkultur) =>
+          `${kulturLabel ?? '(keine Kultur)'}, Teilkultur-ID: ${tk.id}`,
+      }),
+    zaehlungsInFutureNotPrognose: async () =>
+      await buildQkMessages({
+        rows: zaehlungsSorted.filter(
+          (z: import('../../../../../../dbModel.ts').Zaehlung) =>
+            z.kultur_id === kulturId,
+        ),
+        failsCheck: (z: import('../../../../../../dbModel.ts').Zaehlung) =>
+          !!z.datum && new Date(z.datum).getTime() > now,
+        buildUrl: (z: import('../../../../../../dbModel.ts').Zaehlung) =>
+          zaehlungUrl(z),
+        buildText: (z: import('../../../../../../dbModel.ts').Zaehlung) =>
+          zaehlungText(z),
+      }),
+    zaehlungsWithoutDatum: async () =>
+      await buildQkMessages({
+        rows: zaehlungsSorted.filter(
+          (z: import('../../../../../../dbModel.ts').Zaehlung) =>
+            z.kultur_id === kulturId,
+        ),
+        failsCheck: (z: import('../../../../../../dbModel.ts').Zaehlung) =>
+          !z.datum,
+        buildUrl: (z: import('../../../../../../dbModel.ts').Zaehlung) =>
+          zaehlungUrl(z),
+        buildText: (z: import('../../../../../../dbModel.ts').Zaehlung) =>
+          zaehlungText(z),
+      }),
+    zaehlungsWithoutAnzahlPflanzen: async () =>
+      await buildQkMessages({
+        rows: zaehlungsSorted.filter(
+          (z: import('../../../../../../dbModel.ts').Zaehlung) =>
+            z.kultur_id === kulturId,
+        ),
+        failsCheck: (z: import('../../../../../../dbModel.ts').Zaehlung) =>
+          !!teilzaehlungs
+            .filter(
+              (tz: import('../../../../../../dbModel.ts').Teilzaehlung) =>
+                tz.zaehlung_id === z.id,
+            )
+            .filter(
+              (tz: import('../../../../../../dbModel.ts').Teilzaehlung) =>
+                !tz._deleted,
+            )
+            .filter(
+              (tz: import('../../../../../../dbModel.ts').Teilzaehlung) =>
+                !exists(tz.anzahl_pflanzen),
+            ).length,
+        buildUrl: (z: import('../../../../../../dbModel.ts').Zaehlung) =>
+          zaehlungUrl(z),
+        buildText: (z: import('../../../../../../dbModel.ts').Zaehlung) =>
+          zaehlungText(z),
+      }),
+    zaehlungsWithoutAnzahlAuspflanzbereit: async () =>
+      await buildQkMessages({
+        rows: zaehlungsSorted.filter(
+          (z: import('../../../../../../dbModel.ts').Zaehlung) =>
+            z.kultur_id === kulturId,
+        ),
+        failsCheck: (z: import('../../../../../../dbModel.ts').Zaehlung) =>
+          !!teilzaehlungs
+            .filter(
+              (tz: import('../../../../../../dbModel.ts').Teilzaehlung) =>
+                tz.zaehlung_id === z.id,
+            )
+            .filter(
+              (tz: import('../../../../../../dbModel.ts').Teilzaehlung) =>
+                !tz._deleted,
+            )
+            .filter(
+              (tz: import('../../../../../../dbModel.ts').Teilzaehlung) =>
+                !exists(tz.anzahl_auspflanzbereit),
+            ).length,
+        buildUrl: (z: import('../../../../../../dbModel.ts').Zaehlung) =>
+          zaehlungUrl(z),
+        buildText: (z: import('../../../../../../dbModel.ts').Zaehlung) =>
+          zaehlungText(z),
+      }),
+    zaehlungsWithoutAnzahlMutterpflanzen: async () =>
+      await buildQkMessages({
+        rows: zaehlungsSorted.filter(
+          (z: import('../../../../../../dbModel.ts').Zaehlung) =>
+            z.kultur_id === kulturId,
+        ),
+        failsCheck: (z: import('../../../../../../dbModel.ts').Zaehlung) =>
+          !!teilzaehlungs
+            .filter(
+              (tz: import('../../../../../../dbModel.ts').Teilzaehlung) =>
+                tz.zaehlung_id === z.id,
+            )
+            .filter(
+              (tz: import('../../../../../../dbModel.ts').Teilzaehlung) =>
+                !tz._deleted,
+            )
+            .filter(
+              (tz: import('../../../../../../dbModel.ts').Teilzaehlung) =>
+                !exists(tz.anzahl_mutterpflanzen),
+            ).length,
+        buildUrl: (z: import('../../../../../../dbModel.ts').Zaehlung) =>
+          zaehlungUrl(z),
+        buildText: (z: import('../../../../../../dbModel.ts').Zaehlung) =>
+          zaehlungText(z),
+      }),
+    zaehlungsWithTeilzaehlungsWithoutTeilkulturThoughTeilkulturIsChoosen:
+      async () => {
+        // kultur_option.tk is per kultur - one fetch for the whole scope.
+        // NOTE: the original passed an async predicate to .filter(),
+        // which is always truthy - the tk check never filtered
+        const firstZaehlung = zaehlungsSorted.find(
+          (z: import('../../../../../../dbModel.ts').Zaehlung) =>
+            z.kultur_id === kulturId,
+        )
+        let tkChoosen = false
+        if (firstZaehlung) {
+          try {
+            tkChoosen = !!(await firstZaehlung.kultur_option.fetch())?.tk
+          } catch {}
+        }
+        if (!tkChoosen) return []
+        return await buildQkMessages({
+          rows: zaehlungsSorted.filter(
+            (z: import('../../../../../../dbModel.ts').Zaehlung) =>
+              z.kultur_id === kulturId,
+          ),
+          failsCheck: (z: import('../../../../../../dbModel.ts').Zaehlung) => {
+            const tzs = teilzaehlungs
+              .filter(
+                (tz: import('../../../../../../dbModel.ts').Teilzaehlung) =>
+                  tz.zaehlung_id === z.id,
+              )
+              .filter(
+                (tz: import('../../../../../../dbModel.ts').Teilzaehlung) =>
+                  !tz._deleted,
+              )
+            return (
+              !!tzs.length &&
+              !!tzs.filter(
+                (tz: import('../../../../../../dbModel.ts').Teilzaehlung) =>
+                  !tz.teilkultur_id,
+              ).length
+            )
+          },
+          buildUrl: (z: import('../../../../../../dbModel.ts').Zaehlung) =>
+            zaehlungUrl(z),
+          buildText: (z: import('../../../../../../dbModel.ts').Zaehlung) =>
+            zaehlungText(z),
+        })
+      },
     lieferungsWithMultipleVon: async () =>
-      lieferungsSorted
-        .filter(
+      await buildQkMessages({
+        rows: lieferungsSorted.filter(
           (l: import('../../../../../../dbModel.ts').Lieferung) =>
             l.von_kultur_id === kulturId,
-        )
-        .filter(
-          (l: import('../../../../../../dbModel.ts').Lieferung) =>
-            !!l.von_sammlung_id,
-        )
-        .map((l: import('../../../../../../dbModel.ts').Lieferung) => {
-          const datum =
-            l.datum ?
-              DateTime.fromJSDate(new Date(l.datum)).toFormat('yyyy.LL.dd')
-            : `kein Datum`
-          const geplant = l.geplant ? ', (geplant)' : ''
-          const text = `${datum}, ID: ${l.id}${geplant}`
-
-          return {
-            url: ['Lieferungen', l.id],
-            text,
-          }
-        }),
+        ),
+        failsCheck: (l: import('../../../../../../dbModel.ts').Lieferung) =>
+          !!l.von_sammlung_id,
+        buildUrl: (l: import('../../../../../../dbModel.ts').Lieferung) => [
+          'Lieferungen',
+          l.id,
+        ],
+        buildText: (l: import('../../../../../../dbModel.ts').Lieferung) =>
+          lieferungText(l),
+      }),
     lieferungsWithMultipleNach: async () =>
-      lieferungsSorted
-        .filter(
+      await buildQkMessages({
+        rows: lieferungsSorted.filter(
           (l: import('../../../../../../dbModel.ts').Lieferung) =>
             l.nach_kultur_id === kulturId,
-        )
-        .filter(
-          (l: import('../../../../../../dbModel.ts').Lieferung) =>
-            l.nach_ausgepflanzt,
-        )
-        .map((l: import('../../../../../../dbModel.ts').Lieferung) => {
-          const datum =
-            l.datum ?
-              DateTime.fromJSDate(new Date(l.datum)).toFormat('yyyy.LL.dd')
-            : `kein Datum`
-          const geplant = l.geplant ? ', (geplant)' : ''
-          const text = `${datum}, ID: ${l.id}${geplant}`
-
-          return {
-            url: ['Lieferungen', l.id],
-            text,
-          }
-        }),
+        ),
+        failsCheck: (l: import('../../../../../../dbModel.ts').Lieferung) =>
+          !!l.nach_ausgepflanzt,
+        buildUrl: (l: import('../../../../../../dbModel.ts').Lieferung) => [
+          'Lieferungen',
+          l.id,
+        ],
+        buildText: (l: import('../../../../../../dbModel.ts').Lieferung) =>
+          lieferungText(l),
+      }),
     anLieferungsWithoutAnzahlPflanzen: async () =>
       await buildQkMessages({
         rows: lieferungsSorted.filter(
@@ -620,146 +439,106 @@ export const createKulturMessageFunctions = async ({
         buildText: (l) => lieferungText(l),
       }),
     anLieferungsWithoutVon: async () =>
-      lieferungsSorted
-        .filter(
+      await buildQkMessages({
+        rows: lieferungsSorted.filter(
           (l: import('../../../../../../dbModel.ts').Lieferung) =>
             l.nach_kultur_id === kulturId,
-        )
-        .filter(
-          (l: import('../../../../../../dbModel.ts').Lieferung) =>
-            !l.von_kultur_id,
-        )
-        .filter(
-          (l: import('../../../../../../dbModel.ts').Lieferung) =>
-            !l.von_sammlung_id,
-        )
-        .map((l: import('../../../../../../dbModel.ts').Lieferung) => {
-          const datum =
-            l.datum ?
-              DateTime.fromJSDate(new Date(l.datum)).toFormat('yyyy.LL.dd')
-            : `kein Datum`
-          const geplant = l.geplant ? ', (geplant)' : ''
-          const text = `${datum}, ID: ${l.id}${geplant}`
-
-          return {
-            url: ['Kulturen', kulturId, 'An-Lieferungen', l.id],
-            text,
-          }
-        }),
+        ),
+        failsCheck: (l: import('../../../../../../dbModel.ts').Lieferung) =>
+          !l.von_kultur_id,
+        buildUrl: (l: import('../../../../../../dbModel.ts').Lieferung) => [
+          'Kulturen',
+          kulturId,
+          'An-Lieferungen',
+          l.id,
+        ],
+        buildText: (l: import('../../../../../../dbModel.ts').Lieferung) =>
+          lieferungText(l),
+      }),
     ausLieferungsWithoutNach: async () =>
-      lieferungsSorted
-        .filter(
+      await buildQkMessages({
+        rows: lieferungsSorted.filter(
           (l: import('../../../../../../dbModel.ts').Lieferung) =>
             l.von_kultur_id === kulturId,
-        )
-        .filter(
-          (l: import('../../../../../../dbModel.ts').Lieferung) =>
-            !l.nach_kultur_id,
-        )
-        .filter(
-          (l: import('../../../../../../dbModel.ts').Lieferung) =>
-            !l.nach_ausgepflanzt,
-        )
-        .map((l: import('../../../../../../dbModel.ts').Lieferung) => {
-          const datum =
-            l.datum ?
-              DateTime.fromJSDate(new Date(l.datum)).toFormat('yyyy.LL.dd')
-            : `kein Datum`
-          const geplant = l.geplant ? ', (geplant)' : ''
-          const text = `${datum}, ID: ${l.id}${geplant}`
-
-          return {
-            url: ['Kulturen', kulturId, 'Aus-Lieferungen', l.id],
-            text,
-          }
-        }),
+        ),
+        failsCheck: (l: import('../../../../../../dbModel.ts').Lieferung) =>
+          !l.nach_kultur_id && !l.nach_ausgepflanzt,
+        buildUrl: (l: import('../../../../../../dbModel.ts').Lieferung) => [
+          'Kulturen',
+          kulturId,
+          'Aus-Lieferungen',
+          l.id,
+        ],
+        buildText: (l: import('../../../../../../dbModel.ts').Lieferung) =>
+          lieferungText(l),
+      }),
     anLieferungsWithoutDatum: async () =>
-      lieferungsSorted
-        .filter(
-          (l: import('../../../../../../dbModel.ts').Lieferung) =>
-            l.von_kultur_id === kulturId,
-        )
-        .filter(
-          (l: import('../../../../../../dbModel.ts').Lieferung) => !l.datum,
-        )
-        .map((l: import('../../../../../../dbModel.ts').Lieferung) => {
-          const datum =
-            l.datum ?
-              DateTime.fromJSDate(new Date(l.datum)).toFormat('yyyy.LL.dd')
-            : `kein Datum`
-          const geplant = l.geplant ? ', (geplant)' : ''
-          const text = `${datum}, ID: ${l.id}${geplant}`
-
-          return {
-            url: ['Kulturen', kulturId, 'An-Lieferungen', l.id],
-            text,
-          }
-        }),
-    ausLieferungsWithoutDatum: async () =>
-      lieferungsSorted
-        .filter(
-          (l: import('../../../../../../dbModel.ts').Lieferung) =>
-            l.von_kultur_id === kulturId,
-        )
-        .filter(
-          (l: import('../../../../../../dbModel.ts').Lieferung) => !l.datum,
-        )
-        .map((l: import('../../../../../../dbModel.ts').Lieferung) => {
-          const datum =
-            l.datum ?
-              DateTime.fromJSDate(new Date(l.datum)).toFormat('yyyy.LL.dd')
-            : `kein Datum`
-          const geplant = l.geplant ? ', (geplant)' : ''
-          const text = `${datum}, ID: ${l.id}${geplant}`
-
-          return {
-            url: ['Kulturen', kulturId, 'Aus-Lieferungen', l.id],
-            text,
-          }
-        }),
-    anLieferungsWithoutPerson: async () =>
-      lieferungsSorted
-        .filter(
+      await buildQkMessages({
+        rows: lieferungsSorted.filter(
           (l: import('../../../../../../dbModel.ts').Lieferung) =>
             l.nach_kultur_id === kulturId,
-        )
-        .filter(
-          (l: import('../../../../../../dbModel.ts').Lieferung) => !l.person_id,
-        )
-        .map((l: import('../../../../../../dbModel.ts').Lieferung) => {
-          const datum =
-            l.datum ?
-              DateTime.fromJSDate(new Date(l.datum)).toFormat('yyyy.LL.dd')
-            : `kein Datum`
-          const geplant = l.geplant ? ', (geplant)' : ''
-          const text = `${datum}, ID: ${l.id}${geplant}`
-
-          return {
-            url: ['Kulturen', kulturId, 'An-Lieferungen', l.id],
-            text,
-          }
-        }),
-    ausLieferungsWithoutPerson: async () =>
-      lieferungsSorted
-        .filter(
+        ),
+        failsCheck: (l: import('../../../../../../dbModel.ts').Lieferung) =>
+          !l.datum,
+        buildUrl: (l: import('../../../../../../dbModel.ts').Lieferung) => [
+          'Kulturen',
+          kulturId,
+          'An-Lieferungen',
+          l.id,
+        ],
+        buildText: (l: import('../../../../../../dbModel.ts').Lieferung) =>
+          lieferungText(l),
+      }),
+    ausLieferungsWithoutDatum: async () =>
+      await buildQkMessages({
+        rows: lieferungsSorted.filter(
           (l: import('../../../../../../dbModel.ts').Lieferung) =>
             l.von_kultur_id === kulturId,
-        )
-        .filter(
-          (l: import('../../../../../../dbModel.ts').Lieferung) => !l.person_id,
-        )
-        .map((l: import('../../../../../../dbModel.ts').Lieferung) => {
-          const datum =
-            l.datum ?
-              DateTime.fromJSDate(new Date(l.datum)).toFormat('yyyy.LL.dd')
-            : `kein Datum`
-          const geplant = l.geplant ? ', (geplant)' : ''
-          const text = `${datum}, ID: ${l.id}${geplant}`
-
-          return {
-            url: ['Kulturen', kulturId, 'Aus-Lieferungen', l.id],
-            text,
-          }
-        }),
+        ),
+        failsCheck: (l: import('../../../../../../dbModel.ts').Lieferung) =>
+          !l.datum,
+        buildUrl: (l: import('../../../../../../dbModel.ts').Lieferung) => [
+          'Kulturen',
+          kulturId,
+          'Aus-Lieferungen',
+          l.id,
+        ],
+        buildText: (l: import('../../../../../../dbModel.ts').Lieferung) =>
+          lieferungText(l),
+      }),
+    anLieferungsWithoutPerson: async () =>
+      await buildQkMessages({
+        rows: lieferungsSorted.filter(
+          (l: import('../../../../../../dbModel.ts').Lieferung) =>
+            l.nach_kultur_id === kulturId,
+        ),
+        failsCheck: (l: import('../../../../../../dbModel.ts').Lieferung) =>
+          !l.person_id,
+        buildUrl: (l: import('../../../../../../dbModel.ts').Lieferung) => [
+          'Kulturen',
+          kulturId,
+          'An-Lieferungen',
+          l.id,
+        ],
+        buildText: (l: import('../../../../../../dbModel.ts').Lieferung) =>
+          lieferungText(l),
+      }),
+    ausLieferungsWithoutPerson: async () =>
+      await buildQkMessages({
+        rows: lieferungsSorted.filter(
+          (l: import('../../../../../../dbModel.ts').Lieferung) =>
+            l.von_kultur_id === kulturId,
+        ),
+        failsCheck: (l: import('../../../../../../dbModel.ts').Lieferung) =>
+          !l.person_id,
+        buildUrl: (l: import('../../../../../../dbModel.ts').Lieferung) => [
+          'Kulturen',
+          kulturId,
+          'Aus-Lieferungen',
+          l.id,
+        ],
+        buildText: (l: import('../../../../../../dbModel.ts').Lieferung) =>
+          lieferungText(l),
+      }),
   }
 }
