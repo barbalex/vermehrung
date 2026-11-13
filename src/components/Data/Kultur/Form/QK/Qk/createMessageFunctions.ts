@@ -98,21 +98,21 @@ export const createKulturMessageFunctions = async ({
       await buildQkMessages({
         rows: kultursSorted.filter((k) => k.id === kulturId),
         failsCheck: (k) => !exists(k.von_anzahl_individuen),
-        buildUrl: () => ['Kulturen', kulturId],
+        buildUrl: () => ['Kulturen', kulturId, 'Kultur'],
         buildText: (k) => labelOf(k),
       }),
     kultursWithoutGarten: async () =>
       await buildQkMessages({
         rows: kultursSorted.filter((k) => k.id === kulturId),
         failsCheck: (k) => !k.garten_id,
-        buildUrl: () => ['Kulturen', kulturId],
+        buildUrl: () => ['Kulturen', kulturId, 'Kultur'],
         buildText: (k) => labelOf(k),
       }),
     kultursWithoutHerkunft: async () =>
       await buildQkMessages({
         rows: kultursSorted.filter((k) => k.id === kulturId),
         failsCheck: (k) => !k.herkunft_id,
-        buildUrl: () => ['Kulturen', kulturId],
+        buildUrl: () => ['Kulturen', kulturId, 'Kultur'],
         buildText: (k) => labelOf(k),
       }),
     kultursWithoutZaehlungThisYear: async () =>
@@ -142,7 +142,7 @@ export const createKulturMessageFunctions = async ({
             } catch {}
 
             return {
-              url: ['Kulturen', kulturId],
+              url: ['Kulturen', kulturId, 'Kultur'],
               text,
             }
           }),
@@ -205,7 +205,7 @@ export const createKulturMessageFunctions = async ({
                 'Arten',
                 kultur?.art_id,
                 'Kulturen',
-                z.id,
+                kulturId,
                 'Zaehlungen',
                 z.id,
               ],

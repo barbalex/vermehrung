@@ -246,7 +246,7 @@ export const createMessageFunctions = async ({
             const fullname = personFullname(v)
 
             return {
-              url: ['Personen', v.id],
+              url: ['Personen', v.id, 'Person'],
               text: `${v.nr}${fullname ? `, ${fullname}` : ''}`,
             }
           }),
@@ -258,7 +258,7 @@ export const createMessageFunctions = async ({
         .filter((v) => v.length > 1)
         .flatMap((vs) =>
           vs.map((v) => ({
-            url: ['Herkuenfte', v.id],
+            url: ['Herkuenfte', v.id, 'Herkunft'],
             text: `${v.nr}${v.lokalname ? `, ${v.lokalname}` : ''}${
               v.gemeinde ? `, ${v.gemeinde}` : ''
             }`,
@@ -288,7 +288,7 @@ export const createMessageFunctions = async ({
             } catch {}
 
             return {
-              url: ['Arten', a.id],
+              url: ['Arten', a.id, 'Art'],
               text,
             }
           }),
@@ -311,7 +311,7 @@ export const createMessageFunctions = async ({
             } catch {}
 
             return {
-              url: ['Sammlungen', s.id],
+              url: ['Sammlungen', s.id, 'Sammlung'],
               text,
             }
           }),
@@ -332,7 +332,7 @@ export const createMessageFunctions = async ({
               } catch {}
 
               return {
-                url: ['Sammlungen', s.id],
+                url: ['Sammlungen', s.id, 'Sammlung'],
                 text,
               }
             }),
@@ -351,7 +351,7 @@ export const createMessageFunctions = async ({
             } catch {}
 
             return {
-              url: ['Arten', artId, 'Sammlungen', s.id],
+              url: ['Arten', artId, 'Sammlungen', s.id, 'Sammlung'],
               text,
             }
           }),
@@ -368,7 +368,7 @@ export const createMessageFunctions = async ({
             } catch {}
 
             return {
-              url: ['Arten', artId, 'Sammlungen', s.id],
+              url: ['Arten', artId, 'Sammlungen', s.id, 'Sammlung'],
               text,
             }
           }),
@@ -385,7 +385,7 @@ export const createMessageFunctions = async ({
             } catch {}
 
             return {
-              url: ['Arten', artId, 'Sammlungen', s.id],
+              url: ['Arten', artId, 'Sammlungen', s.id, 'Sammlung'],
               text,
             }
           }),
@@ -402,7 +402,7 @@ export const createMessageFunctions = async ({
             } catch {}
 
             return {
-              url: ['Arten', artId, 'Sammlungen', s.id],
+              url: ['Arten', artId, 'Sammlungen', s.id, 'Sammlung'],
               text,
             }
           }),
@@ -419,7 +419,7 @@ export const createMessageFunctions = async ({
             } catch {}
 
             return {
-              url: ['Arten', artId, 'Sammlungen', s.id],
+              url: ['Arten', artId, 'Sammlungen', s.id, 'Sammlung'],
               text,
             }
           }),
@@ -436,7 +436,7 @@ export const createMessageFunctions = async ({
             } catch {}
 
             return {
-              url: ['Arten', artId, 'Sammlungen', s.id],
+              url: ['Arten', artId, 'Sammlungen', s.id, 'Sammlung'],
               text,
             }
           }),
@@ -495,7 +495,7 @@ export const createMessageFunctions = async ({
           } catch {}
 
           return {
-            url: ['Gaerten', g.id],
+            url: ['Gaerten', g.id, 'Garten'],
             text,
           }
         }),
@@ -512,7 +512,7 @@ export const createMessageFunctions = async ({
             } catch {}
 
             return {
-              url: ['Arten', artId, 'Kulturen', k.id],
+              url: ['Arten', artId, 'Kulturen', k.id, 'Kultur'],
               text,
             }
           }),
@@ -528,7 +528,7 @@ export const createMessageFunctions = async ({
             } catch {}
 
             return {
-              url: ['Arten', artId, 'Kulturen', k.id],
+              url: ['Arten', artId, 'Kulturen', k.id, 'Kultur'],
               text,
             }
           }),
@@ -544,7 +544,7 @@ export const createMessageFunctions = async ({
             } catch {}
 
             return {
-              url: ['Arten', artId, 'Kulturen', k.id],
+              url: ['Arten', artId, 'Kulturen', k.id, 'Kultur'],
               text,
             }
           }),
@@ -577,7 +577,7 @@ export const createMessageFunctions = async ({
             } catch {}
 
             return {
-              url: ['Arten', artId, 'Kulturen', k.id],
+              url: ['Arten', artId, 'Kulturen', k.id, 'Kultur'],
               text,
             }
           }),
@@ -649,7 +649,7 @@ export const createMessageFunctions = async ({
           const text = `${kulturLabel ?? '(keine kultur)'}, Zählung-ID: ${z.id}`
 
           return {
-            url: ['Arten', artId, 'Kulturen', z.id, 'Zaehlungen', z.id],
+            url: ['Arten', artId, 'Kulturen', kultur?.id, 'Zaehlungen', z.id],
             text,
           }
         }),
@@ -692,7 +692,7 @@ export const createMessageFunctions = async ({
             const text = `${kulturLabel ?? '(keine Kultur)'}, Zählung-ID: ${z.id}`
 
             return {
-              url: ['Arten', artId, 'Kulturen', z.id, 'Zaehlungen', z.id],
+              url: ['Arten', artId, 'Kulturen', kultur?.id, 'Zaehlungen', z.id],
               text,
             }
           },
