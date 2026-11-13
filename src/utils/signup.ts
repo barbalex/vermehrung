@@ -27,11 +27,26 @@ export const signup = async ({ person }: { person: Person | null }) => {
   }
   let data: string
   try {
+    const headers: Record<string, string> = {}
+    // create-user is manager-gated: prove the caller's role with the api JWT
+    const token = window.localStorage.getItem('token')
+    if (token) headers.authorization = `Bearer ${token}`
     const res = await fetchWithTimeout(
       `${constants?.getAuthUri()}/create-user/${email}`,
+      { headers },
     )
     data = await res.text()
     // like axios, treat non-2xx as an error and surface the body
+    if (res.status === 401) {
+      return addNotification({
+        message: 'Kein gültiges Token. Bitte ab- und wieder anmelden.',
+      })
+    }
+    if (res.status === 403) {
+      return addNotification({
+        message: 'Nur Manager können Konten erstellen.',
+      })
+    }
     if (!res.ok) throw new Error(data || res.statusText)
   } catch (error) {
     if (online) {

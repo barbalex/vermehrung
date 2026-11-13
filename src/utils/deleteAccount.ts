@@ -16,9 +16,26 @@ export const deleteAccount = async ({ person }: { person: Person | null }) => {
   // delete firebase user
   if (person?.account_id) {
     try {
+      const headers: Record<string, string> = {}
+      // delete-user is manager-gated: prove the caller's role with the api JWT
+      const token = window.localStorage.getItem('token')
+      if (token) headers.authorization = `Bearer ${token}`
       const res = await fetchWithTimeout(
         `${constants?.getAuthUri()}/delete-user/${person?.account_id}`,
+        { headers },
       )
+      // the auth gate rejects before Firebase is touched - surface that
+      // instead of treating it as a network failure / offline
+      if (res.status === 401) {
+        return addNotification({
+          message: 'Kein gültiges Token. Bitte ab- und wieder anmelden.',
+        })
+      }
+      if (res.status === 403) {
+        return addNotification({
+          message: 'Nur Manager können Konten löschen.',
+        })
+      }
       // like axios, treat non-2xx as an error and surface the body
       if (!res.ok) throw new Error((await res.text()) || res.statusText)
     } catch (error) {

@@ -10,8 +10,10 @@ services:
     env_file:
       - ./.env
     ports:
-      # make the Postgres database accessible from outside the Docker container on port 5432
-      - '5432:5432'
+      # Postgres reachable on the host (psql, SSH tunnels) - but not from
+      # the network: binding to 127.0.0.1 keeps password auth off the
+      # public interface
+      - '127.0.0.1:5432:5432'
     volumes:
       - db_data:/var/lib/postgresql
       - sik_data:/sik_data
@@ -44,7 +46,9 @@ services:
     expose:
       - '7000'
     ports:
-      - '7000:7000'
+      # caddy reaches auth over the compose network; the host binding is
+      # for debugging only and must not bypass caddy's TLS publicly
+      - '127.0.0.1:7000:7000'
     depends_on:
       db:
         condition: service_healthy

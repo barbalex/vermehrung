@@ -69,6 +69,64 @@ const signToken = (claims, secret, ttlSeconds) => {
   return `${header}.${payload}.${signature}`
 }
 
+// Verify an api JWT minted by /token (HS256, PGRST_JWT_SECRET).
+// Returns its claims if signature and expiry are valid, else null.
+const verifyToken = (token, secret) => {
+  const parts = (token || '').split('.')
+  if (parts.length !== 3) return null
+  const [header, payload, signature] = parts
+  const expected = crypto
+    .createHmac('sha256', secret)
+    .update(`${header}.${payload}`)
+    .digest()
+    .toString('base64')
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_')
+    .replace(/=+$/, '')
+  const received = Buffer.from(signature)
+  const wanted = Buffer.from(expected)
+  if (
+    received.length === 0 ||
+    received.length !== wanted.length ||
+    !crypto.timingSafeEqual(received, wanted)
+  ) {
+    return null
+  }
+  let claims
+  try {
+    claims = JSON.parse(
+      Buffer.from(
+        payload.replace(/-/g, '+').replace(/_/g, '/'),
+        'base64',
+      ).toString('utf8'),
+    )
+  } catch {
+    return null
+  }
+  if (!claims.exp || claims.exp < Math.floor(Date.now() / 1000)) return null
+  return claims
+}
+
+// Gate for the account-admin routes: only a manager with a valid api JWT
+// may call them. Returns a hapi response when denied, null when allowed.
+const requireManager = (req, h) => {
+  const secret = process.env.PGRST_JWT_SECRET
+  if (!secret) {
+    return h.response('PGRST_JWT_SECRET is not configured').code(500)
+  }
+  const claims = verifyToken(
+    (req.headers.authorization || '').replace(/^Bearer /, ''),
+    secret,
+  )
+  if (!claims) {
+    return h.response('a valid api token is required').code(401)
+  }
+  if (claims.role !== 'manager') {
+    return h.response('only managers may administer accounts').code(403)
+  }
+  return null
+}
+
 async function start() {
   server.route({
     method: '*',
@@ -81,6 +139,8 @@ async function start() {
     method: 'GET',
     path: '/create-user/{email}',
     handler: async (req, h) => {
+      const denied = requireManager(req, h)
+      if (denied) return denied
       if (!serviceAccount) {
         return h.response('Firebase not configured').code(500)
       }
@@ -128,6 +188,8 @@ async function start() {
     method: 'GET',
     path: '/delete-user/{uid}',
     handler: async (req, h) => {
+      const denied = requireManager(req, h)
+      if (denied) return denied
       if (!serviceAccount) {
         return h.response('Firebase not configured').code(500)
       }

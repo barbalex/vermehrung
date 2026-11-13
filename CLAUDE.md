@@ -38,7 +38,7 @@ This is a **local-first** app. Three concerns are split across the repo:
 
 - **Postgres/PostGIS** (`db/`): source of truth. The schema is versioned **in this repo** under `src/sql/` (`createTables.sql`, `createViews.sql`, `createRevTriggers_*.sql`, `createApiAccess.sql`, `createSyncFunction.sql`, `one-offs/`).
 - **PostgREST** v16.5 (`api`): exposes Postgres over REST, JWT-authenticated. Roles, column grants and row level security live in `src/sql/createApiAccess.sql` — **generated** from the permission definitions in `src/hasuraMetadata/metadata.json` by `tools/generate_api_access_sql.py`. The directory name is historical (the JSON is Hasura's metadata format and the migration source); nothing Hasura runs anymore — regenerate with the tool after changing permissions.
-- **Auth** (`auth/`, Hapi + `firebase-admin`): `POST /token` verifies a Firebase ID token and returns the api JWT (HS256) carrying `role` + `user_id`.
+- **Auth** (`auth/`, Hapi + `firebase-admin`): `POST /token` verifies a Firebase ID token and returns the api JWT (HS256) carrying `role` + `user_id`. The account-admin routes `GET /create-user/{email}` and `GET /delete-user/{uid}` require an api JWT with `role=manager` in the `Authorization` header (the frontend sends it from localStorage, like every api request). The production compose publishes db (5432) and auth (7000) on `127.0.0.1` only — Caddy reaches the services over the compose network.
 - **Caddy** (`caddy/`): reverse proxy / TLS termination (PostgREST handles CORS itself).
 - `backend-dev/docker-compose.yaml` runs `db` + `api` + `auth` locally. `backend/docker-compose.yaml` (production) runs `db` + `auth` + `api` + `caddy`.
 
