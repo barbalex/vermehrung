@@ -3,20 +3,15 @@ import { useAtomValue } from 'jotai'
 import IconButton from '@mui/material/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import { first as first$ } from 'rxjs/operators'
-import { uniqBy } from 'es-toolkit'
 
-import {
-  dbAtom,
-  errorsAtom,
-  filterArtAtom,
-} from '../../../../../store/index.ts'
+import { errorsAtom } from '../../../../../store/index.ts'
 import { Select } from '../../../../shared/Select/index.tsx'
 import { TextField } from '../../../../shared/TextField.tsx'
 import { constants } from '../../../../../utils/constants.ts'
 import { artsSortedFromArts } from '../../../../../utils/artsSortedFromArts.ts'
+import { useRelationOptions } from '../../../../../utils/useRelationOptions.ts'
 
 import wannStyles from './Wann.module.css'
-import { triStateDeletedQuery } from '../../../../../utils/triStateDeletedQuery.ts'
 
 export const LieferungWas = ({
   showFilter,
@@ -29,49 +24,49 @@ export const LieferungWas = ({
   saveToDb: (event: { target: { name?: string; value: unknown } }) => void
   ifNeeded: (field: string) => boolean
 }) => {
-  const db = useAtomValue(dbAtom)
   const errors = useAtomValue(errorsAtom)
-  const artFilter = useAtomValue(filterArtAtom)
 
-  const [artWerte, setArtWerte] = useState<
-    { value: string; label: string | undefined; link: string[] }[]
-  >([])
+  // the chosen art is resolved once - the hook merges it into the
+  // options so the select shows it even when filtered away
+  const [chosenArt, setChosenArt] = useState<
+    import('../../../../../dbModel.ts').Art | null | undefined
+  >(undefined)
   useEffect(() => {
-    const artDelQuery = triStateDeletedQuery(artFilter._deleted)
-    const subscription = db
-      ?.get<import('../../../../../dbModel.ts').Art>('art')
-      .query(artDelQuery)
-      .observe()
-      .subscribe(async (arts) => {
-        let art
-        try {
-          art = await row?.art.fetch()
-        } catch {}
-        const artsIncludingChoosen = uniqBy(
-          [...arts, ...(art && !showFilter ? [art] : [])],
-          (e) => e.id,
-        )
-        const artsSorted = await artsSortedFromArts(artsIncludingChoosen)
-        const artWerte = await Promise.all(
-          artsSorted.map(async (el) => {
-            let label
-            try {
-              label = await el.label.pipe(first$()).toPromise()
-            } catch {}
-
-            return {
-              value: el.id,
-              label,
-              link: ['Arten', el.id],
-            }
-          }),
-        )
-
-        setArtWerte(artWerte)
+    let isSubscribed = true
+    row?.art
+      .fetch()
+      .then((art) => {
+        if (isSubscribed) setChosenArt(art)
       })
+      .catch(() => {
+        if (isSubscribed) setChosenArt(null)
+      })
+    return () => {
+      isSubscribed = false
+    }
+  }, [row?.art])
 
-    return () => subscription?.unsubscribe?.()
-  }, [db, artFilter._deleted, row?.art, showFilter])
+  const artWerte = useRelationOptions<
+    import('../../../../../dbModel.ts').Art,
+    { value: string; label: string | undefined; link: string[] }
+  >({
+    table: 'art',
+    chosenRow: chosenArt,
+    showFilter,
+    sort: artsSortedFromArts,
+    buildOption: async (el) => {
+      let label
+      try {
+        label = await el.label.pipe(first$()).toPromise()
+      } catch {}
+
+      return {
+        value: el.id,
+        label,
+        link: ['Arten', el.id],
+      }
+    },
+  })
 
   const openGenVielfaldDocs = () => {
     const url = `${constants?.getAppUri()}/Dokumentation/genetische-vielfalt`
