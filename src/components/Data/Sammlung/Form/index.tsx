@@ -39,6 +39,7 @@ import { herkunftSort } from '../../../../utils/herkunftSort.ts'
 
 import artStyles from '../../Art/Form/index.module.css'
 import styles from './index.module.css'
+import { triStateDeletedQuery } from '../../../../utils/triStateDeletedQuery.ts'
 
 export const SammlungForm = ({
   showFilter,
@@ -84,14 +85,7 @@ export const SammlungForm = ({
     }[]
   }>({ personWerte: [], herkunftWerte: [], artWerte: [] })
   useEffect(() => {
-    const personDelQuery =
-      personFilter._deleted === false ? Q.where('_deleted', false)
-      : personFilter._deleted === true ? Q.where('_deleted', true)
-      : Q.or(
-          Q.where('_deleted', false),
-          Q.where('_deleted', true),
-          Q.where('_deleted', null),
-        )
+    const personDelQuery = triStateDeletedQuery(personFilter._deleted)
     const personAktivQuery =
       personFilter.aktiv === false ? Q.where('aktiv', false)
       : personFilter.aktiv === true ? Q.where('aktiv', true)
@@ -104,38 +98,17 @@ export const SammlungForm = ({
       ?.get<import('../../../../dbModel.ts').Person>('person')
       .query(personDelQuery, personAktivQuery)
       .observeWithColumns(['vorname', 'name'])
-    const herkunftDelQuery =
-      herkunftFilter._deleted === false ? Q.where('_deleted', false)
-      : herkunftFilter._deleted === true ? Q.where('_deleted', true)
-      : Q.or(
-          Q.where('_deleted', false),
-          Q.where('_deleted', true),
-          Q.where('_deleted', null),
-        )
+    const herkunftDelQuery = triStateDeletedQuery(herkunftFilter._deleted)
     const herkunftsObservable = db
       ?.get<import('../../../../dbModel.ts').Herkunft>('herkunft')
       .query(herkunftDelQuery)
       .observeWithColumns(['gemeinde', 'lokalname', 'nr'])
-    const artDelQuery =
-      artFilter._deleted === false ? Q.where('_deleted', false)
-      : artFilter._deleted === true ? Q.where('_deleted', true)
-      : Q.or(
-          Q.where('_deleted', false),
-          Q.where('_deleted', true),
-          Q.where('_deleted', null),
-        )
+    const artDelQuery = triStateDeletedQuery(artFilter._deleted)
     const artsObservable = db
       ?.get<import('../../../../dbModel.ts').Art>('art')
       .query(artDelQuery)
       .observeWithColumns(['ae_id'])
-    const sammlungDelQuery =
-      sammlungFilter._deleted === false ? Q.where('_deleted', false)
-      : sammlungFilter._deleted === true ? Q.where('_deleted', true)
-      : Q.or(
-          Q.where('_deleted', false),
-          Q.where('_deleted', true),
-          Q.where('_deleted', null),
-        )
+    const sammlungDelQuery = triStateDeletedQuery(sammlungFilter._deleted)
     const sammlungsNrCountObservable =
       showFilter || !exists(row?.nr) ?
         $of(0)

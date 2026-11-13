@@ -23,6 +23,7 @@ import { Coordinates } from '../../../shared/Coordinates.tsx'
 import { ConflictList } from '../../../shared/ConflictList/index.tsx'
 
 import artStyles from '../../Art/Form/index.module.css'
+import { triStateDeletedQuery } from '../../../../utils/triStateDeletedQuery.ts'
 
 export const HerkunftForm = ({
   showFilter,
@@ -62,14 +63,7 @@ export const HerkunftForm = ({
             'hk_geom_point',
           ])
       : $of({})
-    const delQuery =
-      herkunftFilter._deleted === false ? Q.where('_deleted', false)
-      : herkunftFilter._deleted === true ? Q.where('_deleted', true)
-      : Q.or(
-          Q.where('_deleted', false),
-          Q.where('_deleted', true),
-          Q.where('_deleted', null),
-        )
+    const delQuery = triStateDeletedQuery(herkunftFilter._deleted)
     const herkunftsNrCountObservable =
       showFilter || !exists(row?.nr) ?
         $of(0)

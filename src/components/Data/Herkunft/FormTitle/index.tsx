@@ -11,6 +11,7 @@ import {
 import { FilterTitle } from '../../../shared/FilterTitle.tsx'
 import { HerkunftFormTitle as FormTitle } from './FormTitle.tsx'
 import { tableFilter } from '../../../../utils/tableFilter.ts'
+import { triStateDeletedQuery } from '../../../../utils/triStateDeletedQuery.ts'
 
 export const HerkunftFormTitleChooser = ({
   row,
@@ -44,14 +45,7 @@ export const HerkunftFormTitleChooser = ({
     const collection =
       db?.get<import('../../../../dbModel.ts').Herkunft>('herkunft')
     if (!collection) return
-    const delQuery =
-      herkunftFilter._deleted === false ? Q.where('_deleted', false)
-      : herkunftFilter._deleted === true ? Q.where('_deleted', true)
-      : Q.or(
-          Q.where('_deleted', false),
-          Q.where('_deleted', true),
-          Q.where('_deleted', null),
-        )
+    const delQuery = triStateDeletedQuery(herkunftFilter._deleted)
     const totalCountObservable = collection
       .query(delQuery, ...hierarchyQuery)
       .observeCount()

@@ -12,6 +12,7 @@ import {
 import { FilterTitle } from '../../../shared/FilterTitle.tsx'
 import { KulturFormTitle as FormTitle } from './FormTitle.tsx'
 import { tableFilter } from '../../../../utils/tableFilter.ts'
+import { triStateDeletedQuery } from '../../../../utils/triStateDeletedQuery.ts'
 
 export const KulturFormTitleChooser = ({
   row,
@@ -48,14 +49,7 @@ export const KulturFormTitleChooser = ({
     const collection =
       db?.get<import('../../../../dbModel.ts').Kultur>('kultur')
     if (!collection) return
-    const kulturDelQuery =
-      kulturFilter._deleted === false ? Q.where('_deleted', false)
-      : kulturFilter._deleted === true ? Q.where('_deleted', true)
-      : Q.or(
-          Q.where('_deleted', false),
-          Q.where('_deleted', true),
-          Q.where('_deleted', null),
-        )
+    const kulturDelQuery = triStateDeletedQuery(kulturFilter._deleted)
     const kulturAktivQuery =
       kulturFilter.aktiv === false ? Q.where('aktiv', false)
       : kulturFilter.aktiv === true ? Q.where('aktiv', true)

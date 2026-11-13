@@ -29,6 +29,7 @@ import { GartenPersonen as Personen } from './Personen/index.tsx'
 import { ConflictList } from '../../../shared/ConflictList/index.tsx'
 
 import artStyles from '../../Art/Form/index.module.css'
+import { triStateDeletedQuery } from '../../../../utils/triStateDeletedQuery.ts'
 
 export const GartenForm = ({
   showFilter,
@@ -82,14 +83,7 @@ export const GartenForm = ({
             'ga_bemerkungen',
           ])
       : $of({})
-    const delQuery =
-      personFilter._deleted === false ? Q.where('_deleted', false)
-      : personFilter._deleted === true ? Q.where('_deleted', true)
-      : Q.or(
-          Q.where('_deleted', false),
-          Q.where('_deleted', true),
-          Q.where('_deleted', null),
-        )
+    const delQuery = triStateDeletedQuery(personFilter._deleted)
     const aktivQuery =
       personFilter.aktiv === false ? Q.where('aktiv', false)
       : personFilter.aktiv === true ? Q.where('aktiv', true)

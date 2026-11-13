@@ -38,6 +38,7 @@ import { herkunftSort } from '../../../../utils/herkunftSort.ts'
 
 import artStyles from '../../Art/Form/index.module.css'
 import styles from './index.module.css'
+import { triStateDeletedQuery } from '../../../../utils/triStateDeletedQuery.ts'
 
 export const KulturForm = ({
   showFilter,
@@ -101,14 +102,7 @@ export const KulturForm = ({
           .query(Q.on('person', Q.where('account_id', user.uid)))
           .observeWithColumns(['ku_zwischenlager', 'ku_erhaltungskultur'])
       : $of({})
-    const gartenDelQuery =
-      gartenFilter._deleted === false ? Q.where('_deleted', false)
-      : gartenFilter._deleted === true ? Q.where('_deleted', true)
-      : Q.or(
-          Q.where('_deleted', false),
-          Q.where('_deleted', true),
-          Q.where('_deleted', null),
-        )
+    const gartenDelQuery = triStateDeletedQuery(gartenFilter._deleted)
     const gartenAktivQuery =
       gartenFilter.aktiv === false ? Q.where('aktiv', false)
       : gartenFilter.aktiv === true ? Q.where('aktiv', true)
@@ -123,14 +117,7 @@ export const KulturForm = ({
       .observe()
     const gartenObservable =
       row?.garten ? row?.garten?.observe() : $of(gartenFilter)
-    const sammlungDelQuery =
-      sammlungFilter._deleted === false ? Q.where('_deleted', false)
-      : sammlungFilter._deleted === true ? Q.where('_deleted', true)
-      : Q.or(
-          Q.where('_deleted', false),
-          Q.where('_deleted', true),
-          Q.where('_deleted', null),
-        )
+    const sammlungDelQuery = triStateDeletedQuery(sammlungFilter._deleted)
     const sammlungsObservable = db
       ?.get<import('../../../../dbModel.ts').Sammlung>('sammlung')
       .query(
@@ -183,14 +170,7 @@ export const KulturForm = ({
       // only consider kulturen with both art and herkunft chosen
       const thisGartenKulturs: import('../../../../dbModel.ts').Kultur[] = []
       try {
-        const kulturDelQuery =
-          kulturFilter._deleted === false ? Q.where('_deleted', false)
-          : kulturFilter._deleted === true ? Q.where('_deleted', true)
-          : Q.or(
-              Q.where('_deleted', false),
-              Q.where('_deleted', true),
-              Q.where('_deleted', null),
-            )
+        const kulturDelQuery = triStateDeletedQuery(kulturFilter._deleted)
         const kulturAktivQuery =
           kulturFilter.aktiv === false ? Q.where('aktiv', false)
           : kulturFilter.aktiv === true ? Q.where('aktiv', true)
@@ -310,14 +290,7 @@ export const KulturForm = ({
     }[]
   }>({ artWerte: [], herkunftWerte: [] })
   useEffect(() => {
-    const artDelQuery =
-      artFilter._deleted === false ? Q.where('_deleted', false)
-      : artFilter._deleted === true ? Q.where('_deleted', true)
-      : Q.or(
-          Q.where('_deleted', false),
-          Q.where('_deleted', true),
-          Q.where('_deleted', null),
-        )
+    const artDelQuery = triStateDeletedQuery(artFilter._deleted)
     const artsObservable = db
       ?.get<import('../../../../dbModel.ts').Art>('art')
       .query(
@@ -326,14 +299,7 @@ export const KulturForm = ({
         Q.where('id', Q.oneOf(artsToChoose.filter((v): v is string => !!v))),
       )
       .observe()
-    const herkunftDelQuery =
-      herkunftFilter._deleted === false ? Q.where('_deleted', false)
-      : herkunftFilter._deleted === true ? Q.where('_deleted', true)
-      : Q.or(
-          Q.where('_deleted', false),
-          Q.where('_deleted', true),
-          Q.where('_deleted', null),
-        )
+    const herkunftDelQuery = triStateDeletedQuery(herkunftFilter._deleted)
     const herkunftsObservable = db
       ?.get<import('../../../../dbModel.ts').Herkunft>('herkunft')
       .query(

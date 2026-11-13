@@ -21,6 +21,7 @@ import { tableFilter } from '../../../utils/tableFilter.ts'
 import { constants } from '../../../utils/constants.ts'
 
 import artStyles from '../Arten/index.module.css'
+import { triStateDeletedQuery } from '../../../utils/triStateDeletedQuery.ts'
 
 const onClickNew = () =>
   insertBedarfRev({ values: { jahr: new Date().getFullYear() } })
@@ -44,14 +45,7 @@ export const Bedarfe = ({ filter: showFilter = false }) => {
       : []
     const collection = db?.get<import('../../../dbModel.ts').Bedarf>('bedarf')
     if (!collection) return
-    const delQuery =
-      bedarfFilter._deleted === false ? Q.where('_deleted', false)
-      : bedarfFilter._deleted === true ? Q.where('_deleted', true)
-      : Q.or(
-          Q.where('_deleted', false),
-          Q.where('_deleted', true),
-          Q.where('_deleted', null),
-        )
+    const delQuery = triStateDeletedQuery(bedarfFilter._deleted)
     const countObservable = collection
       .query(delQuery, ...hierarchyQuery)
       .observeCount()

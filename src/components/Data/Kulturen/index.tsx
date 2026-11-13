@@ -23,6 +23,7 @@ import { kultursSortedFromKulturs } from '../../../utils/kultursSortedFromKultur
 import { constants } from '../../../utils/constants.ts'
 
 import artStyles from '../Arten/index.module.css'
+import { triStateDeletedQuery } from '../../../utils/triStateDeletedQuery.ts'
 
 export const Kulturen = ({ filter: showFilter = false }) => {
   const db = useAtomValue(dbAtom)
@@ -53,14 +54,7 @@ export const Kulturen = ({ filter: showFilter = false }) => {
     }
     const collection = db?.get<import('../../../dbModel.ts').Kultur>('kultur')
     if (!collection) return
-    const kulturDelQuery =
-      kulturFilter._deleted === false ? Q.where('_deleted', false)
-      : kulturFilter._deleted === true ? Q.where('_deleted', true)
-      : Q.or(
-          Q.where('_deleted', false),
-          Q.where('_deleted', true),
-          Q.where('_deleted', null),
-        )
+    const kulturDelQuery = triStateDeletedQuery(kulturFilter._deleted)
     const kulturAktivQuery =
       kulturFilter.aktiv === false ? Q.where('aktiv', false)
       : kulturFilter.aktiv === true ? Q.where('aktiv', true)

@@ -11,6 +11,7 @@ import {
 import { FilterTitle } from '../../../shared/FilterTitle.tsx'
 import { GartenFormTitle as FormTitle } from './FormTitle.tsx'
 import { tableFilter } from '../../../../utils/tableFilter.ts'
+import { triStateDeletedQuery } from '../../../../utils/triStateDeletedQuery.ts'
 
 export const GartenFormTitle = ({
   row,
@@ -40,14 +41,7 @@ export const GartenFormTitle = ({
     const collection =
       db?.get<import('../../../../dbModel.ts').Garten>('garten')
     if (!collection) return
-    const delQuery =
-      gartenFilter._deleted === false ? Q.where('_deleted', false)
-      : gartenFilter._deleted === true ? Q.where('_deleted', true)
-      : Q.or(
-          Q.where('_deleted', false),
-          Q.where('_deleted', true),
-          Q.where('_deleted', null),
-        )
+    const delQuery = triStateDeletedQuery(gartenFilter._deleted)
     const aktivQuery =
       gartenFilter.aktiv === false ? Q.where('aktiv', false)
       : gartenFilter.aktiv === true ? Q.where('aktiv', true)

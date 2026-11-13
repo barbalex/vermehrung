@@ -26,6 +26,7 @@ import { lieferungSort } from '../../../utils/lieferungSort.ts'
 import { constants } from '../../../utils/constants.ts'
 
 import artStyles from '../Arten/index.module.css'
+import { triStateDeletedQuery } from '../../../utils/triStateDeletedQuery.ts'
 
 export const Lieferungen = ({ filter: showFilter = false }) => {
   const db = useAtomValue(dbAtom)
@@ -72,14 +73,7 @@ export const Lieferungen = ({ filter: showFilter = false }) => {
     const collection =
       db?.get<import('../../../dbModel.ts').Lieferung>('lieferung')
     if (!collection) return
-    const lieferungDelQuery =
-      lieferungFilter._deleted === false ? Q.where('_deleted', false)
-      : lieferungFilter._deleted === true ? Q.where('_deleted', true)
-      : Q.or(
-          Q.where('_deleted', false),
-          Q.where('_deleted', true),
-          Q.where('_deleted', null),
-        )
+    const lieferungDelQuery = triStateDeletedQuery(lieferungFilter._deleted)
     const countObservable = collection
       .query(lieferungDelQuery, ...hierarchyQuery)
       .observeCount()

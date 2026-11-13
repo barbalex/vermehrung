@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react'
-import { Q } from 'nitromelondb'
 import { first as first$ } from 'rxjs/operators'
 import { combineLatest } from 'rxjs'
 import { uniqBy } from 'es-toolkit'
 
 import { kultursSortedFromKulturs } from '../../../../../../utils/kultursSortedFromKulturs.ts'
+import { triStateDeletedQuery } from '../../../../../../utils/triStateDeletedQuery.ts'
 
 export const useLieferungNachData = ({
   showFilter,
@@ -32,27 +32,13 @@ export const useLieferungNachData = ({
   }>({ nachKulturWerte: [] })
 
   useEffect(() => {
-    const kulturDelQuery =
-      filter.kultur._deleted === false ? Q.where('_deleted', false)
-      : filter.kultur._deleted === true ? Q.where('_deleted', true)
-      : Q.or(
-          Q.where('_deleted', false),
-          Q.where('_deleted', true),
-          Q.where('_deleted', null),
-        )
+    const kulturDelQuery = triStateDeletedQuery(filter.kultur._deleted)
     // BEWARE: need to include inactive kulturs
     const kultursObservable = db
       ?.get<import('../../../../../../dbModel.ts').Kultur>('kultur')
       .query(kulturDelQuery)
       .observe()
-    const sammlungDelQuery =
-      filter.sammlung._deleted === false ? Q.where('_deleted', false)
-      : filter.sammlung._deleted === true ? Q.where('_deleted', true)
-      : Q.or(
-          Q.where('_deleted', false),
-          Q.where('_deleted', true),
-          Q.where('_deleted', null),
-        )
+    const sammlungDelQuery = triStateDeletedQuery(filter.sammlung._deleted)
     const sammlungsObservable = db
       ?.get<import('../../../../../../dbModel.ts').Sammlung>('sammlung')
       .query(sammlungDelQuery)

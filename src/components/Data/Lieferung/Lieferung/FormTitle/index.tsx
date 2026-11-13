@@ -15,6 +15,7 @@ import {
 import { FilterTitle } from '../../../../shared/FilterTitle.tsx'
 import { LieferungFormTitle as FormTitle } from './FormTitle.tsx'
 import { tableFilter } from '../../../../../utils/tableFilter.ts'
+import { triStateDeletedQuery } from '../../../../../utils/triStateDeletedQuery.ts'
 
 export const LieferungTitleChooser = ({
   row,
@@ -68,14 +69,7 @@ export const LieferungTitleChooser = ({
     const collection =
       db?.get<import('../../../../../dbModel.ts').Lieferung>('lieferung')
     if (!collection) return
-    const lieferungDelQuery =
-      lieferungFilter._deleted === false ? Q.where('_deleted', false)
-      : lieferungFilter._deleted === true ? Q.where('_deleted', true)
-      : Q.or(
-          Q.where('_deleted', false),
-          Q.where('_deleted', true),
-          Q.where('_deleted', null),
-        )
+    const lieferungDelQuery = triStateDeletedQuery(lieferungFilter._deleted)
     const totalCountObservable = collection
       .query(lieferungDelQuery, ...hierarchyQuery)
       .observeCount()

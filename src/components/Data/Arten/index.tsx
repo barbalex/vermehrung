@@ -4,7 +4,6 @@ import { FaPlus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import { List } from 'react-window'
 import { combineLatest } from 'rxjs'
-import { Q } from 'nitromelondb'
 
 import { dbAtom, apFilterAtom, filterArtAtom } from '../../../store/index.ts'
 import { insertArtRev } from '../../../modules/insertRev.ts'
@@ -18,6 +17,7 @@ import { constants } from '../../../utils/constants.ts'
 import { ApFilter } from '../../shared/ApFilter.tsx'
 
 import artStyles from './index.module.css'
+import { triStateDeletedQuery } from '../../../utils/triStateDeletedQuery.ts'
 
 export const Arten = ({ filter: showFilter }: { filter?: boolean }) => {
   const db = useAtomValue(dbAtom)
@@ -31,14 +31,7 @@ export const Arten = ({ filter: showFilter }: { filter?: boolean }) => {
   useEffect(() => {
     const collection = db?.get<import('../../../dbModel.ts').Art>('art')
     if (!collection) return
-    const delQuery =
-      artFilter._deleted === false ? Q.where('_deleted', false)
-      : artFilter._deleted === true ? Q.where('_deleted', true)
-      : Q.or(
-          Q.where('_deleted', false),
-          Q.where('_deleted', true),
-          Q.where('_deleted', null),
-        )
+    const delQuery = triStateDeletedQuery(artFilter._deleted)
     const totalCountObservable = collection?.query(delQuery).observeCount()
     const artsObservable = collection
       .query(...tableFilter({ table: 'art', apFilter }))

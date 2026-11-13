@@ -9,6 +9,7 @@ import { lieferungSort } from '../../../../../../utils/lieferungSort.ts'
 import { teilkulturSort } from '../../../../../../utils/teilkulturSort.ts'
 import { zaehlungSort } from '../../../../../../utils/zaehlungSort.ts'
 import { store, filterTableAtoms } from '../../../../../../store/index.ts'
+import { triStateDeletedQuery } from '../../../../../../utils/triStateDeletedQuery.ts'
 
 export const createKulturMessageFunctions = async ({
   kulturId,
@@ -31,14 +32,7 @@ export const createKulturMessageFunctions = async ({
 
   let kulturs: import('../../../../../../dbModel.ts').Kultur[] = []
   try {
-    const kulturDelQuery =
-      filter.kultur._deleted === false ? Q.where('_deleted', false)
-      : filter.kultur._deleted === true ? Q.where('_deleted', true)
-      : Q.or(
-          Q.where('_deleted', false),
-          Q.where('_deleted', true),
-          Q.where('_deleted', null),
-        )
+    const kulturDelQuery = triStateDeletedQuery(filter.kultur._deleted)
     const kulturAktivQuery =
       filter.kultur.aktiv === false ? Q.where('aktiv', false)
       : filter.kultur.aktiv === true ? Q.where('aktiv', true)
@@ -56,14 +50,7 @@ export const createKulturMessageFunctions = async ({
   const kultursSorted = await kultursSortedFromKulturs(kulturs)
   let lieferungs: import('../../../../../../dbModel.ts').Lieferung[] = []
   try {
-    const lieferungDelQuery =
-      filter.lieferung._deleted === false ? Q.where('_deleted', false)
-      : filter.lieferung._deleted === true ? Q.where('_deleted', true)
-      : Q.or(
-          Q.where('_deleted', false),
-          Q.where('_deleted', true),
-          Q.where('_deleted', null),
-        )
+    const lieferungDelQuery = triStateDeletedQuery(filter.lieferung._deleted)
     lieferungs =
       (await db
         ?.get<import('../../../../../../dbModel.ts').Lieferung>('lieferung')
@@ -73,14 +60,7 @@ export const createKulturMessageFunctions = async ({
   const lieferungsSorted = lieferungs.sort(lieferungSort)
   let teilkulturs: import('../../../../../../dbModel.ts').Teilkultur[] = []
   try {
-    const teilkulturDelQuery =
-      filter.teilkultur._deleted === false ? Q.where('_deleted', false)
-      : filter.teilkultur._deleted === true ? Q.where('_deleted', true)
-      : Q.or(
-          Q.where('_deleted', false),
-          Q.where('_deleted', true),
-          Q.where('_deleted', null),
-        )
+    const teilkulturDelQuery = triStateDeletedQuery(filter.teilkultur._deleted)
     teilkulturs =
       (await db
         ?.get<import('../../../../../../dbModel.ts').Teilkultur>('teilkultur')
@@ -90,14 +70,7 @@ export const createKulturMessageFunctions = async ({
   const teilkultursSorted = teilkulturs.sort(teilkulturSort)
   let zaehlungs: import('../../../../../../dbModel.ts').Zaehlung[] = []
   try {
-    const zaehlungDelQuery =
-      filter.zaehlung._deleted === false ? Q.where('_deleted', false)
-      : filter.zaehlung._deleted === true ? Q.where('_deleted', true)
-      : Q.or(
-          Q.where('_deleted', false),
-          Q.where('_deleted', true),
-          Q.where('_deleted', null),
-        )
+    const zaehlungDelQuery = triStateDeletedQuery(filter.zaehlung._deleted)
     zaehlungs =
       (await db
         ?.get<import('../../../../../../dbModel.ts').Zaehlung>('zaehlung')

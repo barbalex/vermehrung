@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useAtomValue } from 'jotai'
 import { combineLatest } from 'rxjs'
-import { Q } from 'nitromelondb'
 
 import {
   dbAtom,
@@ -11,6 +10,7 @@ import {
 import { FilterTitle } from '../../../shared/FilterTitle.tsx'
 import { SammelLieferungFormTitle as FormTitle } from './FormTitle.tsx'
 import { tableFilter } from '../../../../utils/tableFilter.ts'
+import { triStateDeletedQuery } from '../../../../utils/triStateDeletedQuery.ts'
 
 export const SammelLieferungFormTitleChooser = ({
   lieferung,
@@ -41,14 +41,9 @@ export const SammelLieferungFormTitleChooser = ({
         'sammel_lieferung',
       )
     if (!collection) return
-    const sammelLieferungDelQuery =
-      sammelLieferungFilter._deleted === false ? Q.where('_deleted', false)
-      : sammelLieferungFilter._deleted === true ? Q.where('_deleted', true)
-      : Q.or(
-          Q.where('_deleted', false),
-          Q.where('_deleted', true),
-          Q.where('_deleted', null),
-        )
+    const sammelLieferungDelQuery = triStateDeletedQuery(
+      sammelLieferungFilter._deleted,
+    )
     const totalCountObservable = collection
       .query(sammelLieferungDelQuery)
       .observeCount()

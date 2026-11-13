@@ -11,6 +11,7 @@ import {
 import { FilterTitle } from '../../../shared/FilterTitle.tsx'
 import { ZaehlungFormTitle as FormTitle } from './FormTitle.tsx'
 import { tableFilter } from '../../../../utils/tableFilter.ts'
+import { triStateDeletedQuery } from '../../../../utils/triStateDeletedQuery.ts'
 
 export const ZaehlungFormTitleChooser = ({
   row,
@@ -40,14 +41,7 @@ export const ZaehlungFormTitleChooser = ({
     const collection =
       db?.get<import('../../../../dbModel.ts').Zaehlung>('zaehlung')
     if (!collection) return
-    const zaehlungDelQuery =
-      zaehlungFilter._deleted === false ? Q.where('_deleted', false)
-      : zaehlungFilter._deleted === true ? Q.where('_deleted', true)
-      : Q.or(
-          Q.where('_deleted', false),
-          Q.where('_deleted', true),
-          Q.where('_deleted', null),
-        )
+    const zaehlungDelQuery = triStateDeletedQuery(zaehlungFilter._deleted)
     const totalCountObservable = collection
       .query(zaehlungDelQuery, ...hierarchyQuery)
       .observeCount()

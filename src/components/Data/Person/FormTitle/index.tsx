@@ -7,6 +7,7 @@ import { dbAtom, filterPersonAtom } from '../../../../store/index.ts'
 import { FilterTitle } from '../../../shared/FilterTitle.tsx'
 import { PersonFormTitle as FormTitle } from './FormTitle.tsx'
 import { tableFilter } from '../../../../utils/tableFilter.ts'
+import { triStateDeletedQuery } from '../../../../utils/triStateDeletedQuery.ts'
 
 export const PersonFormTitleChooser = ({
   showFilter,
@@ -28,14 +29,7 @@ export const PersonFormTitleChooser = ({
     const collection =
       db?.get<import('../../../../dbModel.ts').Person>('person')
     if (!collection) return
-    const personDelQuery =
-      personFilter._deleted === false ? Q.where('_deleted', false)
-      : personFilter._deleted === true ? Q.where('_deleted', true)
-      : Q.or(
-          Q.where('_deleted', false),
-          Q.where('_deleted', true),
-          Q.where('_deleted', null),
-        )
+    const personDelQuery = triStateDeletedQuery(personFilter._deleted)
     const personAktivQuery =
       personFilter.aktiv === false ? Q.where('aktiv', false)
       : personFilter.aktiv === true ? Q.where('aktiv', true)

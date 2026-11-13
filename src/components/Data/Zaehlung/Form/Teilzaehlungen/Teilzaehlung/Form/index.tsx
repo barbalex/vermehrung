@@ -29,6 +29,7 @@ import { ErrorBoundary } from '../../../../../../shared/ErrorBoundary.tsx'
 import { exists } from '../../../../../../../utils/exists.ts'
 
 import styles from './index.module.css'
+import { triStateDeletedQuery } from '../../../../../../../utils/triStateDeletedQuery.ts'
 
 export const TeilzaehlungForm = ({
   id,
@@ -69,14 +70,7 @@ export const TeilzaehlungForm = ({
   const { teilkulturWerte, kulturOption, row } = dataState
 
   useEffect(() => {
-    const teilkulturDelQuery =
-      teilkulturFilter._deleted === false ? Q.where('_deleted', false)
-      : teilkulturFilter._deleted === true ? Q.where('_deleted', true)
-      : Q.or(
-          Q.where('_deleted', false),
-          Q.where('_deleted', true),
-          Q.where('_deleted', null),
-        )
+    const teilkulturDelQuery = triStateDeletedQuery(teilkulturFilter._deleted)
     const teilkultursObservable = db
       ?.get<import('../../../../../../../dbModel.ts').Teilkultur>('teilkultur')
       .query(teilkulturDelQuery, Q.where('kultur_id', kulturId ?? ''))

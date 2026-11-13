@@ -23,6 +23,7 @@ import { herkunftSort } from '../../../utils/herkunftSort.ts'
 import { constants } from '../../../utils/constants.ts'
 
 import artStyles from '../Arten/index.module.css'
+import { triStateDeletedQuery } from '../../../utils/triStateDeletedQuery.ts'
 
 export const Herkuenfte = ({ filter: showFilter }: { filter?: boolean }) => {
   const db = useAtomValue(dbAtom)
@@ -53,14 +54,7 @@ export const Herkuenfte = ({ filter: showFilter }: { filter?: boolean }) => {
     const collection =
       db?.get<import('../../../dbModel.ts').Herkunft>('herkunft')
     if (!collection) return
-    const delQuery =
-      herkunftFilter._deleted === false ? Q.where('_deleted', false)
-      : herkunftFilter._deleted === true ? Q.where('_deleted', true)
-      : Q.or(
-          Q.where('_deleted', false),
-          Q.where('_deleted', true),
-          Q.where('_deleted', null),
-        )
+    const delQuery = triStateDeletedQuery(herkunftFilter._deleted)
     const countObservable = collection
       .query(delQuery, ...hierarchyQuery)
       .observeCount()

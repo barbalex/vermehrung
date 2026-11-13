@@ -23,6 +23,7 @@ import { sammlungsSortedFromSammlungs } from '../../../utils/sammlungsSortedFrom
 import { constants } from '../../../utils/constants.ts'
 
 import artStyles from '../Arten/index.module.css'
+import { triStateDeletedQuery } from '../../../utils/triStateDeletedQuery.ts'
 
 export const Sammlungen = ({ filter: showFilter = false }) => {
   const db = useAtomValue(dbAtom)
@@ -54,14 +55,7 @@ export const Sammlungen = ({ filter: showFilter = false }) => {
     const collection =
       db?.get<import('../../../dbModel.ts').Sammlung>('sammlung')
     if (!collection) return
-    const sammlungDelQuery =
-      sammlungFilter._deleted === false ? Q.where('_deleted', false)
-      : sammlungFilter._deleted === true ? Q.where('_deleted', true)
-      : Q.or(
-          Q.where('_deleted', false),
-          Q.where('_deleted', true),
-          Q.where('_deleted', null),
-        )
+    const sammlungDelQuery = triStateDeletedQuery(sammlungFilter._deleted)
     const countObservable = collection
       .query(sammlungDelQuery, ...hierarchyQuery)
       .observeCount()

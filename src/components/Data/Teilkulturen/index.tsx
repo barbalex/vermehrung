@@ -21,6 +21,7 @@ import { teilkulturSort } from '../../../utils/teilkulturSort.ts'
 import { constants } from '../../../utils/constants.ts'
 
 import artStyles from '../Arten/index.module.css'
+import { triStateDeletedQuery } from '../../../utils/triStateDeletedQuery.ts'
 
 export const Teilkulturen = ({ filter: showFilter = false }) => {
   const db = useAtomValue(dbAtom)
@@ -42,14 +43,7 @@ export const Teilkulturen = ({ filter: showFilter = false }) => {
     const collection =
       db?.get<import('../../../dbModel.ts').Teilkultur>('teilkultur')
     if (!collection) return
-    const teilkulturDelQuery =
-      teilkulturFilter._deleted === false ? Q.where('_deleted', false)
-      : teilkulturFilter._deleted === true ? Q.where('_deleted', true)
-      : Q.or(
-          Q.where('_deleted', false),
-          Q.where('_deleted', true),
-          Q.where('_deleted', null),
-        )
+    const teilkulturDelQuery = triStateDeletedQuery(teilkulturFilter._deleted)
     const countObservable = collection
       .query(teilkulturDelQuery, ...hierarchyQuery)
       .observeCount()

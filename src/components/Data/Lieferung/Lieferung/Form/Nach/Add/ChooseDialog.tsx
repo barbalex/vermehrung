@@ -9,6 +9,7 @@ import { Q } from 'nitromelondb'
 import { dbAtom, filterGartenAtom } from '../../../../../../../store/index.ts'
 import { gartensSortedFromGartens } from '../../../../../../../utils/gartensSortedFromGartens.ts'
 import { StyledSelect } from '../../../../../../shared/Select/index.tsx'
+import { triStateDeletedQuery } from '../../../../../../../utils/triStateDeletedQuery.ts'
 
 export const LieferungAddChooseDialog = ({
   open,
@@ -39,14 +40,7 @@ export const LieferungAddChooseDialog = ({
   >([])
 
   useEffect(() => {
-    const gartenDelQuery =
-      gartenFilter._deleted === false ? Q.where('_deleted', false)
-      : gartenFilter._deleted === true ? Q.where('_deleted', true)
-      : Q.or(
-          Q.where('_deleted', false),
-          Q.where('_deleted', true),
-          Q.where('_deleted', null),
-        )
+    const gartenDelQuery = triStateDeletedQuery(gartenFilter._deleted)
     const gartenAktivQuery =
       gartenFilter.aktiv === false ? Q.where('aktiv', false)
       : gartenFilter.aktiv === true ? Q.where('aktiv', true)

@@ -27,6 +27,7 @@ import { personLabelFromPerson } from '../../../../utils/personLabelFromPerson.t
 import { personSort } from '../../../../utils/personSort.ts'
 
 import artStyles from '../../Art/Form/index.module.css'
+import { triStateDeletedQuery } from '../../../../utils/triStateDeletedQuery.ts'
 
 export const BedarfForm = ({
   showFilter,
@@ -71,14 +72,7 @@ export const BedarfForm = ({
     }[]
   }>({ kulturWerte: [], personWerte: [] })
   useEffect(() => {
-    const kulturDelQuery =
-      kulturFilter._deleted === false ? Q.where('_deleted', false)
-      : kulturFilter._deleted === true ? Q.where('_deleted', true)
-      : Q.or(
-          Q.where('_deleted', false),
-          Q.where('_deleted', true),
-          Q.where('_deleted', null),
-        )
+    const kulturDelQuery = triStateDeletedQuery(kulturFilter._deleted)
     const kulturAktivQuery =
       kulturFilter.aktiv === false ? Q.where('aktiv', false)
       : kulturFilter.aktiv === true ? Q.where('aktiv', true)
@@ -96,14 +90,7 @@ export const BedarfForm = ({
         'herkunft_id',
         'zwischenlager',
       ])
-    const personDelQuery =
-      personFilter._deleted === false ? Q.where('_deleted', false)
-      : personFilter._deleted === true ? Q.where('_deleted', true)
-      : Q.or(
-          Q.where('_deleted', false),
-          Q.where('_deleted', true),
-          Q.where('_deleted', null),
-        )
+    const personDelQuery = triStateDeletedQuery(personFilter._deleted)
     const personAktivQuery =
       personFilter.aktiv === false ? Q.where('aktiv', false)
       : personFilter.aktiv === true ? Q.where('aktiv', true)

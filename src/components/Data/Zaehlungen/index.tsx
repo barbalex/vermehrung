@@ -21,6 +21,7 @@ import { zaehlungSort } from '../../../utils/zaehlungSort.ts'
 import { constants } from '../../../utils/constants.ts'
 
 import artStyles from '../Arten/index.module.css'
+import { triStateDeletedQuery } from '../../../utils/triStateDeletedQuery.ts'
 
 export const Zaehlungen = ({ filter: showFilter = false }) => {
   const db = useAtomValue(dbAtom)
@@ -42,14 +43,7 @@ export const Zaehlungen = ({ filter: showFilter = false }) => {
     const collection =
       db?.get<import('../../../dbModel.ts').Zaehlung>('zaehlung')
     if (!collection) return
-    const zaehlungDelQuery =
-      zaehlungFilter._deleted === false ? Q.where('_deleted', false)
-      : zaehlungFilter._deleted === true ? Q.where('_deleted', true)
-      : Q.or(
-          Q.where('_deleted', false),
-          Q.where('_deleted', true),
-          Q.where('_deleted', null),
-        )
+    const zaehlungDelQuery = triStateDeletedQuery(zaehlungFilter._deleted)
     const countObservable = collection
       .query(zaehlungDelQuery, ...hierarchyQuery)
       .observeCount()

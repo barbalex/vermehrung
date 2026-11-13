@@ -17,6 +17,7 @@ import { personLabelFromPerson } from '../../../../utils/personLabelFromPerson.t
 import { personSort } from '../../../../utils/personSort.ts'
 
 import wannStyles from '../../Lieferung/Lieferung/Form/Wann.module.css'
+import { triStateDeletedQuery } from '../../../../utils/triStateDeletedQuery.ts'
 
 export const SammelLieferungWer = ({
   showFilter,
@@ -59,14 +60,7 @@ export const SammelLieferungWer = ({
           )
           .findAndObserve(id ?? '')
       : $of({})
-    const personDelQuery =
-      personFilter._deleted === false ? Q.where('_deleted', false)
-      : personFilter._deleted === true ? Q.where('_deleted', true)
-      : Q.or(
-          Q.where('_deleted', false),
-          Q.where('_deleted', true),
-          Q.where('_deleted', null),
-        )
+    const personDelQuery = triStateDeletedQuery(personFilter._deleted)
     const personAktivQuery =
       personFilter.aktiv === false ? Q.where('aktiv', false)
       : personFilter.aktiv === true ? Q.where('aktiv', true)

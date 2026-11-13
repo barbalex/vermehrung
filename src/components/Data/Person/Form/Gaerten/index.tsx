@@ -16,6 +16,7 @@ import { gartensSortedFromGartens } from '../../../../../utils/gartensSortedFrom
 import { gvsSortByGarten } from '../../../../../utils/gvsSortByGarten.ts'
 
 import styles from './index.module.css'
+import { triStateDeletedQuery } from '../../../../../utils/triStateDeletedQuery.ts'
 
 export const PersonGaerten = ({
   person,
@@ -50,14 +51,7 @@ export const PersonGaerten = ({
     const gvsObservable = person?.gvs
       .extend(Q.where('_deleted', false))
       .observe()
-    const gartenDelQuery =
-      gartenFilter._deleted === false ? Q.where('_deleted', false)
-      : gartenFilter._deleted === true ? Q.where('_deleted', true)
-      : Q.or(
-          Q.where('_deleted', false),
-          Q.where('_deleted', true),
-          Q.where('_deleted', null),
-        )
+    const gartenDelQuery = triStateDeletedQuery(gartenFilter._deleted)
     const gartenAktivQuery =
       gartenFilter.aktiv === false ? Q.where('aktiv', false)
       : gartenFilter.aktiv === true ? Q.where('aktiv', true)

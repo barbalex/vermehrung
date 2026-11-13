@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react'
 import { useAtomValue } from 'jotai'
 import IconButton from '@mui/material/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
-import { Q } from 'nitromelondb'
 import { first as first$ } from 'rxjs/operators'
 import { uniqBy } from 'es-toolkit'
 
@@ -17,6 +16,7 @@ import { constants } from '../../../../../utils/constants.ts'
 import { artsSortedFromArts } from '../../../../../utils/artsSortedFromArts.ts'
 
 import wannStyles from './Wann.module.css'
+import { triStateDeletedQuery } from '../../../../../utils/triStateDeletedQuery.ts'
 
 export const LieferungWas = ({
   showFilter,
@@ -37,14 +37,7 @@ export const LieferungWas = ({
     { value: string; label: string | undefined; link: string[] }[]
   >([])
   useEffect(() => {
-    const artDelQuery =
-      artFilter._deleted === false ? Q.where('_deleted', false)
-      : artFilter._deleted === true ? Q.where('_deleted', true)
-      : Q.or(
-          Q.where('_deleted', false),
-          Q.where('_deleted', true),
-          Q.where('_deleted', null),
-        )
+    const artDelQuery = triStateDeletedQuery(artFilter._deleted)
     const subscription = db
       ?.get<import('../../../../../dbModel.ts').Art>('art')
       .query(artDelQuery)

@@ -11,6 +11,7 @@ import {
 import { FilterTitle } from '../../../shared/FilterTitle.tsx'
 import { TeilkulturFormTitle as FormTitle } from './FormTitle.tsx'
 import { tableFilter } from '../../../../utils/tableFilter.ts'
+import { triStateDeletedQuery } from '../../../../utils/triStateDeletedQuery.ts'
 
 export const TeilkulturFormTitleChooser = ({
   row,
@@ -40,14 +41,7 @@ export const TeilkulturFormTitleChooser = ({
     const collection =
       db?.get<import('../../../../dbModel.ts').Teilkultur>('teilkultur')
     if (!collection) return
-    const teilkulturDelQuery =
-      teilkulturFilter._deleted === false ? Q.where('_deleted', false)
-      : teilkulturFilter._deleted === true ? Q.where('_deleted', true)
-      : Q.or(
-          Q.where('_deleted', false),
-          Q.where('_deleted', true),
-          Q.where('_deleted', null),
-        )
+    const teilkulturDelQuery = triStateDeletedQuery(teilkulturFilter._deleted)
     const totalCountObservable = collection
       .query(teilkulturDelQuery, ...hierarchyQuery)
       .observeCount()

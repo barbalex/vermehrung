@@ -16,6 +16,7 @@ import { artsSortedFromArts } from '../../../../../utils/artsSortedFromArts.ts'
 import { avsSortByArt } from '../../../../../utils/avsSortByArt.ts'
 
 import styles from './index.module.css'
+import { triStateDeletedQuery } from '../../../../../utils/triStateDeletedQuery.ts'
 
 export const PersonArten = ({
   person,
@@ -50,14 +51,7 @@ export const PersonArten = ({
       .extend(Q.where('_deleted', false))
       .observe()
     const artFilter = store.get(filterArtAtom)
-    const artDelQuery =
-      artFilter._deleted === false ? Q.where('_deleted', false)
-      : artFilter._deleted === true ? Q.where('_deleted', true)
-      : Q.or(
-          Q.where('_deleted', false),
-          Q.where('_deleted', true),
-          Q.where('_deleted', null),
-        )
+    const artDelQuery = triStateDeletedQuery(artFilter._deleted)
     const artsObservable = db
       ?.get<import('../../../../../dbModel.ts').Art>('art')
       .query(artDelQuery, Q.where('id', Q.notIn(avArtIds)))

@@ -11,6 +11,7 @@ import {
 import { FilterTitle } from '../../../shared/FilterTitle.tsx'
 import { BedarfFormTitle as FormTitle } from './FormTitle.tsx'
 import { tableFilter } from '../../../../utils/tableFilter.ts'
+import { triStateDeletedQuery } from '../../../../utils/triStateDeletedQuery.ts'
 
 export const BedarfFormTitle = ({
   row,
@@ -40,14 +41,7 @@ export const BedarfFormTitle = ({
     const collection =
       db?.get<import('../../../../dbModel.ts').Bedarf>('bedarf')
     if (!collection) return
-    const delQuery =
-      bedarfFilter._deleted === false ? Q.where('_deleted', false)
-      : bedarfFilter._deleted === true ? Q.where('_deleted', true)
-      : Q.or(
-          Q.where('_deleted', false),
-          Q.where('_deleted', true),
-          Q.where('_deleted', null),
-        )
+    const delQuery = triStateDeletedQuery(bedarfFilter._deleted)
     const totalCountObservable = collection
       .query(delQuery, ...hierarchyQuery)
       .observeCount()

@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react'
 import { useAtomValue } from 'jotai'
 import { combineLatest } from 'rxjs'
-import { Q } from 'nitromelondb'
 
 import { dbAtom, filterArtAtom } from '../../../../store/index.ts'
 import { FilterTitle } from '../../../shared/FilterTitle.tsx'
 import { FormTitle } from './FormTitle.tsx'
 import { tableFilter } from '../../../../utils/tableFilter.ts'
+import { triStateDeletedQuery } from '../../../../utils/triStateDeletedQuery.ts'
 
 export const ArtFormTitle = ({
   row,
@@ -27,14 +27,7 @@ export const ArtFormTitle = ({
   useEffect(() => {
     const collection = db?.get<import('../../../../dbModel.ts').Art>('art')
     if (!collection) return
-    const delQuery =
-      artFilter._deleted === false ? Q.where('_deleted', false)
-      : artFilter._deleted === true ? Q.where('_deleted', true)
-      : Q.or(
-          Q.where('_deleted', false),
-          Q.where('_deleted', true),
-          Q.where('_deleted', null),
-        )
+    const delQuery = triStateDeletedQuery(artFilter._deleted)
     const totalCountObservable = collection.query(delQuery).observeCount()
     const filteredCountObservable = collection
       .query(...tableFilter({ table: 'art' }))

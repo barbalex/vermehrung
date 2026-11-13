@@ -4,7 +4,6 @@ import { FaPlus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import { List } from 'react-window'
 import { combineLatest } from 'rxjs'
-import { Q } from 'nitromelondb'
 
 import { dbAtom, filterSammelLieferungAtom } from '../../../store/index.ts'
 import { insertSammelLieferungRev } from '../../../modules/insertRev.ts'
@@ -17,6 +16,7 @@ import { lieferungSort } from '../../../utils/lieferungSort.ts'
 import { constants } from '../../../utils/constants.ts'
 
 import artStyles from '../Arten/index.module.css'
+import { triStateDeletedQuery } from '../../../utils/triStateDeletedQuery.ts'
 
 export const SammelLieferungen = ({ filter: showFilter = false }) => {
   const db = useAtomValue(dbAtom)
@@ -30,14 +30,9 @@ export const SammelLieferungen = ({ filter: showFilter = false }) => {
     const collection =
       db?.get<import('../../../dbModel.ts').SammelLieferung>('sammel_lieferung')
     if (!collection) return
-    const sammelLieferungDelQuery =
-      sammelLieferungFilter._deleted === false ? Q.where('_deleted', false)
-      : sammelLieferungFilter._deleted === true ? Q.where('_deleted', true)
-      : Q.or(
-          Q.where('_deleted', false),
-          Q.where('_deleted', true),
-          Q.where('_deleted', null),
-        )
+    const sammelLieferungDelQuery = triStateDeletedQuery(
+      sammelLieferungFilter._deleted,
+    )
     const countObservable = collection
       .query(sammelLieferungDelQuery)
       .observeCount()

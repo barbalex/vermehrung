@@ -16,6 +16,7 @@ import { personSort } from '../../../../../utils/personSort.ts'
 import { personLabelFromPerson } from '../../../../../utils/personLabelFromPerson.ts'
 
 import styles from './index.module.css'
+import { triStateDeletedQuery } from '../../../../../utils/triStateDeletedQuery.ts'
 
 export const GartenPersonen = ({
   garten,
@@ -45,14 +46,7 @@ export const GartenPersonen = ({
     personWerte: { value: string; label: string; inaktiv: boolean }[]
   }>({ gvsSorted: [], personWerte: [] })
   useEffect(() => {
-    const delQuery =
-      personFilter._deleted === false ? Q.where('_deleted', false)
-      : personFilter._deleted === true ? Q.where('_deleted', true)
-      : Q.or(
-          Q.where('_deleted', false),
-          Q.where('_deleted', true),
-          Q.where('_deleted', null),
-        )
+    const delQuery = triStateDeletedQuery(personFilter._deleted)
     const aktivQuery =
       personFilter.aktiv === false ? Q.where('aktiv', false)
       : personFilter.aktiv === true ? Q.where('aktiv', true)

@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import { useAtomValue } from 'jotai'
-import { Q } from 'nitromelondb'
 import { first as first$ } from 'rxjs/operators'
 import { combineLatest } from 'rxjs'
 import { uniqBy } from 'es-toolkit'
@@ -19,6 +18,7 @@ import { herkunftLabelFromHerkunft } from '../../../../../utils/herkunftLabelFro
 
 import vonStyles from './Von.module.css'
 import wannStyles from './Wann.module.css'
+import { triStateDeletedQuery } from '../../../../../utils/triStateDeletedQuery.ts'
 
 export const LieferungVon = ({
   showFilter,
@@ -59,27 +59,13 @@ export const LieferungVon = ({
     sammlungWerte: [],
   })
   useEffect(() => {
-    const kulturDelQuery =
-      kulturFilter._deleted === false ? Q.where('_deleted', false)
-      : kulturFilter._deleted === true ? Q.where('_deleted', true)
-      : Q.or(
-          Q.where('_deleted', false),
-          Q.where('_deleted', true),
-          Q.where('_deleted', null),
-        )
+    const kulturDelQuery = triStateDeletedQuery(kulturFilter._deleted)
     // BEWARE: need to include inactive kulturs, persons
     const kultursObservable = db
       ?.get<import('../../../../../dbModel.ts').Kultur>('kultur')
       .query(kulturDelQuery)
       .observe()
-    const sammlungDelQuery =
-      sammlungFilter._deleted === false ? Q.where('_deleted', false)
-      : sammlungFilter._deleted === true ? Q.where('_deleted', true)
-      : Q.or(
-          Q.where('_deleted', false),
-          Q.where('_deleted', true),
-          Q.where('_deleted', null),
-        )
+    const sammlungDelQuery = triStateDeletedQuery(sammlungFilter._deleted)
     const sammlungsObservable = db
       ?.get<import('../../../../../dbModel.ts').Sammlung>('sammlung')
       .query(sammlungDelQuery)

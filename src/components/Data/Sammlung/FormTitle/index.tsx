@@ -13,6 +13,7 @@ import {
 import { FilterTitle } from '../../../shared/FilterTitle.tsx'
 import { SammlungFormTitle as FormTitle } from './FormTitle.tsx'
 import { tableFilter } from '../../../../utils/tableFilter.ts'
+import { triStateDeletedQuery } from '../../../../utils/triStateDeletedQuery.ts'
 
 export const SammlungFormTitleChooser = ({
   row,
@@ -56,14 +57,7 @@ export const SammlungFormTitleChooser = ({
     const collection =
       db?.get<import('../../../../dbModel.ts').Sammlung>('sammlung')
     if (!collection) return
-    const sammlungDelQuery =
-      sammlungFilter._deleted === false ? Q.where('_deleted', false)
-      : sammlungFilter._deleted === true ? Q.where('_deleted', true)
-      : Q.or(
-          Q.where('_deleted', false),
-          Q.where('_deleted', true),
-          Q.where('_deleted', null),
-        )
+    const sammlungDelQuery = triStateDeletedQuery(sammlungFilter._deleted)
     const totalCountObservable = collection
       .query(sammlungDelQuery, ...hierarchyQuery)
       .observeCount()

@@ -21,6 +21,7 @@ import { gartensSortedFromGartens } from '../../../utils/gartensSortedFromGarten
 import { constants } from '../../../utils/constants.ts'
 
 import artStyles from '../Arten/index.module.css'
+import { triStateDeletedQuery } from '../../../utils/triStateDeletedQuery.ts'
 
 export const Gaerten = ({ filter: showFilter = false }) => {
   const db = useAtomValue(dbAtom)
@@ -41,14 +42,7 @@ export const Gaerten = ({ filter: showFilter = false }) => {
       : []
     const collection = db?.get<import('../../../dbModel.ts').Garten>('garten')
     if (!collection) return
-    const delQuery =
-      gartenFilter._deleted === false ? Q.where('_deleted', false)
-      : gartenFilter._deleted === true ? Q.where('_deleted', true)
-      : Q.or(
-          Q.where('_deleted', false),
-          Q.where('_deleted', true),
-          Q.where('_deleted', null),
-        )
+    const delQuery = triStateDeletedQuery(gartenFilter._deleted)
     const aktivQuery =
       gartenFilter?.aktiv === true ? Q.where('aktiv', true)
       : gartenFilter?.aktiv === false ? Q.where('aktiv', false)

@@ -25,6 +25,7 @@ import { ConflictList } from '../../../shared/ConflictList/index.tsx'
 import { kultursSortedFromKulturs } from '../../../../utils/kultursSortedFromKulturs.ts'
 
 import artStyles from '../../Art/Form/index.module.css'
+import { triStateDeletedQuery } from '../../../../utils/triStateDeletedQuery.ts'
 
 export const TeilkulturForm = ({
   showFilter,
@@ -61,14 +62,7 @@ export const TeilkulturForm = ({
     kulturOption: import('../../../../dbModel.ts').KulturOption | undefined
   }>({ kulturWerte: [], kulturOption: undefined })
   useEffect(() => {
-    const kulturDelQuery =
-      kulturFilter._deleted === false ? Q.where('_deleted', false)
-      : kulturFilter._deleted === true ? Q.where('_deleted', true)
-      : Q.or(
-          Q.where('_deleted', false),
-          Q.where('_deleted', true),
-          Q.where('_deleted', null),
-        )
+    const kulturDelQuery = triStateDeletedQuery(kulturFilter._deleted)
     const kulturAktivQuery =
       kulturFilter.aktiv === false ? Q.where('aktiv', false)
       : kulturFilter.aktiv === true ? Q.where('aktiv', true)
