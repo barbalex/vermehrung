@@ -10,6 +10,10 @@ import { teilkulturSort } from '../../../../../../utils/teilkulturSort.ts'
 import { zaehlungSort } from '../../../../../../utils/zaehlungSort.ts'
 import { store, filterTableAtoms } from '../../../../../../store/index.ts'
 import { triStateDeletedQuery } from '../../../../../../utils/triStateDeletedQuery.ts'
+import {
+  buildQkMessages,
+  labelOf,
+} from '../../../../../shared/QK/buildQkMessages.ts'
 
 export const createKulturMessageFunctions = async ({
   kulturId,
@@ -91,56 +95,26 @@ export const createKulturMessageFunctions = async ({
 
   return {
     kultursWithoutVonAnzahlIndividuen: async () =>
-      await Promise.all(
-        kultursSorted
-          .filter((k) => k.id === kulturId)
-          .filter((k) => !exists(k.von_anzahl_individuen))
-          .map(async (k) => {
-            let text
-            try {
-              text = await k.label.pipe(first$()).toPromise()
-            } catch {}
-
-            return {
-              url: ['Kulturen', kulturId],
-              text,
-            }
-          }),
-      ),
+      await buildQkMessages({
+        rows: kultursSorted.filter((k) => k.id === kulturId),
+        failsCheck: (k) => !exists(k.von_anzahl_individuen),
+        buildUrl: () => ['Kulturen', kulturId],
+        buildText: (k) => labelOf(k),
+      }),
     kultursWithoutGarten: async () =>
-      await Promise.all(
-        kultursSorted
-          .filter((k) => k.id === kulturId)
-          .filter((k) => !k.garten_id)
-          .map(async (k) => {
-            let text
-            try {
-              text = await k.label.pipe(first$()).toPromise()
-            } catch {}
-
-            return {
-              url: ['Kulturen', kulturId],
-              text,
-            }
-          }),
-      ),
+      await buildQkMessages({
+        rows: kultursSorted.filter((k) => k.id === kulturId),
+        failsCheck: (k) => !k.garten_id,
+        buildUrl: () => ['Kulturen', kulturId],
+        buildText: (k) => labelOf(k),
+      }),
     kultursWithoutHerkunft: async () =>
-      await Promise.all(
-        kultursSorted
-          .filter((k) => k.id === kulturId)
-          .filter((k) => !k.herkunft_id)
-          .map(async (k) => {
-            let text
-            try {
-              text = await k.label.pipe(first$()).toPromise()
-            } catch {}
-
-            return {
-              url: ['Kulturen', kulturId],
-              text,
-            }
-          }),
-      ),
+      await buildQkMessages({
+        rows: kultursSorted.filter((k) => k.id === kulturId),
+        failsCheck: (k) => !k.herkunft_id,
+        buildUrl: () => ['Kulturen', kulturId],
+        buildText: (k) => labelOf(k),
+      }),
     kultursWithoutZaehlungThisYear: async () =>
       await Promise.all(
         kultursSorted
