@@ -7,6 +7,7 @@ const Hapi = require('@hapi/hapi')
 const { initializeApp, cert } = require('firebase-admin/app')
 const { getAuth } = require('firebase-admin/auth')
 const crypto = require('node:crypto')
+const { PassThrough } = require('node:stream')
 const postgres = require('postgres')
 
 const serviceAccount = require('./config.js')
@@ -107,24 +108,67 @@ const verifyToken = (token, secret) => {
   return claims
 }
 
-// Gate for the account-admin routes: only a manager with a valid api JWT
-// may call them. Returns a hapi response when denied, null when allowed.
-const requireManager = (req, h) => {
+// Verify the api JWT this service mints. Returns { claims } when valid,
+// { error } with a ready hapi response when not.
+const getApiTokenClaims = (req, h) => {
   const secret = process.env.PGRST_JWT_SECRET
   if (!secret) {
-    return h.response('PGRST_JWT_SECRET is not configured').code(500)
+    return { error: h.response('PGRST_JWT_SECRET is not configured').code(500) }
   }
   const claims = verifyToken(
     (req.headers.authorization || '').replace(/^Bearer /, ''),
     secret,
   )
   if (!claims) {
-    return h.response('a valid api token is required').code(401)
+    return { error: h.response('a valid api token is required').code(401) }
   }
+  return { claims }
+}
+
+// Gate for the account-admin routes: only a manager with a valid api JWT
+// may call them. Returns a hapi response when denied, null when allowed.
+const requireManager = (req, h) => {
+  const { claims, error } = getApiTokenClaims(req, h)
+  if (error) return error
   if (claims.role !== 'manager') {
     return h.response('only managers may administer accounts').code(403)
   }
   return null
+}
+
+// === SSE: tell clients when data changed on the server ===
+// one LISTEN connection (channel vermehrung_changed, payload = table
+// name) fans out to every connected event stream. Table signals are
+// debounced so a bulk import emits one event, not thousands. Signals
+// carry no data: clients answer by running their /rpc/sync delta fetch,
+// row visibility stays with the api's row level security.
+const sseClients = new Set()
+let pendingTables = new Set()
+let flushTimer = null
+
+const flushPendingTables = () => {
+  flushTimer = null
+  const tables = [...pendingTables]
+  pendingTables = new Set()
+  if (!sseClients.size || !tables.length) return
+  const payload = `event: changed\ndata: ${JSON.stringify(tables)}\n\n`
+  for (const client of sseClients) {
+    client.write(payload)
+  }
+}
+
+const startEventListener = async () => {
+  try {
+    await sql.listen('vermehrung_changed', (table) => {
+      pendingTables.add(table)
+      if (!flushTimer) {
+        flushTimer = setTimeout(flushPendingTables, 250)
+      }
+    })
+    console.log('listening on channel vermehrung_changed')
+  } catch (error) {
+    console.log('error listening on vermehrung_changed:', error)
+  }
 }
 
 async function start() {
@@ -219,6 +263,38 @@ async function start() {
     },
   })
 
+  // SSE stream: emits a 'changed' event (data: json array of table
+  // names) whenever postgres notifies a write. Gated by any valid api
+  // JWT - the signal itself carries no data.
+  server.route({
+    method: 'GET',
+    path: '/events',
+    handler: (req, h) => {
+      const { error } = getApiTokenClaims(req, h)
+      if (error) return error
+      const stream = new PassThrough()
+      stream.write(': connected\n\n')
+      sseClients.add(stream)
+      // proxies kill idle connections: heartbeat keeps the stream open
+      const heartbeat = setInterval(() => {
+        stream.write(': heartbeat\n\n')
+      }, 25000)
+      const cleanup = () => {
+        clearInterval(heartbeat)
+        sseClients.delete(stream)
+        stream.end()
+      }
+      req.events.once('disconnect', cleanup)
+      stream.once('close', cleanup)
+      return h
+        .response(stream)
+        .type('text/event-stream')
+        .header('cache-control', 'no-cache')
+        .header('connection', 'keep-alive')
+        .header('x-accel-buffering', 'no')
+    },
+  })
+
   // exchanges a Firebase ID token for the JWT the api (PostgREST) accepts
   server.route({
     method: 'POST',
@@ -288,6 +364,7 @@ async function start() {
       return h.response({ token }).code(200)
     },
   })
+  startEventListener()
   await server.start()
   console.log('JSON-API-Server running at:', server.info.uri)
 }

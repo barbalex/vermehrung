@@ -16,5 +16,7 @@ api.vermehrung.ch {
 auth.vermehrung.ch {
   reverse_proxy * {
     to v_auth:7000
+    # the /events SSE stream must not be buffered
+    flush_interval -1
   }
 }
