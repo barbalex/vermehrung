@@ -9,7 +9,6 @@ import {
   onlineAtom,
   addNotification,
   removeNotificationById,
-  removeAllNotifications,
 } from '../../store/index.ts'
 import { tableNames } from '../../utils/tableNames.ts'
 
@@ -36,8 +35,6 @@ export const InitialDataLoadingNotifier = () => {
 
     return () => {
       if (id) {
-        // TODO: remove log
-        console.log('removing notification on unmount:', id)
         removeNotificationById(id)
       }
     }
@@ -49,14 +46,10 @@ export const InitialDataLoadingNotifier = () => {
     online,
   ])
 
-  // ensure all initial loading notifications are removed after 8s
-  useEffect(() => {
-    if (!initialDataQueried) return
-    setTimeout(() => {
-      console.log('initial data queried, removing all notifications')
-      removeAllNotifications()
-    }, 5000)
-  }, [initialDataQueried])
+  // no fallback that clears stuck messages is needed: every notification
+  // removes itself after its duration, and initialDataQueried settles
+  // reliably - processSubscriptionResult flips each table's flag in the
+  // write's finally, so the effect cleanup above always runs
 
   return null
 }
