@@ -13,6 +13,7 @@ import { triStateDeletedQuery } from '../../../../../../utils/triStateDeletedQue
 import {
   buildQkMessages,
   labelOf,
+  lieferungText,
 } from '../../../../../shared/QK/buildQkMessages.ts'
 
 export const createKulturMessageFunctions = async ({
@@ -553,143 +554,71 @@ export const createKulturMessageFunctions = async ({
           }
         }),
     anLieferungsWithoutAnzahlPflanzen: async () =>
-      lieferungsSorted
-        .filter(
+      await buildQkMessages({
+        rows: lieferungsSorted.filter(
           (l: import('../../../../../../dbModel.ts').Lieferung) =>
             l.nach_kultur_id === kulturId,
-        )
-        .filter(
-          (l: import('../../../../../../dbModel.ts').Lieferung) =>
-            !exists(l.anzahl_pflanzen),
-        )
-        .map((l: import('../../../../../../dbModel.ts').Lieferung) => {
-          const datum =
-            l.datum ?
-              DateTime.fromJSDate(new Date(l.datum)).toFormat('yyyy.LL.dd')
-            : `kein Datum`
-          const geplant = l.geplant ? ', (geplant)' : ''
-          const text = `${datum}, ID: ${l.id}${geplant}`
-
-          return {
-            url: ['Kulturen', kulturId, 'An-Lieferungen', l.id],
-            text,
-          }
-        }),
+        ),
+        failsCheck: (l: import('../../../../../../dbModel.ts').Lieferung) =>
+          !exists(l.anzahl_pflanzen),
+        buildUrl: (l) => ['Kulturen', kulturId, 'An-Lieferungen', l.id],
+        buildText: (l) => lieferungText(l),
+      }),
     ausLieferungsWithoutAnzahlPflanzen: async () =>
-      lieferungsSorted
-        .filter(
+      await buildQkMessages({
+        rows: lieferungsSorted.filter(
           (l: import('../../../../../../dbModel.ts').Lieferung) =>
             l.von_kultur_id === kulturId,
-        )
-        .filter(
-          (l: import('../../../../../../dbModel.ts').Lieferung) =>
-            !exists(l.anzahl_pflanzen),
-        )
-        .map((l: import('../../../../../../dbModel.ts').Lieferung) => {
-          const datum =
-            l.datum ?
-              DateTime.fromJSDate(new Date(l.datum)).toFormat('yyyy.LL.dd')
-            : `kein Datum`
-          const geplant = l.geplant ? ', (geplant)' : ''
-          const text = `${datum}, ID: ${l.id}${geplant}`
-
-          return {
-            url: ['Kulturen', kulturId, 'Aus-Lieferungen', l.id],
-            text,
-          }
-        }),
+        ),
+        failsCheck: (l: import('../../../../../../dbModel.ts').Lieferung) =>
+          !exists(l.anzahl_pflanzen),
+        buildUrl: (l) => ['Kulturen', kulturId, 'Aus-Lieferungen', l.id],
+        buildText: (l) => lieferungText(l),
+      }),
     anLieferungsWithoutAnzahlAuspflanzbereit: async () =>
-      lieferungsSorted
-        .filter(
+      await buildQkMessages({
+        rows: lieferungsSorted.filter(
           (l: import('../../../../../../dbModel.ts').Lieferung) =>
             l.nach_kultur_id === kulturId,
-        )
-        .filter(
-          (l: import('../../../../../../dbModel.ts').Lieferung) =>
-            !exists(l.anzahl_auspflanzbereit),
-        )
-        .map((l: import('../../../../../../dbModel.ts').Lieferung) => {
-          const datum =
-            l.datum ?
-              DateTime.fromJSDate(new Date(l.datum)).toFormat('yyyy.LL.dd')
-            : `kein Datum`
-          const geplant = l.geplant ? ', (geplant)' : ''
-          const text = `${datum}, ID: ${l.id}${geplant}`
-
-          return {
-            url: ['Kulturen', kulturId, 'An-Lieferungen', l.id],
-            text,
-          }
-        }),
+        ),
+        failsCheck: (l: import('../../../../../../dbModel.ts').Lieferung) =>
+          !exists(l.anzahl_auspflanzbereit),
+        buildUrl: (l) => ['Kulturen', kulturId, 'An-Lieferungen', l.id],
+        buildText: (l) => lieferungText(l),
+      }),
     ausLieferungsWithoutAnzahlAuspflanzbereit: async () =>
-      lieferungsSorted
-        .filter(
+      await buildQkMessages({
+        rows: lieferungsSorted.filter(
           (l: import('../../../../../../dbModel.ts').Lieferung) =>
             l.von_kultur_id === kulturId,
-        )
-        .filter(
-          (l: import('../../../../../../dbModel.ts').Lieferung) =>
-            !exists(l.anzahl_auspflanzbereit),
-        )
-        .map((l: import('../../../../../../dbModel.ts').Lieferung) => {
-          const datum =
-            l.datum ?
-              DateTime.fromJSDate(new Date(l.datum)).toFormat('yyyy.LL.dd')
-            : `kein Datum`
-          const geplant = l.geplant ? ', (geplant)' : ''
-          const text = `${datum}, ID: ${l.id}${geplant}`
-
-          return {
-            url: ['Kulturen', kulturId, 'Aus-Lieferungen', l.id],
-            text,
-          }
-        }),
+        ),
+        failsCheck: (l: import('../../../../../../dbModel.ts').Lieferung) =>
+          !exists(l.anzahl_auspflanzbereit),
+        buildUrl: (l) => ['Kulturen', kulturId, 'Aus-Lieferungen', l.id],
+        buildText: (l) => lieferungText(l),
+      }),
     anLieferungsWithoutVonAnzahlIndividuen: async () =>
-      lieferungsSorted
-        .filter(
+      await buildQkMessages({
+        rows: lieferungsSorted.filter(
           (l: import('../../../../../../dbModel.ts').Lieferung) =>
             l.nach_kultur_id === kulturId,
-        )
-        .filter(
-          (l: import('../../../../../../dbModel.ts').Lieferung) =>
-            !exists(l.von_anzahl_individuen),
-        )
-        .map((l: import('../../../../../../dbModel.ts').Lieferung) => {
-          const datum =
-            l.datum ?
-              DateTime.fromJSDate(new Date(l.datum)).toFormat('yyyy.LL.dd')
-            : `kein Datum`
-          const geplant = l.geplant ? ', (geplant)' : ''
-          const text = `${datum}, ID: ${l.id}${geplant}`
-
-          return {
-            url: ['Kulturen', kulturId, 'An-Lieferungen', l.id],
-            text,
-          }
-        }),
+        ),
+        failsCheck: (l: import('../../../../../../dbModel.ts').Lieferung) =>
+          !exists(l.von_anzahl_individuen),
+        buildUrl: (l) => ['Kulturen', kulturId, 'An-Lieferungen', l.id],
+        buildText: (l) => lieferungText(l),
+      }),
     ausLieferungsWithoutVonAnzahlIndividuen: async () =>
-      lieferungsSorted
-        .filter(
+      await buildQkMessages({
+        rows: lieferungsSorted.filter(
           (l: import('../../../../../../dbModel.ts').Lieferung) =>
             l.von_kultur_id === kulturId,
-        )
-        .filter(
-          (l: import('../../../../../../dbModel.ts').Lieferung) =>
-            !exists(l.von_anzahl_individuen),
-        )
-        .map((l: import('../../../../../../dbModel.ts').Lieferung) => {
-          const datum =
-            l.datum ?
-              DateTime.fromJSDate(new Date(l.datum)).toFormat('yyyy.LL.dd')
-            : `kein Datum`
-          const geplant = l.geplant ? ', (geplant)' : ''
-          const text = `${datum}, ID: ${l.id}${geplant}`
-
-          return {
-            url: ['Kulturen', kulturId, 'Aus-Lieferungen', l.id],
-            text,
-          }
-        }),
+        ),
+        failsCheck: (l: import('../../../../../../dbModel.ts').Lieferung) =>
+          !exists(l.von_anzahl_individuen),
+        buildUrl: (l) => ['Kulturen', kulturId, 'Aus-Lieferungen', l.id],
+        buildText: (l) => lieferungText(l),
+      }),
     anLieferungsWithoutVon: async () =>
       lieferungsSorted
         .filter(

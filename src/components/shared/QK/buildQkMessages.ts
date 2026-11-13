@@ -1,4 +1,5 @@
 import { first as first$ } from 'rxjs/operators'
+import { DateTime } from 'luxon'
 
 export interface QkMessage {
   url: string[]
@@ -41,4 +42,19 @@ export const labelOf = async (row: unknown) => {
   } catch {
     return ''
   }
+}
+
+// lieferung messages share their text: date (or kein Datum), id and the
+// geplant marker
+export const lieferungText = (l: {
+  id: string
+  datum?: string | null
+  geplant?: boolean | null
+}) => {
+  const datum =
+    l.datum ?
+      DateTime.fromJSDate(new Date(l.datum)).toFormat('yyyy.LL.dd')
+    : `kein Datum`
+  const geplant = l.geplant ? ', (geplant)' : ''
+  return `${datum}, ID: ${l.id}${geplant}`
 }
