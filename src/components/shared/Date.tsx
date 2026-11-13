@@ -3,7 +3,13 @@ import FormControl from '@mui/material/FormControl'
 import InputLabel from '@mui/material/InputLabel'
 import FormHelperText from '@mui/material/FormHelperText'
 import { DateTime } from 'luxon'
-import DatePicker from 'react-datepicker'
+import DatePicker, { registerLocale, setDefaultLocale } from 'react-datepicker'
+import { de } from 'date-fns/locale'
+import 'react-datepicker/dist/react-datepicker.css'
+
+// module scope: registered before the first DatePicker renders
+registerLocale('de', de)
+setDefaultLocale('de')
 
 import type { SaveToDbFn } from './types.ts'
 

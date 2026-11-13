@@ -1,8 +1,8 @@
 import { Link } from 'react-router'
 
 import dokuStyles from '../../index.module.css'
-import teilkulturOption from './teilkultur_option.gif'
-import teilkulturNew from './teilkultur_new.gif'
+import teilkulturOption from './teilkultur_option.webm'
+import teilkulturNew from './teilkultur_new.webm'
 
 export const Teilkulturen = () => (
   <>
@@ -51,10 +51,12 @@ export const Teilkulturen = () => (
     <p>
       Bei Kulturen gibt es die Option &quot;Mit Teil-Kulturen arbeiten&quot;.
       <br />
-      <img
+      <video
         src={teilkulturOption}
-        referrerPolicy="no-referrer"
-        alt='Option "Mit Teil-Kulturen arbeiten"'
+        autoPlay
+        loop
+        muted
+        playsInline
       />
       <br />
       Sie ermöglicht:
@@ -87,10 +89,12 @@ export const Teilkulturen = () => (
       Feld, in dem man Teil-Kulturen auswählt, erfasst werden: Einfach den neuen
       Wert tippen und &quot;... als neue Teilkultur aufnehmen&quot; wählen.
       <br />
-      <img
+      <video
         src={teilkulturNew}
-        referrerPolicy="no-referrer"
-        alt="Direkt neue Teilkultur erstellen"
+        autoPlay
+        loop
+        muted
+        playsInline
       />
       <br />
       <br />

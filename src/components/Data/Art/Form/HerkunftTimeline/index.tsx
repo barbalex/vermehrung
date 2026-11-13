@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, lazy, Suspense } from 'react'
 import { useAtomValue } from 'jotai'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
@@ -6,7 +6,10 @@ import { uniq } from 'es-toolkit'
 import { combineLatest } from 'rxjs'
 import { Q } from 'nitromelondb'
 
-import { Pflanzen } from './Pflanzen/index.tsx'
+// recharts only loads when the timeline is expanded
+const LazyPflanzen = lazy(() =>
+  import('./Pflanzen/index.tsx').then((m) => ({ default: m.Pflanzen })),
+)
 import { Collapsible } from '../../../../shared/Collapsible.tsx'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.tsx'
 import { dbAtom, filterHerkunftAtom } from '../../../../../store/index.ts'
@@ -98,13 +101,18 @@ export const HerkunftTimeline = ({
         </div>
       </section>
       <Collapsible open={open}>
-        {herkunfts.map((herkunft) => (
-          <Pflanzen
-            key={herkunft.id}
-            artId={artId}
-            herkunft={herkunft}
-          />
-        ))}
+        {open &&
+          herkunfts.map((herkunft) => (
+            <Suspense
+              fallback={null}
+              key={herkunft.id}
+            >
+              <LazyPflanzen
+                artId={artId}
+                herkunft={herkunft}
+              />
+            </Suspense>
+          ))}
       </Collapsible>
     </ErrorBoundary>
   )

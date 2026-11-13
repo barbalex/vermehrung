@@ -11,10 +11,6 @@ import { config as rxjsConfig } from 'rxjs'
 // ends, components recover when their observable dependencies change
 rxjsConfig.onUnhandledError = (error) => console.error(error)
 
-import { registerLocale, setDefaultLocale } from 'react-datepicker'
-import { de } from 'date-fns/locale'
-import 'react-datepicker/dist/react-datepicker.css'
-
 import 'allotment/dist/style.css'
 import './index.css'
 
@@ -27,9 +23,6 @@ import { maybeWipeForIdMigration } from './utils/idMigration2026.ts'
 // discard local data once for the uuidv7 id migration, before anything
 // reads or creates the local database
 await maybeWipeForIdMigration()
-
-registerLocale('de', de)
-setDefaultLocale('de')
 
 // inform users of old browsers
 browserUpdate({

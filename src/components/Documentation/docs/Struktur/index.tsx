@@ -1,5 +1,5 @@
 import dokuStyles from '../../index.module.css'
-import structure from './structure.png'
+import structure from './structure.webp'
 
 export const Struktur = () => (
   <>

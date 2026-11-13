@@ -1,5 +1,5 @@
 import dokuStyles from '../../index.module.css'
-import felderBlenden from './felderBlenden1.gif'
+import felderBlenden from './felderBlenden1.webm'
 
 export const FelderBlenden = () => (
   <>
@@ -21,10 +21,12 @@ export const FelderBlenden = () => (
     <p>
       Dafür wird das Zahnrad-Symbol oben rechts verwendet:
       <br />
-      <img
+      <video
         src={felderBlenden}
-        referrerPolicy="no-referrer"
-        alt="Felder wählen"
+        autoPlay
+        loop
+        muted
+        playsInline
       />
       <br />
     </p>

@@ -1,7 +1,5 @@
-import { useRef, useState, useMemo } from 'react'
+import { useRef, useState, useMemo, lazy, Suspense } from 'react'
 import { useAtomValue } from 'jotai'
-import ImageGallery from 'react-image-gallery'
-import 'react-image-gallery/build/image-gallery.css'
 import Button from '@mui/material/Button'
 import { v7 as uuidv7 } from 'uuid'
 import { of as $of } from 'rxjs'
@@ -13,7 +11,6 @@ import {
   onlineAtom,
   store,
 } from '../../../store/index.ts'
-import { Uploader } from '../../Uploader.tsx'
 import { File } from './File.tsx'
 import { isImageFile } from './isImageFile.ts'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
@@ -21,6 +18,10 @@ import { fileSort } from '../../../utils/fileSort.ts'
 import { useObservable } from '../../../utils/useObservable.ts'
 
 import styles from './index.module.css'
+
+// the heavy upload/gallery libs load on demand, not with every form
+const LazyUploader = lazy(() => import('./LazyUploader.tsx'))
+const LazyImageGallery = lazy(() => import('./LazyImageGallery.tsx'))
 
 interface FileRow {
   id: string
@@ -150,14 +151,16 @@ export const Files = ({
       >
         <div className={styles.title}>Dateien</div>
         <div className={styles.buttons}>
-          <Uploader
-            onFileUploadSuccess={
-              onFileUploadSuccess as unknown as (info: unknown) => void
-            }
-            onFileUploadFailed={
-              onFileUploadFailed as unknown as (info: unknown) => void
-            }
-          />
+          <Suspense fallback={<Button disabled>Uploader lädt…</Button>}>
+            <LazyUploader
+              onFileUploadSuccess={
+                onFileUploadSuccess as unknown as (info: unknown) => void
+              }
+              onFileUploadFailed={
+                onFileUploadFailed as unknown as (info: unknown) => void
+              }
+            />
+          </Suspense>
           {!!images.length && (
             <Button
               color="primary"
@@ -175,10 +178,12 @@ export const Files = ({
       {lightboxIsOpen && (
         <>
           <div className={styles.spacer} />
-          <ImageGallery
-            items={imageObjects}
-            showPlayButton={false}
-          />
+          <Suspense fallback={null}>
+            <LazyImageGallery
+              items={imageObjects}
+              showPlayButton={false}
+            />
+          </Suspense>
         </>
       )}
       {!!sortedFiles.length && (

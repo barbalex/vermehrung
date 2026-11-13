@@ -48,6 +48,9 @@ const buildPerson = (id: string, name: string) => ({
 
 describe('buildOptions corpus cache', () => {
   let fetchMock: ReturnType<typeof createDbMock>['fetchMock']
+  // a counter, not Date.now(): consecutive tests can run within the
+  // same millisecond
+  let testRun = 0
 
   beforeEach(() => {
     const mock = createDbMock([
@@ -59,7 +62,7 @@ describe('buildOptions corpus cache', () => {
     store.set(lastUpdatedAtom, { person: 100 } as Record<TableName, number>)
     // a distinct filter value per test run invalidates leftovers from
     // the previous test's module-level cache
-    store.set(filterTableAtoms.person, { _testRun: Date.now() })
+    store.set(filterTableAtoms.person, { _testRun: ++testRun })
   })
 
   it('returns matching person options', async () => {

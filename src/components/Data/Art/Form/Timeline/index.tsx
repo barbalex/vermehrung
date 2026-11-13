@@ -1,9 +1,12 @@
-import { useState } from 'react'
+import { useState, lazy, Suspense } from 'react'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 
-import { Pflanzen } from './Pflanzen/index.tsx'
+// recharts only loads when the timeline is expanded
+const LazyPflanzen = lazy(() =>
+  import('./Pflanzen/index.tsx').then((m) => ({ default: m.Pflanzen })),
+)
 import { Collapsible } from '../../../../shared/Collapsible.tsx'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.tsx'
 import { constants } from '../../../../../utils/constants.ts'
@@ -74,10 +77,11 @@ export const Timeline = ({
         </div>
       </section>
       <Collapsible open={open}>
-        <Pflanzen
-          key={artId ?? ''}
-          artId={artId ?? undefined}
-        />
+        {open && (
+          <Suspense fallback={null}>
+            <LazyPflanzen artId={artId ?? undefined} />
+          </Suspense>
+        )}
       </Collapsible>
     </ErrorBoundary>
   )
