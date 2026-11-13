@@ -177,6 +177,9 @@ test('local-first: login, sync, offline boot, re-login resets cursors', async ({
   })
 
   // the auth service: exchanges the firebase id token for the api jwt
+  // the SSE change signal is not exercised here - abort it, so the
+  // reconnect backoff runs against the mock instead of a real server
+  await page.route('http://localhost:7010/events', (route) => route.abort())
   await page.route('http://localhost:7010/token', async (route) => {
     if (await guard(route)) return
     return route.fulfill({

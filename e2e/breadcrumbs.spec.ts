@@ -154,6 +154,9 @@ test('breadcrumbs strip replaces the form header nav buttons', async ({
       }),
     }),
   )
+  // the SSE change signal is not exercised here - abort it, so the
+  // reconnect backoff runs against the mock instead of a real server
+  await page.route('http://localhost:7010/events', (route) => route.abort())
   await page.route('http://localhost:7010/token', (route) =>
     route.fulfill({
       contentType: 'application/json',
