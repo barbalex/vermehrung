@@ -7,7 +7,6 @@ import { HeaderHome as Home } from './Home.tsx'
 import { HeaderDoku as Doku } from './Doku/index.tsx'
 import { HeaderVermehrung as Vermehrung } from './Vermehrung/index.tsx'
 import { Breadcrumbs } from '../Breadcrumbs/index.tsx'
-import { breadcrumbsEnabled } from '../../utils/breadcrumbsEnabled.ts'
 
 import styles from './index.module.css'
 
@@ -30,7 +29,7 @@ const Header = () => {
             <Vermehrung />
           : <Doku />}
         </Toolbar>
-        {isVermehrung && breadcrumbsEnabled && <Breadcrumbs />}
+        {isVermehrung && <Breadcrumbs />}
       </AppBar>
     </ErrorBoundary>
   )

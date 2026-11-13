@@ -8,8 +8,6 @@ import { FilterNumbers } from '../../../shared/FilterNumbers.tsx'
 import { Menu } from '../../../shared/Menu.tsx'
 import { KulturDownload as Download } from './Download.tsx'
 import { KulturAnleitung as Anleitung } from './Anleitung.tsx'
-import { KulturNavButtons as NavButtons } from './NavButtons.tsx'
-import { breadcrumbsEnabled } from '../../../../utils/breadcrumbsEnabled.ts'
 
 import artStyles from '../../Art/FormTitle/FormTitle.module.css'
 
@@ -33,7 +31,6 @@ export const KulturFormTitle = ({
     >
       <div className={artStyles.title}>Kultur</div>
       <div className={artStyles.symbols}>
-        {!breadcrumbsEnabled && <NavButtons row={row} />}
         {(width ?? 0) < 520 ?
           <Menu white={false}>
             <Add asMenu />

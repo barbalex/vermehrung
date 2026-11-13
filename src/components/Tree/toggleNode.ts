@@ -12,13 +12,12 @@ import {
   setFilterShow,
 } from '../../store/index.ts'
 import { isNodeOpen } from './isNodeOpen.ts'
-import { breadcrumbsEnabled } from '../../utils/breadcrumbsEnabled.ts'
 import { singularOfFolder } from '../../utils/singularOfFolder.ts'
 
-// with breadcrumbs enabled, activating an object node opens its form
-// directly (the url gets the object name suffix)
+// activating an object node opens its form directly
+// (the url gets the object name suffix)
 const urlToActivate = (node: TreeNode) => {
-  if (!breadcrumbsEnabled || node.nodeType !== 'table') return [...node.url]
+  if (node.nodeType !== 'table') return [...node.url]
   const objectName = singularOfFolder[node.url.at(-2) as string]
   return objectName ? [...node.url, objectName] : [...node.url]
 }

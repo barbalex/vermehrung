@@ -1,20 +1,10 @@
-import IconButton from '@mui/material/IconButton'
 import { useElementWidth } from '../../../shared/useElementWidth.ts'
 
-import {
-  store,
-  activeNodeArrayAtom,
-  setActiveNodeArray,
-  removeOpenNode,
-} from '../../../../store/index.ts'
 import { GartenSettings as Settings } from './Settings/index.tsx'
 import { GartenDeleteButton as DeleteButton } from './DeleteButton.tsx'
 import { GartenAddButton as AddButton } from './AddButton.tsx'
 import { GartenDownload as Download } from './Download/index.tsx'
 import { FilterNumbers } from '../../../shared/FilterNumbers.tsx'
-import UpSvg from '../../../../svg/to_up.svg?react'
-import KuDownSvg from '../../../../svg/to_ku_down.svg?react'
-import { breadcrumbsEnabled } from '../../../../utils/breadcrumbsEnabled.ts'
 import { HistoryButton } from '../../../shared/HistoryButton.tsx'
 import { Menu } from '../../../shared/Menu.tsx'
 
@@ -33,17 +23,6 @@ export const GartenFormTitle = ({
 }) => {
   const { width, ref } = useElementWidth<HTMLDivElement>()
 
-  const onClickUp = () => {
-    const activeNodeArray = store.get(activeNodeArrayAtom)
-    removeOpenNode(activeNodeArray)
-    setActiveNodeArray(activeNodeArray.slice(0, -1))
-  }
-
-  const onClickToKulturen = () => {
-    const activeNodeArray = store.get(activeNodeArrayAtom)
-    setActiveNodeArray([...activeNodeArray, 'Kulturen'])
-  }
-
   return (
     <div
       className={artStyles.container}
@@ -51,24 +30,6 @@ export const GartenFormTitle = ({
     >
       <div className={artStyles.title}>Garten</div>
       <div className={artStyles.symbols}>
-        {!breadcrumbsEnabled && (
-          <>
-            <IconButton
-              title="Zur Liste"
-              onClick={onClickUp}
-              size="large"
-            >
-              <UpSvg />
-            </IconButton>
-            <IconButton
-              title="Zu den Kulturen"
-              onClick={onClickToKulturen}
-              size="large"
-            >
-              <KuDownSvg />
-            </IconButton>
-          </>
-        )}
         <AddButton />
         <DeleteButton row={row} />
         <Download gartenId={row?.id} />

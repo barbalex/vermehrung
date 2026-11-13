@@ -17,10 +17,8 @@ import { SammelLieferungDeleteButton as Delete } from './Delete.tsx'
 import { FilterNumbers } from '../../../shared/FilterNumbers.tsx'
 import { Menu } from '../../../shared/Menu.tsx'
 import { HistoryButton } from '../../../shared/HistoryButton.tsx'
-import { SammelLieferungNavButtons as NavButtons } from './NavButtons.tsx'
 import { SammelLieferungPrint as PrintButtons } from './PrintButtons.tsx'
 import { SammelLieferungAnleitung as Anleitung } from './Anleitung.tsx'
-import { breadcrumbsEnabled } from '../../../../utils/breadcrumbsEnabled.ts'
 
 import artStyles from '../../Art/FormTitle/FormTitle.module.css'
 
@@ -85,7 +83,6 @@ export const SammelLieferungFormTitle = ({
       <div className={artStyles.symbols}>
         {shownAsSammelLieferung && (
           <>
-            {!breadcrumbsEnabled && <NavButtons />}
             <Add />
             <Delete row={row} />
           </>

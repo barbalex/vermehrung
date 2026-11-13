@@ -2,7 +2,6 @@ import { lazy, type ReactNode } from 'react'
 import { useAtomValue } from 'jotai'
 import { isId } from '../../utils/isId.ts'
 import { ObjectList } from './ObjectList.tsx'
-import { breadcrumbsEnabled } from '../../utils/breadcrumbsEnabled.ts'
 import {
   activeFormAtom,
   activeNodeArrayAtom,
@@ -82,10 +81,10 @@ const FourOhFour = lazy(async () => ({
   default: (await import('../../routes/404.tsx')).FourOhFour,
 }))
 
-// with breadcrumbs enabled, an object url first renders the object's list
-// (the object itself + its child tables, replacing the removed form header
-// down-navigation). the object's form renders when its name is in the url
-// (.../{id}/{Name}). objects without child tables render their form directly
+// an object url first renders the object's list (the object itself + its
+// child tables, replacing the removed form header down-navigation). the
+// object's form renders when its name is in the url (.../{id}/{Name}).
+// objects without child tables render their form directly
 const WithObjectList = ({
   table,
   id,
@@ -96,7 +95,7 @@ const WithObjectList = ({
   children: ReactNode
 }) => {
   const objectName = useAtomValue(activeObjectNameAtom)
-  if (breadcrumbsEnabled && !objectName) {
+  if (!objectName) {
     return (
       <ObjectList
         table={table}

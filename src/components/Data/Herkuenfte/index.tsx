@@ -12,16 +12,12 @@ import {
   sammlungIdInActiveNodeArrayAtom,
   artIdInActiveNodeArrayAtom,
   filterHerkunftAtom,
-  setActiveNodeArray,
-  removeOpenNode,
 } from '../../../store/index.ts'
 import { insertHerkunftRev } from '../../../modules/insertRev.ts'
 import { FilterTitle } from '../../shared/FilterTitle.tsx'
 import { HerkunftRow as Row } from './Row.tsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
 import { FilterNumbers } from '../../shared/FilterNumbers.tsx'
-import UpSvg from '../../../svg/to_up.svg?react'
-import { breadcrumbsEnabled } from '../../../utils/breadcrumbsEnabled.ts'
 import { tableFilter } from '../../../utils/tableFilter.ts'
 import { herkunftSort } from '../../../utils/herkunftSort.ts'
 import { constants } from '../../../utils/constants.ts'
@@ -85,17 +81,6 @@ export const Herkuenfte = ({ filter: showFilter }: { filter?: boolean }) => {
 
   const { herkunfts, totalCount } = dataState
   const filteredCount = herkunfts.length
-
-  const onClickUp = () => {
-    removeOpenNode(activeNodeArray)
-    setActiveNodeArray(activeNodeArray.slice(0, -1))
-  }
-
-  let upTitle = 'Eine Ebene höher'
-  if (activeNodeArray[0] === 'Herkuenfte') {
-    upTitle = 'Zu allen Listen'
-  }
-
   // herkuenfte is top node
   // never enable adding below that
   const showPlus = activeNodeArray.length < 2
@@ -116,15 +101,6 @@ export const Herkuenfte = ({ filter: showFilter }: { filter?: boolean }) => {
         : <div className={artStyles.titleContainer}>
             <div className={artStyles.title}>Herkünfte</div>
             <div className={artStyles.titleSymbols}>
-              {!breadcrumbsEnabled && (
-                <IconButton
-                  title={upTitle}
-                  onClick={onClickUp}
-                  size="large"
-                >
-                  <UpSvg />
-                </IconButton>
-              )}
               {showPlus && (
                 <IconButton
                   aria-label="neue Herkunft"

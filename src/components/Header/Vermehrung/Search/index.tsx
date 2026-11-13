@@ -11,7 +11,6 @@ import {
   setActiveNodeArray,
   setFilterShow,
 } from '../../../../store/index.ts'
-import { breadcrumbsEnabled } from '../../../../utils/breadcrumbsEnabled.ts'
 import { singularOfFolder } from '../../../../utils/singularOfFolder.ts'
 import { buildOptions } from './buildOptions.ts'
 
@@ -86,9 +85,8 @@ export const HeaderSearch = () => {
         // do nothing
       }
     }
-    // with breadcrumbs enabled, open the found object's form directly,
-    // not its object list
-    if (breadcrumbsEnabled && newActiveNodeArray) {
+    // open the found object's form directly, not its object list
+    if (newActiveNodeArray) {
       const objectName = singularOfFolder[newActiveNodeArray.at(-2) as string]
       if (objectName) newActiveNodeArray = [...newActiveNodeArray, objectName]
     }

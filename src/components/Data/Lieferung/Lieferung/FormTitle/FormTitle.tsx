@@ -1,12 +1,5 @@
-import { useAtomValue } from 'jotai'
-import IconButton from '@mui/material/IconButton'
 import { useElementWidth } from '../../../../shared/useElementWidth.ts'
 
-import {
-  activeNodeArrayAtom,
-  setActiveNodeArray,
-  removeOpenNode,
-} from '../../../../../store/index.ts'
 import { LieferungSettings as Settings } from './Settings/index.tsx'
 import { LieferungAddButton as AddButton } from './AddButton.tsx'
 import { LieferungDeleteButton as DeleteButton } from './DeleteButton.tsx'
@@ -14,9 +7,6 @@ import { LieferungAnleitung as Anleitung } from './Anleitung.tsx'
 import { FilterNumbers } from '../../../../shared/FilterNumbers.tsx'
 import { HistoryButton } from '../../../../shared/HistoryButton.tsx'
 import { Menu } from '../../../../shared/Menu.tsx'
-import UpSvg from '../../../../../svg/to_up.svg?react'
-import KuDownSvg from '../../../../../svg/to_ku_down.svg?react'
-import { breadcrumbsEnabled } from '../../../../../utils/breadcrumbsEnabled.ts'
 
 import artStyles from '../../../Art/FormTitle/FormTitle.module.css'
 
@@ -31,25 +21,7 @@ export const LieferungFormTitle = ({
   filteredCount: number
   showHistory: boolean
 }) => {
-  const activeNodeArray = useAtomValue(activeNodeArrayAtom)
-
   const { width, ref } = useElementWidth<HTMLDivElement>()
-
-  const onClickUp = () => {
-    removeOpenNode(activeNodeArray)
-    setActiveNodeArray(activeNodeArray.slice(0, -1))
-  }
-
-  const nachKulturId = row?.nach_kultur_id ?? undefined
-  const onClickToKultur = () =>
-    setActiveNodeArray([
-      ...activeNodeArray.filter((n) => n !== 'Kulturen'),
-      'Kulturen',
-      ...(nachKulturId ? [nachKulturId] : []),
-    ])
-  // to kulturen is not implemented in nodes, so turned off
-  const toKulturenEnabled = false
-  const showToKu = toKulturenEnabled && activeNodeArray[0] === 'Sammlungen'
 
   return (
     <div
@@ -58,26 +30,6 @@ export const LieferungFormTitle = ({
     >
       <div className={artStyles.title}>Lieferung</div>
       <div className={artStyles.symbols}>
-        {!breadcrumbsEnabled && (
-          <>
-            <IconButton
-              title="Zur Liste"
-              onClick={onClickUp}
-              size="large"
-            >
-              <UpSvg />
-            </IconButton>
-            {showToKu && (
-              <IconButton
-                title="Zur Kultur"
-                onClick={onClickToKultur}
-                size="large"
-              >
-                <KuDownSvg />
-              </IconButton>
-            )}
-          </>
-        )}
         <AddButton />
         <DeleteButton row={row} />
         {(width ?? 0) < 520 ?

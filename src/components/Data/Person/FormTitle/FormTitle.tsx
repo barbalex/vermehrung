@@ -10,8 +10,6 @@ import { FilterNumbers } from '../../../shared/FilterNumbers.tsx'
 import { Menu } from '../../../shared/Menu.tsx'
 import { HistoryButton } from '../../../shared/HistoryButton.tsx'
 import { PersonKonto as KontoMenu } from './KontoMenu/index.tsx'
-import { PersonFormTitleNavButtons as NavButtons } from './NavButtons.tsx'
-import { breadcrumbsEnabled } from '../../../../utils/breadcrumbsEnabled.ts'
 
 import artStyles from '../../Art/FormTitle/FormTitle.module.css'
 
@@ -55,7 +53,6 @@ export const PersonFormTitle = ({
     >
       <div className={artStyles.title}>Person</div>
       <div className={artStyles.symbols}>
-        {!breadcrumbsEnabled && <NavButtons />}
         {userRole?.name === 'manager' && (
           <>
             <AddButton />

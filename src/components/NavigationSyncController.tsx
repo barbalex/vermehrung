@@ -15,7 +15,6 @@ import {
 import { getActiveNodeArrayFromPathname } from '../utils/getActiveNodeArrayFromPathname.ts'
 import { splitHistoriesFromActiveNodeArray } from '../utils/splitHistoriesFromActiveNodeArray.ts'
 import { splitObjectNameFromActiveNodeArray } from '../utils/splitObjectNameFromActiveNodeArray.ts'
-import { breadcrumbsEnabled } from '../utils/breadcrumbsEnabled.ts'
 
 // syncs activeNodeArray with browser navigation
 export const NavigationSyncController = () => {
@@ -56,10 +55,8 @@ export const NavigationSyncController = () => {
     // setActiveNodeArray below only runs when the node array changed,
     // which it does not when only the object name suffix appears/disappears
     const { activeNodeArray: activeNodeArray, objectName } =
-      breadcrumbsEnabled ?
-        splitObjectNameFromActiveNodeArray(activeNodeArrayFromUrl as string[])
-      : { activeNodeArray: activeNodeArrayFromUrl, objectName: undefined }
-    if (breadcrumbsEnabled) setObjectName(objectName)
+      splitObjectNameFromActiveNodeArray(activeNodeArrayFromUrl as string[])
+    setObjectName(objectName)
 
     if (!isEqual(activeNodeArray, aNA)) {
       // when the url contains a histories suffix, do not navigate:

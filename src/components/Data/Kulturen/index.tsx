@@ -8,21 +8,16 @@ import { combineLatest } from 'rxjs'
 
 import {
   dbAtom,
-  activeNodeArrayAtom,
   filterKulturAtom,
   artIdInActiveNodeArrayAtom,
   gartenIdInActiveNodeArrayAtom,
   herkunftIdInActiveNodeArrayAtom,
-  setActiveNodeArray,
-  removeOpenNode,
 } from '../../../store/index.ts'
 import { insertKulturRev } from '../../../modules/insertRev.ts'
 import { FilterTitle } from '../../shared/FilterTitle.tsx'
 import { KulturRow as Row } from './Row.tsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
 import { FilterNumbers } from '../../shared/FilterNumbers.tsx'
-import UpSvg from '../../../svg/to_up.svg?react'
-import { breadcrumbsEnabled } from '../../../utils/breadcrumbsEnabled.ts'
 import { tableFilter } from '../../../utils/tableFilter.ts'
 import { kultursSortedFromKulturs } from '../../../utils/kultursSortedFromKulturs.ts'
 import { constants } from '../../../utils/constants.ts'
@@ -36,7 +31,6 @@ export const Kulturen = ({ filter: showFilter = false }) => {
   const herkunftIdInActiveNodeArray = useAtomValue(
     herkunftIdInActiveNodeArrayAtom,
   )
-  const activeNodeArray = useAtomValue(activeNodeArrayAtom)
   const kulturFilter = useAtomValue(filterKulturAtom)
 
   const [dataState, setDataState] = useState<{
@@ -110,23 +104,6 @@ export const Kulturen = ({ filter: showFilter = false }) => {
 
   const { kulturs, totalCount } = dataState
   const filteredCount = kulturs.length
-
-  const onClickUp = () => {
-    removeOpenNode(activeNodeArray)
-    setActiveNodeArray(activeNodeArray.slice(0, -1))
-  }
-
-  let upTitle = 'Eine Ebene höher'
-  if (activeNodeArray[0] === 'Kulturen') {
-    upTitle = 'Zu allen Listen'
-  }
-  if (activeNodeArray[activeNodeArray.length - 3] === 'Arten') {
-    upTitle = 'Zur Art'
-  }
-  if (activeNodeArray[activeNodeArray.length - 3] === 'Gaerten') {
-    upTitle = 'Zum Garten'
-  }
-
   return (
     <ErrorBoundary>
       <div
@@ -143,15 +120,6 @@ export const Kulturen = ({ filter: showFilter = false }) => {
         : <div className={artStyles.titleContainer}>
             <div className={artStyles.title}>Kulturen</div>
             <div className={artStyles.titleSymbols}>
-              {!breadcrumbsEnabled && (
-                <IconButton
-                  title={upTitle}
-                  onClick={onClickUp}
-                  size="large"
-                >
-                  <UpSvg />
-                </IconButton>
-              )}
               <IconButton
                 aria-label="neue Kultur"
                 title="neue Kultur"

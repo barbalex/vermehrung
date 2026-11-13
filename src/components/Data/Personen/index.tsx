@@ -10,17 +10,8 @@ import { FilterTitle } from '../../shared/FilterTitle.tsx'
 import { PersonRow as Row } from './Row.tsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
 import { FilterNumbers } from '../../shared/FilterNumbers.tsx'
-import {
-  dbAtom,
-  userAtom,
-  filterPersonAtom,
-  activeNodeArrayAtom,
-  setActiveNodeArray,
-  removeOpenNode,
-} from '../../../store/index.ts'
+import { dbAtom, userAtom, filterPersonAtom } from '../../../store/index.ts'
 import { insertPersonRev } from '../../../modules/insertRev.ts'
-import UpSvg from '../../../svg/to_up.svg?react'
-import { breadcrumbsEnabled } from '../../../utils/breadcrumbsEnabled.ts'
 import { tableFilter } from '../../../utils/tableFilter.ts'
 import { personSort } from '../../../utils/personSort.ts'
 import { constants } from '../../../utils/constants.ts'
@@ -31,7 +22,6 @@ export const Personen = ({ filter: showFilter = false }) => {
   const db = useAtomValue(dbAtom)
   const user = useAtomValue(userAtom)
   const personFilter = useAtomValue(filterPersonAtom)
-  const activeNodeArray = useAtomValue(activeNodeArrayAtom)
 
   const [dataState, setDataState] = useState<{
     persons: import('../../../dbModel.ts').Person[]
@@ -95,17 +85,6 @@ export const Personen = ({ filter: showFilter = false }) => {
 
   const { persons, totalCount, userRole } = dataState
   const filteredCount = persons.length
-
-  const onClickUp = () => {
-    removeOpenNode(activeNodeArray)
-    setActiveNodeArray(activeNodeArray.slice(0, -1))
-  }
-
-  let upTitle = 'Eine Ebene höher'
-  if (activeNodeArray[0] === 'Personen') {
-    upTitle = 'Zu allen Listen'
-  }
-
   return (
     <ErrorBoundary>
       <div
@@ -122,15 +101,6 @@ export const Personen = ({ filter: showFilter = false }) => {
         : <div className={artStyles.titleContainer}>
             <div className={artStyles.title}>Personen</div>
             <div className={artStyles.titleSymbols}>
-              {!breadcrumbsEnabled && (
-                <IconButton
-                  title={upTitle}
-                  onClick={onClickUp}
-                  size="large"
-                >
-                  <UpSvg />
-                </IconButton>
-              )}
               {userRole?.name === 'manager' && (
                 <IconButton
                   aria-label="neue Person"

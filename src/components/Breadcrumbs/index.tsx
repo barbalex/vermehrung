@@ -148,8 +148,7 @@ const CrumbItem = ({
 
 // always-visible strip below the app bar (ps-style, as opposed to apf2's
 // mobile-only bookmarks) showing the path of the active node.
-// Replaces the nav buttons in the form title bars - see
-// src/utils/breadcrumbsEnabled.ts
+// Replaces the nav buttons formerly in the form title bars
 export const Breadcrumbs = () => {
   const activeNodeArray = useAtomValue(activeNodeArrayAtom)
   const objectName = useAtomValue(activeObjectNameAtom)

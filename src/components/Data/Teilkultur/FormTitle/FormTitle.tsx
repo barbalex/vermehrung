@@ -1,12 +1,5 @@
-import IconButton from '@mui/material/IconButton'
 import { useElementWidth } from '../../../shared/useElementWidth.ts'
 
-import {
-  store,
-  activeNodeArrayAtom,
-  setActiveNodeArray,
-  removeOpenNode,
-} from '../../../../store/index.ts'
 import { TeilkulturSettings as Settings } from './Settings/index.tsx'
 import { TeilkulturDeleteButton as DeleteButton } from './DeleteButton.tsx'
 import { TeilkulturAddButton as AddButton } from './AddButton.tsx'
@@ -14,8 +7,6 @@ import { TeilkulturAnleitung as Anleitung } from './Anleitung.tsx'
 import { FilterNumbers } from '../../../shared/FilterNumbers.tsx'
 import { HistoryButton } from '../../../shared/HistoryButton.tsx'
 import { Menu } from '../../../shared/Menu.tsx'
-import { breadcrumbsEnabled } from '../../../../utils/breadcrumbsEnabled.ts'
-import UpSvg from '../../../../svg/to_up.svg?react'
 
 import artStyles from '../../Art/FormTitle/FormTitle.module.css'
 
@@ -32,12 +23,6 @@ export const TeilkulturFormTitle = ({
 }) => {
   const { width, ref } = useElementWidth<HTMLDivElement>()
 
-  const onClickUp = () => {
-    const activeNodeArray = store.get(activeNodeArrayAtom)
-    removeOpenNode(activeNodeArray)
-    setActiveNodeArray(activeNodeArray.slice(0, -1))
-  }
-
   return (
     <div
       className={artStyles.container}
@@ -45,15 +30,6 @@ export const TeilkulturFormTitle = ({
     >
       <div className={artStyles.title}>Teilkultur</div>
       <div className={artStyles.symbols}>
-        {!breadcrumbsEnabled && (
-          <IconButton
-            title="Zur Liste"
-            onClick={onClickUp}
-            size="large"
-          >
-            <UpSvg />
-          </IconButton>
-        )}
         <AddButton />
         <DeleteButton row={row} />
         {(width ?? 0) < 520 ?

@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test'
 import { createHmac } from 'node:crypto'
 
-// Pins the apf2-style object lists behind breadcrumbsEnabled:
+// Pins the apf2-style object lists:
 // - an object url renders the object itself + its child tables (tree order)
 // - the object's form renders at .../{id}/{Name}
 // - leaf objects (zaehlung) render their form directly

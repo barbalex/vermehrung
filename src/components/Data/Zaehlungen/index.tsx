@@ -7,20 +7,15 @@ import { Q } from 'nitromelondb'
 import { combineLatest } from 'rxjs'
 
 import {
-  activeNodeArrayAtom,
   dbAtom,
   filterZaehlungAtom,
   kulturIdInActiveNodeArrayAtom,
-  removeOpenNode,
-  setActiveNodeArray,
 } from '../../../store/index.ts'
 import { insertZaehlungRev } from '../../../modules/insertRev.ts'
 import { FilterTitle } from '../../shared/FilterTitle.tsx'
 import { ZaehlungRow as Row } from './Row.tsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
 import { FilterNumbers } from '../../shared/FilterNumbers.tsx'
-import UpSvg from '../../../svg/to_up.svg?react'
-import { breadcrumbsEnabled } from '../../../utils/breadcrumbsEnabled.ts'
 import { tableFilter } from '../../../utils/tableFilter.ts'
 import { zaehlungSort } from '../../../utils/zaehlungSort.ts'
 import { constants } from '../../../utils/constants.ts'
@@ -30,7 +25,6 @@ import artStyles from '../Arten/index.module.css'
 export const Zaehlungen = ({ filter: showFilter = false }) => {
   const db = useAtomValue(dbAtom)
   const kulturIdInActiveNodeArray = useAtomValue(kulturIdInActiveNodeArrayAtom)
-  const activeNodeArray = useAtomValue(activeNodeArrayAtom)
   const zaehlungFilter = useAtomValue(filterZaehlungAtom)
 
   const [dataState, setDataState] = useState<{
@@ -88,20 +82,6 @@ export const Zaehlungen = ({ filter: showFilter = false }) => {
 
   const { zaehlungs, totalCount } = dataState
   const filteredCount = zaehlungs.length
-
-  const onClickUp = () => {
-    removeOpenNode(activeNodeArray)
-    setActiveNodeArray(activeNodeArray.slice(0, -1))
-  }
-
-  let upTitle = 'Eine Ebene höher'
-  if (activeNodeArray[0] === 'Zaehlungen') {
-    upTitle = 'Zu allen Listen'
-  }
-  if (activeNodeArray[activeNodeArray.length - 3] === 'Kulturen') {
-    upTitle = 'Zur Kultur'
-  }
-
   return (
     <ErrorBoundary>
       <div
@@ -118,15 +98,6 @@ export const Zaehlungen = ({ filter: showFilter = false }) => {
         : <div className={artStyles.titleContainer}>
             <div className={artStyles.title}>Zählungen</div>
             <div className={artStyles.titleSymbols}>
-              {!breadcrumbsEnabled && (
-                <IconButton
-                  title={upTitle}
-                  onClick={onClickUp}
-                  size="large"
-                >
-                  <UpSvg />
-                </IconButton>
-              )}
               <IconButton
                 aria-label="neue Zählung"
                 title="neue Zählung"

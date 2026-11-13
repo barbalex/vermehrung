@@ -8,21 +8,16 @@ import { combineLatest } from 'rxjs'
 
 import {
   dbAtom,
-  activeNodeArrayAtom,
   filterSammlungAtom,
   artIdInActiveNodeArrayAtom,
   herkunftIdInActiveNodeArrayAtom,
   personIdInActiveNodeArrayAtom,
-  setActiveNodeArray,
-  removeOpenNode,
 } from '../../../store/index.ts'
 import { insertSammlungRev } from '../../../modules/insertRev.ts'
 import { FilterTitle } from '../../shared/FilterTitle.tsx'
 import { SammlungRow as Row } from './Row.tsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
 import { FilterNumbers } from '../../shared/FilterNumbers.tsx'
-import UpSvg from '../../../svg/to_up.svg?react'
-import { breadcrumbsEnabled } from '../../../utils/breadcrumbsEnabled.ts'
 import { tableFilter } from '../../../utils/tableFilter.ts'
 import { sammlungsSortedFromSammlungs } from '../../../utils/sammlungsSortedFromSammlungs.ts'
 import { constants } from '../../../utils/constants.ts'
@@ -36,7 +31,6 @@ export const Sammlungen = ({ filter: showFilter = false }) => {
     herkunftIdInActiveNodeArrayAtom,
   )
   const personIdInActiveNodeArray = useAtomValue(personIdInActiveNodeArrayAtom)
-  const activeNodeArray = useAtomValue(activeNodeArrayAtom)
   const sammlungFilter = useAtomValue(filterSammlungAtom)
 
   const [dataState, setDataState] = useState<{
@@ -101,26 +95,6 @@ export const Sammlungen = ({ filter: showFilter = false }) => {
 
   const { sammlungs, totalCount } = dataState
   const filteredCount = sammlungs.length
-
-  const onClickUp = () => {
-    removeOpenNode(activeNodeArray)
-    setActiveNodeArray(activeNodeArray.slice(0, -1))
-  }
-
-  let upTitle = 'Eine Ebene höher'
-  if (activeNodeArray[0] === 'Sammlungen') {
-    upTitle = 'Zu allen Listen'
-  }
-  if (activeNodeArray[activeNodeArray.length - 3] === 'Arten') {
-    upTitle = 'Zur Art'
-  }
-  if (activeNodeArray[activeNodeArray.length - 3] === 'Personen') {
-    upTitle = 'Zur Person'
-  }
-  if (activeNodeArray[activeNodeArray.length - 3] === 'Herkuenfte') {
-    upTitle = 'Zur Herkunft'
-  }
-
   return (
     <ErrorBoundary>
       <div
@@ -137,15 +111,6 @@ export const Sammlungen = ({ filter: showFilter = false }) => {
         : <div className={artStyles.titleContainer}>
             <div className={artStyles.title}>Sammlungen</div>
             <div className={artStyles.titleSymbols}>
-              {!breadcrumbsEnabled && (
-                <IconButton
-                  title={upTitle}
-                  onClick={onClickUp}
-                  size="large"
-                >
-                  <UpSvg />
-                </IconButton>
-              )}
               <IconButton
                 aria-label="neue Sammlung"
                 title="neue Sammlung"

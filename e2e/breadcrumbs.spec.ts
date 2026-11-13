@@ -1,8 +1,8 @@
 import { expect, test } from '@playwright/test'
 import { createHmac } from 'node:crypto'
 
-// Pins the breadcrumbs strip (ps-style, always visible) that replaces the
-// nav buttons in form title bars - see src/utils/breadcrumbsEnabled.ts:
+// Pins the breadcrumbs strip (ps-style, always visible) that replaced the
+// nav buttons formerly in the form title bars:
 // - the strip shows the full path of the active node, folders and row labels
 // - crumbs navigate to their prefix path
 // - the form title bars no longer render nav buttons

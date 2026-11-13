@@ -27,7 +27,6 @@ import { kulturIdOfAnLieferungInUrl } from '../utils/kulturIdOfAnLieferungInUrl.
 import { kulturIdOfAusLieferungInUrl } from '../utils/kulturIdOfAusLieferungInUrl.ts'
 import { zaehlungIdInUrl } from '../utils/zaehlungIdInUrl.ts'
 import { splitObjectNameFromActiveNodeArray } from '../utils/splitObjectNameFromActiveNodeArray.ts'
-import { breadcrumbsEnabled } from '../utils/breadcrumbsEnabled.ts'
 import type { ApiClient } from '../utils/apiTypes.ts'
 
 /** the user as the app uses it: the firebase auth user, loosely */
@@ -263,13 +262,6 @@ export const setOpenNodes = (val: string[][]) => {
   )
 }
 
-export const removeOpenNode = (val: string[]) => {
-  store.set(
-    openNodesAtom,
-    store.get(openNodesAtom).filter((n) => !isEqual(n, val)),
-  )
-}
-
 export const removeOpenNodeWithChildren = (url: string[]) => {
   store.set(
     openNodesAtom,
@@ -281,24 +273,20 @@ export const removeOpenNodeWithChildren = (url: string[]) => {
 }
 
 // === object name in url ===
-// with breadcrumbs enabled, an object's form url ends with its name
-// ('/Arten/{artId}/Art'). like the histories suffix it is kept out of
-// activeNodeArray. undefined: no object name in url (list or folder url)
+// an object's form url ends with its name ('/Arten/{artId}/Art').
+// like the histories suffix it is kept out of activeNodeArray.
+// undefined: no object name in url (list or folder url)
 export const activeObjectNameAtom = atom<string | undefined>(undefined)
 export const setObjectName = (val: string | undefined) =>
   store.set(activeObjectNameAtom, val)
 
 export const setActiveNodeArray = (val: string[], nonavigate?: boolean) => {
-  // with breadcrumbs enabled, an object's form url ends with its name
-  // ('/Arten/{artId}/Art'). like the histories suffix it is deliberately
-  // NOT part of activeNodeArray (read positionally in many places) but
-  // kept in the url
-  let activeNodeArray = val
-  if (breadcrumbsEnabled) {
-    const split = splitObjectNameFromActiveNodeArray(val)
-    activeNodeArray = split.activeNodeArray
-    setObjectName(split.objectName)
-  }
+  // an object's form url ends with its name ('/Arten/{artId}/Art').
+  // like the histories suffix it is deliberately NOT part of
+  // activeNodeArray (read positionally in many places) but kept in the url
+  const split = splitObjectNameFromActiveNodeArray(val)
+  setObjectName(split.objectName)
+  const activeNodeArray = split.activeNodeArray
   store.set(activeNodeArrayAtom, activeNodeArray)
   if (!nonavigate) {
     getNavigate()?.(`/Vermehrung/${val.join('/')}`)

@@ -8,19 +8,14 @@ import { combineLatest } from 'rxjs'
 
 import {
   dbAtom,
-  activeNodeArrayAtom,
   filterGartenAtom,
   personIdInActiveNodeArrayAtom,
-  setActiveNodeArray,
-  removeOpenNode,
 } from '../../../store/index.ts'
 import { insertGartenRev } from '../../../modules/insertRev.ts'
 import { FilterTitle } from '../../shared/FilterTitle.tsx'
 import { GartenRow as Row } from './Row.tsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
 import { FilterNumbers } from '../../shared/FilterNumbers.tsx'
-import UpSvg from '../../../svg/to_up.svg?react'
-import { breadcrumbsEnabled } from '../../../utils/breadcrumbsEnabled.ts'
 import { tableFilter } from '../../../utils/tableFilter.ts'
 import { gartensSortedFromGartens } from '../../../utils/gartensSortedFromGartens.ts'
 import { constants } from '../../../utils/constants.ts'
@@ -30,7 +25,6 @@ import artStyles from '../Arten/index.module.css'
 export const Gaerten = ({ filter: showFilter = false }) => {
   const db = useAtomValue(dbAtom)
   const personIdInActiveNodeArray = useAtomValue(personIdInActiveNodeArrayAtom)
-  const activeNodeArray = useAtomValue(activeNodeArrayAtom)
   const gartenFilter = useAtomValue(filterGartenAtom)
 
   const [dataState, setDataState] = useState<{
@@ -95,20 +89,6 @@ export const Gaerten = ({ filter: showFilter = false }) => {
 
   const { gartens, totalCount } = dataState
   const filteredCount = gartens.length
-
-  const onClickUp = () => {
-    removeOpenNode(activeNodeArray)
-    setActiveNodeArray(activeNodeArray.slice(0, -1))
-  }
-
-  let upTitle = 'Eine Ebene höher'
-  if (activeNodeArray[0] === 'Gaerten') {
-    upTitle = 'Zu allen Listen'
-  }
-  if (activeNodeArray[activeNodeArray.length - 3] === 'Personen') {
-    upTitle = 'Zur Person'
-  }
-
   return (
     <ErrorBoundary>
       <div
@@ -125,15 +105,6 @@ export const Gaerten = ({ filter: showFilter = false }) => {
         : <div className={artStyles.titleContainer}>
             <div className={artStyles.title}>Gärten</div>
             <div className={artStyles.titleSymbols}>
-              {!breadcrumbsEnabled && (
-                <IconButton
-                  title={upTitle}
-                  onClick={onClickUp}
-                  size="large"
-                >
-                  <UpSvg />
-                </IconButton>
-              )}
               <IconButton
                 aria-label="neuer Garten"
                 title="neuer Garten"

@@ -1,9 +1,5 @@
-.container {
-  min-height: calc(100dvh - var(--app-bar-height));
-  position: relative;
-}
-
 /* the breadcrumbs strip below the app bar takes additional height */
-.containerWithBreadcrumbs {
+.container {
   min-height: calc(100dvh - var(--app-bar-height) - var(--breadcrumbs-height));
+  position: relative;
 }

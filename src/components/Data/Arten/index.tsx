@@ -3,19 +3,10 @@ import { useAtomValue } from 'jotai'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import { List } from 'react-window'
-import UpSvg from '../../../svg/to_up.svg?react'
-import { breadcrumbsEnabled } from '../../../utils/breadcrumbsEnabled.ts'
 import { combineLatest } from 'rxjs'
 import { Q } from 'nitromelondb'
 
-import {
-  dbAtom,
-  activeNodeArrayAtom,
-  apFilterAtom,
-  filterArtAtom,
-  setActiveNodeArray,
-  removeOpenNode,
-} from '../../../store/index.ts'
+import { dbAtom, apFilterAtom, filterArtAtom } from '../../../store/index.ts'
 import { insertArtRev } from '../../../modules/insertRev.ts'
 import { FilterTitle } from '../../shared/FilterTitle.tsx'
 import { ArtRow as Row } from './Row.tsx'
@@ -30,7 +21,6 @@ import artStyles from './index.module.css'
 
 export const Arten = ({ filter: showFilter }: { filter?: boolean }) => {
   const db = useAtomValue(dbAtom)
-  const activeNodeArray = useAtomValue(activeNodeArrayAtom)
   const apFilter = useAtomValue(apFilterAtom)
   const artFilter = useAtomValue(filterArtAtom)
 
@@ -72,17 +62,6 @@ export const Arten = ({ filter: showFilter }: { filter?: boolean }) => {
 
   const { arts, totalCount } = dataState
   const filteredCount = arts.length
-
-  const onClickUp = () => {
-    removeOpenNode(activeNodeArray)
-    setActiveNodeArray(activeNodeArray.slice(0, -1))
-  }
-
-  let upTitle = 'Eine Ebene höher'
-  if (activeNodeArray[0] === 'Arten') {
-    upTitle = 'Zu allen Listen'
-  }
-
   return (
     <ErrorBoundary>
       <div
@@ -102,15 +81,6 @@ export const Arten = ({ filter: showFilter }: { filter?: boolean }) => {
               <div className={artStyles.apFilterContainer}>
                 <ApFilter />
               </div>
-              {!breadcrumbsEnabled && (
-                <IconButton
-                  title={upTitle}
-                  onClick={onClickUp}
-                  size="large"
-                >
-                  <UpSvg />
-                </IconButton>
-              )}
               <IconButton
                 aria-label="neue Art"
                 title="neue Art"
