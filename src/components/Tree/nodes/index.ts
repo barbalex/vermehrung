@@ -128,7 +128,8 @@ import { zaehlungSort } from '../../../utils/zaehlungSort.ts'
 import { lieferungSort } from '../../../utils/lieferungSort.ts'
 import { bedarfSort } from '../../../utils/bedarfSort.ts'
 import { personSort } from '../../../utils/personSort.ts'
-import { artsSortedFromArts } from '../../../utils/artsSortedFromArts.ts'
+import { sortBy } from 'es-toolkit'
+import { first as first$ } from 'rxjs/operators'
 import { kultursSortedFromKulturs } from '../../../utils/kultursSortedFromKulturs.ts'
 import { gartensSortedFromGartens } from '../../../utils/gartensSortedFromGartens.ts'
 import { sammlungsSortedFromSammlungs } from '../../../utils/sammlungsSortedFromSammlungs.ts'
@@ -318,9 +319,24 @@ export const buildNodes = async ({
       try {
         arts = (await artQuery?.fetch()) ?? []
       } catch {}
-      const artsSorted = await artsSortedFromArts(arts)
+      // resolve every art label once: sorting and node building share it
+      const artLabelPairs = await Promise.all(
+        arts.map(async (art) => {
+          let label: unknown = ''
+          try {
+            label = await art.label.pipe(first$()).toPromise()
+          } catch {}
+          return [art.id, String(label ?? '')] as const
+        }),
+      )
+      const artLabelById = new Map(artLabelPairs)
+      const artsSorted = sortBy(arts, [
+        (art) => (artLabelById.get(art.id) ?? '').toLowerCase(),
+      ])
       artNodes = await Promise.all(
-        artsSorted.map(async (art, index) => await buildArt({ art, index })),
+        artsSorted.map(async (art, index) =>
+          buildArt({ art, index, label: artLabelById.get(art.id) ?? '' }),
+        ),
       )
 
       // on to child nodes

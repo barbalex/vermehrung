@@ -21,6 +21,15 @@ import {
   filterZaehlungAtom,
   filterLieferungAtom,
   filterPersonAtom,
+  artIdInActiveNodeArrayAtom,
+  herkunftIdInActiveNodeArrayAtom,
+  gartenIdInActiveNodeArrayAtom,
+  kulturIdInActiveNodeArrayAtom,
+  teilkulturIdInActiveNodeArrayAtom,
+  zaehlungIdInActiveNodeArrayAtom,
+  lieferungIdInActiveNodeArrayAtom,
+  personIdInActiveNodeArrayAtom,
+  sammlungIdInActiveNodeArrayAtom,
 } from '../../store/index.ts'
 import { TreeSettings as Settings } from './Settings.tsx'
 import { ApFilterContainer } from './ApFilter.tsx'
@@ -30,6 +39,7 @@ import { ApFilterWarning } from './ApFilterWarning.tsx'
 import { ErrorBoundary } from '../shared/ErrorBoundary.tsx'
 import { tableFilter } from '../../utils/tableFilter.ts'
 import { notDeletedQuery } from '../../utils/notDeletedQuery.ts'
+import { exists } from '../../utils/exists.ts'
 import { buildNodes } from './nodes/index.ts'
 
 import styles from './index.module.css'
@@ -49,6 +59,25 @@ export const Tree = () => {
   const zaehlungFilter = useAtomValue(filterZaehlungAtom)
   const lieferungFilter = useAtomValue(filterLieferungAtom)
   const personFilter = useAtomValue(filterPersonAtom)
+  const artIdInActiveNodeArray = useAtomValue(artIdInActiveNodeArrayAtom)
+  const herkunftIdInActiveNodeArray = useAtomValue(
+    herkunftIdInActiveNodeArrayAtom,
+  )
+  const gartenIdInActiveNodeArray = useAtomValue(gartenIdInActiveNodeArrayAtom)
+  const kulturIdInActiveNodeArray = useAtomValue(kulturIdInActiveNodeArrayAtom)
+  const teilkulturIdInActiveNodeArray = useAtomValue(
+    teilkulturIdInActiveNodeArrayAtom,
+  )
+  const zaehlungIdInActiveNodeArray = useAtomValue(
+    zaehlungIdInActiveNodeArrayAtom,
+  )
+  const lieferungIdInActiveNodeArray = useAtomValue(
+    lieferungIdInActiveNodeArrayAtom,
+  )
+  const personIdInActiveNodeArray = useAtomValue(personIdInActiveNodeArrayAtom)
+  const sammlungIdInActiveNodeArray = useAtomValue(
+    sammlungIdInActiveNodeArrayAtom,
+  )
 
   const [nodes, setNodes] = useState<import('./nodes/index.ts').TreeNode[]>([])
   const [dataState, setDataState] = useState<{
@@ -211,6 +240,31 @@ export const Tree = () => {
     return () => subscription?.unsubscribe?.()
   }, [buildMyNodesDebounced, db, user.uid])
 
+  // buildNodes reads the active node only for folder visibility (the
+  // top url segment) and - when a filter is set - to force-include the
+  // active row id in the filtered queries (tableFilter). Both are
+  // collapsed into two derived deps so navigating within a folder does
+  // NOT rebuild the whole tree.
+  const filterIsActive = (filter: Record<string, unknown>) =>
+    Object.values(filter).some((value) => exists(value))
+  const activeFolder = aNA[0]
+  const activeIdsWhenFiltered = JSON.stringify({
+    art: filterIsActive(artFilter) ? artIdInActiveNodeArray : null,
+    herkunft:
+      filterIsActive(herkunftFilter) ? herkunftIdInActiveNodeArray : null,
+    garten: filterIsActive(gartenFilter) ? gartenIdInActiveNodeArray : null,
+    kultur: filterIsActive(kulturFilter) ? kulturIdInActiveNodeArray : null,
+    teilkultur:
+      filterIsActive(teilkulturFilter) ? teilkulturIdInActiveNodeArray : null,
+    zaehlung:
+      filterIsActive(zaehlungFilter) ? zaehlungIdInActiveNodeArray : null,
+    lieferung:
+      filterIsActive(lieferungFilter) ? lieferungIdInActiveNodeArray : null,
+    person: filterIsActive(personFilter) ? personIdInActiveNodeArray : null,
+    sammlung:
+      filterIsActive(sammlungFilter) ? sammlungIdInActiveNodeArray : null,
+  })
+
   useEffect(() => {
     //console.log('Tree second useEffect ordering nodes build')
     buildMyNodesDebounced()
@@ -226,11 +280,11 @@ export const Tree = () => {
     zaehlungFilter,
     lieferungFilter,
     personFilter,
-    // need to rebuild tree on activeNodeArray changes
-    aNA,
+    // folder visibility + force-included active ids (see above)
+    activeFolder,
+    activeIdsWhenFiltered,
     // need to rebuild tree on openNodes changes
     openNodes,
-    openNodes.length,
     user.uid,
     apFilter,
   ])
