@@ -82,44 +82,52 @@ export const processSubscriptionResult = async ({
   // use a timeout to stagger the imports
   // reason: indexedDB creates indexes right after a table was imported
   // need to stagger imports to keep ui responsive between them
-  setTimeout(async () => {
-    try {
-      await db.write(async () => {
-        if (objectsToUpdate.length || dataToCreateObjectsFrom.length) {
-          // single array, not a spread: the initial sync imports > 10k
-          // rows per table and a spread would blow the call stack
-          await db.batch([
-            ...objectsToUpdate.map((object) => {
-              const thisObjectsData = (dataToCheck.find(
-                (d) => d.id === object.id,
-              ) ?? {}) as Record<string, unknown>
+  // the caller awaits until the write committed: the cursor (lastUpdated)
+  // may only advance past rows that are in the local database - a crash
+  // after the cursor was persisted but before the commit would lose them
+  // forever (they are never re-delivered)
+  await new Promise<void>((resolve) => {
+    setTimeout(async () => {
+      try {
+        await db.write(async () => {
+          if (objectsToUpdate.length || dataToCreateObjectsFrom.length) {
+            // single array, not a spread: the initial sync imports > 10k
+            // rows per table and a spread would blow the call stack
+            await db.batch([
+              ...objectsToUpdate.map((object) => {
+                const thisObjectsData = (dataToCheck.find(
+                  (d) => d.id === object.id,
+                ) ?? {}) as Record<string, unknown>
 
-              return object.prepareUpdate((ob: Model) => {
-                Object.keys(thisObjectsData)
-                  .filter((key) => !['id', '__typename'].includes(key))
-                  .forEach((key) => {
-                    const obRecord = ob as unknown as Record<string, unknown>
-                    if (!isEqual(obRecord[key], thisObjectsData[key])) {
-                      obRecord[key] = thisObjectsData[key]
-                    }
-                  })
-              })
-            }),
-            // prepareCreateFromDirtyRaw replaces watermelon's id with vermehrung's
-            ...dataToCreateObjectsFrom.map((d) =>
-              collection.prepareCreateFromDirtyRaw(
-                parseComplexFieldsForWm(d as Record<string, unknown>),
+                return object.prepareUpdate((ob: Model) => {
+                  Object.keys(thisObjectsData)
+                    .filter((key) => !['id', '__typename'].includes(key))
+                    .forEach((key) => {
+                      const obRecord = ob as unknown as Record<string, unknown>
+                      if (!isEqual(obRecord[key], thisObjectsData[key])) {
+                        obRecord[key] = thisObjectsData[key]
+                      }
+                    })
+                })
+              }),
+              // prepareCreateFromDirtyRaw replaces watermelon's id with vermehrung's
+              ...dataToCreateObjectsFrom.map((d) =>
+                collection.prepareCreateFromDirtyRaw(
+                  parseComplexFieldsForWm(d as Record<string, unknown>),
+                ),
               ),
-            ),
-          ])
-          setInitiallyQueried({ table })
-        }
+            ])
+          }
+        })
+        setLastUpdated({ table, val: lastUpdatedValue })
+      } catch (error) {
+        console.log('Error in processSubscriptionResult > db.action:', error)
+        // deliberately do not advance the cursor: the next sync
+        // re-delivers these rows instead of skipping them forever
+      } finally {
         setInitiallyQueried({ table })
-      })
-    } catch (error) {
-      console.log('Error in processSubscriptionResult > db.action:', error)
-      setInitiallyQueried({ table })
-    }
+        resolve()
+      }
+    })
   })
-  setLastUpdated({ table, val: lastUpdatedValue })
 }

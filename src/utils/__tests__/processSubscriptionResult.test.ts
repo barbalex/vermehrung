@@ -143,4 +143,40 @@ describe('processSubscriptionResult', () => {
     expect(db.state.writeCalls).toBe(0)
     expect(store.get(initiallyQueriedAtom).art).toBe(true)
   })
+
+  it('advances the watermark only after the write committed', async () => {
+    const db = createDbMock({})
+    store.set(dbAtom, db)
+
+    const pending = processSubscriptionResult({
+      data: [{ id: '1', name: 'Neu', __typename: 'art' }],
+      table: 'art',
+    })
+    // while the write is still pending the cursor must not have moved:
+    // a tab death here must re-deliver these rows on the next boot
+    expect(store.get(lastUpdatedAtom).art).toBe(0)
+    expect(db.state.writeCalls).toBe(0)
+
+    await pending
+
+    expect(db.state.writeCalls).toBe(1)
+    expect(store.get(lastUpdatedAtom).art).toBeGreaterThan(0)
+  })
+
+  it('does not advance the watermark when the write fails', async () => {
+    const db = createDbMock({})
+    db.write = async () => {
+      throw new Error('boom')
+    }
+    store.set(dbAtom, db)
+
+    await processSubscriptionResult({
+      data: [{ id: '1', name: 'Neu', __typename: 'art' }],
+      table: 'art',
+    })
+
+    expect(store.get(initiallyQueriedAtom).art).toBe(true)
+    // the cursor stays put so the next sync re-delivers these rows
+    expect(store.get(lastUpdatedAtom).art).toBe(0)
+  })
 })

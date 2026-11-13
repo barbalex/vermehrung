@@ -6,7 +6,7 @@ Found during the 2026-11-13 codebase survey. Work top to bottom.
 
 1. [x] **Unauthenticated admin routes on the auth service** — `GET /create-user/{email}` and `GET /delete-user/{uid}` in `backend/auth/server.js` required no auth; `backend/docker-compose.yaml` published Postgres (5432) and auth (7000) on all interfaces. Fixed: routes now require an api JWT with `role=manager` (`Authorization: Bearer`), ports bound to `127.0.0.1`.
 2. [ ] **Inverted QK query** — Art's `zaehlungsWithoutDatum` (`src/components/Data/Art/Form/QK/Qk/createMessageFunctions.ts`, `Q.where('datum', Q.notEq(null))`) selects Zählungen _with_ a datum; Kultur's version filters `!z.datum`. Fix the inversion; best done as part of A6.
-3. [ ] **Crash window in the sync loop** — `processSubscriptionResult` persists the watermark cursor _before_ the SQLite write commits (write sits in an un-awaited `setTimeout` at `processSubscriptionResult.ts:85`, `setLastUpdated` runs at line 124). Tab death in between loses rows permanently. Fix: advance the cursor only after `db.write` commits.
+3. [x] **Crash window in the sync loop** — `processSubscriptionResult` persisted the watermark cursor _before_ the SQLite write committed. Fixed: the function now resolves only after the write commits (setTimeout staggering kept), and `setLastUpdated` runs exclusively on the success path — a failed write leaves the cursor put so the next sync re-delivers the rows. Also closes a latent double-create race: the poller's `await` now spans the writes, so overlapping polls can't both see the same rows as missing.
 4. [ ] `Lieferungen/index.tsx:93` calls `observeWithColumns(['gemeinde', 'lokalname', 'nr'])` — herkunft columns on the lieferung table.
 
 ## B. The bored list (ranked by payoff)
@@ -32,6 +32,7 @@ Found during the 2026-11-13 codebase survey. Work top to bottom.
 - [ ] Fix `isNodeOpen`'s per-row linear `isEqual` scan (use a `Set` of joined-url keys); drop redundant `openNodes.length` dep in `Tree/index.tsx:233`.
 - [ ] Collapse 13 value-identical `initial`/`empty` exports in `src/store/Filter/`; merge 16 near-identical `<entity>IdInUrl.ts` helpers.
 - [ ] `scripts/deployBackend.mjs` — one-command backend deploy (scp changed files to `root@139.162.172.14:/root/vermehrung`, remote `docker compose build auth && up -d`) so the copied server folder can't drift from the repo again (it had lagged: Hasura-era `server.js`, missing `../src/sql` mounts).
+- [ ] Fix the flaky `e2e/breadcrumbs.spec.ts` pixel assertion (`<= 12`px layout measurement flakes under load, fails intermittently on HEAD).
 - [ ] Replace the `fdw_user`/'secret' literal password in `backend/db/init/01_db_users_roles.sql`; remove stale Hasura vars from `backend/.env` + dead `03.sql` jwt_secret line.
 - [ ] Set a removal date for `migrateLokiToSqlite.ts` once the user base has crossed the migration.
 
