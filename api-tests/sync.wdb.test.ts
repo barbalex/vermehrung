@@ -42,10 +42,11 @@ describe('tree option query against real watermelondb', () => {
     })
     db = new Database({
       adapter,
+      // only actual models: the dbModel base classes have no table
       modelClasses: Object.values(models).filter(
         (m): m is typeof Model =>
           typeof m === 'function' &&
-          Boolean((m as unknown as { prototype?: unknown }).prototype),
+          Boolean((m as unknown as { table?: string }).table),
       ),
     })
     store.set(dbAtom, db)

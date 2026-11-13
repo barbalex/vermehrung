@@ -215,7 +215,9 @@ export default defineConfig({
         // version.json must always come from the network (see
         // emit-version-json above)
         globIgnores: ['version.json'],
-        maximumFileSizeToCacheInBytes: 1000000000,
+        // 10MB: nothing precached today exceeds the 1.26MB sqlite wasm - the
+        // cap only stops future bloat from eating mobile storage quotas
+        maximumFileSizeToCacheInBytes: 10_000_000,
       },
       registerType: 'autoUpdate',
       includeAssets: [

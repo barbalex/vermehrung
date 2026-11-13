@@ -364,7 +364,9 @@ async function start() {
           email: decoded.email ?? null,
         },
         secret,
-        60 * 60 * 12,
+        // 1h: role changes and account deletions take effect quickly -
+        // the client transparently re-mints on 401 (getAuthToken)
+        60 * 60,
       )
       return h.response({ token }).code(200)
     },

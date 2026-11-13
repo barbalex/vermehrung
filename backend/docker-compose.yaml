@@ -28,6 +28,8 @@ services:
       options:
         max-size: '10m'
         max-file: '3'
+    # the host has 4GB - leave room for os and the other services
+    mem_limit: 2g
     healthcheck:
       test: ['CMD-SHELL', 'pg_isready -U postgres']
       # give the first-run restore of vermehrung.backup time to finish
@@ -49,6 +51,24 @@ services:
       # caddy reaches auth over the compose network; the host binding is
       # for debugging only and must not bypass caddy's TLS publicly
       - '127.0.0.1:7000:7000'
+    logging:
+      options:
+        max-size: '10m'
+        max-file: '3'
+    mem_limit: 512m
+    healthcheck:
+      # node:slim has no curl/wget
+      test:
+        [
+          'CMD',
+          'node',
+          '-e',
+          "fetch('http://localhost:7000/').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))",
+        ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
     depends_on:
       db:
         condition: service_healthy
@@ -65,6 +85,11 @@ services:
     restart: always
     env_file:
       - ./.env
+    logging:
+      options:
+        max-size: '10m'
+        max-file: '3'
+    mem_limit: 512m
     environment:
       PGRST_DB_SCHEMAS: public
       PGRST_DB_ANON_ROLE: anon
@@ -86,6 +111,11 @@ services:
         condition: service_started
         restart: true
     restart: always
+    logging:
+      options:
+        max-size: '10m'
+        max-file: '3'
+    mem_limit: 256m
     ports:
       - '80:80'
       - '443:443'

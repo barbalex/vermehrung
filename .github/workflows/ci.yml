@@ -1,0 +1,40 @@
+# the deploy gates, run on every push and pr: format, lint, typecheck,
+# unit tests and the backend-free e2e suite (it boots the vite dev
+# server and mocks firebase/auth/PostgREST via page.route - see
+# playwright.config.ts). The api tests stay local-only: they need the
+# docker backend and prod-sized data (see CLAUDE.md).
+name: ci
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run format:check
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e
+        env:
+          CI: 'true'
+      # report only (no threshold configured): tracks the
+      # `as unknown as` cast count over time
+      - run: npm run type-coverage
+        continue-on-error: true
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-artifacts
+          path: test-results/
+          retention-days: 7
