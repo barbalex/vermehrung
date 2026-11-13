@@ -14,7 +14,8 @@ import { lieferungSort } from '../../../../../../utils/lieferungSort.ts'
 import { personSort } from '../../../../../../utils/personSort.ts'
 import { teilkulturSort } from '../../../../../../utils/teilkulturSort.ts'
 import { zaehlungSort } from '../../../../../../utils/zaehlungSort.ts'
-import { personFullname } from '../../../../../../utils/personFullname.ts'
+import { personLabelFromPerson } from '../../../../../../utils/personLabelFromPerson.ts'
+import { herkunftLabelFromHerkunft } from '../../../../../../utils/herkunftLabelFromHerkunft.ts'
 import { store, filterTableAtoms } from '../../../../../../store/index.ts'
 import { triStateDeletedQuery } from '../../../../../../utils/triStateDeletedQuery.ts'
 import { triStateQuery } from '../../../../../../utils/triStateDeletedQuery.ts'
@@ -235,14 +236,12 @@ export const createMessageFunctions = async ({
       return Object.values(pGroupedByNr)
         .filter((v) => v.length > 1)
         .flatMap((vs) =>
-          vs.map((v) => {
-            const fullname = personFullname(v)
-
-            return {
-              url: ['Personen', v.id, 'Person'],
-              text: `${v.nr}${fullname ? `, ${fullname}` : ''}`,
-            }
-          }),
+          vs.map((v) => ({
+            url: ['Personen', v.id, 'Person'],
+            // official label plus the nr - the nr is what this check is
+            // about
+            text: `${personLabelFromPerson({ person: v })} (Nr. ${v.nr})`,
+          })),
         )
     },
     herkunftsWithNonUniqueNr: async () => {
@@ -252,9 +251,7 @@ export const createMessageFunctions = async ({
         .flatMap((vs) =>
           vs.map((v) => ({
             url: ['Herkuenfte', v.id, 'Herkunft'],
-            text: `${v.nr}${v.lokalname ? `, ${v.lokalname}` : ''}${
-              v.gemeinde ? `, ${v.gemeinde}` : ''
-            }`,
+            text: herkunftLabelFromHerkunft({ herkunft: v }),
           })),
         )
     },
