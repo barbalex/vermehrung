@@ -1,4 +1,6 @@
 import Fuse from 'fuse.js'
+import type { IFuseOptions } from 'fuse.js'
+import type { Model } from 'nitromelondb'
 import { DateTime } from 'luxon'
 import { first as first$ } from 'rxjs/operators'
 
@@ -17,7 +19,13 @@ import { personSort } from '../../../../utils/personSort.ts'
 import { zaehlungSort } from '../../../../utils/zaehlungSort.ts'
 import { herkunftLabelFromHerkunft } from '../../../../utils/herkunftLabelFromHerkunft.ts'
 import { bedarfLabelFromBedarf } from '../../../../utils/bedarfLabelFromBedarf.ts'
-import { store, dbAtom } from '../../../../store/index.ts'
+import {
+  store,
+  dbAtom,
+  lastUpdatedAtom,
+  filterTableAtoms,
+  type TableName,
+} from '../../../../store/index.ts'
 
 const threshold = 0.2
 const distance = 1000 // ensure text in long labels is found
@@ -25,107 +33,72 @@ const distance = 1000 // ensure text in long labels is found
 const formatDateForSearch = (datum: string | null | undefined) =>
   datum ? DateTime.fromSQL(datum).toFormat('yyyy.LL.dd') : ''
 
-export const buildOptions = async ({
-  cb,
-  val,
-}: {
-  cb: (options: unknown[]) => void
-  val: string
-}) => {
-  const db = store.get(dbAtom)
+// === corpus cache ====================================================
+// Building the suggestions (fetch + label resolution) and the fuse
+// indexes is expensive but only depends on the table's content and its
+// filter - not on the search string. Cache the fuse per table, keyed by
+// the table's sync watermark and filter: a keystroke then only runs
+// fuse.search on the cached indexes.
+// CAVEAT: purely local (offline) edits do not advance the watermark -
+// the cache catches up with the next sync (online: ~1s after the queue
+// drained).
+type CorpusFuse = Fuse<Record<string, unknown>>
 
-  let arts: import('../../../../dbModel.ts').Art[] = []
+// one cast site for the fuse variance: builders produce Fuse<their
+// concrete suggestion shape>, the cache stores them uniformly
+const makeFuse = <T>(list: T[], options: IFuseOptions<T>): CorpusFuse =>
+  new Fuse(
+    list as Record<string, unknown>[],
+    options as IFuseOptions<Record<string, unknown>>,
+  )
+interface CacheEntry {
+  version: string
+  fuse: CorpusFuse
+}
+const corpusCache = new Map<string, CacheEntry>()
+
+const tableVersion = (table: string) => {
+  const filterAtom = filterTableAtoms[table]
+  const filter = filterAtom ? store.get(filterAtom) : null
+  return JSON.stringify([
+    store.get(lastUpdatedAtom)[table as TableName] ?? 0,
+    filter,
+  ])
+}
+
+const cachedFuse = async (
+  table: string,
+  build: () => Promise<CorpusFuse>,
+): Promise<CorpusFuse> => {
+  const version = tableVersion(table)
+  const cached = corpusCache.get(table)
+  if (cached && cached.version === version) return cached.fuse
+  const fuse = await build()
+  corpusCache.set(table, { version, fuse })
+  return fuse
+}
+
+const fetchTable = async <T extends Model>(table: string): Promise<T[]> => {
   try {
-    arts =
-      (await db
-        ?.get<import('../../../../dbModel.ts').Art>('art')
-        .query(...tableFilter({ table: 'art' }))
+    return (
+      (await store
+        ?.get(dbAtom)
+        ?.get<T>(table as never)
+        .query(...tableFilter({ table: table as never }))
         .fetch()) ?? []
-  } catch {}
-  const artsSorted = await artsSortedFromArts(arts)
+    )
+  } catch {
+    return []
+  }
+}
 
-  let bedarfs: import('../../../../dbModel.ts').Bedarf[] = []
-  try {
-    bedarfs =
-      (await db
-        ?.get<import('../../../../dbModel.ts').Bedarf>('bedarf')
-        .query(...tableFilter({ table: 'bedarf' }))
-        .fetch()) ?? []
-  } catch {}
-  const bedarfsSorted = bedarfs.sort(bedarfSort)
+// === per-table corpus builders =======================================
 
-  let gartens: import('../../../../dbModel.ts').Garten[] = []
-  try {
-    gartens =
-      (await db
-        ?.get<import('../../../../dbModel.ts').Garten>('garten')
-        .query(...tableFilter({ table: 'garten' }))
-        .fetch()) ?? []
-  } catch {}
-  const gartensSorted = await gartensSortedFromGartens(gartens)
-
-  let herkunfts: import('../../../../dbModel.ts').Herkunft[] = []
-  try {
-    herkunfts =
-      (await db
-        ?.get<import('../../../../dbModel.ts').Herkunft>('herkunft')
-        .query(...tableFilter({ table: 'herkunft' }))
-        .fetch()) ?? []
-  } catch {}
-  const herkunftsSorted = herkunfts.sort(herkunftSort)
-
-  let kulturs: import('../../../../dbModel.ts').Kultur[] = []
-  try {
-    kulturs =
-      (await db
-        ?.get<import('../../../../dbModel.ts').Kultur>('kultur')
-        .query(...tableFilter({ table: 'kultur' }))
-        .fetch()) ?? []
-  } catch {}
-  const kultursSorted = await kultursSortedFromKulturs(kulturs)
-
-  let lieferungs: import('../../../../dbModel.ts').Lieferung[] = []
-  try {
-    lieferungs =
-      (await db
-        ?.get<import('../../../../dbModel.ts').Lieferung>('lieferung')
-        .query(...tableFilter({ table: 'lieferung' }))
-        .fetch()) ?? []
-  } catch {}
-  const lieferungsSorted = lieferungs.sort(lieferungSort)
-
-  let persons: import('../../../../dbModel.ts').Person[] = []
-  try {
-    persons =
-      (await db
-        ?.get<import('../../../../dbModel.ts').Person>('person')
-        .query(...tableFilter({ table: 'person' }))
-        .fetch()) ?? []
-  } catch {}
-  const personsSorted = persons.sort(personSort)
-
-  let sammlungs: import('../../../../dbModel.ts').Sammlung[] = []
-  try {
-    sammlungs =
-      (await db
-        ?.get<import('../../../../dbModel.ts').Sammlung>('sammlung')
-        .query(...tableFilter({ table: 'sammlung' }))
-        .fetch()) ?? []
-  } catch {}
-  const sammlungsSorted = await sammlungsSortedFromSammlungs(sammlungs)
-
-  let zaehlungs: import('../../../../dbModel.ts').Zaehlung[] = []
-  try {
-    zaehlungs =
-      (await db
-        ?.get<import('../../../../dbModel.ts').Zaehlung>('zaehlung')
-        .query(...tableFilter({ table: 'zaehlung' }))
-        .fetch()) ?? []
-  } catch {}
-  const zaehlungsSorted = zaehlungs.sort(zaehlungSort)
-
-  const options = []
-  const searchArtSuggestions = await Promise.all(
+const artFuse = async () => {
+  const artsSorted = await artsSortedFromArts(
+    await fetchTable<import('../../../../dbModel.ts').Art>('art'),
+  )
+  const suggestions = await Promise.all(
     artsSorted.map(async (a) => {
       let label = ''
       try {
@@ -139,19 +112,18 @@ export const buildOptions = async ({
       }
     }),
   )
-  const artSuggestionsFuse = new Fuse(searchArtSuggestions, {
+  return makeFuse(suggestions, {
     keys: [{ name: 'label', weight: 1 }],
     threshold,
     distance,
   })
-  const artSuggestions = artSuggestionsFuse.search(val).map((o) => o.item)
-  if (artSuggestions.length) {
-    options.push({
-      label: `Arten (${artSuggestions.length})`,
-      options: artSuggestions,
-    })
-  }
-  const searchGartenSuggestions = await Promise.all(
+}
+
+const gartenFuse = async () => {
+  const gartensSorted = await gartensSortedFromGartens(
+    await fetchTable<import('../../../../dbModel.ts').Garten>('garten'),
+  )
+  const suggestions = await Promise.all(
     gartensSorted.map(async (g) => {
       let label
       try {
@@ -176,7 +148,7 @@ export const buildOptions = async ({
       }
     }),
   )
-  const gartenSuggestionsFuse = new Fuse(searchGartenSuggestions, {
+  return makeFuse(suggestions, {
     keys: [
       { name: 'name', weight: 1 },
       { name: 'personname', weight: 0.7 },
@@ -189,20 +161,19 @@ export const buildOptions = async ({
     threshold,
     distance,
   })
-  const gartenSuggestions = gartenSuggestionsFuse.search(val).map((o) => o.item)
-  if (gartenSuggestions.length) {
-    options.push({
-      label: `Gärten (${gartenSuggestions.length})`,
-      options: gartenSuggestions,
-    })
-  }
-  const searchHerkunftSuggestions = herkunftsSorted.map((h) => ({
+}
+
+const herkunftFuse = async () => {
+  const herkunftsSorted = (
+    await fetchTable<import('../../../../dbModel.ts').Herkunft>('herkunft')
+  ).sort(herkunftSort)
+  const suggestions = herkunftsSorted.map((h) => ({
     value: h.id,
     label: herkunftLabelFromHerkunft({ herkunft: h }),
     ...h,
     type: 'Herkuenfte',
   }))
-  const herkunftSuggestionsFuse = new Fuse(searchHerkunftSuggestions, {
+  return makeFuse(suggestions, {
     keys: [
       { name: 'nr', weight: 1 },
       { name: 'lokalname', weight: 1 },
@@ -214,16 +185,13 @@ export const buildOptions = async ({
     threshold,
     distance,
   })
-  const herkunftSuggestions = herkunftSuggestionsFuse
-    .search(val)
-    .map((o) => o.item)
-  if (herkunftSuggestions.length) {
-    options.push({
-      label: `Herkünfte (${herkunftSuggestions.length})`,
-      options: herkunftSuggestions,
-    })
-  }
-  const searchKulturSuggestions = await Promise.all(
+}
+
+const kulturFuse = async () => {
+  const kultursSorted = await kultursSortedFromKulturs(
+    await fetchTable<import('../../../../dbModel.ts').Kultur>('kultur'),
+  )
+  const suggestions = await Promise.all(
     kultursSorted.map(async (k) => {
       let label
       try {
@@ -253,7 +221,7 @@ export const buildOptions = async ({
       }
     }),
   )
-  const kulturSuggestionsFuse = new Fuse(searchKulturSuggestions, {
+  return makeFuse(suggestions, {
     keys: [
       { name: 'label', weight: 1 },
       { name: 'personname', weight: 0.7 },
@@ -264,14 +232,13 @@ export const buildOptions = async ({
     threshold,
     distance,
   })
-  const kulturSuggestions = kulturSuggestionsFuse.search(val).map((o) => o.item)
-  if (kulturSuggestions.length) {
-    options.push({
-      label: `Kulturen (${kulturSuggestions.length})`,
-      options: kulturSuggestions,
-    })
-  }
-  const searchBedarfSuggestions = await Promise.all(
+}
+
+const bedarfFuse = async () => {
+  const bedarfsSorted = (
+    await fetchTable<import('../../../../dbModel.ts').Bedarf>('bedarf')
+  ).sort(bedarfSort)
+  const suggestions = await Promise.all(
     bedarfsSorted.map(async (b) => {
       let kultur
       try {
@@ -304,7 +271,7 @@ export const buildOptions = async ({
       }
     }),
   )
-  const bedarfSuggestionsFuse = new Fuse(searchBedarfSuggestions, {
+  return makeFuse(suggestions, {
     keys: [
       { name: 'label', weight: 1 },
       { name: 'jahr', weight: 1 },
@@ -317,14 +284,16 @@ export const buildOptions = async ({
     threshold,
     distance,
   })
-  const bedarfSuggestions = bedarfSuggestionsFuse.search(val).map((o) => o.item)
-  if (bedarfSuggestions.length) {
-    options.push({
-      label: `Bedarf (${bedarfSuggestions.length})`,
-      options: bedarfSuggestions,
-    })
-  }
-  const searchLieferungSuggestions = await Promise.all(
+}
+
+const lieferungFuse = async () => {
+  const lieferungsSorted = (
+    await fetchTable<import('../../../../dbModel.ts').Lieferung>('lieferung')
+  ).sort(lieferungSort)
+  // for von/nach kultur lookups (uncached: only runs on corpus rebuilds)
+  const kulturs =
+    await fetchTable<import('../../../../dbModel.ts').Kultur>('kultur')
+  const suggestions = await Promise.all(
     lieferungsSorted.map(async (l) => {
       let person
       try {
@@ -389,7 +358,7 @@ export const buildOptions = async ({
       }
     }),
   )
-  const lieferungSuggestionsFuse = new Fuse(searchLieferungSuggestions, {
+  return makeFuse(suggestions, {
     keys: [
       { name: 'artname', weight: 1 },
       { name: 'personname', weight: 1 },
@@ -409,16 +378,13 @@ export const buildOptions = async ({
     threshold,
     distance,
   })
-  const lieferungSuggestions = lieferungSuggestionsFuse
-    .search(val)
-    .map((o) => o.item)
-  if (lieferungSuggestions.length) {
-    options.push({
-      label: `Lieferungen (${lieferungSuggestions.length})`,
-      options: lieferungSuggestions,
-    })
-  }
-  const searchPersonSuggestions = personsSorted.map((p) => ({
+}
+
+const personFuse = async () => {
+  const personsSorted = (
+    await fetchTable<import('../../../../dbModel.ts').Person>('person')
+  ).sort(personSort)
+  const suggestions = personsSorted.map((p) => ({
     value: p.id,
     label: personLabelFromPerson({ person: p }),
     nr: p.nr,
@@ -432,7 +398,7 @@ export const buildOptions = async ({
     bemerkungen: p.bemerkungen ?? '',
     type: 'Personen',
   }))
-  const personSuggestionsFuse = new Fuse(searchPersonSuggestions, {
+  return makeFuse(suggestions, {
     keys: [
       { name: 'nr', weight: 1 },
       { name: 'label', weight: 1 },
@@ -448,14 +414,13 @@ export const buildOptions = async ({
     threshold,
     distance,
   })
-  const personSuggestions = personSuggestionsFuse.search(val).map((o) => o.item)
-  if (personSuggestions.length) {
-    options.push({
-      label: `Personen (${personSuggestions.length})`,
-      options: personSuggestions,
-    })
-  }
-  const searchSammlungSuggestions = await Promise.all(
+}
+
+const sammlungFuse = async () => {
+  const sammlungsSorted = await sammlungsSortedFromSammlungs(
+    await fetchTable<import('../../../../dbModel.ts').Sammlung>('sammlung'),
+  )
+  const suggestions = await Promise.all(
     sammlungsSorted.map(async (s) => {
       let label
       try {
@@ -479,7 +444,7 @@ export const buildOptions = async ({
       }
     }),
   )
-  const sammlungSuggestionsFuse = new Fuse(searchSammlungSuggestions, {
+  return makeFuse(suggestions, {
     keys: [
       { name: 'label', weight: 1 },
       { name: 'herkunftlokalname', weight: 0.7 },
@@ -492,34 +457,55 @@ export const buildOptions = async ({
     threshold,
     distance,
   })
-  const sammlungSuggestions = sammlungSuggestionsFuse
-    .search(val)
-    .map((o) => o.item)
-  if (sammlungSuggestions.length) {
-    options.push({
-      label: `Sammlungen (${sammlungSuggestions.length})`,
-      options: sammlungSuggestions,
-    })
-  }
-  const searchZaehlungSuggestions = zaehlungsSorted.map((z) => ({
+}
+
+const zaehlungFuse = async () => {
+  const zaehlungsSorted = (
+    await fetchTable<import('../../../../dbModel.ts').Zaehlung>('zaehlung')
+  ).sort(zaehlungSort)
+  const suggestions = zaehlungsSorted.map((z) => ({
     value: z.id,
     label: formatDateForSearch(z.datum),
     parent: z.kultur_id,
     type: 'Zaehlungen',
   }))
-  const zaehlungSuggestionsFuse = new Fuse(searchZaehlungSuggestions, {
+  return makeFuse(suggestions, {
     keys: [{ name: 'label', weight: 1 }],
     threshold,
     distance,
   })
-  const zaehlungSuggestions = zaehlungSuggestionsFuse
-    .search(val)
-    .map((o) => o.item)
-  if (zaehlungSuggestions.length) {
-    options.push({
-      label: `Zählungen (${zaehlungSuggestions.length})`,
-      options: zaehlungSuggestions,
-    })
+}
+
+// fixed group order for the dropdown
+const corpora: [string, string, () => Promise<CorpusFuse>][] = [
+  ['art', 'Arten', artFuse],
+  ['garten', 'Gärten', gartenFuse],
+  ['herkunft', 'Herkünfte', herkunftFuse],
+  ['kultur', 'Kulturen', kulturFuse],
+  ['bedarf', 'Bedarf', bedarfFuse],
+  ['lieferung', 'Lieferungen', lieferungFuse],
+  ['person', 'Personen', personFuse],
+  ['sammlung', 'Sammlungen', sammlungFuse],
+  ['zaehlung', 'Zählungen', zaehlungFuse],
+]
+
+export const buildOptions = async ({
+  cb,
+  val,
+}: {
+  cb: (options: unknown[]) => void
+  val: string
+}) => {
+  const options = []
+  for (const [table, groupLabel, buildFuse] of corpora) {
+    const fuse = await cachedFuse(table, buildFuse)
+    const suggestions = fuse.search(val).map((o) => o.item)
+    if (suggestions.length) {
+      options.push({
+        label: `${groupLabel} (${suggestions.length})`,
+        options: suggestions,
+      })
+    }
   }
   if (!options.length && val) {
     options.push({ val: 'none', label: '(keine Resultate)' })
