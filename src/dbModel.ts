@@ -38,7 +38,108 @@ const dontSanitize = (val: unknown): unknown => val
 /*const sanitizeArrayOfStrings = (val) =>
   Array.isArray(val) ? val.map(String) : []*/
 
-export class Herkunft extends Model {
+// the table of a model instance - every model defines it via
+// `static table`
+const tableOf = (model: object) =>
+  (model.constructor as unknown as { table: string }).table
+
+// base class for the editable rev-versioned models: the writers are
+// identical across all of them, varying only in the table name
+export class VermehrungModel extends Model {
+  async removeConflict(_rev: string) {
+    await this.update((row) => {
+      const r = row as unknown as Record<string, unknown>
+      r._conflicts = ((r._conflicts as string[] | null) ?? []).filter(
+        (x) => x !== _rev,
+      )
+    })
+  }
+
+  // updates the row locally - ui and labels stay live.
+  // the revision is created when the editing session on this row
+  // ends (see modules/revAggregation.js), not per field change
+  async edit({
+    field,
+    value,
+    values,
+  }: {
+    field?: string
+    value?: unknown
+    values?: Record<string, unknown>
+  }) {
+    if (!field && !values) {
+      throw new Error('field or values must be passed')
+    }
+    const table = tableOf(this)
+    unsetError(`${table}.${field}`)
+    const changes = values ?? { [field as string]: value }
+    registerDirtyRev(table, this.id, field, this)
+    // optimistically update store
+    await this.update((row) => {
+      const r = row as unknown as Record<string, unknown>
+      Object.entries(changes).forEach(([key, val]) => {
+        r[key] = val
+      })
+      r.changed = new Date().toISOString()
+      r.changed_by = store.get(userAtom)?.email ?? null
+    })
+  }
+
+  async delete() {
+    await this.callWriter(() => this.edit({ field: '_deleted', value: true }))
+  }
+}
+
+// base class for the file models: they are not rev-versioned - edits
+// patch the row directly, deletes remove it
+export class VermehrungFileModel extends Model {
+  async edit({ field, value }: { field?: string; value?: unknown }) {
+    const table = tableOf(this)
+    const parentColumn = `${table.replace(/_file$/, '')}_id`
+    const row = this as unknown as Record<string, unknown>
+    const newObject = {
+      id: row.id,
+      [parentColumn]: row[parentColumn],
+      file_id: row.file_id,
+      file_mime_type: row.file_mime_type,
+      name: row.name,
+      beschreibung: row.beschreibung,
+      changed: row.changed,
+      [field as string]: value,
+      _rev_at: Date.now() / 1000,
+    }
+    try {
+      await store
+        .get(apiClientAtom)
+        ?.patch(`/${table}?id=eq.${this.id}`, newObject)
+    } catch (error) {
+      addNotification({
+        message: (error as Error).message,
+      })
+      return console.log(error)
+    }
+    // updating server is done by calling code
+    await this.update((r) => {
+      ;(r as unknown as Record<string, unknown>)[field as string] = value
+    })
+  }
+
+  async delete() {
+    const table = tableOf(this)
+    try {
+      await store.get(apiClientAtom)?.delete(`/${table}?id=eq.${this.id}`)
+    } catch (error) {
+      addNotification({
+        message: (error as Error).message,
+      })
+      return console.log(error)
+    }
+    // updating server is done by calling code
+    await this.destroyPermanently()
+  }
+}
+
+export class Herkunft extends VermehrungModel {
   static table = 'herkunft'
   static associations: Associations = {
     sammlung: { type: 'has_many', foreignKey: 'herkunft_id' },
@@ -69,42 +170,6 @@ export class Herkunft extends Model {
   declare sammlungs: Query<Sammlung>
   declare herkunfts: Query<Herkunft>
   declare files: Query<HerkunftFile>
-
-  async removeConflict(_rev: string) {
-    await this.update((row) => {
-      row._conflicts = (this._conflicts ?? []).filter((r) => r !== _rev)
-    })
-  }
-  // updates the row locally - ui and labels stay live.
-  // the revision is created when the editing session on this row
-  // ends (see modules/revAggregation.js), not per field change
-  async edit({
-    field,
-    value,
-    values,
-  }: {
-    field?: string
-    value?: unknown
-    values?: Record<string, unknown>
-  }) {
-    if (!field && !values) {
-      throw new Error('field or values must be passed')
-    }
-    unsetError(`herkunft.${field}`)
-    const changes = values ?? { [field as string]: value }
-    registerDirtyRev('herkunft', this.id, field, this)
-    // optimistically update store
-    await this.update((row) => {
-      Object.entries(changes).forEach(([key, val]) => {
-        ;(row as unknown as Record<string, unknown>)[key] = val
-      })
-      row.changed = new Date().toISOString()
-      row.changed_by = store.get(userAtom)?.email ?? null
-    })
-  }
-  async delete() {
-    await this.callWriter(() => this.edit({ field: '_deleted', value: true }))
-  }
 }
 modelDecorators(
   Herkunft,
@@ -135,7 +200,7 @@ modelDecorators(
   ['removeConflict', 'edit', 'delete'],
 )
 
-export class Sammlung extends Model {
+export class Sammlung extends VermehrungModel {
   static table = 'sammlung'
   static associations: Associations = {
     art: { type: 'belongs_to', key: 'art_id' },
@@ -237,43 +302,6 @@ export class Sammlung extends Model {
       }),
     ))
   }
-
-  async removeConflict(_rev: string) {
-    await this.update((row) => {
-      row._conflicts = (this._conflicts ?? []).filter((r) => r !== _rev)
-    })
-  }
-  // updates the row locally - ui and labels stay live.
-  // the revision is created when the editing session on this row
-  // ends (see modules/revAggregation.js), not per field change
-  async edit({
-    field,
-    value,
-    values,
-  }: {
-    field?: string
-    value?: unknown
-    values?: Record<string, unknown>
-  }) {
-    if (!field && !values) {
-      throw new Error('field or values must be passed')
-    }
-    unsetError(`sammlung.${field}`)
-    const changes = values ?? { [field as string]: value }
-    registerDirtyRev('sammlung', this.id, field, this)
-    // optimistically update store
-    await this.update((row) => {
-      Object.entries(changes).forEach(([key, val]) => {
-        ;(row as unknown as Record<string, unknown>)[key] = val
-      })
-      row.changed = new Date().toISOString()
-      row.changed_by = store.get(userAtom)?.email ?? null
-    })
-  }
-
-  async delete() {
-    await this.callWriter(() => this.edit({ field: '_deleted', value: true }))
-  }
 }
 modelDecorators(
   Sammlung,
@@ -311,7 +339,7 @@ modelDecorators(
   ['removeConflict', 'edit', 'delete'],
 )
 
-export class Lieferung extends Model {
+export class Lieferung extends VermehrungModel {
   static table = 'lieferung'
   static associations: Associations = {
     art: { type: 'belongs_to', key: 'art_id' },
@@ -400,43 +428,6 @@ export class Lieferung extends Model {
       map$((lieferung) => lieferungLabelFromLieferung({ lieferung })),
     ))
   }
-
-  async removeConflict(_rev: string) {
-    await this.update((row) => {
-      row._conflicts = (this._conflicts ?? []).filter((r) => r !== _rev)
-    })
-  }
-  // updates the row locally - ui and labels stay live.
-  // the revision is created when the editing session on this row
-  // ends (see modules/revAggregation.js), not per field change
-  async edit({
-    field,
-    value,
-    values,
-  }: {
-    field?: string
-    value?: unknown
-    values?: Record<string, unknown>
-  }) {
-    if (!field && !values) {
-      throw new Error('field or values must be passed')
-    }
-    unsetError(`lieferung.${field}`)
-    const changes = values ?? { [field as string]: value }
-    registerDirtyRev('lieferung', this.id, field, this)
-    // optimistically update store
-    await this.update((row) => {
-      Object.entries(changes).forEach(([key, val]) => {
-        ;(row as unknown as Record<string, unknown>)[key] = val
-      })
-      row.changed = new Date().toISOString()
-      row.changed_by = store.get(userAtom)?.email ?? null
-    })
-  }
-
-  async delete() {
-    await this.callWriter(() => this.edit({ field: '_deleted', value: true }))
-  }
 }
 modelDecorators(
   Lieferung,
@@ -473,7 +464,7 @@ modelDecorators(
   ['removeConflict', 'edit', 'delete'],
 )
 
-export class Art extends Model {
+export class Art extends VermehrungModel {
   static table = 'art'
   static associations: Associations = {
     ae_art: { type: 'belongs_to', key: 'ae_id' },
@@ -521,43 +512,7 @@ export class Art extends Model {
       .query(Q.on('sammlung', 'art_id', this.id)))
   }
 
-  async removeConflict(_rev: string) {
-    await this.update((row) => {
-      row._conflicts = (this._conflicts ?? []).filter((r) => r !== _rev)
-    })
-  }
   // values is meant to enable updating multiple fields at once
-  // updates the row locally - ui and labels stay live.
-  // the revision is created when the editing session on this row
-  // ends (see modules/revAggregation.js), not per field change
-  async edit({
-    field,
-    value,
-    values,
-  }: {
-    field?: string
-    value?: unknown
-    values?: Record<string, unknown>
-  }) {
-    if (!field && !values) {
-      throw new Error('field or values must be passed')
-    }
-    unsetError(`art.${field}`)
-    const changes = values ?? { [field as string]: value }
-    registerDirtyRev('art', this.id, field, this)
-    // optimistically update store
-    await this.update((row) => {
-      Object.entries(changes).forEach(([key, val]) => {
-        ;(row as unknown as Record<string, unknown>)[key] = val
-      })
-      row.changed = new Date().toISOString()
-      row.changed_by = store.get(userAtom)?.email ?? null
-    })
-  }
-
-  async delete() {
-    await this.callWriter(() => this.edit({ field: '_deleted', value: true }))
-  }
 }
 modelDecorators(
   Art,
@@ -620,7 +575,7 @@ modelDecorators(AeArt, {
   arts: children('art'),
 })
 
-export class Garten extends Model {
+export class Garten extends VermehrungModel {
   static table = 'garten'
   static associations: Associations = {
     person: { type: 'belongs_to', key: 'person_id' },
@@ -675,42 +630,6 @@ export class Garten extends Model {
       }),
     ))
   }
-
-  async removeConflict(_rev: string) {
-    await this.update((row) => {
-      row._conflicts = (this._conflicts ?? []).filter((r) => r !== _rev)
-    })
-  }
-  // updates the row locally - ui and labels stay live.
-  // the revision is created when the editing session on this row
-  // ends (see modules/revAggregation.js), not per field change
-  async edit({
-    field,
-    value,
-    values,
-  }: {
-    field?: string
-    value?: unknown
-    values?: Record<string, unknown>
-  }) {
-    if (!field && !values) {
-      throw new Error('field or values must be passed')
-    }
-    unsetError(`garten.${field}`)
-    const changes = values ?? { [field as string]: value }
-    registerDirtyRev('garten', this.id, field, this)
-    // optimistically update store
-    await this.update((row) => {
-      Object.entries(changes).forEach(([key, val]) => {
-        ;(row as unknown as Record<string, unknown>)[key] = val
-      })
-      row.changed = new Date().toISOString()
-      row.changed_by = store.get(userAtom)?.email ?? null
-    })
-  }
-  async delete() {
-    await this.callWriter(() => this.edit({ field: '_deleted', value: true }))
-  }
 }
 modelDecorators(
   Garten,
@@ -743,7 +662,7 @@ modelDecorators(
   ['removeConflict', 'edit', 'delete'],
 )
 
-export class Kultur extends Model {
+export class Kultur extends VermehrungModel {
   static table = 'kultur'
   static associations: Associations = {
     garten: { type: 'belongs_to', key: 'garten_id' },
@@ -891,42 +810,6 @@ export class Kultur extends Model {
       }),
     ))
   }
-
-  async removeConflict(_rev: string) {
-    await this.update((row) => {
-      row._conflicts = (this._conflicts ?? []).filter((r) => r !== _rev)
-    })
-  }
-  // updates the row locally - ui and labels stay live.
-  // the revision is created when the editing session on this row
-  // ends (see modules/revAggregation.js), not per field change
-  async edit({
-    field,
-    value,
-    values,
-  }: {
-    field?: string
-    value?: unknown
-    values?: Record<string, unknown>
-  }) {
-    if (!field && !values) {
-      throw new Error('field or values must be passed')
-    }
-    unsetError(`kultur.${field}`)
-    const changes = values ?? { [field as string]: value }
-    registerDirtyRev('kultur', this.id, field, this)
-    // optimistically update store
-    await this.update((row) => {
-      Object.entries(changes).forEach(([key, val]) => {
-        ;(row as unknown as Record<string, unknown>)[key] = val
-      })
-      row.changed = new Date().toISOString()
-      row.changed_by = store.get(userAtom)?.email ?? null
-    })
-  }
-  async delete() {
-    await this.callWriter(() => this.edit({ field: '_deleted', value: true }))
-  }
 }
 modelDecorators(
   Kultur,
@@ -959,7 +842,7 @@ modelDecorators(
   ['removeConflict', 'edit', 'delete'],
 )
 
-export class Teilkultur extends Model {
+export class Teilkultur extends VermehrungModel {
   static table = 'teilkultur'
   static associations: Associations = {
     kultur: { type: 'belongs_to', key: 'kultur_id' },
@@ -983,42 +866,6 @@ export class Teilkultur extends Model {
 
   declare kultur: Relation<Kultur>
   declare teilzaehlungs: Query<Teilzaehlung>
-
-  async removeConflict(_rev: string) {
-    await this.update((row) => {
-      row._conflicts = (this._conflicts ?? []).filter((r) => r !== _rev)
-    })
-  }
-  // updates the row locally - ui and labels stay live.
-  // the revision is created when the editing session on this row
-  // ends (see modules/revAggregation.js), not per field change
-  async edit({
-    field,
-    value,
-    values,
-  }: {
-    field?: string
-    value?: unknown
-    values?: Record<string, unknown>
-  }) {
-    if (!field && !values) {
-      throw new Error('field or values must be passed')
-    }
-    unsetError(`teilkultur.${field}`)
-    const changes = values ?? { [field as string]: value }
-    registerDirtyRev('teilkultur', this.id, field, this)
-    // optimistically update store
-    await this.update((row) => {
-      Object.entries(changes).forEach(([key, val]) => {
-        ;(row as unknown as Record<string, unknown>)[key] = val
-      })
-      row.changed = new Date().toISOString()
-      row.changed_by = store.get(userAtom)?.email ?? null
-    })
-  }
-  async delete() {
-    await this.callWriter(() => this.edit({ field: '_deleted', value: true }))
-  }
 }
 modelDecorators(
   Teilkultur,
@@ -1043,7 +890,7 @@ modelDecorators(
   ['removeConflict', 'edit', 'delete'],
 )
 
-export class Zaehlung extends Model {
+export class Zaehlung extends VermehrungModel {
   static table = 'zaehlung'
   static associations: Associations = {
     kultur: { type: 'belongs_to', key: 'kultur_id' },
@@ -1118,42 +965,6 @@ export class Zaehlung extends Model {
       return anzahl_mutterpflanzen
     }),
   )*/
-
-  async removeConflict(_rev: string) {
-    await this.update((row) => {
-      row._conflicts = (this._conflicts ?? []).filter((r) => r !== _rev)
-    })
-  }
-  // updates the row locally - ui and labels stay live.
-  // the revision is created when the editing session on this row
-  // ends (see modules/revAggregation.js), not per field change
-  async edit({
-    field,
-    value,
-    values,
-  }: {
-    field?: string
-    value?: unknown
-    values?: Record<string, unknown>
-  }) {
-    if (!field && !values) {
-      throw new Error('field or values must be passed')
-    }
-    unsetError(`zaehlung.${field}`)
-    const changes = values ?? { [field as string]: value }
-    registerDirtyRev('zaehlung', this.id, field, this)
-    // optimistically update store
-    await this.update((row) => {
-      Object.entries(changes).forEach(([key, val]) => {
-        ;(row as unknown as Record<string, unknown>)[key] = val
-      })
-      row.changed = new Date().toISOString()
-      row.changed_by = store.get(userAtom)?.email ?? null
-    })
-  }
-  async delete() {
-    await this.callWriter(() => this.edit({ field: '_deleted', value: true }))
-  }
 }
 modelDecorators(
   Zaehlung,
@@ -1178,7 +989,7 @@ modelDecorators(
   ['removeConflict', 'edit', 'delete'],
 )
 
-export class Teilzaehlung extends Model {
+export class Teilzaehlung extends VermehrungModel {
   static table = 'teilzaehlung'
   static associations: Associations = {
     zaehlung: { type: 'belongs_to', key: 'zaehlung_id' },
@@ -1212,42 +1023,6 @@ export class Teilzaehlung extends Model {
       map$((teilkultur) => teilkulturLabelFromTeilkultur({ teilkultur })),
     ))
   }
-
-  async removeConflict(_rev: string) {
-    await this.update((row) => {
-      row._conflicts = (this._conflicts ?? []).filter((r) => r !== _rev)
-    })
-  }
-  // updates the row locally - ui and labels stay live.
-  // the revision is created when the editing session on this row
-  // ends (see modules/revAggregation.js), not per field change
-  async edit({
-    field,
-    value,
-    values,
-  }: {
-    field?: string
-    value?: unknown
-    values?: Record<string, unknown>
-  }) {
-    if (!field && !values) {
-      throw new Error('field or values must be passed')
-    }
-    unsetError(`teilzaehlung.${field}`)
-    const changes = values ?? { [field as string]: value }
-    registerDirtyRev('teilzaehlung', this.id, field, this)
-    // optimistically update store
-    await this.update((row) => {
-      Object.entries(changes).forEach(([key, val]) => {
-        ;(row as unknown as Record<string, unknown>)[key] = val
-      })
-      row.changed = new Date().toISOString()
-      row.changed_by = store.get(userAtom)?.email ?? null
-    })
-  }
-  async delete() {
-    await this.callWriter(() => this.edit({ field: '_deleted', value: true }))
-  }
 }
 modelDecorators(
   Teilzaehlung,
@@ -1275,7 +1050,7 @@ modelDecorators(
   ['removeConflict', 'edit', 'delete'],
 )
 
-export class Person extends Model {
+export class Person extends VermehrungModel {
   static table = 'person'
   static associations: Associations = {
     person_option: { type: 'belongs_to', key: 'id' },
@@ -1347,41 +1122,8 @@ export class Person extends Model {
   declare bedarfs: Query<Bedarf>
   declare files: Query<PersonFile>
 
-  async removeConflict(_rev: string) {
-    await this.update((row) => {
-      row._conflicts = (this._conflicts ?? []).filter((r) => r !== _rev)
-    })
-  }
-  // updates the row locally - ui and labels stay live.
-  // the revision is created when the editing session on this row
-  // ends (see modules/revAggregation.js), not per field change
-  async edit({
-    field,
-    value,
-    values,
-  }: {
-    field?: string
-    value?: unknown
-    values?: Record<string, unknown>
-  }) {
-    if (!field && !values) {
-      throw new Error('field or values must be passed')
-    }
-    unsetError(`person.${field}`)
-    const changes = values ?? { [field as string]: value }
-    registerDirtyRev('person', this.id, field, this)
-    // optimistically update store
-    await this.update((row) => {
-      Object.entries(changes).forEach(([key, val]) => {
-        ;(row as unknown as Record<string, unknown>)[key] = val
-      })
-      row.changed = new Date().toISOString()
-      row.changed_by = store.get(userAtom)?.email ?? null
-    })
-  }
-
   async delete() {
-    await this.callWriter(() => this.edit({ field: '_deleted', value: true }))
+    await super.delete()
     // delete firebase user
     deleteAccount({ person: this })
   }
@@ -1429,7 +1171,7 @@ modelDecorators(
   ['removeConflict', 'edit', 'delete'],
 )
 
-export class SammelLieferung extends Model {
+export class SammelLieferung extends VermehrungModel {
   static table = 'sammel_lieferung'
   static associations: Associations = {
     art: { type: 'belongs_to', key: 'art_id' },
@@ -1507,43 +1249,6 @@ export class SammelLieferung extends Model {
       }),
     ))
   }
-
-  async removeConflict(_rev: string) {
-    await this.update((row) => {
-      row._conflicts = (this._conflicts ?? []).filter((r) => r !== _rev)
-    })
-  }
-  // updates the row locally - ui and labels stay live.
-  // the revision is created when the editing session on this row
-  // ends (see modules/revAggregation.js), not per field change
-  async edit({
-    field,
-    value,
-    values,
-  }: {
-    field?: string
-    value?: unknown
-    values?: Record<string, unknown>
-  }) {
-    if (!field && !values) {
-      throw new Error('field or values must be passed')
-    }
-    unsetError(`sammel_lieferung.${field}`)
-    const changes = values ?? { [field as string]: value }
-    registerDirtyRev('sammel_lieferung', this.id, field, this)
-    // optimistically update store
-    await this.update((row) => {
-      Object.entries(changes).forEach(([key, val]) => {
-        ;(row as unknown as Record<string, unknown>)[key] = val
-      })
-      row.changed = new Date().toISOString()
-      row.changed_by = store.get(userAtom)?.email ?? null
-    })
-  }
-
-  async delete() {
-    await this.callWriter(() => this.edit({ field: '_deleted', value: true }))
-  }
 }
 modelDecorators(
   SammelLieferung,
@@ -1580,7 +1285,7 @@ modelDecorators(
   ['removeConflict', 'edit', 'delete'],
 )
 
-export class Bedarf extends Model {
+export class Bedarf extends VermehrungModel {
   static table = 'bedarf'
   static associations: Associations = {
     kultur: { type: 'belongs_to', key: 'kultur_id' },
@@ -1618,42 +1323,6 @@ export class Bedarf extends Model {
       ),
     ))
   }
-
-  async removeConflict(_rev: string) {
-    await this.update((row) => {
-      row._conflicts = (this._conflicts ?? []).filter((r) => r !== _rev)
-    })
-  }
-  // updates the row locally - ui and labels stay live.
-  // the revision is created when the editing session on this row
-  // ends (see modules/revAggregation.js), not per field change
-  async edit({
-    field,
-    value,
-    values,
-  }: {
-    field?: string
-    value?: unknown
-    values?: Record<string, unknown>
-  }) {
-    if (!field && !values) {
-      throw new Error('field or values must be passed')
-    }
-    unsetError(`bedarf.${field}`)
-    const changes = values ?? { [field as string]: value }
-    registerDirtyRev('bedarf', this.id, field, this)
-    // optimistically update store
-    await this.update((row) => {
-      Object.entries(changes).forEach(([key, val]) => {
-        ;(row as unknown as Record<string, unknown>)[key] = val
-      })
-      row.changed = new Date().toISOString()
-      row.changed_by = store.get(userAtom)?.email ?? null
-    })
-  }
-  async delete() {
-    await this.callWriter(() => this.edit({ field: '_deleted', value: true }))
-  }
 }
 modelDecorators(
   Bedarf,
@@ -1678,7 +1347,7 @@ modelDecorators(
   ['removeConflict', 'edit', 'delete'],
 )
 
-export class Av extends Model {
+export class Av extends VermehrungModel {
   static table = 'av'
   static associations: Associations = {
     art: { type: 'belongs_to', key: 'art_id' },
@@ -1721,42 +1390,6 @@ export class Av extends Model {
       }),
     ))
   }
-
-  async removeConflict(_rev: string) {
-    await this.update((row) => {
-      row._conflicts = (this._conflicts ?? []).filter((r) => r !== _rev)
-    })
-  }
-  // updates the row locally - ui and labels stay live.
-  // the revision is created when the editing session on this row
-  // ends (see modules/revAggregation.js), not per field change
-  async edit({
-    field,
-    value,
-    values,
-  }: {
-    field?: string
-    value?: unknown
-    values?: Record<string, unknown>
-  }) {
-    if (!field && !values) {
-      throw new Error('field or values must be passed')
-    }
-    unsetError(`av.${field}`)
-    const changes = values ?? { [field as string]: value }
-    registerDirtyRev('av', this.id, field, this)
-    // optimistically update store
-    await this.update((row) => {
-      Object.entries(changes).forEach(([key, val]) => {
-        ;(row as unknown as Record<string, unknown>)[key] = val
-      })
-      row.changed = new Date().toISOString()
-      row.changed_by = store.get(userAtom)?.email ?? null
-    })
-  }
-  async delete() {
-    await this.callWriter(() => this.edit({ field: '_deleted', value: true }))
-  }
 }
 modelDecorators(
   Av,
@@ -1777,7 +1410,7 @@ modelDecorators(
   ['removeConflict', 'edit', 'delete'],
 )
 
-export class Gv extends Model {
+export class Gv extends VermehrungModel {
   static table = 'gv'
   static associations: Associations = {
     garten: { type: 'belongs_to', key: 'garten_id' },
@@ -1823,42 +1456,6 @@ export class Gv extends Model {
       }),
     ))
   }
-
-  async removeConflict(_rev: string) {
-    await this.update((row) => {
-      row._conflicts = (this._conflicts ?? []).filter((r) => r !== _rev)
-    })
-  }
-  // updates the row locally - ui and labels stay live.
-  // the revision is created when the editing session on this row
-  // ends (see modules/revAggregation.js), not per field change
-  async edit({
-    field,
-    value,
-    values,
-  }: {
-    field?: string
-    value?: unknown
-    values?: Record<string, unknown>
-  }) {
-    if (!field && !values) {
-      throw new Error('field or values must be passed')
-    }
-    unsetError(`gv.${field}`)
-    const changes = values ?? { [field as string]: value }
-    registerDirtyRev('gv', this.id, field, this)
-    // optimistically update store
-    await this.update((row) => {
-      Object.entries(changes).forEach(([key, val]) => {
-        ;(row as unknown as Record<string, unknown>)[key] = val
-      })
-      row.changed = new Date().toISOString()
-      row.changed_by = store.get(userAtom)?.email ?? null
-    })
-  }
-  async delete() {
-    await this.callWriter(() => this.edit({ field: '_deleted', value: true }))
-  }
 }
 modelDecorators(
   Gv,
@@ -1879,7 +1476,7 @@ modelDecorators(
   ['removeConflict', 'edit', 'delete'],
 )
 
-export class ArtFile extends Model {
+export class ArtFile extends VermehrungFileModel {
   static table = 'art_file'
   static associations: Associations = {
     art: { type: 'belongs_to', key: 'art_id' },
@@ -1894,50 +1491,6 @@ export class ArtFile extends Model {
   declare _rev_at: number | null
 
   declare art: Relation<Art>
-
-  async edit({ field, value }: { field?: string; value?: unknown }) {
-    // extract only the needed keys
-    const { id, art_id, file_id, file_mime_type, name, beschreibung, changed } =
-      this
-    const newObject = {
-      id,
-      art_id,
-      file_id,
-      file_mime_type,
-      name,
-      beschreibung,
-      changed,
-      [field as string]: value,
-      _rev_at: Date.now() / 1000,
-    }
-    try {
-      await store
-        .get(apiClientAtom)
-        ?.patch(`/art_file?id=eq.${this.id}`, newObject)
-    } catch (error) {
-      addNotification({
-        message: (error as Error).message,
-      })
-      return console.log(error)
-    }
-    // updating server is done by calling code
-    await this.update((row) => {
-      ;(row as unknown as Record<string, unknown>)[field as string] = value
-    })
-    return
-  }
-  async delete() {
-    try {
-      await store.get(apiClientAtom)?.delete(`/art_file?id=eq.${this.id}`)
-    } catch (error) {
-      addNotification({
-        message: (error as Error).message,
-      })
-      return console.log(error)
-    }
-    // updating server is done by calling code
-    await this.destroyPermanently()
-  }
 }
 modelDecorators(
   ArtFile,
@@ -1954,7 +1507,7 @@ modelDecorators(
   ['edit', 'delete'],
 )
 
-export class GartenFile extends Model {
+export class GartenFile extends VermehrungFileModel {
   static table = 'garten_file'
   static associations: Associations = {
     garten: { type: 'belongs_to', key: 'garten_id' },
@@ -1969,57 +1522,6 @@ export class GartenFile extends Model {
   declare _rev_at: number | null
 
   declare garten: Relation<Garten>
-
-  async edit({ field, value }: { field?: string; value?: unknown }) {
-    // extract only the needed keys
-    const {
-      id,
-      garten_id,
-      file_id,
-      file_mime_type,
-      name,
-      beschreibung,
-      changed,
-    } = this
-    const newObject = {
-      id,
-      garten_id,
-      file_id,
-      file_mime_type,
-      name,
-      beschreibung,
-      changed,
-      [field as string]: value,
-      _rev_at: Date.now() / 1000,
-    }
-    try {
-      await store
-        .get(apiClientAtom)
-        ?.patch(`/garten_file?id=eq.${this.id}`, newObject)
-    } catch (error) {
-      addNotification({
-        message: (error as Error).message,
-      })
-      return console.log(error)
-    }
-    // updating server is done by calling code
-    await this.update((row) => {
-      ;(row as unknown as Record<string, unknown>)[field as string] = value
-    })
-    return
-  }
-  async delete() {
-    try {
-      await store.get(apiClientAtom)?.delete(`/garten_file?id=eq.${this.id}`)
-    } catch (error) {
-      addNotification({
-        message: (error as Error).message,
-      })
-      return console.log(error)
-    }
-    // updating server is done by calling code
-    await this.destroyPermanently()
-  }
 }
 modelDecorators(
   GartenFile,
@@ -2036,7 +1538,7 @@ modelDecorators(
   ['edit', 'delete'],
 )
 
-export class HerkunftFile extends Model {
+export class HerkunftFile extends VermehrungFileModel {
   static table = 'herkunft_file'
   static associations: Associations = {
     herkunft: { type: 'belongs_to', key: 'herkunft_id' },
@@ -2051,57 +1553,6 @@ export class HerkunftFile extends Model {
   declare _rev_at: number | null
 
   declare herkunft: Relation<Herkunft>
-
-  async edit({ field, value }: { field?: string; value?: unknown }) {
-    // extract only the needed keys
-    const {
-      id,
-      herkunft_id,
-      file_id,
-      file_mime_type,
-      name,
-      beschreibung,
-      changed,
-    } = this
-    const newObject = {
-      id,
-      herkunft_id,
-      file_id,
-      file_mime_type,
-      name,
-      beschreibung,
-      changed,
-      [field as string]: value,
-      _rev_at: Date.now() / 1000,
-    }
-    try {
-      await store
-        .get(apiClientAtom)
-        ?.patch(`/herkunft_file?id=eq.${this.id}`, newObject)
-    } catch (error) {
-      addNotification({
-        message: (error as Error).message,
-      })
-      return console.log(error)
-    }
-    // updating server is done by calling code
-    await this.update((row) => {
-      ;(row as unknown as Record<string, unknown>)[field as string] = value
-    })
-    return
-  }
-  async delete() {
-    try {
-      await store.get(apiClientAtom)?.delete(`/herkunft_file?id=eq.${this.id}`)
-    } catch (error) {
-      addNotification({
-        message: (error as Error).message,
-      })
-      return console.log(error)
-    }
-    // updating server is done by calling code
-    await this.destroyPermanently()
-  }
 }
 modelDecorators(
   HerkunftFile,
@@ -2118,7 +1569,7 @@ modelDecorators(
   ['edit', 'delete'],
 )
 
-export class KulturFile extends Model {
+export class KulturFile extends VermehrungFileModel {
   static table = 'kultur_file'
   static associations: Associations = {
     kultur: { type: 'belongs_to', key: 'kultur_id' },
@@ -2133,57 +1584,6 @@ export class KulturFile extends Model {
   declare _rev_at: number | null
 
   declare kultur: Relation<Kultur>
-
-  async edit({ field, value }: { field?: string; value?: unknown }) {
-    // extract only the needed keys
-    const {
-      id,
-      kultur_id,
-      file_id,
-      file_mime_type,
-      name,
-      beschreibung,
-      changed,
-    } = this
-    const newObject = {
-      id,
-      kultur_id,
-      file_id,
-      file_mime_type,
-      name,
-      beschreibung,
-      changed,
-      [field as string]: value,
-      _rev_at: Date.now() / 1000,
-    }
-    try {
-      await store
-        .get(apiClientAtom)
-        ?.patch(`/kultur_file?id=eq.${this.id}`, newObject)
-    } catch (error) {
-      addNotification({
-        message: (error as Error).message,
-      })
-      return console.log(error)
-    }
-    // updating server is done by calling code
-    await this.update((row) => {
-      ;(row as unknown as Record<string, unknown>)[field as string] = value
-    })
-    return
-  }
-  async delete() {
-    try {
-      await store.get(apiClientAtom)?.delete(`/kultur_file?id=eq.${this.id}`)
-    } catch (error) {
-      addNotification({
-        message: (error as Error).message,
-      })
-      return console.log(error)
-    }
-    // updating server is done by calling code
-    await this.destroyPermanently()
-  }
 }
 modelDecorators(
   KulturFile,
@@ -2200,7 +1600,7 @@ modelDecorators(
   ['edit', 'delete'],
 )
 
-export class LieferungFile extends Model {
+export class LieferungFile extends VermehrungFileModel {
   static table = 'lieferung_file'
   static associations: Associations = {
     lieferung: { type: 'belongs_to', key: 'lieferung_id' },
@@ -2215,57 +1615,6 @@ export class LieferungFile extends Model {
   declare _rev_at: number | null
 
   declare lieferung: Relation<Lieferung>
-
-  async edit({ field, value }: { field?: string; value?: unknown }) {
-    // extract only the needed keys
-    const {
-      id,
-      lieferung_id,
-      file_id,
-      file_mime_type,
-      name,
-      beschreibung,
-      changed,
-    } = this
-    const newObject = {
-      id,
-      lieferung_id,
-      file_id,
-      file_mime_type,
-      name,
-      beschreibung,
-      changed,
-      [field as string]: value,
-      _rev_at: Date.now() / 1000,
-    }
-    try {
-      await store
-        .get(apiClientAtom)
-        ?.patch(`/lieferung_file?id=eq.${this.id}`, newObject)
-    } catch (error) {
-      addNotification({
-        message: (error as Error).message,
-      })
-      return console.log(error)
-    }
-    // updating server is done by calling code
-    await this.update((row) => {
-      ;(row as unknown as Record<string, unknown>)[field as string] = value
-    })
-    return
-  }
-  async delete() {
-    try {
-      await store.get(apiClientAtom)?.delete(`/lieferung_file?id=eq.${this.id}`)
-    } catch (error) {
-      addNotification({
-        message: (error as Error).message,
-      })
-      return console.log(error)
-    }
-    // updating server is done by calling code
-    await this.destroyPermanently()
-  }
 }
 modelDecorators(
   LieferungFile,
@@ -2282,7 +1631,7 @@ modelDecorators(
   ['edit', 'delete'],
 )
 
-export class PersonFile extends Model {
+export class PersonFile extends VermehrungFileModel {
   static table = 'person_file'
   static associations: Associations = {
     person: { type: 'belongs_to', key: 'person_id' },
@@ -2297,57 +1646,6 @@ export class PersonFile extends Model {
   declare _rev_at: number | null
 
   declare person: Relation<Person>
-
-  async edit({ field, value }: { field?: string; value?: unknown }) {
-    // extract only the needed keys
-    const {
-      id,
-      person_id,
-      file_id,
-      file_mime_type,
-      name,
-      beschreibung,
-      changed,
-    } = this
-    const newObject = {
-      id,
-      person_id,
-      file_id,
-      file_mime_type,
-      name,
-      beschreibung,
-      changed,
-      [field as string]: value,
-      _rev_at: Date.now() / 1000,
-    }
-    try {
-      await store
-        .get(apiClientAtom)
-        ?.patch(`/person_file?id=eq.${this.id}`, newObject)
-    } catch (error) {
-      addNotification({
-        message: (error as Error).message,
-      })
-      return console.log(error)
-    }
-    // updating server is done by calling code
-    await this.update((row) => {
-      ;(row as unknown as Record<string, unknown>)[field as string] = value
-    })
-    return
-  }
-  async delete() {
-    try {
-      await store.get(apiClientAtom)?.delete(`/person_file?id=eq.${this.id}`)
-    } catch (error) {
-      addNotification({
-        message: (error as Error).message,
-      })
-      return console.log(error)
-    }
-    // updating server is done by calling code
-    await this.destroyPermanently()
-  }
 }
 modelDecorators(
   PersonFile,
@@ -2364,7 +1662,7 @@ modelDecorators(
   ['edit', 'delete'],
 )
 
-export class SammlungFile extends Model {
+export class SammlungFile extends VermehrungFileModel {
   static table = 'sammlung_file'
   static associations: Associations = {
     sammlung: { type: 'belongs_to', key: 'sammlung_id' },
@@ -2379,57 +1677,6 @@ export class SammlungFile extends Model {
   declare _rev_at: number | null
 
   declare sammlung: Relation<Sammlung>
-
-  async edit({ field, value }: { field?: string; value?: unknown }) {
-    // extract only the needed keys
-    const {
-      id,
-      sammlung_id,
-      file_id,
-      file_mime_type,
-      name,
-      beschreibung,
-      changed,
-    } = this
-    const newObject = {
-      id,
-      sammlung_id,
-      file_id,
-      file_mime_type,
-      name,
-      beschreibung,
-      changed,
-      [field as string]: value,
-      _rev_at: Date.now() / 1000,
-    }
-    try {
-      await store
-        .get(apiClientAtom)
-        ?.patch(`/sammlung_file?id=eq.${this.id}`, newObject)
-    } catch (error) {
-      addNotification({
-        message: (error as Error).message,
-      })
-      return console.log(error)
-    }
-    // updating server is done by calling code
-    await this.update((row) => {
-      ;(row as unknown as Record<string, unknown>)[field as string] = value
-    })
-    return
-  }
-  async delete() {
-    try {
-      await store.get(apiClientAtom)?.delete(`/sammlung_file?id=eq.${this.id}`)
-    } catch (error) {
-      addNotification({
-        message: (error as Error).message,
-      })
-      return console.log(error)
-    }
-    // updating server is done by calling code
-    await this.destroyPermanently()
-  }
 }
 modelDecorators(
   SammlungFile,
@@ -2446,7 +1693,7 @@ modelDecorators(
   ['edit', 'delete'],
 )
 
-export class ArtQk extends Model {
+export class ArtQk extends VermehrungModel {
   static table = 'art_qk'
 
   declare name: string
@@ -2461,42 +1708,6 @@ export class ArtQk extends Model {
   declare _depth: number | null
   declare _deleted: boolean | null
   declare _conflicts: string[] | null
-
-  async removeConflict(_rev: string) {
-    await this.update((row) => {
-      row._conflicts = (this._conflicts ?? []).filter((r) => r !== _rev)
-    })
-  }
-  // updates the row locally - ui and labels stay live.
-  // the revision is created when the editing session on this row
-  // ends (see modules/revAggregation.js), not per field change
-  async edit({
-    field,
-    value,
-    values,
-  }: {
-    field?: string
-    value?: unknown
-    values?: Record<string, unknown>
-  }) {
-    if (!field && !values) {
-      throw new Error('field or values must be passed')
-    }
-    unsetError(`art_qk.${field}`)
-    const changes = values ?? { [field as string]: value }
-    registerDirtyRev('art_qk', this.id, field, this)
-    // optimistically update store
-    await this.update((row) => {
-      Object.entries(changes).forEach(([key, val]) => {
-        ;(row as unknown as Record<string, unknown>)[key] = val
-      })
-      row.changed = new Date().toISOString()
-      row.changed_by = store.get(userAtom)?.email ?? null
-    })
-  }
-  async delete() {
-    await this.callWriter(() => this.edit({ field: '_deleted', value: true }))
-  }
 }
 modelDecorators(
   ArtQk,
@@ -2517,7 +1728,7 @@ modelDecorators(
   ['removeConflict', 'edit', 'delete'],
 )
 
-export class KulturOption extends Model {
+export class KulturOption extends VermehrungModel {
   static table = 'kultur_option'
   static associations: Associations = {
     kultur: { type: 'belongs_to', key: 'id' },
@@ -2544,42 +1755,6 @@ export class KulturOption extends Model {
   declare _conflicts: string[] | null
 
   declare kultur: Relation<Kultur>
-
-  async removeConflict(_rev: string) {
-    await this.update((row) => {
-      row._conflicts = (this._conflicts ?? []).filter((r) => r !== _rev)
-    })
-  }
-  // updates the row locally - ui and labels stay live.
-  // the revision is created when the editing session on this row
-  // ends (see modules/revAggregation.js), not per field change
-  async edit({
-    field,
-    value,
-    values,
-  }: {
-    field?: string
-    value?: unknown
-    values?: Record<string, unknown>
-  }) {
-    if (!field && !values) {
-      throw new Error('field or values must be passed')
-    }
-    unsetError(`kultur_option.${field}`)
-    const changes = values ?? { [field as string]: value }
-    registerDirtyRev('kultur_option', this.id, field, this)
-    // optimistically update store
-    await this.update((row) => {
-      Object.entries(changes).forEach(([key, val]) => {
-        ;(row as unknown as Record<string, unknown>)[key] = val
-      })
-      row.changed = new Date().toISOString()
-      row.changed_by = store.get(userAtom)?.email ?? null
-    })
-  }
-  async delete() {
-    await this.callWriter(() => this.edit({ field: '_deleted', value: true }))
-  }
 }
 modelDecorators(
   KulturOption,
@@ -2608,7 +1783,7 @@ modelDecorators(
   ['removeConflict', 'edit', 'delete'],
 )
 
-export class KulturQk extends Model {
+export class KulturQk extends VermehrungModel {
   static table = 'kultur_qk'
 
   declare name: string
@@ -2623,42 +1798,6 @@ export class KulturQk extends Model {
   declare _depth: number | null
   declare _deleted: boolean | null
   declare _conflicts: string[] | null
-
-  async removeConflict(_rev: string) {
-    await this.update((row) => {
-      row._conflicts = (this._conflicts ?? []).filter((r) => r !== _rev)
-    })
-  }
-  // updates the row locally - ui and labels stay live.
-  // the revision is created when the editing session on this row
-  // ends (see modules/revAggregation.js), not per field change
-  async edit({
-    field,
-    value,
-    values,
-  }: {
-    field?: string
-    value?: unknown
-    values?: Record<string, unknown>
-  }) {
-    if (!field && !values) {
-      throw new Error('field or values must be passed')
-    }
-    unsetError(`kultur_qk.${field}`)
-    const changes = values ?? { [field as string]: value }
-    registerDirtyRev('kultur_qk', this.id, field, this)
-    // optimistically update store
-    await this.update((row) => {
-      Object.entries(changes).forEach(([key, val]) => {
-        ;(row as unknown as Record<string, unknown>)[key] = val
-      })
-      row.changed = new Date().toISOString()
-      row.changed_by = store.get(userAtom)?.email ?? null
-    })
-  }
-  async delete() {
-    await this.callWriter(() => this.edit({ field: '_deleted', value: true }))
-  }
 }
 modelDecorators(
   KulturQk,
@@ -2679,7 +1818,7 @@ modelDecorators(
   ['removeConflict', 'edit', 'delete'],
 )
 
-export class PersonOption extends Model {
+export class PersonOption extends VermehrungModel {
   static table = 'person_option'
   static associations: Associations = {
     person: { type: 'belongs_to', key: 'id' },
@@ -2720,42 +1859,6 @@ export class PersonOption extends Model {
   declare _conflicts: string[] | null
 
   declare person: Relation<Person>
-
-  async removeConflict(_rev: string) {
-    await this.update((row) => {
-      row._conflicts = (this._conflicts ?? []).filter((r) => r !== _rev)
-    })
-  }
-  // updates the row locally - ui and labels stay live.
-  // the revision is created when the editing session on this row
-  // ends (see modules/revAggregation.js), not per field change
-  async edit({
-    field,
-    value,
-    values,
-  }: {
-    field?: string
-    value?: unknown
-    values?: Record<string, unknown>
-  }) {
-    if (!field && !values) {
-      throw new Error('field or values must be passed')
-    }
-    unsetError(`person_option.${field}`)
-    const changes = values ?? { [field as string]: value }
-    registerDirtyRev('person_option', this.id, field, this)
-    // optimistically update store
-    await this.update((row) => {
-      Object.entries(changes).forEach(([key, val]) => {
-        ;(row as unknown as Record<string, unknown>)[key] = val
-      })
-      row.changed = new Date().toISOString()
-      row.changed_by = store.get(userAtom)?.email ?? null
-    })
-  }
-  async delete() {
-    await this.callWriter(() => this.edit({ field: '_deleted', value: true }))
-  }
 }
 modelDecorators(
   PersonOption,

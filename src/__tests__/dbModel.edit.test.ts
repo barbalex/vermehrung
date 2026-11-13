@@ -35,6 +35,8 @@ import { flushRow, getUnflushedRevs } from '../modules/revAggregation.ts'
 
 const buildFakeRow = (db: unknown) => {
   const row: Record<string, unknown> = {
+    // the edit writers read the table from the constructor
+    constructor: Herkunft,
     id: 'herk-1',
     nr: 'Nr 1',
     lokalname: null,

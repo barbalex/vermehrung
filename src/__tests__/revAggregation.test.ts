@@ -58,6 +58,8 @@ describe('revAggregation', () => {
   it('flushes a row automatically after the editing idle delay', async () => {
     vi.useFakeTimers()
     const row = {
+      // the edit writers read the table from the constructor
+      constructor: Herkunft,
       id: 'herk-1',
       nr: 'A',
       lokalname: null,
@@ -110,6 +112,8 @@ describe('revAggregation', () => {
 
   it('persists the unflushed registry across reloads (crash heal data)', async () => {
     const row = {
+      // the edit writers read the table from the constructor
+      constructor: Herkunft,
       id: 'herk-9',
       nr: 'A',
       lokalname: null,
@@ -150,6 +154,8 @@ describe('revAggregation', () => {
       JSON.stringify({ herkunft: { 'herk-7': { lastField: 'nr' } } }),
     )
     const row = {
+      // the edit writers read the table from the constructor
+      constructor: Herkunft,
       id: 'herk-7',
       nr: 'B',
       lokalname: null,
@@ -185,6 +191,8 @@ describe('revAggregation', () => {
 
   it('flushing on route change drains all dirty rows', async () => {
     const rows = ['herk-a', 'herk-b'].map((id) => ({
+      // the edit writers read the table from the constructor
+      constructor: Herkunft,
       id,
       nr: 'A',
       lokalname: null,
