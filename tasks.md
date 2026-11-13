@@ -37,3 +37,11 @@ Found during the 2026-11-13 codebase survey. Work top to bottom.
 ## Scratch
 
 get Sammel-Lieferung/lieferschein to work again?
+
+---
+
+do we need a 'how to build/update production' documentation to prevent agents from having to find out themselves?
+
+---
+
+do we need a 'how to deploy' documentation to prevent agents from having to find out themselves?
