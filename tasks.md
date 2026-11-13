@@ -11,7 +11,7 @@ Found during the 2026-11-13 codebase survey. Work top to bottom.
 
 ## B. The bored list (ranked by payoff)
 
-1. [ ] **Event-driven, batched sync** — LISTEN/NOTIFY → SSE "dirty" signal + existing delta fetch; 30–60s fallback poll; pause on `document.hidden`. Batch queue drains per table (PostgREST array bodies); one `requestSyncSoon()` per drain, not per write. Chunk the cursor-0 initial sync (today: full dump through the same 15s timeout, restarts from 0 on failure). Inline the RLS helper functions (`security definer set search_path` defeats inlining → per-row nested-EXISTS calls for gaertner/artverantwortlich).
+1. [x] **Event-driven, batched sync** — DONE 13.11.2026: row-level `pg_notify` triggers on all synced tables (`createNotifyTriggers.sql`) → SSE `/events` endpoint on the auth service (JWT-gated, debounced, heartbeat; caddy `flush_interval -1`, auth `compression: false` — gzip buffered the never-ending stream); client fetch-SSE (`syncEvents.ts`) drives the poll (200ms after a signal, 60s fallback while connected, immediate sync on tab-visible); queue drains batch per table into bulk upserts (atomic removal, per-query fallback on batch errors). Initial sync fetches one table per request (`p_tables` param on the sync rpc) — dumps fit the 15s timeout and progress survives failures; the dead `event` block is gone. **RLS inlining investigated and rejected**: the differential test (definer vs inlined fingerprints per role/table, dev db) shows postgres' `infinite recursion detected in policy` on garten↔kultur for gaertner/artverantwortlich — the definer helpers are load-bearing recursion breakers, and the expensive policies are exactly the cyclic ones. Real fix if ever needed: per-role visibility precomputation (e.g. `app.my_gartens()` set-returning definer chokepoints, or an ACL table maintained by triggers).
 2. [ ] **Cache the search corpus** — `Search/buildOptions.ts` re-fetches 9 tables and builds 9 Fuse indexes per debounced keystroke. Key a corpus/Fuse cache on `lastUpdatedAtom` per table.
 3. [ ] **Stop rebuilding the whole tree on every click** — `Tree/index.tsx` combines 14 whole-table observables into a full `buildNodes()` rebuild on any write, click, or filter change; each art's label is fetched twice per rebuild. Incremental per-branch rebuild keyed on URL prefixes (or move the builder into the web worker).
 4. [ ] **Schema-driven components** — ~11 copy families in `src/components/Data/` (~10k → ~2.5k lines): 12 forms with identical `saveToDb`s, 11 lists ~90–95% identical, 11×2 History, 12 Conflict. One generic component each behind declarative per-entity field lists (generatable via kanel). Preceded by component tests (currently zero). Also: `VermehrungModel` base class for the 25 byte-identical `edit()` writers in `dbModel.ts` (~675 lines).
@@ -47,3 +47,7 @@ do we need a 'how to build/update production' documentation to prevent agents fr
 ---
 
 do we need a 'how to deploy' documentation to prevent agents from having to find out themselves?
+
+---
+
+Tree keyboard navigation as in ae3
