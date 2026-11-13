@@ -104,6 +104,7 @@ export const createKulturMessageFunctions = async ({
       kulturId,
       'Zaehlungen',
       z.id,
+      'Zaehlung',
     ] as string[]
   const zaehlungText = (z: import('../../../../../../dbModel.ts').Zaehlung) => {
     const zaehlungLabel =
@@ -175,7 +176,7 @@ export const createKulturMessageFunctions = async ({
               (z: import('../../../../../../dbModel.ts').Zaehlung) =>
                 z.datum && z.datum > startYear && z.datum < startNextYear,
             ).length === 0,
-        buildUrl: () => ['Kulturen', kulturId],
+        buildUrl: () => ['Kulturen', kulturId, 'Kultur'],
         buildText: (k: import('../../../../../../dbModel.ts').Kultur) =>
           labelOf(k),
       }),
@@ -192,6 +193,7 @@ export const createKulturMessageFunctions = async ({
           kulturId,
           'Teilkulturen',
           tk.id,
+          'Teilkultur',
         ],
         buildText: (tk: import('../../../../../../dbModel.ts').Teilkultur) =>
           `${kulturLabel ?? '(keine Kultur)'}, Teilkultur-ID: ${tk.id}`,
@@ -353,6 +355,7 @@ export const createKulturMessageFunctions = async ({
         buildUrl: (l: import('../../../../../../dbModel.ts').Lieferung) => [
           'Lieferungen',
           l.id,
+          'Lieferung',
         ],
         buildText: (l: import('../../../../../../dbModel.ts').Lieferung) =>
           lieferungText(l),
@@ -368,6 +371,7 @@ export const createKulturMessageFunctions = async ({
         buildUrl: (l: import('../../../../../../dbModel.ts').Lieferung) => [
           'Lieferungen',
           l.id,
+          'Lieferung',
         ],
         buildText: (l: import('../../../../../../dbModel.ts').Lieferung) =>
           lieferungText(l),
@@ -380,7 +384,13 @@ export const createKulturMessageFunctions = async ({
         ),
         failsCheck: (l: import('../../../../../../dbModel.ts').Lieferung) =>
           !exists(l.anzahl_pflanzen),
-        buildUrl: (l) => ['Kulturen', kulturId, 'An-Lieferungen', l.id],
+        buildUrl: (l) => [
+          'Kulturen',
+          kulturId,
+          'An-Lieferungen',
+          l.id,
+          'Lieferung',
+        ],
         buildText: (l) => lieferungText(l),
       }),
     ausLieferungsWithoutAnzahlPflanzen: async () =>
@@ -391,7 +401,13 @@ export const createKulturMessageFunctions = async ({
         ),
         failsCheck: (l: import('../../../../../../dbModel.ts').Lieferung) =>
           !exists(l.anzahl_pflanzen),
-        buildUrl: (l) => ['Kulturen', kulturId, 'Aus-Lieferungen', l.id],
+        buildUrl: (l) => [
+          'Kulturen',
+          kulturId,
+          'Aus-Lieferungen',
+          l.id,
+          'Lieferung',
+        ],
         buildText: (l) => lieferungText(l),
       }),
     anLieferungsWithoutAnzahlAuspflanzbereit: async () =>
@@ -402,7 +418,13 @@ export const createKulturMessageFunctions = async ({
         ),
         failsCheck: (l: import('../../../../../../dbModel.ts').Lieferung) =>
           !exists(l.anzahl_auspflanzbereit),
-        buildUrl: (l) => ['Kulturen', kulturId, 'An-Lieferungen', l.id],
+        buildUrl: (l) => [
+          'Kulturen',
+          kulturId,
+          'An-Lieferungen',
+          l.id,
+          'Lieferung',
+        ],
         buildText: (l) => lieferungText(l),
       }),
     ausLieferungsWithoutAnzahlAuspflanzbereit: async () =>
@@ -413,7 +435,13 @@ export const createKulturMessageFunctions = async ({
         ),
         failsCheck: (l: import('../../../../../../dbModel.ts').Lieferung) =>
           !exists(l.anzahl_auspflanzbereit),
-        buildUrl: (l) => ['Kulturen', kulturId, 'Aus-Lieferungen', l.id],
+        buildUrl: (l) => [
+          'Kulturen',
+          kulturId,
+          'Aus-Lieferungen',
+          l.id,
+          'Lieferung',
+        ],
         buildText: (l) => lieferungText(l),
       }),
     anLieferungsWithoutVonAnzahlIndividuen: async () =>
@@ -424,7 +452,13 @@ export const createKulturMessageFunctions = async ({
         ),
         failsCheck: (l: import('../../../../../../dbModel.ts').Lieferung) =>
           !exists(l.von_anzahl_individuen),
-        buildUrl: (l) => ['Kulturen', kulturId, 'An-Lieferungen', l.id],
+        buildUrl: (l) => [
+          'Kulturen',
+          kulturId,
+          'An-Lieferungen',
+          l.id,
+          'Lieferung',
+        ],
         buildText: (l) => lieferungText(l),
       }),
     ausLieferungsWithoutVonAnzahlIndividuen: async () =>
@@ -435,7 +469,13 @@ export const createKulturMessageFunctions = async ({
         ),
         failsCheck: (l: import('../../../../../../dbModel.ts').Lieferung) =>
           !exists(l.von_anzahl_individuen),
-        buildUrl: (l) => ['Kulturen', kulturId, 'Aus-Lieferungen', l.id],
+        buildUrl: (l) => [
+          'Kulturen',
+          kulturId,
+          'Aus-Lieferungen',
+          l.id,
+          'Lieferung',
+        ],
         buildText: (l) => lieferungText(l),
       }),
     anLieferungsWithoutVon: async () =>
@@ -451,6 +491,7 @@ export const createKulturMessageFunctions = async ({
           kulturId,
           'An-Lieferungen',
           l.id,
+          'Lieferung',
         ],
         buildText: (l: import('../../../../../../dbModel.ts').Lieferung) =>
           lieferungText(l),
@@ -468,6 +509,7 @@ export const createKulturMessageFunctions = async ({
           kulturId,
           'Aus-Lieferungen',
           l.id,
+          'Lieferung',
         ],
         buildText: (l: import('../../../../../../dbModel.ts').Lieferung) =>
           lieferungText(l),
@@ -485,6 +527,7 @@ export const createKulturMessageFunctions = async ({
           kulturId,
           'An-Lieferungen',
           l.id,
+          'Lieferung',
         ],
         buildText: (l: import('../../../../../../dbModel.ts').Lieferung) =>
           lieferungText(l),
@@ -502,6 +545,7 @@ export const createKulturMessageFunctions = async ({
           kulturId,
           'Aus-Lieferungen',
           l.id,
+          'Lieferung',
         ],
         buildText: (l: import('../../../../../../dbModel.ts').Lieferung) =>
           lieferungText(l),
@@ -519,6 +563,7 @@ export const createKulturMessageFunctions = async ({
           kulturId,
           'An-Lieferungen',
           l.id,
+          'Lieferung',
         ],
         buildText: (l: import('../../../../../../dbModel.ts').Lieferung) =>
           lieferungText(l),
@@ -536,6 +581,7 @@ export const createKulturMessageFunctions = async ({
           kulturId,
           'Aus-Lieferungen',
           l.id,
+          'Lieferung',
         ],
         buildText: (l: import('../../../../../../dbModel.ts').Lieferung) =>
           lieferungText(l),

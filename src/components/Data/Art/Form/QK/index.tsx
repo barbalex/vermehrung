@@ -28,7 +28,8 @@ export const ArtQkWrapper = ({ artId }: { artId: string | undefined }) => {
     qks: import('../../../../../dbModel.ts').ArtQk[]
     userPersonOption:
       import('../../../../../dbModel.ts').PersonOption | undefined
-  }>({ qks: [], userPersonOption: undefined })
+    loaded: boolean
+  }>({ qks: [], userPersonOption: undefined, loaded: false })
   useEffect(() => {
     const userPersonOptionsObservable =
       user.uid ?
@@ -58,12 +59,13 @@ export const ArtQkWrapper = ({ artId }: { artId: string | undefined }) => {
       setDataState({
         qks,
         userPersonOption: userPersonOptions?.[0],
+        loaded: true,
       }),
     )
 
     return () => subscription?.unsubscribe?.()
   }, [db, user.uid])
-  const { qks, userPersonOption } = dataState
+  const { qks, userPersonOption, loaded } = dataState
   const userPersonOptionRecord = userPersonOption as unknown as Record<
     string,
     unknown
@@ -167,7 +169,7 @@ export const ArtQkWrapper = ({ artId }: { artId: string | undefined }) => {
           {tab === 'qk' ?
             <Qk
               artId={artId}
-              qkChoosens={qkChoosens}
+              qkChoosens={loaded ? qkChoosens : null}
             />
           : <Choose qks={qks} />}
         </div>

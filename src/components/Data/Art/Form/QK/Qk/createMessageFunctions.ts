@@ -204,6 +204,7 @@ export const createMessageFunctions = async ({
         kultur?.id,
         'Zaehlungen',
         z.id,
+        'Zaehlung',
       ] as string[],
       text: `${kulturLabel ?? '(keine Kultur)'}, ${zaehlungLabel}${teilzaehlung}`,
     }
@@ -459,6 +460,7 @@ export const createMessageFunctions = async ({
               kultur?.id,
               'Teilkulturen',
               tk.id,
+              'Teilkultur',
             ] as string[],
             text: `${kulturLabel ?? '(keine Kultur)'}, Teilkultur-ID: ${tk.id}`,
           }
@@ -538,42 +540,42 @@ export const createMessageFunctions = async ({
       await buildQkMessages({
         rows: lieferungsOfArt,
         failsCheck: (l) => !!l.von_sammlung_id && !!l.von_kultur_id,
-        buildUrl: (l) => ['Lieferungen', l.id],
+        buildUrl: (l) => ['Lieferungen', l.id, 'Lieferung'],
         buildText: (l) => lieferungText(l),
       }),
     lieferungsWithMultipleNach: async () =>
       await buildQkMessages({
         rows: lieferungsOfArt,
         failsCheck: (l) => !!l.nach_ausgepflanzt && !!l.nach_kultur_id,
-        buildUrl: (l) => ['Lieferungen', l.id],
+        buildUrl: (l) => ['Lieferungen', l.id, 'Lieferung'],
         buildText: (l) => lieferungText(l),
       }),
     lieferungsWithoutAnzahlPflanzen: async () =>
       await buildQkMessages({
         rows: lieferungsOfArt,
         failsCheck: (l) => !exists(l.anzahl_pflanzen),
-        buildUrl: (l) => ['Lieferungen', l.id],
+        buildUrl: (l) => ['Lieferungen', l.id, 'Lieferung'],
         buildText: (l) => lieferungText(l),
       }),
     lieferungsWithoutAnzahlAuspflanzbereit: async () =>
       await buildQkMessages({
         rows: lieferungsOfArt,
         failsCheck: (l) => !exists(l.anzahl_auspflanzbereit),
-        buildUrl: (l) => ['Lieferungen', l.id],
+        buildUrl: (l) => ['Lieferungen', l.id, 'Lieferung'],
         buildText: (l) => lieferungText(l),
       }),
     lieferungsWithoutVonAnzahlIndividuen: async () =>
       await buildQkMessages({
         rows: lieferungsOfArt,
         failsCheck: (l) => !exists(l.von_anzahl_individuen),
-        buildUrl: (l) => ['Lieferungen', l.id],
+        buildUrl: (l) => ['Lieferungen', l.id, 'Lieferung'],
         buildText: (l) => lieferungText(l),
       }),
     lieferungsWithoutVon: async () =>
       await buildQkMessages({
         rows: lieferungsOfArt,
         failsCheck: (l) => !l.von_kultur_id && !l.von_sammlung_id,
-        buildUrl: (l) => ['Lieferungen', l.id],
+        buildUrl: (l) => ['Lieferungen', l.id, 'Lieferung'],
         buildText: (l) => lieferungText(l),
       }),
     lieferungsWithoutNach: async () =>
@@ -583,21 +585,21 @@ export const createMessageFunctions = async ({
           (!!l.von_kultur_id || !!l.von_sammlung_id) &&
           !l.nach_kultur_id &&
           !l.nach_ausgepflanzt,
-        buildUrl: (l) => ['Lieferungen', l.id],
+        buildUrl: (l) => ['Lieferungen', l.id, 'Lieferung'],
         buildText: (l) => lieferungText(l),
       }),
     lieferungsWithoutDatum: async () =>
       await buildQkMessages({
         rows: lieferungsOfArt,
         failsCheck: (l) => !l.datum,
-        buildUrl: (l) => ['Lieferungen', l.id],
+        buildUrl: (l) => ['Lieferungen', l.id, 'Lieferung'],
         buildText: (l) => lieferungText(l),
       }),
     lieferungsWithoutPerson: async () =>
       await buildQkMessages({
         rows: lieferungsOfArt,
         failsCheck: (l) => !l.person_id,
-        buildUrl: (l) => ['Lieferungen', l.id],
+        buildUrl: (l) => ['Lieferungen', l.id, 'Lieferung'],
         buildText: (l) => lieferungText(l),
       }),
   }

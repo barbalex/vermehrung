@@ -16,7 +16,7 @@ export const ArtQk = ({
   qkChoosens,
 }: {
   artId: string | undefined
-  qkChoosens: import('../../../../../../dbModel.ts').ArtQk[] | null | undefined
+  qkChoosens: import('../../../../../../dbModel.ts').ArtQk[] | null
 }) => {
   const db = useAtomValue(dbAtom)
 
@@ -33,6 +33,9 @@ export const ArtQk = ({
     { title: string; messages: { url: string[]; text: string }[] }[] | null
   >(null)
   useEffect(() => {
+    // qkChoosens null: the chosen checks have not loaded yet - keep
+    // 'rechne...' instead of flashing the empty result
+    if (qkChoosens === null) return
     let isActive = true
     createMessageFunctions({
       artId: artId ?? '',

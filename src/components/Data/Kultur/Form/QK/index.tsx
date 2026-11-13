@@ -32,11 +32,13 @@ export const KulturQkRouter = ({
     qks: import('../../../../../dbModel.ts').KulturQk[]
     userPersonOption:
       import('../../../../../dbModel.ts').PersonOption | undefined
+    loaded: boolean
   }>({
     qks: [],
     userPersonOption: undefined,
+    loaded: false,
   })
-  const { qks, userPersonOption } = dataState
+  const { qks, userPersonOption, loaded } = dataState
 
   useEffect(() => {
     const userPersonOptionsObservable =
@@ -64,7 +66,11 @@ export const KulturQkRouter = ({
         ]
       >
     ).subscribe(([userPersonOptions, qks]) => {
-      setDataState({ qks, userPersonOption: userPersonOptions?.[0] })
+      setDataState({
+        qks,
+        userPersonOption: userPersonOptions?.[0],
+        loaded: true,
+      })
     })
 
     return () => subscription?.unsubscribe?.()
@@ -167,7 +173,7 @@ export const KulturQkRouter = ({
               kultur={
                 kultur as unknown as import('../../../../../dbModel.ts').Kultur
               }
-              qkChoosens={qkChoosens}
+              qkChoosens={loaded ? qkChoosens : null}
             />
           : <Choose qks={qks} />}
         </div>
