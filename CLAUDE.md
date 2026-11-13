@@ -42,6 +42,10 @@ This is a **local-first** app. Three concerns are split across the repo:
 - **Caddy** (`caddy/`): reverse proxy / TLS termination (PostgREST handles CORS itself).
 - `backend-dev/docker-compose.yaml` runs `db` + `api` + `auth` locally. `backend/docker-compose.yaml` (production) runs `db` + `auth` + `api` + `caddy`.
 
+### Deploying the backend
+
+The production stack runs at `ssh root@139.162.172.14`, folder `/root/vermehrung` — a **copied** `backend/` folder, not a git clone. It differs from the repo's compose file: the `../src/sql/*` mounts are removed (there is no `/root/src` on the server) and it can lag behind the repo. Deploy = scp the changed files (compose / `auth/server.js` / `db/`), then `cd /root/vermehrung && docker compose build auth && docker compose up -d`. The secrets live in `/root/vermehrung/.env` (key names: `DATABASE_URL`, `PGRST_JWT_SECRET`, `FIREBASE_*`, …). db/auth publish on `127.0.0.1` only; Caddy reaches them over the compose network.
+
 ### 2. Frontend (`src/` — this Vite app, hosted on Firebase Hosting)
 
 - **React 19** + **MUI 9** (Emotion; `jsxImportSource: '@emotion/react'`), **React Compiler** enabled, **jotai** for app/UI state.
