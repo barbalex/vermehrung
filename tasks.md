@@ -31,6 +31,7 @@ Found during the 2026-11-13 codebase survey. Work top to bottom.
 - [ ] Hoist `tableIsFilteredAtom(table)` to a module-level map (atom factory called during render).
 - [ ] Fix `isNodeOpen`'s per-row linear `isEqual` scan (use a `Set` of joined-url keys); drop redundant `openNodes.length` dep in `Tree/index.tsx:233`.
 - [ ] Collapse 13 value-identical `initial`/`empty` exports in `src/store/Filter/`; merge 16 near-identical `<entity>IdInUrl.ts` helpers.
+- [ ] `scripts/deployBackend.mjs` — one-command backend deploy (scp changed files to `root@139.162.172.14:/root/vermehrung`, remote `docker compose build auth && up -d`) so the copied server folder can't drift from the repo again (it had lagged: Hasura-era `server.js`, missing `../src/sql` mounts).
 - [ ] Replace the `fdw_user`/'secret' literal password in `backend/db/init/01_db_users_roles.sql`; remove stale Hasura vars from `backend/.env` + dead `03.sql` jwt_secret line.
 - [ ] Set a removal date for `migrateLokiToSqlite.ts` once the user base has crossed the migration.
 
