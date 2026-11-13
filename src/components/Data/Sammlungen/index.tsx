@@ -1,14 +1,10 @@
-import { useEffect, useState } from 'react'
 import { useAtomValue } from 'jotai'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import { List } from 'react-window'
 import { Q } from 'nitromelondb'
-import { combineLatest } from 'rxjs'
 
 import {
-  dbAtom,
-  filterSammlungAtom,
   artIdInActiveNodeArrayAtom,
   herkunftIdInActiveNodeArrayAtom,
   personIdInActiveNodeArrayAtom,
@@ -18,77 +14,50 @@ import { FilterTitle } from '../../shared/FilterTitle.tsx'
 import { SammlungRow as Row } from './Row.tsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
 import { FilterNumbers } from '../../shared/FilterNumbers.tsx'
-import { tableFilter } from '../../../utils/tableFilter.ts'
 import { sammlungsSortedFromSammlungs } from '../../../utils/sammlungsSortedFromSammlungs.ts'
 import { constants } from '../../../utils/constants.ts'
+import { useEntityList } from '../../../utils/useEntityList.ts'
 
 import artStyles from '../Arten/index.module.css'
-import { triStateDeletedQuery } from '../../../utils/triStateDeletedQuery.ts'
 
 export const Sammlungen = ({ filter: showFilter = false }) => {
-  const db = useAtomValue(dbAtom)
   const artIdInActiveNodeArray = useAtomValue(artIdInActiveNodeArrayAtom)
   const herkunftIdInActiveNodeArray = useAtomValue(
     herkunftIdInActiveNodeArrayAtom,
   )
   const personIdInActiveNodeArray = useAtomValue(personIdInActiveNodeArrayAtom)
-  const sammlungFilter = useAtomValue(filterSammlungAtom)
 
-  const [dataState, setDataState] = useState<{
-    sammlungs: import('../../../dbModel.ts').Sammlung[]
-    totalCount: number
-  }>({ sammlungs: [], totalCount: 0 })
-  useEffect(() => {
-    const hierarchyQuery = []
-    if (artIdInActiveNodeArray) {
-      hierarchyQuery.push(Q.experimentalJoinTables(['art']))
-      hierarchyQuery.push(Q.on('art', 'id', artIdInActiveNodeArray))
-    }
-    if (herkunftIdInActiveNodeArray) {
-      hierarchyQuery.push(Q.experimentalJoinTables(['herkunft']))
-      hierarchyQuery.push(Q.on('herkunft', 'id', herkunftIdInActiveNodeArray))
-    }
-    if (personIdInActiveNodeArray) {
-      hierarchyQuery.push(Q.experimentalJoinTables(['person']))
-      hierarchyQuery.push(Q.on('person', 'id', personIdInActiveNodeArray))
-    }
-    const collection =
-      db?.get<import('../../../dbModel.ts').Sammlung>('sammlung')
-    if (!collection) return
-    const sammlungDelQuery = triStateDeletedQuery(sammlungFilter._deleted)
-    const countObservable = collection
-      .query(sammlungDelQuery, ...hierarchyQuery)
-      .observeCount()
-    const dataObservable = collection
-      .query(...tableFilter({ table: 'sammlung' }), ...hierarchyQuery)
-      .observeWithColumns(['nr', 'datum', 'geplant'])
-
-    // so need to hackly use merge
-    const combinedObservables = combineLatest([countObservable, dataObservable])
-    const subscription = (
-      combinedObservables as unknown as import('rxjs').Observable<
-        [number, import('../../../dbModel.ts').Sammlung[]]
-      >
-    ).subscribe(async ([totalCount, sammlungs]) => {
-      const sammlungsSorted = await sammlungsSortedFromSammlungs(sammlungs)
-      setDataState({
-        sammlungs: sammlungsSorted,
-        totalCount,
-      })
-    })
-
-    return () => subscription?.unsubscribe?.()
-  }, [
-    db,
-    // need to rerender if any of the values of sammlungFilter changes
-    sammlungFilter,
-    artIdInActiveNodeArray,
-    herkunftIdInActiveNodeArray,
-    personIdInActiveNodeArray,
-  ])
-
-  const { sammlungs, totalCount } = dataState
-  const filteredCount = sammlungs.length
+  const {
+    rows: sammlungs,
+    totalCount,
+    filteredCount,
+  } = useEntityList<import('../../../dbModel.ts').Sammlung>({
+    table: 'sammlung',
+    observeColumns: ['nr', 'datum', 'geplant'],
+    sort: sammlungsSortedFromSammlungs,
+    buildClauses: () => {
+      // only rows of the art/herkunft/person in the url, if any
+      const hierarchyQuery = []
+      if (artIdInActiveNodeArray) {
+        hierarchyQuery.push(Q.experimentalJoinTables(['art']))
+        hierarchyQuery.push(Q.on('art', 'id', artIdInActiveNodeArray))
+      }
+      if (herkunftIdInActiveNodeArray) {
+        hierarchyQuery.push(Q.experimentalJoinTables(['herkunft']))
+        hierarchyQuery.push(Q.on('herkunft', 'id', herkunftIdInActiveNodeArray))
+      }
+      if (personIdInActiveNodeArray) {
+        hierarchyQuery.push(Q.experimentalJoinTables(['person']))
+        hierarchyQuery.push(Q.on('person', 'id', personIdInActiveNodeArray))
+      }
+      return hierarchyQuery
+    },
+    clauseDeps: [
+      artIdInActiveNodeArray,
+      herkunftIdInActiveNodeArray,
+      personIdInActiveNodeArray,
+    ],
+  })
   return (
     <ErrorBoundary>
       <div
