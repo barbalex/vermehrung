@@ -70,23 +70,75 @@ describe('observeQueuedQueries', () => {
 
   const tickle = () => store.set(retryTickAtom, Date.now())
 
-  it('executes the oldest query first and removes it on success', async () => {
+  it('batches consecutive same-table queries into one bulk upsert', async () => {
+    // queue while offline so the drain sees both queries at once
+    store.set(shortTermOnlineAtom, false)
     addQueuedQuery(buildQuery({ id: 'a', time: 100 }))
     addQueuedQuery(buildQuery({ id: 'b', time: 50 }))
+    store.set(shortTermOnlineAtom, true)
 
     await vi.waitFor(() => {
       expect(postMock).toHaveBeenCalled()
     })
+    expect(postMock).toHaveBeenCalledTimes(1)
     expect(postMock).toHaveBeenCalledWith(
       '/art_rev',
-      { art_id: '1', _rev: '1-abc' },
+      [
+        { art_id: '1', _rev: '1-abc' },
+        { art_id: '1', _rev: '1-abc' },
+      ],
       'resolution=merge-duplicates,return=minimal',
     )
     await vi.waitFor(() => {
       expect(store.get(queuedQueriesAtom)).toHaveLength(0)
     })
-    expect(store.get(queuedQueriesAtom)).toEqual([])
-    expect(postMock).toHaveBeenCalledTimes(2)
+    expect(postMock).toHaveBeenCalledTimes(1)
+  })
+
+  it('does not batch across tables', async () => {
+    store.set(shortTermOnlineAtom, false)
+    addQueuedQuery(buildQuery({ id: 'a', time: 100 }))
+    addQueuedQuery(
+      buildQuery({
+        id: 'b',
+        time: 50,
+        name: 'mutateInsert_person_rev_one',
+        revertTable: 'person',
+      }),
+    )
+    store.set(shortTermOnlineAtom, true)
+
+    await vi.waitFor(() => {
+      expect(store.get(queuedQueriesAtom)).toHaveLength(0)
+    })
+    const paths = postMock.mock.calls.map((call) => call[0])
+    expect(paths).toEqual(['/person_rev', '/art_rev'])
+  })
+
+  it('falls back to single queries when the batch fails', async () => {
+    const serverError = new Error('Unexpected server error')
+    ;(serverError as import('../../utils/apiTypes.ts').ApiError).status = 500
+    let calls = 0
+    nextResponse = () => {
+      calls++
+      if (calls === 1) throw serverError
+      return
+    }
+    store.set(shortTermOnlineAtom, false)
+    addQueuedQuery(buildQuery({ id: 'a', time: 100 }))
+    addQueuedQuery(buildQuery({ id: 'b', time: 50 }))
+    store.set(shortTermOnlineAtom, true)
+
+    await vi.waitFor(() => {
+      expect(store.get(queuedQueriesAtom)).toHaveLength(0)
+    })
+    // the failed batch is retried query by query: both succeed singly
+    expect(calls).toBe(3)
+    // every send posts an array body - the batch carries both objects,
+    // the retries one each
+    expect(postMock.mock.calls[0][1]).toHaveLength(2)
+    expect(postMock.mock.calls[1][1]).toHaveLength(1)
+    expect(postMock.mock.calls[2][1]).toHaveLength(1)
   })
 
   it('does nothing while shortTermOnline is false', async () => {

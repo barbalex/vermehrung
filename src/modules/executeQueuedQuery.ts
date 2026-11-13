@@ -18,24 +18,51 @@ export interface QueuedQueryResult {
 
 export const executeQueuedQuery = async (
   query: QueuedQuery,
+): Promise<QueuedQueryResult> => executeQueuedQueries([query])
+
+// the rev table a queued query writes to, e.g. 'art' for
+// mutateInsert_art_rev_one - null when the name does not match
+export const revTableOf = (query: QueuedQuery): string | null =>
+  (query as unknown as { name?: string }).name?.match?.(
+    /^mutateInsert_(.+)_rev_one$/,
+  )?.[1] ?? null
+
+// one bulk upsert for a group of queued revisions of the same table:
+// draining a long offline queue replays one request per table instead
+// of one per edit. PostgREST inserts the array in order, so
+// parent-to-child revision chains stay intact.
+export const executeQueuedQueries = async (
+  queries: QueuedQuery[],
 ): Promise<QueuedQueryResult> => {
-  const { name, variables } = query as unknown as {
-    name: string
-    variables: string
+  const objects: unknown[] = []
+  let path: string | null = null
+  for (const query of queries) {
+    const { variables } = query as unknown as {
+      name: string
+      variables: string
+    }
+    const table = revTableOf(query)
+    if (!table) {
+      throw new Error(
+        'keine Mutation gefunden für: ' +
+          (query as unknown as { name?: string }).name,
+      )
+    }
+    const thisPath = `/${table}_rev`
+    if (path && thisPath !== path) {
+      throw new Error('a batch must only contain queries of one table')
+    }
+    path = thisPath
+    const { object } = JSON.parse(variables as string)
+    objects.push(object)
   }
-  const match = name?.match?.(/^mutateInsert_(.+)_rev_one$/)
-  if (!match) {
-    throw new Error('keine Mutation gefunden für: ' + name)
+  if (!path) {
+    throw new Error('keine Queries zum Ausführen übergeben')
   }
-  const { object } = JSON.parse(variables as string)
   try {
     await store
       .get(apiClientAtom)
-      ?.post(
-        `/${match[1]}_rev`,
-        object,
-        'resolution=merge-duplicates,return=minimal',
-      )
+      ?.post(path, objects, 'resolution=merge-duplicates,return=minimal')
     return {}
   } catch (error) {
     const apiError = error as ApiError

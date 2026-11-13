@@ -105,7 +105,8 @@ describe('persisted atoms', () => {
     expect(postMock).toHaveBeenCalledTimes(1)
     expect(postMock).toHaveBeenCalledWith(
       '/art_rev',
-      { art_id: '1' },
+      // every send posts an array body (bulk upsert contract)
+      [{ art_id: '1' }],
       'resolution=merge-duplicates,return=minimal',
     )
     unobserve()

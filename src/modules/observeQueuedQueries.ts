@@ -12,10 +12,11 @@ import {
   updateModelValues,
   deferQueuedQueryById,
   removeQueuedQueryById,
+  removeQueuedQueryByIds,
   addNotification,
 } from '../store/index.ts'
 import { getAuthToken } from '../utils/getAuthToken.ts'
-import { executeQueuedQuery } from './executeQueuedQuery.ts'
+import { executeQueuedQueries, revTableOf } from './executeQueuedQuery.ts'
 import { requestSyncSoon } from '../utils/syncPoller.ts'
 import type { TableName } from '../store/index.ts'
 
@@ -23,6 +24,10 @@ import type { TableName } from '../store/index.ts'
 // Without this, rapid queue changes cause the same oldest query
 // to be sent multiple times before it is removed.
 let isProcessing = false
+
+// one bulk upsert per request keeps server round trips (and rev
+// trigger work) bounded while replaying long offline queues
+const MAX_BATCH_SIZE = 100
 
 const drainQueue = async (get: Parameters<Effect>[0]): Promise<void> => {
   if (isProcessing) return
@@ -34,10 +39,45 @@ const drainQueue = async (get: Parameters<Effect>[0]): Promise<void> => {
 
   if (!get(shortTermOnlineAtom)) return
 
+  const queries = store.get(queuedQueriesSortedAtom)
+  const first = queries[0]
+  if (!first) return
+
+  // batch consecutive queries of the same table into one bulk upsert;
+  // on any batch error fall through to the single-query drain so the
+  // error is classified and handled per query (revert, defer, notify)
+  const table = revTableOf(first)
+  if (table && queries.length > 1) {
+    const group = []
+    for (const query of queries) {
+      if (revTableOf(query) !== table || group.length >= MAX_BATCH_SIZE) {
+        break
+      }
+      group.push(query)
+    }
+    if (group.length > 1) {
+      isProcessing = true
+      let batchResponse
+      try {
+        batchResponse = await executeQueuedQueries(group)
+      } catch (error) {
+        console.error('observeQueuedQueries, error executing batch:', error)
+        isProcessing = false
+        return
+      }
+      // Release the lock BEFORE any queue mutation so the observer
+      // picks up the next query immediately
+      isProcessing = false
+      if (!batchResponse.error) {
+        removeQueuedQueryByIds(group.map((query) => query.id))
+        requestSyncSoon()
+        return
+      }
+    }
+  }
+
   // execute oldest operation first
-  // read via store.get so queue contents are not tracked
-  const query = store.get(queuedQueriesSortedAtom)[0]
-  if (!query) return
+  const query = first
 
   const { revertTable, revertField, revertId, revertValue, revertValues } =
     query as unknown as {
@@ -51,7 +91,7 @@ const drainQueue = async (get: Parameters<Effect>[0]): Promise<void> => {
   isProcessing = true
   let response
   try {
-    response = await executeQueuedQuery(query)
+    response = await executeQueuedQueries([query])
   } catch (error) {
     console.error('observeQueuedQueries, error executing query:', error)
     isProcessing = false

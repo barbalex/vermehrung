@@ -533,6 +533,15 @@ export const removeQueuedQueryById = (id: string) => {
   store.set(queueSizeAtom, queue.length)
 }
 
+// atomic bulk removal: removing batch members one by one re-triggers
+// the queue observer mid-loop, draining the remaining members singly
+export const removeQueuedQueryByIds = (ids: string[]) => {
+  const idSet = new Set(ids)
+  const queue = store.get(queuedQueriesAtom).filter((q) => !idSet.has(q.id))
+  store.set(queuedQueriesAtom, queue)
+  store.set(queueSizeAtom, queue.length)
+}
+
 export const deferQueuedQueryById = (id: string) => {
   store.set(
     queuedQueriesAtom,
