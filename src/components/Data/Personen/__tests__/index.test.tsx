@@ -19,7 +19,11 @@ vi.mock('react-window', () => ({
   }) => (
     <div data-testid="list">
       {Array.from({ length: rowCount }, (_, index) => (
-        <RowComponent key={index} index={index} {...rowProps} />
+        <RowComponent
+          key={index}
+          index={index}
+          {...rowProps}
+        />
       ))}
     </div>
   ),
@@ -60,7 +64,11 @@ const buildDb = ({
         return {
           observeCount: () => of(persons.length),
           observeWithColumns: () =>
-            of(table === 'person' ? persons : role ? [role] : []),
+            of(
+              table === 'person' ? persons
+              : role ? [role]
+              : [],
+            ),
         }
       },
     }),
