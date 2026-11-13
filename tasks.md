@@ -54,6 +54,4 @@ Tree keyboard navigation as in ae3
 
 ---
 
-qk forms (at least Art): while initially loading 'juhui' flashes. should only appear when loading is finished and no qk found
-
 ---
