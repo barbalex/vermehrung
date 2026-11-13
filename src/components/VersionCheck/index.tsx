@@ -193,9 +193,7 @@ export const VersionCheck = () => {
         className={styles.banner}
         role="status"
       >
-        <div className={styles.text}>
-          {`App wird aktualisiert …`}
-        </div>
+        <div className={styles.text}>{`App wird aktualisiert …`}</div>
         <LinearProgress
           className={styles.progress}
           color="inherit"
