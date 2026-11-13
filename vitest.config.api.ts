@@ -18,6 +18,9 @@ export default defineConfig({
     babel({
       presets: [],
       plugins: [
+        // must run before the class-features plugins: dbModel.ts uses
+        // `declare` fields
+        ['@babel/plugin-transform-typescript', { allowDeclareFields: true }],
         ['@babel/plugin-proposal-decorators', { version: 'legacy' }],
         ['@babel/plugin-proposal-class-properties', { loose: true }],
       ],
