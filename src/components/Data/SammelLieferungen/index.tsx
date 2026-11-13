@@ -47,7 +47,7 @@ export const SammelLieferungen = ({ filter: showFilter = false }) => {
           table: 'sammel_lieferung',
         }),
       )
-      .observeWithColumns(['gemeinde', 'lokalname', 'nr'])
+      .observeWithColumns(['datum', 'anzahl_pflanzen'])
     const combinedObservables = combineLatest([countObservable, dataObservable])
     const subscription = combinedObservables.subscribe(
       ([totalCount, sammelLieferungs]) => {

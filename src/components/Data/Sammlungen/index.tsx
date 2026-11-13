@@ -67,7 +67,7 @@ export const Sammlungen = ({ filter: showFilter = false }) => {
       .observeCount()
     const dataObservable = collection
       .query(...tableFilter({ table: 'sammlung' }), ...hierarchyQuery)
-      .observeWithColumns(['gemeinde', 'lokalname', 'nr'])
+      .observeWithColumns(['nr', 'datum', 'geplant'])
 
     // so need to hackly use merge
     const combinedObservables = combineLatest([countObservable, dataObservable])

@@ -90,7 +90,12 @@ export const Lieferungen = ({ filter: showFilter = false }) => {
         }),
         ...hierarchyQuery,
       )
-      .observeWithColumns(['gemeinde', 'lokalname', 'nr'])
+      .observeWithColumns([
+        'datum',
+        'anzahl_pflanzen',
+        'anzahl_auspflanzbereit',
+        'geplant',
+      ])
     const combinedObservables = combineLatest([countObservable, dataObservable])
     const subscription = combinedObservables.subscribe(
       ([totalCount, lieferungs]) => {
