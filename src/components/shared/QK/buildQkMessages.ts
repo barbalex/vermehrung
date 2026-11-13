@@ -15,17 +15,25 @@ export const buildQkMessages = async <T extends { id: string }>({
   failsCheck,
   buildUrl,
   buildText,
+  buildMessage,
 }: {
   rows: T[]
   failsCheck: (row: T) => boolean
-  buildUrl: (row: T) => string[]
-  buildText: (row: T) => string | Promise<string>
+  // either buildUrl + buildText, or one combined buildMessage (for
+  // messages whose url and text share an async resolution, e.g. a
+  // zaehlung's kultur)
+  buildUrl?: (row: T) => string[]
+  buildText?: (row: T) => string | Promise<string>
+  buildMessage?: (row: T) => QkMessage | Promise<QkMessage>
 }): Promise<QkMessage[]> =>
   Promise.all(
-    rows.filter(failsCheck).map(async (row) => ({
-      url: buildUrl(row),
-      text: await buildText(row),
-    })),
+    rows.filter(failsCheck).map(async (row) => {
+      if (buildMessage) return await buildMessage(row)
+      return {
+        url: buildUrl?.(row) ?? [],
+        text: await buildText?.(row),
+      }
+    }),
   )
 
 // most messages show the row's label - resolve it once, tolerate errors
