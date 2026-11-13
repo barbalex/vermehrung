@@ -15,7 +15,7 @@ services:
       # host port 5434 (not 5432): this stack must coexist with other local
       # projects claiming 5432/5433 (apf2, ae3). Update kanel.config.mjs
       # when changing this.
-      - '5434:5432'
+      - '127.0.0.1:5434:5432'
     volumes:
       - db_data:/var/lib/postgresql
       - sik_data:/sik_data
