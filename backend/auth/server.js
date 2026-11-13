@@ -15,6 +15,11 @@ const serviceAccount = require('./config.js')
 const server = new Hapi.Server({
   host: '0.0.0.0',
   port: 7000,
+  // compression off: the SSE /events stream is never-ending and tiny -
+  // a gzip writer buffers it indefinitely, so nothing ever reaches the
+  // client through proxies that send Accept-Encoding (Go/caddy always
+  // does). The other responses are small json - nothing to gain.
+  compression: false,
   // cors must be handled here: the browser sends a preflight OPTIONS for
   // the /token POST (Authorization header), which hapi only answers when
   // cors is configured. Caddy could only patch response headers - enough
