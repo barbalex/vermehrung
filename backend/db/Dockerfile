@@ -21,9 +21,10 @@ RUN apt-get install -y -qq nano
 RUN apt-get install -y -qq rclone
 RUN apt-get install -y -qq dos2unix
 
-# add the backup script
+# add the backup + restore-test scripts
 ADD backup.sh /backup.sh
+ADD test-restore.sh /test-restore.sh
 # Change line ending format to LF
-RUN dos2unix /backup.sh
-RUN chmod +x /backup.sh
-RUN chmod 0744 /backup.sh
+RUN dos2unix /backup.sh /test-restore.sh
+RUN chmod +x /backup.sh /test-restore.sh
+RUN chmod 0744 /backup.sh /test-restore.sh
