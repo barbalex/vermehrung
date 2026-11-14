@@ -10,6 +10,7 @@
     "build_ts": "tsc && vite build",
     "deploy": "node scripts/deploy.mjs",
     "deploy_only": "firebase deploy --only hosting",
+    "fetchBackup": "node scripts/fetchBackup.mjs",
     "deploy_preview": "npm run format:check && npm run lint && npm run typecheck && npm test && npm run build && firebase hosting:channel:deploy preview",
     "dev": "vite",
     "firebase-login": "firebase login",
