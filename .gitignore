@@ -65,6 +65,10 @@ typings/
 
 # dotenv environment variables file
 .env*
+!.env.example
+
+# macOS finder metadata
+.DS_Store
 
 .cache/
 #public
@@ -93,3 +97,6 @@ git_stats.txt
 
 # playwright test output
 test-results/
+
+# agent session dirs
+.zcode

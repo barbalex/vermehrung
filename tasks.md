@@ -26,12 +26,12 @@ Found during the 2026-11-13 codebase survey. Work top to bottom.
 - [ ] `processSubscriptionResult`: delete the duplicated identical `query()` call; swap `find`/`includes` O(n²) passes for a `Map`.
 - [ ] Persist `lastUpdatedAtom` once per poll instead of 27 IndexedDB writes every 5 seconds.
 - [ ] Replace proj4 (139KB) with closed-form LV03→WGS84 math (~20 lines).
-- [ ] Delete dead code: `Tree/nodes/sammelLieferung/` modules, `DataProviderHOC.tsx`, unused shared components (`Checkbox2StatesNonUpdatable`, `StringToCopyOnlyButton`, `InfoWithPopover`), orphan CSS modules, `.DS_Store` files, commented-out console.logs.
-- [ ] Untrack `dist/index.html` / `dist/manifest.webmanifest` so deploys stop committing build artifacts.
+- [ ] Delete dead code: `Tree/nodes/sammelLieferung/` modules, `DataProviderHOC.tsx`, unused shared components (`Checkbox2StatesNonUpdatable`, `StringToCopyOnlyButton`, `InfoWithPopover`), orphan CSS modules, commented-out console.logs. (.DS_Store files + root `schema.graphql` removed 14.11.2026.)
+- [x] Untrack `dist/index.html` / `dist/manifest.webmanifest` so deploys stop committing build artifacts — DONE 14.11.2026, together with `test-results/.last-run.json` and `.DS_Store` (`.gitignore`d now); `scripts/deploy.mjs` commits only `package.json` + `.firebase` upload caches.
 - [ ] Hoist `tableIsFilteredAtom(table)` to a module-level map (atom factory called during render).
 - [ ] Fix `isNodeOpen`'s per-row linear `isEqual` scan (use a `Set` of joined-url keys); drop redundant `openNodes.length` dep in `Tree/index.tsx:233`.
 - [ ] Collapse 13 value-identical `initial`/`empty` exports in `src/store/Filter/`; merge 16 near-identical `<entity>IdInUrl.ts` helpers.
-- [ ] `scripts/deployBackend.mjs` — one-command backend deploy (scp changed files to `root@139.162.172.14:/root/vermehrung`, remote `docker compose build auth && up -d`) so the copied server folder can't drift from the repo again (it had lagged: Hasura-era `server.js`, missing `../src/sql` mounts).
+- [x] `scripts/deployBackend.mjs` — one-command backend deploy (scp changed files to `root@139.162.172.14:/root/vermehrung`, remote `docker compose build auth && up -d`) so the copied server folder can't drift from the repo again (it had lagged: Hasura-era `server.js`, missing `../src/sql` mounts). DONE 14.11.2026: dry-run default with per-file sha256 drift check, `--apply` tars a backup to `/root/vermehrung-backups/` first and prints the rollback command; the repo compose deploys verbatim (its `src/sql` mounts are fed by copying the two files to `/root/src/sql`).
 - [ ] Fix the flaky `e2e/breadcrumbs.spec.ts` pixel assertion (`<= 12`px layout measurement flakes under load, fails intermittently on HEAD).
 - [ ] Replace the `fdw_user`/'secret' literal password in `backend/db/init/01_db_users_roles.sql`; remove stale Hasura vars from `backend/.env` + dead `03.sql` jwt_secret line.
 - [ ] Set a removal date for `migrateLokiToSqlite.ts` once the user base has crossed the migration.
@@ -42,16 +42,6 @@ get Sammel-Lieferung/lieferschein to work again?
 
 ---
 
-do we need a 'how to build/update production' documentation to prevent agents from having to find out themselves?
-
----
-
-do we need a 'how to deploy' documentation to prevent agents from having to find out themselves?
-
----
-
 Tree keyboard navigation as in ae3
-
----
 
 ---

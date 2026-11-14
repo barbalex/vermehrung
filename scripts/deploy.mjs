@@ -33,9 +33,11 @@ run('npm', ['run', 'build'])
 run('npm', ['run', 'deploy_only'])
 
 // commit the files the deploy changed, but only those — anything else
-// staged or modified stays untouched. dist/ and .firebase/ are gitignored,
-// so this only ever picks up the already-tracked files within them.
-const deployFiles = ['package.json', 'dist', '.firebase']
+// staged or modified stays untouched. .firebase/ is gitignored, so this
+// only ever picks up the already-tracked files within it (the hosting
+// upload caches — keeping them tracked makes deploys from fresh clones
+// skip re-uploading unchanged files).
+const deployFiles = ['package.json', '.firebase']
 const dirty = capture('git', ['status', '--porcelain', '--', ...deployFiles])
 const { version } = JSON.parse(
   readFileSync(path.join(root, 'package.json'), 'utf8'),

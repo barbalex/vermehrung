@@ -1,20 +1,34 @@
-# CLAUDE.md
+# AGENTS.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Guidance for AI coding agents (ZCode, Claude Code, Codex, Cursor, …) working in this repository. `CLAUDE.md` is a symlink to this file so every tool finds the same guidance — keep it that way when editing.
+
+`tasks.md` is the living workoff list (bugs, optimizations, scratch notes). Check it before starting work, work its items top to bottom, and update it when you finish or discover something.
 
 ## What this is
 
 `vermehrung.ch` — a German-language PWA for breeding endangered plant species for the [Aktionsplan Flora des Kantons Zürich](https://aln.zh.ch/internet/baudirektion/aln/de/naturschutz/artenfoerderung/ap_fl.html). In production since September 2020. The UI language is German (`lang="de"`); entity names in code are German (Sammlung, Kultur, Zaehlung, Lieferung, Herkunft, Garten, Person, Event, Teilkultur, Teilzaehlung, SammelLieferung).
 
+## Guardrails — read before acting
+
+- **Never deploy unless the user explicitly asked for a deploy in this session.** `npm run deploy` / `deploy_preview` / `deploy_only` publish to Firebase Hosting **and auto-commit + push to master**. `node scripts/deployBackend.mjs --apply` overwrites the production backend server. The dry run (`deployBackend.mjs` without `--apply`) is read-only and always safe.
+- **Never ssh to production** (`root@139.162.172.14`) on your own initiative — production is only ever touched through an explicitly requested backend deploy.
+- **Never `docker compose down -v`** or otherwise delete the `db_data` volume: it holds the locally restored production-sized dataset (5-minute re-restore, local test edits gone). Plain `down`/`stop` is fine.
+- Secrets are local-only and must stay that way: `backend/.env`, `backend-dev/.env`, `.env.development`, `.env.production` are gitignored. Tests read them from disk — that's fine; never commit, echo or paste their values.
+- Don't commit build artifacts or test output (`dist/`, `test-results/` are gitignored).
+
 ## Commands
+
+Prerequisites: Node 24 (`.nvmrc`; `package.json` engines), `npm ci` to install, `npx playwright install chromium` for the e2e suite, Docker for the local backend, and the frontend env vars (`cp .env.example .env.development`).
 
 ```bash
 npm run dev              # Vite dev server on http://localhost:5175 (PWA, SW auto-update)
 npm run build            # vite build  (NOTE: skips tsc — does NOT type-check)
 npm run build_ts         # tsc && vite build
 npm run serve            # vite preview (serve the production build locally)
-npm run deploy           # lint + typecheck + test + bump + build + firebase deploy --only hosting, then commit + push of the deploy files (package.json, dist, .firebase)  (production; optional bump type arg: npm run deploy [patch|minor|major], default patch)
+npm run deploy           # lint + typecheck + test + bump + build + firebase deploy --only hosting, then commit + push of the deploy files (package.json, .firebase)  (production; optional bump type arg: npm run deploy [patch|minor|major], default patch)
 npm run deploy_preview   # lint + typecheck + test + build + firebase hosting:channel:deploy preview
+npm run backend          # local backend stack (db + api + auth) via docker compose, waits for health checks
+npm run verify           # format:check + lint + typecheck + unit tests — the fast pre-flight loop (what CI runs, minus e2e)
 npm test                 # vitest unit tests
 npm run test:api         # api equivalence tests — needs the local backend + docker (NOT in CI)
 npm run test:e2e         # Playwright e2e: boot smoke + local-first scenario (no backend needed)
@@ -23,12 +37,12 @@ npm run typecheck        # tsc --noEmit (strict, noUnusedLocals/noUnusedParamete
 ```
 
 - `npm test` runs the vitest suite under `src/**/__tests__/` (store persistence, queue observer, revision builders).
-- `npm run test:api` runs `api-tests/` against the **local backend**: it tests the sync rpc (row visibility per role, delta cursors, GeoJSON geodata, gaertner column exclusions) and the upsert write path. Start the backend with `docker compose -f backend-dev/docker-compose.yaml up` first. (The PostgREST-vs-Hasura equivalence oracle was removed with Hasura — see git history, `permissions.equivalence.test.ts`.)
+- `npm run test:api` runs `api-tests/` against the **local backend**: it tests the sync rpc (row visibility per role, delta cursors, GeoJSON geodata, gaertner column exclusions) and the upsert write path. Start the backend with `npm run backend` first. (The PostgREST-vs-Hasura equivalence oracle was removed with Hasura — see git history, `permissions.equivalence.test.ts`.)
 - `npm run test:e2e` runs `e2e/`: boot smoke tests plus `local-first.spec.ts`, a full browser scenario (login → initial sync → offline boot from cache → re-login) that pins the seams `test:api` cannot reach. It mocks firebase identity toolkit, the auth service `/token` and PostgREST via `page.route` — no backend and no real credentials are used. Offline is emulated by spoofing `navigator.onLine` and aborting backend routes (like production, where the service worker still serves assets).
 - The whole codebase is TypeScript (`strict`, `noUnusedLocals`/`noUnusedParameters`); `npm run typecheck` and `npm run lint` are both at zero. `npm run build` deliberately skips `tsc`, but the deploy scripts gate on lint + typecheck + test before building.
 - Dependencies are pinned to exact versions (`.npmrc`: `save-exact=true`, `force=true`, `allow-git=none`). Bump with `ncu -c 5 -i` (the `-c 5` cooldown avoids brand-new releases).
 - **Revision aggregation**: field edits update the local row immediately (labels stay live) but no longer create a revision per field change. One revision per row and editing session is queued by `src/modules/revAggregation.ts` when it ends: ~5s after the last change, on navigation, on tab-hide/close, plus a boot heal that flushes rows left dirty by a crash (registry in localStorage, `vermehrung:unflushed-revs`) before the sync starts. The sync never overwrites rows with unflushed edits (`isUnflushedRev` guard in `processSubscriptionResult`). The rev-table field lists live in `src/modules/revTableFields.ts` - keep them in sync with the schema.
-- Deploys are manual via `npm run deploy` / `npm run deploy_preview` (the former GitHub Actions auto-deploy was removed — see git history, `743acdbce`).
+- Deploys are manual via `npm run deploy` / `npm run deploy_preview` for the frontend (the former GitHub Actions auto-deploy was removed — see git history, `743acdbce`) and `scripts/deployBackend.mjs` for the backend (see below).
 
 ## Architecture
 
@@ -44,7 +58,13 @@ This is a **local-first** app. Three concerns are split across the repo:
 
 ### Deploying the backend
 
-The production stack runs at `ssh root@139.162.172.14`, folder `/root/vermehrung` — a **copied** `backend/` folder, not a git clone. It differs from the repo's compose file: the `../src/sql/*` mounts are removed (there is no `/root/src` on the server) and it can lag behind the repo. Deploy = scp the changed files (compose / `auth/server.js` / `db/`), then `cd /root/vermehrung && docker compose build auth && docker compose up -d`. The secrets live in `/root/vermehrung/.env` (key names: `DATABASE_URL`, `PGRST_JWT_SECRET`, `FIREBASE_*`, …). db/auth publish on `127.0.0.1` only; Caddy reaches them over the compose network.
+The production stack runs at `ssh root@139.162.172.14`, folder `/root/vermehrung` — a **copied** `backend/` folder, not a git clone (it had lagged behind the repo before, which is what `scripts/deployBackend.mjs` prevents).
+
+- `node scripts/deployBackend.mjs` — **dry run, read-only, safe to run anytime**: per-file drift check (local sha256 vs the server) plus the plan. Use it to see exactly what the server runs.
+- `node scripts/deployBackend.mjs --apply` — only on explicit request (see guardrails): tars the current server folder to `/root/vermehrung-backups/<stamp>.tgz`, scp's the drifted files (backend compose + `auth/` + `db/` + `caddy/`, plus the two `src/sql` files the compose mounts, copied to `/root/src/sql` so the repo compose deploys verbatim), then remotely runs `docker compose build auth db && docker compose up -d` and prints the rollback command.
+- NOT deployed: `backend/.env` and `backend/dropbox_uploader.conf` (server-local secrets). The db data lives in docker volumes — file deploys never touch it, and rebuilding the db image does not re-run the init scripts (they only run on a fresh volume).
+
+Rollback: frontend — `firebase hosting:rollback` (re-releases the previous release; `firebase hosting:releases` lists them). Backend — untar the backup the deploy script printed over `/root/vermehrung`, rebuild, `up -d`. The secrets live in `/root/vermehrung/.env` (key names: `DATABASE_URL`, `PGRST_JWT_SECRET`, `FIREBASE_*`, …). db/auth publish on `127.0.0.1` only; Caddy reaches them over the compose network.
 
 ### 2. Frontend (`src/` — this Vite app, hosted on Firebase Hosting)
 
@@ -70,7 +90,14 @@ Every editable row is versioned. Columns on each model: `_rev` (`"<depth>-<md5>"
 
 ## Local backend & debugging
 
-When the app runs on `localhost`, it talks to a **local PostgREST at `http://localhost:8090`** and the local auth service at `http://localhost:7010`, decided in [src/utils/constants.ts](src/utils/constants.ts) (`hostname === 'localhost'` → dev ports, else `api.vermehrung.ch` / `auth.vermehrung.ch`). The dev backend's host ports are a dedicated block — db **5434**, api **8090**, auth **7010** (`backend-dev/docker-compose.yaml`) — chosen so the stack can run next to other local projects claiming 3000/3100/5000/5432/5433 (apf2, ae3). When changing them, update `src/utils/constants.ts`, the mocks in `e2e/*.spec.ts`, `api-tests/helpers.ts` and the port rewrite in `kanel.config.mjs`. The backend secrets live in `backend-dev/.env` / `backend/.env` (note: mixed line endings — strip `\r` when parsing them in scripts). Bring the backend up with `docker compose -f backend-dev/docker-compose.yaml up`. A fresh `db_data` volume initializes from `vermehrung.backup`, then `backend-dev/db/init/04_api_access.sh` applies `src/sql/createApiAccess.sql` + `createSyncFunction.sql` (mounted at `/api_sql`) — a pg_dump contains no cluster-level roles, so without that step PostgREST crash-loops with `password authentication failed for user "authenticator"`. `backend/` (production) has the same hook for building a new server from a backup.
+When the app runs on `localhost`, it talks to a **local PostgREST at `http://localhost:8090`** and the local auth service at `http://localhost:7010`, decided in [src/utils/constants.ts](src/utils/constants.ts) (`hostname === 'localhost'` → dev ports, else `api.vermehrung.ch` / `auth.vermehrung.ch`). The dev backend's host ports are a dedicated block — db **5434**, api **8090**, auth **7010** (`backend-dev/docker-compose.yaml`) — chosen so the stack can run next to other local projects claiming 3000/3100/5000/5432/5433 (apf2, ae3). When changing them, update `src/utils/constants.ts`, the mocks in `e2e/*.spec.ts`, `api-tests/helpers.ts` and the port rewrite in `kanel.config.mjs`. The backend secrets live in `backend-dev/.env` / `backend/.env` (note: mixed line endings — strip `\r` when parsing them in scripts). Bring the backend up with `npm run backend` (`docker compose -f backend-dev/docker-compose.yaml up -d --wait`). A fresh `db_data` volume initializes from `vermehrung.backup`, then `backend-dev/db/init/04_api_access.sh` applies `src/sql/createApiAccess.sql` + `createSyncFunction.sql` (mounted at `/api_sql`) — a pg_dump contains no cluster-level roles, so without that step PostgREST crash-loops with `password authentication failed for user "authenticator"`. `backend/` (production) has the same hook for building a new server from a backup. `scripts/fetchBackup.mjs` fetches a fresh production backup into `backend-dev/db/vermehrung.backup`.
+
+## Testing roles
+
+Row visibility is role-scoped: `gaertner` (own gardens), `artverantwortlich` (assigned species), `manager` (everything). The permission definitions live in `src/hasuraMetadata/metadata.json` and are generated into `src/sql/createApiAccess.sql`. Two levels to test them at:
+
+- **api level**: `npm run test:api` (needs the local backend) mints a JWT per role and asserts the sync rpc returns exactly the rows each role may see.
+- **UI level**: `node scripts/dev-token.mjs <role>` (needs `npm run backend` + `npm run dev`) picks a person of that role from the dev db — one with an `account_id` and preferably related data, so the permission filters bite — mints their api JWT and prints a `http://localhost:5175/Vermehrung/?devToken=<jwt>` url. Opening it boots the app straight into that role: DEV builds only, no Firebase sign-in, token valid 1h (open a fresh url after expiry). The mechanism is the `?devToken=` branch in `src/utils/recreatePersistedStore.ts`; `e2e/devtoken.spec.ts` pins it (self-skips without the local backend). Playwright/browser automation can simply navigate to that url.
 
 ## Navigation & code layout
 
