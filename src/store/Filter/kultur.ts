@@ -11,18 +11,7 @@ export const initial = {
   _deleted: false,
 }
 
-export const empty = {
-  id: null,
-  art_id: null,
-  herkunft_id: null,
-  garten_id: null,
-  zwischenlager: null,
-  erhaltungskultur: null,
-  von_anzahl_individuen: null,
-  aktiv: true,
-  bemerkungen: null,
-  _deleted: false,
-}
+export const empty = initial
 
 export const simpleTypes = {
   id: 'uuid',

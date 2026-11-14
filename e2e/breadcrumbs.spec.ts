@@ -211,18 +211,26 @@ test('breadcrumbs strip replaces the form header nav buttons', async ({
     await expect(trail.locator('a')).toHaveCount(0, { timeout: 60_000 })
     await expect(trail.getByText('Vermehrung')).toBeVisible()
     // a short trail hugs the strip's right edge
-    const rightAligned = await page.evaluate(() => {
-      const trail = document.querySelector('nav[aria-label="Pfad"]')
-      const strip = trail?.parentElement
-      if (!(trail instanceof HTMLElement) || !(strip instanceof HTMLElement)) {
-        return null
-      }
-      return (
-        strip.getBoundingClientRect().right -
-        trail.getBoundingClientRect().right
-      )
-    })
-    expect(rightAligned).toBeLessThanOrEqual(12)
+    const rightAlignedOfTrail = () =>
+      page.evaluate(() => {
+        const trail = document.querySelector('nav[aria-label="Pfad"]')
+        const strip = trail?.parentElement
+        if (
+          !(trail instanceof HTMLElement) ||
+          !(strip instanceof HTMLElement)
+        ) {
+          return null
+        }
+        return (
+          strip.getBoundingClientRect().right -
+          trail.getBoundingClientRect().right
+        )
+      })
+    // poll: under parallel load the first measurement can catch the
+    // trail mid-layout (this was the repo's one flaky assertion)
+    await expect
+      .poll(rightAlignedOfTrail, { timeout: 10_000 })
+      .toBeLessThanOrEqual(12)
   })
 
   await test.step('list: the folder is the last crumb', async () => {

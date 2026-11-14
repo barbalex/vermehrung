@@ -11,21 +11,21 @@ import emptyValues from './Filter/emptyValues.ts'
 import { emptyHash } from './Filter/emptyHash.ts'
 
 import { activeFormFromActiveNodeArray } from '../utils/activeFormFromActiveNodeArray.ts'
-import { artIdInUrl } from '../utils/artIdInUrl.ts'
-import { herkunftIdInUrl } from '../utils/herkunftIdInUrl.ts'
-import { gartenIdInUrl } from '../utils/gartenIdInUrl.ts'
-import { kulturIdInUrl } from '../utils/kulturIdInUrl.ts'
-import { anLieferungIdInUrl } from '../utils/anLieferungIdInUrl.ts'
-import { bedarfIdInUrl } from '../utils/bedarfIdInUrl.ts'
-import { ausLieferungIdInUrl } from '../utils/ausLieferungIdInUrl.ts'
-import { lieferungIdInUrl } from '../utils/lieferungIdInUrl.ts'
-import { teilkulturIdInUrl } from '../utils/teilkulturIdInUrl.ts'
-import { personIdInUrl } from '../utils/personIdInUrl.ts'
-import { sammelLieferungIdInUrl } from '../utils/sammelLieferungIdInUrl.ts'
-import { sammlungIdInUrl } from '../utils/sammlungIdInUrl.ts'
+import { artIdInUrl } from '../utils/idsInUrl.ts'
+import { herkunftIdInUrl } from '../utils/idsInUrl.ts'
+import { gartenIdInUrl } from '../utils/idsInUrl.ts'
+import { kulturIdInUrl } from '../utils/idsInUrl.ts'
+import { anLieferungIdInUrl } from '../utils/idsInUrl.ts'
+import { bedarfIdInUrl } from '../utils/idsInUrl.ts'
+import { ausLieferungIdInUrl } from '../utils/idsInUrl.ts'
+import { lieferungIdInUrl } from '../utils/idsInUrl.ts'
+import { teilkulturIdInUrl } from '../utils/idsInUrl.ts'
+import { personIdInUrl } from '../utils/idsInUrl.ts'
+import { sammelLieferungIdInUrl } from '../utils/idsInUrl.ts'
+import { sammlungIdInUrl } from '../utils/idsInUrl.ts'
 import { kulturIdOfAnLieferungInUrl } from '../utils/kulturIdOfAnLieferungInUrl.ts'
 import { kulturIdOfAusLieferungInUrl } from '../utils/kulturIdOfAusLieferungInUrl.ts'
-import { zaehlungIdInUrl } from '../utils/zaehlungIdInUrl.ts'
+import { zaehlungIdInUrl } from '../utils/idsInUrl.ts'
 import { splitObjectNameFromActiveNodeArray } from '../utils/splitObjectNameFromActiveNodeArray.ts'
 import type { ApiClient } from '../utils/apiTypes.ts'
 
@@ -376,13 +376,21 @@ export const filterZaehlungAtom = filterTableAtoms.zaehlung
 export const filterTeilkulturAtom = filterTableAtoms.teilkultur
 export const filterTeilzaehlungAtom = filterTableAtoms.teilzaehlung
 
-export const tableIsFilteredAtom = (table: string) =>
-  atom((get) => {
-    const empty = emptyHash[table]
-    return Object.entries(get(filterTableAtoms[table])).some(
-      ([key, value]) => value !== empty[key],
-    )
-  })
+// cached, not created per call: the factory was invoked during render
+const tableIsFilteredAtoms = new Map<string, Atom<boolean>>()
+export const tableIsFilteredAtom = (table: string) => {
+  let atomInstance = tableIsFilteredAtoms.get(table)
+  if (!atomInstance) {
+    atomInstance = atom((get) => {
+      const empty = emptyHash[table]
+      return Object.entries(get(filterTableAtoms[table])).some(
+        ([key, value]) => value !== empty[key],
+      )
+    })
+    tableIsFilteredAtoms.set(table, atomInstance)
+  }
+  return atomInstance
+}
 
 export const filterFilteredAtom = atom((get) =>
   filterTableNames.some((table) => get(tableIsFilteredAtom(table))),

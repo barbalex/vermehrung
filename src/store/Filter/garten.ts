@@ -10,17 +10,7 @@ export const initial = {
   bemerkungen: null,
 }
 
-export const empty = {
-  id: null,
-  name: null,
-  person_id: null,
-  strasse: null,
-  plz: null,
-  ort: null,
-  aktiv: true,
-  _deleted: false,
-  bemerkungen: null,
-}
+export const empty = initial
 
 export const simpleTypes = {
   id: 'uuid',

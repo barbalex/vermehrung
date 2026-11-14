@@ -9,16 +9,7 @@ export const initial = {
   _deleted: false,
 }
 
-export const empty = {
-  id: null,
-  kultur_id: null,
-  person_id: null,
-  jahr: null,
-  beschreibung: null,
-  bemerkungen: null,
-  neues_material: null,
-  _deleted: false,
-}
+export const empty = initial
 
 export const simpleTypes = {
   id: 'uuid',

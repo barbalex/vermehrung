@@ -21,28 +21,7 @@ export const initial = {
   _deleted: false,
 }
 
-export const empty = {
-  id: null,
-  nr: null,
-  vorname: null,
-  name: null,
-  adresszusatz: null,
-  strasse: null,
-  plz: null,
-  ort: null,
-  telefon_privat: null,
-  telefon_geschaeft: null,
-  telefon_mobile: null,
-  email: null,
-  kein_email: null,
-  bemerkungen: null,
-  account_id: null,
-  user_role_id: null,
-  kommerziell: null,
-  info: null,
-  aktiv: true,
-  _deleted: false,
-}
+export const empty = initial
 
 export const simpleTypes = {
   id: 'uuid',

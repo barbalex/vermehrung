@@ -7,14 +7,7 @@ export const initial = {
   _deleted: false,
 }
 
-export const empty = {
-  id: null,
-  ae_id: null,
-  set: null,
-  apflora_av: null,
-  apflora_ap: null,
-  _deleted: false,
-}
+export const empty = initial
 
 export const simpleTypes = {
   id: 'uuid',
