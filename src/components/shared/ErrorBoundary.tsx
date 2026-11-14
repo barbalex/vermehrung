@@ -3,6 +3,8 @@ import Button from '@mui/material/Button'
 
 import type { ReactNode } from 'react'
 
+import { reportError } from '../../modules/errorTelemetry.ts'
+
 import styles from './ErrorBoundary.module.css'
 
 const onReload = () => window.location.reload()
@@ -68,6 +70,7 @@ export const ErrorBoundary = ({ children }: { children: ReactNode }) => {
         >
       }
       onReset={onReload}
+      onError={(error) => void reportError('boundary', error)}
     >
       {children}
     </ErrorBoundaryComponent>

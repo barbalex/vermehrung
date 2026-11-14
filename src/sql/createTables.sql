@@ -1790,3 +1790,60 @@ CREATE INDEX ON gv_rev USING btree(_deleted);
 
 CREATE INDEX ON gv_rev USING btree(_rev_at);
 
+
+-- error telemetry collector - NOT synced to clients, no rev-versioning.
+-- Canonical applied source: createErrorReport.sql (idempotent, applied by
+-- backend*/db/init/04_api_access.sh and scripts/deployBackend.mjs) -
+-- keep the two in sync.
+DROP TABLE IF EXISTS error_report CASCADE;
+
+CREATE TABLE error_report(
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  created_at timestamptz NOT NULL DEFAULT now(),
+  release text CHECK (char_length(release) <= 40),
+  kind text NOT NULL CHECK (
+    kind IN ('window.error', 'unhandledrejection', 'boundary', 'manual')
+  ),
+  message text NOT NULL CHECK (char_length(message) <= 2000),
+  stack text CHECK (char_length(stack) <= 5000),
+  url text CHECK (char_length(url) <= 2000),
+  user_agent text CHECK (char_length(user_agent) <= 1000)
+);
+
+CREATE INDEX error_report_created_at_idx ON error_report USING btree(created_at);
+
+-- force id/created_at regardless of what the client sends
+CREATE OR REPLACE FUNCTION error_report_force_defaults()
+RETURNS trigger LANGUAGE plpgsql AS $$
+BEGIN
+  NEW.id := gen_random_uuid();
+  NEW.created_at := now();
+  RETURN NEW;
+END;
+$$;
+
+DROP TRIGGER IF EXISTS error_report_force_defaults ON error_report;
+
+CREATE TRIGGER error_report_force_defaults
+  BEFORE INSERT ON error_report
+  FOR EACH ROW EXECUTE FUNCTION error_report_force_defaults();
+
+ALTER TABLE error_report ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS insert_anon ON error_report;
+
+CREATE POLICY insert_anon ON error_report
+  FOR INSERT TO anon
+  WITH CHECK (true);
+
+DROP POLICY IF EXISTS read_manager ON error_report;
+
+CREATE POLICY read_manager ON error_report
+  FOR SELECT TO manager
+  USING (true);
+
+-- anon: insert only - no read/update/delete
+GRANT INSERT ON error_report TO anon;
+GRANT SELECT ON error_report TO manager;
+
+NOTIFY pgrst, 'reload schema';

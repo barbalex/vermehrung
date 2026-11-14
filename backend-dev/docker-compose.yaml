@@ -23,6 +23,7 @@ services:
       # /docker-entrypoint-initdb.d: createApiAccess.sql needs app.password)
       - ../src/sql/createApiAccess.sql:/api_sql/createApiAccess.sql:ro
       - ../src/sql/createSyncFunction.sql:/api_sql/createSyncFunction.sql:ro
+      - ../src/sql/createErrorReport.sql:/api_sql/createErrorReport.sql:ro
     command: postgres -c max_locks_per_transaction=2000
     logging:
       options:

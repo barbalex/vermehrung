@@ -302,6 +302,11 @@ export default defineConfig({
     inconsistentCjsInterop: true,
   },
   build: {
+    // client error reports (src/modules/errorTelemetry.ts) reference
+    // deployed chunk urls in their stacks - the emitted sourcemaps allow
+    // symbolication against them (the .map files are NOT precached by the
+    // service worker: .map is not in the workbox globPatterns)
+    sourcemap: true,
     rolldownOptions: {
       output: {
         manualChunks(id) {

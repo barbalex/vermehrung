@@ -6,9 +6,11 @@
 // server) and the plan. --apply executes:
 //   1. tar the current server folder to /root/vermehrung-backups/<stamp>.tgz
 //   2. scp the drifted files (backend compose + auth/ + db/ + caddy/ and
-//      the two src/sql files the compose mounts read-only - to /root/src/sql,
+//      the src/sql files the compose mounts read-only - to /root/src/sql,
 //      matching the ../src/sql mount paths verbatim)
 //   3. remotely: docker compose build auth db && docker compose up -d
+//   4. remotely: apply createErrorReport.sql to the running db (init
+//      scripts never re-run on an existing volume; the file is idempotent)
 // and prints the rollback command. NOT deployed: backend/.env and
 // backend/dropbox_uploader.conf (server-local secrets) - the db data in
 // the docker volumes is never touched; rebuilding the db image does not
@@ -49,10 +51,11 @@ const files = [
     f,
     `${REMOTE_DIR}/caddy/`,
   ]),
-  ...['createApiAccess.sql', 'createSyncFunction.sql'].map((f) => [
-    path.join(root, 'src/sql', f),
-    '/root/src/sql/',
-  ]),
+  ...[
+    'createApiAccess.sql',
+    'createSyncFunction.sql',
+    'createErrorReport.sql',
+  ].map((f) => [path.join(root, 'src/sql', f), '/root/src/sql/']),
 ]
 const remotePath = ([local, remoteDir]) => remoteDir + path.basename(local)
 
@@ -127,6 +130,9 @@ console.log(
 console.log(
   `  3. ssh cd ${REMOTE_DIR} && docker compose build auth db && docker compose up -d`,
 )
+console.log(
+  `  4. ssh apply createErrorReport.sql to the running db (idempotent)`,
+)
 
 if (!APPLY) {
   console.log(
@@ -155,6 +161,15 @@ run('ssh', [
   ...sshOptions,
   HOST,
   `cd ${REMOTE_DIR} && docker compose build auth db && docker compose up -d`,
+])
+
+// the error_report collector table must reach the RUNNING db - the volume
+// predates it and init scripts never re-run on an existing volume. The
+// file is idempotent, so this is a safe no-op on every deploy.
+run('ssh', [
+  ...sshOptions,
+  HOST,
+  `cd ${REMOTE_DIR} && docker compose exec -T db psql --username postgres --dbname vermehrung -v ON_ERROR_STOP=1 --file=/api_sql/createErrorReport.sql`,
 ])
 
 console.log(`\nbackup written: ${backupFile}`)

@@ -9,7 +9,12 @@ import { config as rxjsConfig } from 'rxjs'
 // findAndObserve hits a record missing locally (fresh browser before the
 // initial sync, remotely deleted row). log instead: the subscription
 // ends, components recover when their observable dependencies change
-rxjsConfig.onUnhandledError = (error) => console.error(error)
+rxjsConfig.onUnhandledError = (error) => {
+  console.error(error)
+  // unhandled rxjs errors never reach the window handlers - report them
+  // as production error reports too (no-op in dev)
+  void reportError('manual', error)
+}
 
 import 'allotment/dist/style.css'
 import './index.css'
@@ -18,7 +23,13 @@ import browserUpdate from 'browser-update'
 
 import { App } from './App.tsx'
 import { store } from './store/index.ts'
+import { installErrorTelemetry, reportError } from './modules/errorTelemetry.ts'
 import { maybeWipeForIdMigration } from './utils/idMigration2026.ts'
+
+// production error reports (src/sql/createErrorReport.sql); no-op unless
+// VITE_ERROR_TELEMETRY_URL is set at build time. Installed before anything
+// can throw
+installErrorTelemetry()
 
 // discard local data once for the uuidv7 id migration, before anything
 // reads or creates the local database

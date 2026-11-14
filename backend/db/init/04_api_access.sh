@@ -20,3 +20,10 @@ echo "api roles created"
 echo "creating sync function"
 psql --username "$POSTGRES_USER" --dbname=vermehrung -v ON_ERROR_STOP=1 --file=/api_sql/createSyncFunction.sql
 echo "sync function created"
+
+# the error telemetry collector table (client error reports). Not part of
+# old backups; idempotent, so applying it over a restored newer backup is
+# safe. Needs the anon/manager roles from createApiAccess.sql above.
+echo "creating error_report table"
+psql --username "$POSTGRES_USER" --dbname=vermehrung -v ON_ERROR_STOP=1 --file=/api_sql/createErrorReport.sql
+echo "error_report table created"

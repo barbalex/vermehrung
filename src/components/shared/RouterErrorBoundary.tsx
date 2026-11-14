@@ -1,7 +1,9 @@
+import { useEffect } from 'react'
 import { useRouteError } from 'react-router'
 import Button from '@mui/material/Button'
 
 import { logout } from '../../utils/logout.ts'
+import { reportError } from '../../modules/errorTelemetry.ts'
 
 import styles from './ErrorBoundary.module.css'
 
@@ -13,6 +15,10 @@ export const RouterErrorBoundary = ({
   children?: import('react').ReactNode
 }) => {
   const error = useRouteError()
+
+  useEffect(() => {
+    void reportError('boundary', error)
+  }, [error])
 
   const onReset = () => logout()
 
