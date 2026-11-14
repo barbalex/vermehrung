@@ -118,10 +118,6 @@ import { buildPersonLieferungFolder } from './person/lieferung/folder.ts'
 import { buildPersonLieferung } from './person/lieferung/index.ts'
 import { buildPersonSammlungFolder } from './person/sammlung/folder.ts'
 import { buildPersonSammlung } from './person/sammlung/index.ts'
-// import { buildSammelLieferungFolder } from './sammelLieferung/folder.ts'
-// import { buildSammelLieferung } from './sammelLieferung/index.ts'
-// import { buildSammelLieferungLieferungFolder } from './sammelLieferung/lieferung/folder.ts'
-// import { buildSammelLieferungLieferung } from './sammelLieferung/lieferung/index.ts'
 import { herkunftSort } from '../../../utils/herkunftSort.ts'
 import { teilkulturSort } from '../../../utils/teilkulturSort.ts'
 import { zaehlungSort } from '../../../utils/zaehlungSort.ts'
@@ -140,7 +136,6 @@ import { getShowHerkunft } from '../../../utils/showHerkunft.ts'
 import { getShowKultur } from '../../../utils/showKultur.ts'
 import { getShowLieferung } from '../../../utils/showLieferung.ts'
 import { getShowPerson } from '../../../utils/showPerson.ts'
-// import { getShowSammelLieferung } from '../../../utils/showSammelLieferung.ts'
 import { getShowSammlung } from '../../../utils/showSammlung.ts'
 import { getShowTeilkultur } from '../../../utils/showTeilkultur.ts'
 import { getShowZaehlung } from '../../../utils/showZaehlung.ts'
@@ -187,7 +182,6 @@ export const buildNodes = async ({
   const showKultur = getShowKultur({ userPersonOption, activeNodeArray })
   const showLieferung = getShowLieferung({ userPersonOption, activeNodeArray })
   const showPerson = getShowPerson()
-  // const showSammelLieferung = getShowSammelLieferung({
   //   userPersonOption,
   //   activeNodeArray,
   // })
@@ -298,10 +292,6 @@ export const buildNodes = async ({
   const personLieferungNodes: TreeNode[] = []
   const personSammlungFolderNodes: TreeNode[] = []
   const personSammlungNodes: TreeNode[] = []
-  // const sammelLieferungFolderNodes = []
-  // const sammelLieferungNodes = []
-  // const sammelLieferungLieferungFolderNodes = []
-  // const sammelLieferungLieferungNodes = []
 
   // 1 art
   if (showArt) {
@@ -2095,81 +2085,43 @@ export const buildNodes = async ({
     }
   }
 
-  // 9 sammelLieferung
-  // if (showSammelLieferung) {
-  //   const sammelLieferungQuery = db
-  //     .get<SammelLieferung>('sammel_lieferung')
   //     .query(...tableFilter({ table: 'sammel_lieferung' }))
-  //   const sammelLieferungCount = (await sammelLieferungQuery?.fetchCount()) ?? 0
-  //   sammelLieferungFolderNodes = buildSammelLieferungFolder({
-  //     count: sammelLieferungCount,
   //   })
   //   if (
   //     openNodes.some((n) => n.length === 1 && n[0] === 'Sammel-Lieferungen')
   //   ) {
-  //     let sammelLieferungs = []
   //     try {
-  //       sammelLieferungs = await sammelLieferungQuery?.fetch()
   //     } catch {}
-  //     const sammelLieferungsSorted = sammelLieferungs.sort(lieferungSort)
-  //     sammelLieferungNodes = await Promise.all(
-  //       sammelLieferungsSorted.map(
-  //         async (sammelLieferung, index) =>
-  //           await buildSammelLieferung({
-  //             sammelLieferung,
   //             index,
   //           }),
   //       ),
   //     )
 
   //     // on to child nodes
-  //     const openSammelLieferungNodes = openNodes.filter(
   //       (n) => n.length === 2 && n[0] === 'Sammel-Lieferungen',
   //     )
-  //     for (const sammelLieferungNode of openSammelLieferungNodes) {
-  //       const sammelLieferungId = sammelLieferungNode[1]
-  //       const sammelLieferung = sammelLieferungsSorted.find(
-  //         (a) => a.id === sammelLieferungId,
   //       )
-  //       if (!sammelLieferung) break
-  //       const sammelLieferungIndex = sammelLieferungNodes.findIndex(
-  //         (a) => a.id === sammelLieferungId,
   //       )
 
-  //       // 2.1 sammelLieferung > lieferung
   //       let lieferungs = []
   //       try {
-  //         lieferungs = await sammelLieferung.lieferungs
   //           .extend(...tableFilter({ table: 'lieferung' }))
   //           .fetch()
   //       } catch {}
   //       const lieferungsSorted = lieferungs.sort(lieferungSort)
-  //       sammelLieferungLieferungFolderNodes.push(
-  //         buildSammelLieferungLieferungFolder({
   //           children: lieferungsSorted,
-  //           sammelLieferungIndex,
-  //           sammelLieferungId,
   //         }),
   //       )
-  //       const sammelLieferungLieferungFolderIsOpen = openNodes.some(
   //         (n) =>
   //           n.length === 3 &&
   //           n[0] === 'Sammel-Lieferungen' &&
-  //           n[1] === sammelLieferungId &&
   //           n[2] === 'Lieferungen',
   //       )
-  //       if (sammelLieferungLieferungFolderIsOpen) {
-  //         const newSammelLieferungLieferungNodes = lieferungsSorted.map(
   //           (lieferung, lieferungIndex) =>
-  //             buildSammelLieferungLieferung({
   //               lieferung,
   //               lieferungIndex,
-  //               sammelLieferungId,
-  //               sammelLieferungIndex,
   //             }),
   //         )
-  //         sammelLieferungLieferungNodes.push(
-  //           ...newSammelLieferungLieferungNodes,
   //         )
   //       }
   //     }
@@ -2788,10 +2740,6 @@ export const buildNodes = async ({
     ...personLieferungNodes,
     ...personSammlungFolderNodes,
     ...personSammlungNodes,
-    // ...sammelLieferungFolderNodes,
-    // ...sammelLieferungNodes,
-    // ...sammelLieferungLieferungFolderNodes,
-    // ...sammelLieferungLieferungNodes,
   ]
 
   const nodesSorted = nodes.sort(

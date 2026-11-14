@@ -93,6 +93,7 @@ export const Login = () => {
     if (firebaseAuth) await signOut(firebaseAuth)
     await localForage.clear()
     window.localStorage.removeItem('token')
+    window.localStorage.removeItem('devToken')
     resetSyncState()
     // previously deferred via setTimeout so the click handler would not
     // await the sign-in; the latch above now covers the whole login
