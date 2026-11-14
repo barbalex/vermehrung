@@ -7,8 +7,9 @@ FROM postgis/postgis:18-3.6
 COPY ./init/ /docker-entrypoint-initdb.d/
 COPY ./vermehrung.backup /sik_data/vermehrung.backup
 
-RUN chmod +x /docker-entrypoint-initdb.d/02_restore.sh
-RUN chmod +x /docker-entrypoint-initdb.d/04_api_access.sh
+# glob: production's init dir deliberately lacks 04_api_access.sh
+# (its db was initialized from a backup, api access applied separately)
+RUN chmod +x /docker-entrypoint-initdb.d/*.sh
 
 # for using cron, see https://www.cloudsavvyit.com/9033/how-to-use-cron-with-your-docker-containers/
 

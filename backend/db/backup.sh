@@ -8,7 +8,7 @@
 # data fingerprint: deterministic md5 over every synced table's rows.
 # replaces the old size-equality check - equal size with different
 # content silently skipped backups
-FINGERPRINT=$(PGPASSWORD=$POSTGRES_PASSWORD psql -U postgres -h localhost -At -c "
+FINGERPRINT=$(PGPASSWORD=$POSTGRES_PASSWORD psql -U postgres -h localhost -d vermehrung -At -c "
   select coalesce(md5(string_agg(row_text, '' order by row_text)), '') from (
     select (to_jsonb(t))::text as row_text from public.art t
     union all select (to_jsonb(t))::text from public.art_qk t
@@ -44,7 +44,7 @@ FINGERPRINT=$(PGPASSWORD=$POSTGRES_PASSWORD psql -U postgres -h localhost -At -c
     union all select (to_jsonb(t))::text from public.teilkultur_rev t
     union all select (to_jsonb(t))::text from public.teilzaehlung_rev t
     union all select (to_jsonb(t))::text from public.zaehlung_rev t
-  ) s") || "-$(PGPASSWORD=$POSTGRES_PASSWORD psql -U postgres -h localhost -At -c 'select count(*) from public.art_rev')"
+  ) s") || "-$(PGPASSWORD=$POSTGRES_PASSWORD psql -U postgres -h localhost -d vermehrung -At -c 'select count(*) from public.art_rev')"
 if [ -f /sik_data/last.fingerprint ] && [ "$FINGERPRINT" = "$(cat /sik_data/last.fingerprint)" ]; then
   echo "data fingerprint unchanged - not dumping"
   exit 0
