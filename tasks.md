@@ -23,17 +23,17 @@ Found during the 2026-11-13 codebase survey. Work top to bottom.
 
 - [ ] `triStateQuery(column, value)` helper — the tri-state `_deleted` ternary appears 205× in 62 files (~1.5k lines).
 - [ ] Remove the dead `event` block from `createSyncFunction.sql` (client never reads it since the bedarf migration — wasted work every 5s).
-- [ ] `processSubscriptionResult`: delete the duplicated identical `query()` call; swap `find`/`includes` O(n²) passes for a `Map`.
-- [ ] Persist `lastUpdatedAtom` once per poll instead of 27 IndexedDB writes every 5 seconds.
-- [ ] Replace proj4 (139KB) with closed-form LV03→WGS84 math (~20 lines).
-- [ ] Delete dead code: `Tree/nodes/sammelLieferung/` modules, `DataProviderHOC.tsx`, unused shared components (`Checkbox2StatesNonUpdatable`, `StringToCopyOnlyButton`, `InfoWithPopover`), orphan CSS modules, commented-out console.logs. (.DS_Store files + root `schema.graphql` removed 14.11.2026.)
+- [x] `processSubscriptionResult` dedup + Map — DONE 14.11.2026.
+- [x] Persist `lastUpdatedAtom` once per poll — DONE 14.11.2026: persisted-atom write-backs are debounced 100ms (one IndexedDB write per burst; crash direction stays safe: un-persisted cursors re-deliver).
+- [x] proj4 → closed-form — DONE 14.11.2026: degree-4 polynomial fitted to proj4's exact pipeline over the Swiss extent, max error 0.043m (better than the official ~1m formulas); proj4 demoted to devDep (test-only reference).
+- [x] Delete dead code — DONE 14.11.2026 (sammelLieferung tree modules + 52 commented lines, DataProviderHOC, 3 unused shared components, 3 orphan CSS modules): `Tree/nodes/sammelLieferung/` modules, `DataProviderHOC.tsx`, unused shared components (`Checkbox2StatesNonUpdatable`, `StringToCopyOnlyButton`, `InfoWithPopover`), orphan CSS modules, commented-out console.logs. (.DS_Store files + root `schema.graphql` removed 14.11.2026.)
 - [x] Untrack `dist/index.html` / `dist/manifest.webmanifest` so deploys stop committing build artifacts — DONE 14.11.2026, together with `test-results/.last-run.json` and `.DS_Store` (`.gitignore`d now); `scripts/deploy.mjs` commits only `package.json` + `.firebase` upload caches.
-- [ ] Hoist `tableIsFilteredAtom(table)` to a module-level map (atom factory called during render).
-- [ ] Fix `isNodeOpen`'s per-row linear `isEqual` scan (use a `Set` of joined-url keys); drop redundant `openNodes.length` dep in `Tree/index.tsx:233`.
-- [ ] Collapse 13 value-identical `initial`/`empty` exports in `src/store/Filter/`; merge 16 near-identical `<entity>IdInUrl.ts` helpers.
+- [x] `tableIsFilteredAtom` cached per table; `isNodeOpen` uses a cached Set of joined-url keys (rebuilt once per openNodes change) — DONE 14.11.2026.
+- [x] (folded into the item above)
+- [x] Filter `empty = initial` aliases (13 files); `<entity>IdInUrl` helpers merged into `utils/idsInUrl.ts` (one implementation + folder aliases) — DONE 14.11.2026.
 - [x] `scripts/deployBackend.mjs` — one-command backend deploy (scp changed files to `root@139.162.172.14:/root/vermehrung`, remote `docker compose build auth && up -d`) so the copied server folder can't drift from the repo again (it had lagged: Hasura-era `server.js`, missing `../src/sql` mounts). DONE 14.11.2026: dry-run default with per-file sha256 drift check, `--apply` tars a backup to `/root/vermehrung-backups/` first and prints the rollback command; the repo compose deploys verbatim (its `src/sql` mounts are fed by copying the two files to `/root/src/sql`).
-- [ ] Fix the flaky `e2e/breadcrumbs.spec.ts` pixel assertion (`<= 12`px layout measurement flakes under load, fails intermittently on HEAD).
-- [ ] Replace the `fdw_user`/'secret' literal password in `backend/db/init/01_db_users_roles.sql`; remove stale Hasura vars from `backend/.env` + dead `03.sql` jwt_secret line.
+- [x] Breadcrumbs pixel assertion now `expect.poll`s (stable 3/3 under load) — DONE 14.11.2026.
+- [x] Dead `03.sql` jwt_secret line removed; the `.env`s carry no stale Hasura vars (checked both). OPEN (needs apf2 coordination): `fdw_user`'s password — the user is the remote apflora ae_server connection; changing it must happen on both sides.
 - [ ] Set a removal date for `migrateLokiToSqlite.ts` once the user base has crossed the migration.
 
 ## Scratch
