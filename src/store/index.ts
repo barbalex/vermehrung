@@ -67,6 +67,26 @@ export interface QueuedQuery {
 // hydration completes), persisted state appears shortly after boot,
 // changes are written back as they happen.
 // Hydration is started once by initiateApp via hydratePersistedAtoms().
+// one trailing write per key, 100ms: collapses bursts (sync cursors)
+// into a single IndexedDB write
+const persistedWriteTimers = new Map<string, ReturnType<typeof setTimeout>>()
+const debouncePersistedWrite = (
+  key: string,
+  baseAtom: PrimitiveAtom<unknown>,
+) => {
+  const write = () => {
+    persistedWriteTimers.delete(key)
+    localForage.setItem(key, store.get(baseAtom)).catch((error) => {
+      console.error(`persisting ${key} failed:`, error)
+    })
+  }
+  return () => {
+    const pending = persistedWriteTimers.get(key)
+    if (pending) clearTimeout(pending)
+    persistedWriteTimers.set(key, setTimeout(write, 100))
+  }
+}
+
 const persistedAtoms: {
   key: string
   baseAtom: PrimitiveAtom<unknown>
@@ -111,12 +131,13 @@ export const hydratePersistedAtoms = async () => {
       // reasons to skip hydration
       entry.hydrated = true
       entry.dirty = false
-      // subscribe after hydration so the initial value is not written back
-      store.sub(baseAtom, () => {
-        localForage.setItem(key, store.get(baseAtom)).catch((error) => {
-          console.error(`persisting ${key} failed:`, error)
-        })
-      })
+      // subscribe after hydration so the initial value is not written back.
+      // debounced: the sync poll advances one cursor per table in a
+      // burst - without the delay that is 27 IndexedDB writes of the
+      // same key per poll. delaying persistence only ever re-delivers
+      // rows on a crash (cursor not yet advanced) - the safe direction
+      const debounced = debouncePersistedWrite(key, baseAtom)
+      store.sub(baseAtom, debounced)
     }),
   )
   // let the queue observer know about hydrated queries immediately

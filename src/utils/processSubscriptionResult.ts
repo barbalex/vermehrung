@@ -41,34 +41,28 @@ export const processSubscriptionResult = async ({
   const collection = db.get(table)
   const incomingIds = dataToCheck.map((d) => d.id)
 
-  let objectsOfToUpdate: Model[] = []
+  // one query for both purposes: updates and missing-row detection
+  // (this used to run the identical query twice)
+  let existingObjects: Model[] = []
   try {
-    objectsOfToUpdate = await db
-      .get(table)
+    existingObjects = await collection
       .query(Q.where('id', Q.oneOf(incomingIds)))
       .fetch()
   } catch {}
-  let objectsOfIncoming: Model[] = []
-  try {
-    objectsOfIncoming = await db
-      .get(table)
-      .query(Q.where('id', Q.oneOf(incomingIds)))
-      .fetch()
-  } catch {}
-  const existingIds = objectsOfIncoming.map((d) => d.id)
-  const missingIds = incomingIds.filter((d) => !existingIds.includes(d))
-  const dataToCreateObjectsFrom = dataToCheck.filter((d) =>
-    missingIds.includes(d.id),
+  // id -> incoming row, so the O(n^2) find/includes passes over the
+  // > 10k-row initial sync become Map lookups
+  const dataById = new Map(dataToCheck.map((d) => [d.id, d]))
+  const existingIds = new Set(existingObjects.map((d) => d.id))
+  const dataToCreateObjectsFrom = dataToCheck.filter(
+    (d) => !existingIds.has(d.id),
   )
   // only if remote changed after local
-  const objectsToUpdate = objectsOfToUpdate.filter((o) => {
+  const objectsToUpdate = existingObjects.filter((o) => {
     // never overwrite rows with unflushed local edits: their revision
     // has not reached the server yet, so the sync data is stale for
     // them. the flush + the following sync reconcile the row
     if (isUnflushedRev(table, o.id)) return false
-    const dat = stripTypename(
-      dataToCheck.find((d) => d.id === o.id) ?? { id: '' },
-    )
+    const dat = stripTypename(dataById.get(o.id) ?? { id: '' })
     return !Object.entries(dat).every(([key, value]) =>
       isEqual(value, (o as unknown as Record<string, unknown>)[key]),
     )
@@ -76,7 +70,7 @@ export const processSubscriptionResult = async ({
   console.log('processSubscriptionResult:', {
     table,
     toUpdate: objectsToUpdate.length,
-    toCreate: missingIds.length,
+    toCreate: dataToCreateObjectsFrom.length,
   })
 
   // use a timeout to stagger the imports
@@ -95,9 +89,8 @@ export const processSubscriptionResult = async ({
             // rows per table and a spread would blow the call stack
             await db.batch([
               ...objectsToUpdate.map((object) => {
-                const thisObjectsData = (dataToCheck.find(
-                  (d) => d.id === object.id,
-                ) ?? {}) as Record<string, unknown>
+                const thisObjectsData = (dataById.get(object.id) ??
+                  {}) as Record<string, unknown>
 
                 return object.prepareUpdate((ob: Model) => {
                   Object.keys(thisObjectsData)

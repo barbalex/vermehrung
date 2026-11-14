@@ -30,6 +30,11 @@ export const getAuthToken = async (
   nextRetryMs: number = retryMs,
   forceRefresh = false,
 ) => {
+  // dev role sessions (scripts/dev-token.mjs) carry a locally minted token
+  // and no firebase user: there is nothing to exchange, keep the stored one
+  if (import.meta.env.DEV && window.localStorage.getItem('devToken')) {
+    return
+  }
   const user = store.get(userAtom)
   if (!user?.uid) {
     // nothing to fetch without a user.

@@ -74,7 +74,8 @@ describe('persisted atoms', () => {
     await hydratePersistedAtoms()
 
     store.set(activeNodeArrayAtom, ['Sammlungen'])
-    await new Promise((resolve) => setTimeout(resolve, 10))
+    // above the 100ms persistence debounce
+    await new Promise((resolve) => setTimeout(resolve, 150))
 
     expect(storageData.get('vermehrung:tree:activeNodeArray')).toEqual([
       'Sammlungen',
@@ -116,7 +117,8 @@ describe('persisted atoms', () => {
     await hydratePersistedAtoms()
 
     addQueuedQuery(buildQuery({ id: 'new-1' }))
-    await new Promise((resolve) => setTimeout(resolve, 10))
+    // above the 100ms persistence debounce
+    await new Promise((resolve) => setTimeout(resolve, 150))
 
     const persisted = storageData.get('vermehrung:queuedQueries') as {
       id: string

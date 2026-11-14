@@ -4,8 +4,12 @@
   "version": "1.25.45",
   "versionDate": "14.11.2026",
   "license": "ISC",
+  "engines": {
+    "node": ">=24"
+  },
   "type": "module",
   "scripts": {
+    "backend": "docker compose -f backend-dev/docker-compose.yaml up -d --wait",
     "build": "vite build",
     "build_ts": "tsc && vite build",
     "deploy": "node scripts/deploy.mjs",
@@ -13,6 +17,7 @@
     "fetchBackup": "node scripts/fetchBackup.mjs",
     "deploy_preview": "npm run format:check && npm run lint && npm run typecheck && npm test && npm run build && firebase hosting:channel:deploy preview",
     "dev": "vite",
+    "dev-token": "node scripts/dev-token.mjs",
     "firebase-login": "firebase login",
     "firebase-login-reauth": "firebase login --reauth",
     "format": "prettier --write .",
@@ -26,6 +31,7 @@
     "test:e2e": "playwright test",
     "type-coverage": "type-coverage --strict",
     "typecheck": "tsc --noEmit",
+    "verify": "npm run format:check && npm run lint && npm run typecheck && npm test",
     "how-to-install-using-sfw": "sfw npm i",
     "ncu using cooldown": "ncu -c 5 -i",
     "bump": "node tools/bumpVersion.mjs"
@@ -48,7 +54,6 @@
     "localforage": "1.10.0",
     "luxon": "3.7.2",
     "nitromelondb": "0.31.1",
-    "proj4": "2.22.0",
     "react": "19.3.1",
     "react-datepicker": "9.1.0",
     "react-dom": "19.3.1",
@@ -93,6 +98,7 @@
     "jsdom": "29.1.1",
     "kanel": "4.0.4",
     "prettier": "3.9.10",
+    "proj4": "2.22.0",
     "type-coverage": "2.31.2",
     "typescript": "6.0.3",
     "vite": "8.3.5",

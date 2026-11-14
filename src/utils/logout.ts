@@ -20,5 +20,6 @@ export const logout = async () => {
   await localForage.clear()
   resetSyncState()
   window.localStorage.removeItem('token')
+  window.localStorage.removeItem('devToken')
   window.location.reload()
 }

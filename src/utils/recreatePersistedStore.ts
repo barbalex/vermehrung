@@ -32,6 +32,35 @@ export const recreatePersistedStore = async () => {
   // hydration runs in parallel to app boot: persisted state appears
   // shortly after boot, a slow/blocked storage must not block booting
   hydratePersistedAtoms()
+  // DEV ONLY — role sessions without Firebase (scripts/dev-token.mjs):
+  // the script mints an api JWT for a person of the chosen role against
+  // the local backend and opens the app with ?devToken=<jwt>. Boot
+  // straight into that role: no Firebase sign-in, no /token exchange.
+  // The claims' sub carries the person's account_id because the role
+  // lookup in SubscriptionsInitializer matches person.account_id against
+  // the user uid. Stripped from the url so navigation drops it.
+  if (import.meta.env.DEV) {
+    const devToken = new URLSearchParams(window.location.search).get('devToken')
+    if (devToken) {
+      try {
+        const payload = devToken.split('.')[1] ?? ''
+        const claims = JSON.parse(
+          atob(payload.replace(/-/g, '+').replace(/_/g, '/')),
+        ) as { sub?: string }
+        window.localStorage.setItem('token', devToken)
+        // flag for getAuthToken: no firebase user to exchange, see there
+        window.localStorage.setItem('devToken', '1')
+        window.history.replaceState({}, '', window.location.pathname)
+        setUser({ uid: claims.sub, email: 'dev@localhost' })
+        setAuthorizing(false)
+        setGettingAuthUser(false)
+        // nothing was registered to unregister
+        return () => undefined
+      } catch {
+        // malformed devToken: fall through to the regular login
+      }
+    }
+  }
   let fbApp
   // catch app already existing
   // https://stackoverflow.com/a/48686803/712005
