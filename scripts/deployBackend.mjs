@@ -79,8 +79,10 @@ const localHash = (file) =>
 
 const remoteHashes = (() => {
   try {
+    // files missing remotely (first deploy of a new file) print to
+    // stderr and would fail the command - they are simply drift
     const out = sshCapture(
-      `sha256sum ${files.map(remotePath).join(' ')}`,
+      `sha256sum ${files.map(remotePath).join(' ')} 2>/dev/null || true`,
       60_000,
     )
     const hashes = {}
