@@ -13,6 +13,10 @@ import { Choose } from './Choose/index.tsx'
 import { Collapsible } from '../../../../shared/Collapsible.tsx'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.tsx'
 import { dbAtom, userAtom } from '../../../../../store/index.ts'
+import {
+  toggleFormSection,
+  useFormSectionOpen,
+} from '../../../../../modules/formSections.ts'
 import { constants } from '../../../../../utils/constants.ts'
 
 import styles from './index.module.css'
@@ -95,7 +99,7 @@ export const ArtQkWrapper = ({ artId }: { artId: string | undefined }) => {
     window.open(url)
   }
 
-  const [open, setOpen] = useState(false)
+  const open = useFormSectionOpen('qk')
   const onClickToggle = (e: {
     target: { name?: string; value: unknown }
     currentTarget?: HTMLElement
@@ -104,7 +108,7 @@ export const ArtQkWrapper = ({ artId }: { artId: string | undefined }) => {
     key?: string
   }) => {
     e.stopPropagation?.()
-    setOpen(!open)
+    toggleFormSection('qk')
   }
 
   return (

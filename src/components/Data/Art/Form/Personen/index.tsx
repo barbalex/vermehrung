@@ -13,6 +13,10 @@ import {
   unsetError,
 } from '../../../../../store/index.ts'
 import { insertAvRev } from '../../../../../modules/insertRev.ts'
+import {
+  toggleFormSection,
+  useFormSectionOpen,
+} from '../../../../../modules/formSections.ts'
 import { Person } from './Person.tsx'
 import { Select } from '../../../../shared/Select/index.tsx'
 import { Collapsible } from '../../../../shared/Collapsible.tsx'
@@ -34,7 +38,7 @@ export const Personen = ({
 
   useEffect(() => unsetError('av'), [art?.id])
 
-  const [open, setOpen] = useState(false)
+  const open = useFormSectionOpen('personen')
   const onClickToggle = (e: {
     target: { name?: string; value: unknown }
     currentTarget?: HTMLElement
@@ -43,7 +47,7 @@ export const Personen = ({
     key?: string
   }) => {
     e.stopPropagation?.()
-    setOpen(!open)
+    toggleFormSection('personen')
   }
 
   const [dataState, setDataState] = useState<{

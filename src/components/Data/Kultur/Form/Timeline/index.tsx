@@ -7,6 +7,10 @@ import { useElementWidth } from '../../../../shared/useElementWidth.ts'
 import { constants } from '../../../../../utils/constants.ts'
 import { Collapsible } from '../../../../shared/Collapsible.tsx'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.tsx'
+import {
+  toggleFormSection,
+  useFormSectionOpen,
+} from '../../../../../modules/formSections.ts'
 import { buildKulturTimelineData as buildData } from './buildData.ts'
 
 import styles from './index.module.css'
@@ -49,7 +53,7 @@ export const KulturTimeline = ({
 
   const isNarrow = (width ?? 0) < 1100
 
-  const [open, setOpen] = useState(false)
+  const open = useFormSectionOpen('timeline')
   const onClickToggle = (e: {
     target: { name?: string; value: unknown }
     currentTarget?: HTMLElement
@@ -58,7 +62,7 @@ export const KulturTimeline = ({
     key?: string
   }) => {
     e.stopPropagation?.()
-    setOpen(!open)
+    toggleFormSection('timeline')
   }
 
   // need to disable animation or labels will not show on first render

@@ -8,6 +8,7 @@ import {
   filterSammlungAtom,
 } from '../../store/index.ts'
 import emptyValues from '../../store/Filter/emptyValues.ts'
+import { openFormSectionsAtom } from '../formSections.ts'
 import {
   applySearchParams,
   decodeFilterValues,
@@ -25,6 +26,7 @@ beforeEach(() => {
   store.set(filterArtAtom, emptyValues.art)
   store.set(filterShowAtom, false)
   store.set(apFilterAtom, true)
+  store.set(openFormSectionsAtom, [])
 })
 
 describe('decodeFilterValues', () => {
@@ -129,5 +131,16 @@ describe('applySearchParams', () => {
   it('an ftab-only url does not touch the filter pane (it belongs to the open pane)', () => {
     applySearchParams('?ftab=person')
     expect(store.get(filterShowAtom)).toBe(false)
+  })
+
+  it('?open= drives the expanded form sections and reverts when it disappears', () => {
+    applySearchParams('?open=timeline,qk')
+    expect(store.get(openFormSectionsAtom)).toEqual(['timeline', 'qk'])
+    // an empty value is the collapsed default, junk slugs pass through
+    applySearchParams('?open=')
+    expect(store.get(openFormSectionsAtom)).toEqual([])
+    applySearchParams('?open=timeline')
+    applySearchParams('')
+    expect(store.get(openFormSectionsAtom)).toEqual([])
   })
 })

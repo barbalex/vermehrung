@@ -9,6 +9,10 @@ import { Q } from 'nitromelondb'
 import { combineLatest, of as $of } from 'rxjs'
 
 import { dbAtom, userAtom } from '../../../../../store/index.ts'
+import {
+  toggleFormSection,
+  useFormSectionOpen,
+} from '../../../../../modules/formSections.ts'
 import { KulturQk as Qk } from './Qk/index.tsx'
 import { ChooseKulturQk as Choose } from './Choose/index.tsx'
 import { constants } from '../../../../../utils/constants.ts'
@@ -97,7 +101,7 @@ export const KulturQkRouter = ({
     window.open(url)
   }
 
-  const [open, setOpen] = useState(false)
+  const open = useFormSectionOpen('qk')
   const onClickToggle = (e: {
     target: { name?: string; value: unknown }
     currentTarget?: HTMLElement
@@ -106,7 +110,7 @@ export const KulturQkRouter = ({
     key?: string
   }) => {
     e.stopPropagation?.()
-    setOpen(!open)
+    toggleFormSection('qk')
   }
 
   return (

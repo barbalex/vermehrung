@@ -8,6 +8,10 @@ import { combineLatest } from 'rxjs'
 
 import { dbAtom, store, filterArtAtom } from '../../../../../store/index.ts'
 import { insertAvRev } from '../../../../../modules/insertRev.ts'
+import {
+  toggleFormSection,
+  useFormSectionOpen,
+} from '../../../../../modules/formSections.ts'
 import { PersonArt as Art } from './Art.tsx'
 import { Select } from '../../../../shared/Select/index.tsx'
 import { Collapsible } from '../../../../shared/Collapsible.tsx'
@@ -28,7 +32,7 @@ export const PersonArten = ({
   const [errors, setErrors] = useState({})
   useEffect(() => setErrors({}), [person])
 
-  const [open, setOpen] = useState(false)
+  const open = useFormSectionOpen('arten')
   const onClickToggle = (e: {
     target: { name?: string; value: unknown }
     currentTarget?: HTMLElement
@@ -37,7 +41,7 @@ export const PersonArten = ({
     key?: string
   }) => {
     e.stopPropagation?.()
-    setOpen(!open)
+    toggleFormSection('arten')
   }
 
   const [dataState, setDataState] = useState<{

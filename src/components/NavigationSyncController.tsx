@@ -59,9 +59,14 @@ export const NavigationSyncController = () => {
     setObjectName(objectName)
 
     if (!isEqual(activeNodeArray, aNA)) {
-      // when the url contains a histories suffix, do not navigate:
-      // navigating from the stripped activeNodeArray would remove it
-      setActiveNodeArray(activeNodeArray, !!historyRev)
+      // pass the object-name suffix through: setActiveNodeArray strips it
+      // for the atom but keeps it in the url it navigates to. Passing
+      // only the stripped array would navigate to the object url — a
+      // boot deep-link to a form url (.../{id}/Art) lost its suffix
+      setActiveNodeArray(
+        objectName ? [...activeNodeArray, objectName] : activeNodeArray,
+        !!historyRev,
+      )
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname])

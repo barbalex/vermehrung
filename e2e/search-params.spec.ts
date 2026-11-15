@@ -8,6 +8,8 @@ import { createHmac } from 'node:crypto'
 // - a tab click writes ftab=<tab>
 // - reloading such a url reproduces the view (pane open, tab, values)
 // - back to a url without the params reverts pane and filters
+// - expanding a collapsible form section writes open=<slug> and the url
+//   reproduces the expansion
 
 const EMAIL = 'test@vermehrung.ch'
 const PASSWORD = 'not-a-real-password'
@@ -229,6 +231,39 @@ test('filter state is linkable via search params', async ({ page }) => {
     await expect(page).toHaveURL(/\/Vermehrung\/Arten$/)
     await expect(page.getByText('Art Filter')).toHaveCount(0)
     await expect(page.getByText(ARTNAME).first()).toBeVisible()
+  })
+
+  await test.step('expanded form sections are linkable', async () => {
+    await page.goto(`/Vermehrung/Arten/${ART_ID}/Art`)
+    // exact match: the HerkunftTimeline section title is 'Zeit-Achsen …'
+    const timeline = page
+      .locator('section')
+      .filter({ has: page.getByText('Zeit-Achse', { exact: true }) })
+    await expect(timeline).toBeVisible({ timeout: 30_000 })
+    await timeline.locator('button[title="öffnen"]').click()
+    await expect(page).toHaveURL(/\/Art\?open=timeline$/)
+
+    // the url reproduces the expansion after a reload
+    await page.reload()
+    const loginDialog = page.getByRole('dialog', { name: 'Anmeldung' })
+    await expect(
+      loginDialog.or(timeline.locator('button[title="schliessen"]')),
+    ).toBeVisible({ timeout: 30_000 })
+    if (await loginDialog.isVisible()) {
+      await page.locator('#email').fill(EMAIL)
+      await page.locator('#passwort').fill(PASSWORD)
+      await page.getByRole('button', { name: 'anmelden' }).click()
+    }
+    await expect(timeline.locator('button[title="schliessen"]')).toBeVisible({
+      timeout: 30_000,
+    })
+
+    // back to the param-less form url collapses it again
+    await page.goBack()
+    await expect(page).toHaveURL(new RegExp(`/Vermehrung/Arten/${ART_ID}/Art$`))
+    await expect(timeline.locator('button[title="öffnen"]')).toBeVisible({
+      timeout: 30_000,
+    })
   })
 
   await expect(page.locator('#dev-error-overlay')).toHaveCount(0)

@@ -1,4 +1,4 @@
-import { useState, lazy, Suspense } from 'react'
+import { lazy, Suspense } from 'react'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
@@ -9,6 +9,10 @@ const LazyPflanzen = lazy(() =>
 )
 import { Collapsible } from '../../../../shared/Collapsible.tsx'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.tsx'
+import {
+  toggleFormSection,
+  useFormSectionOpen,
+} from '../../../../../modules/formSections.ts'
 import { constants } from '../../../../../utils/constants.ts'
 
 import styles from './index.module.css'
@@ -18,7 +22,7 @@ export const Timeline = ({
 }: {
   artId: string | null | undefined
 }) => {
-  const [open, setOpen] = useState(false)
+  const open = useFormSectionOpen('timeline')
 
   const openDocs = (e: {
     target: { name?: string; value: unknown }
@@ -42,7 +46,7 @@ export const Timeline = ({
     key?: string
   }) => {
     e.stopPropagation?.()
-    setOpen(!open)
+    toggleFormSection('timeline')
   }
 
   return (

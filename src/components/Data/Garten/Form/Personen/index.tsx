@@ -7,6 +7,10 @@ import { combineLatest, of as $of } from 'rxjs'
 
 import { dbAtom, filterPersonAtom } from '../../../../../store/index.ts'
 import { insertGvRev } from '../../../../../modules/insertRev.ts'
+import {
+  toggleFormSection,
+  useFormSectionOpen,
+} from '../../../../../modules/formSections.ts'
 import { GartenPerson as Person } from './Person.tsx'
 import { Select } from '../../../../shared/Select/index.tsx'
 import { Collapsible } from '../../../../shared/Collapsible.tsx'
@@ -29,7 +33,7 @@ export const GartenPersonen = ({
   const [errors, setErrors] = useState<Record<string, unknown>>({})
   useEffect(() => setErrors({}), [garten?.id])
 
-  const [open, setOpen] = useState(false)
+  const open = useFormSectionOpen('personen')
   const onClickToggle = (e: {
     target: { name?: string; value: unknown }
     currentTarget?: HTMLElement
@@ -38,7 +42,7 @@ export const GartenPersonen = ({
     key?: string
   }) => {
     e.stopPropagation?.()
-    setOpen(!open)
+    toggleFormSection('personen')
   }
 
   const [dataState, setDataState] = useState<{

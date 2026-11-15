@@ -13,6 +13,7 @@ import {
 } from '../store/index.ts'
 import emptyValues from '../store/Filter/emptyValues.ts'
 import { simpleTypes } from '../store/Filter/simpleTypes.ts'
+import { openFormSectionsAtom } from './formSections.ts'
 
 // Makes view state linkable via the url's query string:
 //
@@ -26,6 +27,8 @@ import { simpleTypes } from '../store/Filter/simpleTypes.ts'
 //   ftab=<tab>                  the filter pane's active tab (written by
 //                               Filter.tsx on tab clicks, removed when the
 //                               pane closes)
+//   open=<slug>[,<slug>]        collapsible form sections (QK, Timeline,
+//                               ...) expanded, see modules/formSections.ts
 //
 // Rules:
 // - url -> atoms (on every location change, incl. boot): groups with
@@ -220,10 +223,35 @@ const ftabGroup: ParamGroup = {
   atoms: () => [],
 }
 
+// collapsible form sections (QK, Timeline, ...): ?open=<slug>[,<slug>],
+// see modules/formSections.ts. Toggling a section is discrete: push.
+const openGroup: ParamGroup = {
+  tracked: (key) => key === 'open',
+  apply: (params) => {
+    const slugs = (params.get('open') ?? '')
+      .split(',')
+      .map((slug) => slug.trim())
+      .filter((slug) => slug !== '')
+    if (!isEqual(store.get(openFormSectionsAtom), slugs))
+      store.set(openFormSectionsAtom, slugs)
+  },
+  revert: () => {
+    if (store.get(openFormSectionsAtom).length > 0)
+      store.set(openFormSectionsAtom, [])
+  },
+  updates: () => {
+    const slugs = store.get(openFormSectionsAtom)
+    return [['open', slugs.length > 0 ? slugs.join(',') : undefined]]
+  },
+  replace: false,
+  atoms: () => [openFormSectionsAtom as PrimitiveAtom<unknown>],
+}
+
 const groups: ParamGroup[] = [
   filterShowGroup,
   apGroup,
   ftabGroup,
+  openGroup,
   ...filterTableNames.map(tableGroup),
 ]
 

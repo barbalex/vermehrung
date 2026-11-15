@@ -12,6 +12,10 @@ const LazyPflanzen = lazy(() =>
 )
 import { Collapsible } from '../../../../shared/Collapsible.tsx'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.tsx'
+import {
+  toggleFormSection,
+  useFormSectionOpen,
+} from '../../../../../modules/formSections.ts'
 import { dbAtom, filterHerkunftAtom } from '../../../../../store/index.ts'
 import { herkunftSort } from '../../../../../utils/herkunftSort.ts'
 
@@ -63,7 +67,7 @@ export const HerkunftTimeline = ({
     return () => subscription?.unsubscribe?.()
   }, [artId, db, herkunftFilter._deleted])
 
-  const [open, setOpen] = useState(false)
+  const open = useFormSectionOpen('herkunft-timeline')
   const onClickToggle = (e: {
     target: { name?: string; value: unknown }
     currentTarget?: HTMLElement
@@ -72,7 +76,7 @@ export const HerkunftTimeline = ({
     key?: string
   }) => {
     e.stopPropagation?.()
-    setOpen(!open)
+    toggleFormSection('herkunft-timeline')
   }
 
   return (
