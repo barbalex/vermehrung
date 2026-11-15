@@ -10,6 +10,8 @@ import { createHmac } from 'node:crypto'
 // - back to a url without the params reverts pane and filters
 // - expanding a collapsible form section writes open=<slug> and the url
 //   reproduces the expansion
+// - the QK section's auswählen tab writes qk=waehlen; collapsing the
+//   section removes open and qk in one history entry
 
 const EMAIL = 'test@vermehrung.ch'
 const PASSWORD = 'not-a-real-password'
@@ -264,6 +266,44 @@ test('filter state is linkable via search params', async ({ page }) => {
     await expect(timeline.locator('button[title="öffnen"]')).toBeVisible({
       timeout: 30_000,
     })
+  })
+
+  await test.step("the QK section's tab is linkable", async () => {
+    const qkSection = page
+      .locator('section')
+      .filter({ hasText: 'Qualitäts-Kontrollen' })
+    const waehlenTab = page.getByRole('tab', { name: /auswählen/ })
+    await qkSection.locator('button[title="öffnen"]').click()
+    await expect(page).toHaveURL(/open=qk$/)
+    await waehlenTab.click()
+    await expect(page).toHaveURL(/open=qk&qk=waehlen$/)
+    await expect(waehlenTab).toHaveAttribute('aria-selected', 'true')
+
+    // the url reproduces section and tab after a reload
+    await page.reload()
+    const loginDialog = page.getByRole('dialog', { name: 'Anmeldung' })
+    await expect(
+      loginDialog.or(qkSection.locator('button[title="schliessen"]')),
+    ).toBeVisible({ timeout: 30_000 })
+    if (await loginDialog.isVisible()) {
+      await page.locator('#email').fill(EMAIL)
+      await page.locator('#passwort').fill(PASSWORD)
+      await page.getByRole('button', { name: 'anmelden' }).click()
+    }
+    await expect(qkSection.locator('button[title="schliessen"]')).toBeVisible({
+      timeout: 30_000,
+    })
+    await expect(waehlenTab).toHaveAttribute('aria-selected', 'true')
+
+    // collapsing removes open and qk together — one back restores both
+    await qkSection.locator('button[title="schliessen"]').click()
+    await expect(page).toHaveURL(new RegExp(`/Vermehrung/Arten/${ART_ID}/Art$`))
+    await page.goBack()
+    await expect(page).toHaveURL(/open=qk&qk=waehlen$/)
+    await expect(qkSection.locator('button[title="schliessen"]')).toBeVisible({
+      timeout: 30_000,
+    })
+    await expect(waehlenTab).toHaveAttribute('aria-selected', 'true')
   })
 
   await expect(page.locator('#dev-error-overlay')).toHaveCount(0)

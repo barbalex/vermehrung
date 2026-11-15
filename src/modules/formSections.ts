@@ -38,3 +38,10 @@ export const toggleFormSection = (slug: string) => {
 /** a section's expanded state, url-backed via ?open= */
 export const useFormSectionOpen = (slug: string): boolean =>
   useAtomValue(isOpenAtom(slug))
+
+// the QK section's inner tab ('qk' = ausführen, 'waehlen' = auswählen),
+// url-driven via ?qk=waehlen (diff-encoded: the param only exists for
+// the non-default tab, and only while the qk section is expanded)
+export const qkTabAtom = atom<string>('qk')
+
+export const setQkTab = (tab: string) => store.set(qkTabAtom, tab)

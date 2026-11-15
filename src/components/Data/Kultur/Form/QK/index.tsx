@@ -10,6 +10,8 @@ import { combineLatest, of as $of } from 'rxjs'
 
 import { dbAtom, userAtom } from '../../../../../store/index.ts'
 import {
+  qkTabAtom,
+  setQkTab,
   toggleFormSection,
   useFormSectionOpen,
 } from '../../../../../modules/formSections.ts'
@@ -29,8 +31,9 @@ export const KulturQkRouter = ({
   const db = useAtomValue(dbAtom)
   const user = useAtomValue(userAtom)
 
-  const [tab, setTab] = useState('qk')
-  const onChangeTab = (_event: unknown, value: string) => setTab(value)
+  // url-driven via ?qk=waehlen, shared with the Art form's QK section
+  const tab = useAtomValue(qkTabAtom)
+  const onChangeTab = (_event: unknown, value: string) => setQkTab(value)
 
   const [dataState, setDataState] = useState<{
     qks: import('../../../../../dbModel.ts').KulturQk[]

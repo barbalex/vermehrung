@@ -8,7 +8,7 @@ import {
   filterSammlungAtom,
 } from '../../store/index.ts'
 import emptyValues from '../../store/Filter/emptyValues.ts'
-import { openFormSectionsAtom } from '../formSections.ts'
+import { openFormSectionsAtom, qkTabAtom } from '../formSections.ts'
 import {
   applySearchParams,
   decodeFilterValues,
@@ -27,6 +27,7 @@ beforeEach(() => {
   store.set(filterShowAtom, false)
   store.set(apFilterAtom, true)
   store.set(openFormSectionsAtom, [])
+  store.set(qkTabAtom, 'qk')
 })
 
 describe('decodeFilterValues', () => {
@@ -142,5 +143,15 @@ describe('applySearchParams', () => {
     applySearchParams('?open=timeline')
     applySearchParams('')
     expect(store.get(openFormSectionsAtom)).toEqual([])
+  })
+
+  it('?qk= drives the QK tab and reverts when it disappears', () => {
+    applySearchParams('?qk=waehlen')
+    expect(store.get(qkTabAtom)).toBe('waehlen')
+    applySearchParams('')
+    expect(store.get(qkTabAtom)).toBe('qk')
+    // junk values fall back to the default tab
+    applySearchParams('?qk=zzz')
+    expect(store.get(qkTabAtom)).toBe('qk')
   })
 })

@@ -13,7 +13,7 @@ import {
 } from '../store/index.ts'
 import emptyValues from '../store/Filter/emptyValues.ts'
 import { simpleTypes } from '../store/Filter/simpleTypes.ts'
-import { openFormSectionsAtom } from './formSections.ts'
+import { openFormSectionsAtom, qkTabAtom } from './formSections.ts'
 
 // Makes view state linkable via the url's query string:
 //
@@ -29,6 +29,8 @@ import { openFormSectionsAtom } from './formSections.ts'
 //                               pane closes)
 //   open=<slug>[,<slug>]        collapsible form sections (QK, Timeline,
 //                               ...) expanded, see modules/formSections.ts
+//   qk=waehlen                  the QK section's auswählen tab (only
+//                               while the qk section is expanded)
 //
 // Rules:
 // - url -> atoms (on every location change, incl. boot): groups with
@@ -247,11 +249,42 @@ const openGroup: ParamGroup = {
   atoms: () => [openFormSectionsAtom as PrimitiveAtom<unknown>],
 }
 
+// the QK section's inner tab: ?qk=waehlen — diff-encoded (ausführen is
+// the default, so the param only exists for auswählen) and only while
+// the qk section is expanded; collapsing the section removes it
+const qkTabGroup: ParamGroup = {
+  tracked: (key) => key === 'qk',
+  apply: (params) => {
+    const tab = params.get('qk') === 'waehlen' ? 'waehlen' : 'qk'
+    if (store.get(qkTabAtom) !== tab) store.set(qkTabAtom, tab)
+  },
+  revert: () => {
+    if (store.get(qkTabAtom) !== 'qk') store.set(qkTabAtom, 'qk')
+  },
+  updates: () => [
+    [
+      'qk',
+      (
+        store.get(qkTabAtom) === 'waehlen' &&
+        store.get(openFormSectionsAtom).includes('qk')
+      ) ?
+        'waehlen'
+      : undefined,
+    ],
+  ],
+  replace: false,
+  atoms: () => [
+    qkTabAtom as PrimitiveAtom<unknown>,
+    openFormSectionsAtom as PrimitiveAtom<unknown>,
+  ],
+}
+
 const groups: ParamGroup[] = [
   filterShowGroup,
   apGroup,
   ftabGroup,
   openGroup,
+  qkTabGroup,
   ...filterTableNames.map(tableGroup),
 ]
 
@@ -283,22 +316,45 @@ export const applySearchParams = (search: string) => {
 
 // === atoms -> url ===
 
-const writeGroupToUrl = (group: ParamGroup) => {
-  const navigate = getNavigate()
-  if (!navigate) return
-  const { pathname, search } = window.location
-  const params = new URLSearchParams(search)
-  const before = params.toString()
-  for (const [key, value] of group.updates(params)) {
-    if (value === undefined) params.delete(key)
-    else params.set(key, value)
-  }
-  const after = params.toString()
-  // identical: our own write would re-trigger applySearchParams for
-  // nothing (it no-ops on equal atoms, but skip the navigation anyway)
-  if (after === before) return
-  navigate(after ? `${pathname}?${after}` : pathname, {
-    replace: group.replace,
+// one navigation per change burst: a single user action can touch
+// several groups (collapsing the QK section rewrites open AND qk;
+// "Alle Filter entfernen" empties all tables at once), and sequential
+// navigations would push one history entry per group. Dirty groups are
+// collected and flushed together in a microtask; push when any of them
+// is discrete (replace-only bursts keep replacing, e.g. filter typing).
+const dirtyGroups = new Set<ParamGroup>()
+let flushScheduled = false
+
+const scheduleWrite = (group: ParamGroup) => {
+  dirtyGroups.add(group)
+  if (flushScheduled) return
+  flushScheduled = true
+  queueMicrotask(() => {
+    flushScheduled = false
+    const navigate = getNavigate()
+    if (!navigate) {
+      dirtyGroups.clear()
+      return
+    }
+    const { pathname, search } = window.location
+    const params = new URLSearchParams(search)
+    const before = params.toString()
+    let push = false
+    // groups in fixed order, so params serialize deterministically
+    for (const group of groups) {
+      if (!dirtyGroups.has(group)) continue
+      if (!group.replace) push = true
+      for (const [key, value] of group.updates(params)) {
+        if (value === undefined) params.delete(key)
+        else params.set(key, value)
+      }
+    }
+    dirtyGroups.clear()
+    const after = params.toString()
+    // identical: our own write would re-trigger applySearchParams for
+    // nothing (it no-ops on equal atoms, but skip the navigation anyway)
+    if (after === before) return
+    navigate(after ? `${pathname}?${after}` : pathname, { replace: !push })
   })
 }
 
@@ -311,7 +367,7 @@ export const initSearchParamsSync = () => {
   void persistedAtomsHydrated.then(() => {
     for (const group of groups) {
       for (const atom of group.atoms())
-        store.sub(atom, () => writeGroupToUrl(group))
+        store.sub(atom, () => scheduleWrite(group))
     }
   })
 }
