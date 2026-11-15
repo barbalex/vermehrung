@@ -34,7 +34,8 @@ const Zaehlung = lazy(async () => ({
   default: (await import('./Data/Zaehlung/index.tsx')).Zaehlung,
 }))
 import { ErrorBoundary } from './shared/ErrorBoundary.tsx'
-import { activeFormAtom } from '../store/index.ts'
+import { activeFormAtom, filterTabAtom } from '../store/index.ts'
+import { setFtabParam } from '../modules/searchSync.ts'
 import { Fallback } from './shared/Fallback.tsx'
 
 import styles from './Filter.module.css'
@@ -61,9 +62,33 @@ export const Filter = () => {
         .replace(/^zaehlungen$/, 'zaehlung')
       // fallback if no form is active
     : 'art'
-  const [activeTab, setActiveTab] = useState(activeTabFromActiveForm)
+  const titleObject: Record<string, string> = {
+    art: 'Art Filter',
+    garten: 'Garten Filter',
+    herkunft: 'Herkunft Filter',
+    kultur: 'Kultur Filter',
+    lieferung: 'Lieferung Filter',
+    sammel_lieferung: 'Sammel-Lieferung Filter',
+    person: 'Person Filter',
+    sammlung: 'Sammlung Filter',
+    teilkultur: 'TeilKultur Filter',
+    zaehlung: 'Zählung Filter',
+  }
+  // the tab is url-driven while a ?ftab= param exists (shared links,
+  // back/forward; unknown values are ignored). Without it the tab
+  // derives from the active form, frozen at the pane's mount - as it
+  // always was, so navigating does not rip the tab away
+  const urlTab = useAtomValue(filterTabAtom)
+  const knownTabs = Object.keys(titleObject)
+  const [derivedTab] = useState(activeTabFromActiveForm)
+  const activeTab = urlTab && knownTabs.includes(urlTab) ? urlTab : derivedTab
 
-  const onChangeTab = (_event: unknown, value: string) => setActiveTab(value)
+  // make the chosen tab linkable; replace (not push) so cycling tabs
+  // does not spam the history. searchSync removes the param again when
+  // the pane closes.
+  const onChangeTab = (_event: unknown, value: string) => {
+    setFtabParam(value)
+  }
 
   const formObject: Record<string, import('react').ReactElement> = {
     art: <Art filter />,
@@ -78,18 +103,6 @@ export const Filter = () => {
     zaehlung: <Zaehlung filter />,
   }
   const form = formObject[activeTab]
-  const titleObject: Record<string, string> = {
-    art: 'Art Filter',
-    garten: 'Garten Filter',
-    herkunft: 'Herkunft Filter',
-    kultur: 'Kultur Filter',
-    lieferung: 'Lieferung Filter',
-    sammel_lieferung: 'Sammel-Lieferung Filter',
-    person: 'Person Filter',
-    sammlung: 'Sammlung Filter',
-    teilkultur: 'TeilKultur Filter',
-    zaehlung: 'Zählung Filter',
-  }
 
   return (
     <ErrorBoundary>

@@ -11,6 +11,9 @@ const NavigationSyncController = lazy(async () => ({
   default: (await import('./NavigationSyncController.tsx'))
     .NavigationSyncController,
 }))
+const SearchSyncController = lazy(async () => ({
+  default: (await import('./SearchSyncController.tsx')).SearchSyncController,
+}))
 const Notifications = lazy(async () => ({
   default: (await import('./Notifications/index.tsx')).Notifications,
 }))
@@ -43,6 +46,7 @@ export const Layout = () => {
         <Outlet />
       </Suspense>
       <NavigationSyncController />
+      <SearchSyncController />
       <ExportProgress />
       <Notifications />
     </div>

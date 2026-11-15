@@ -11,6 +11,7 @@ import emptyValues from './Filter/emptyValues.ts'
 import { emptyHash } from './Filter/emptyHash.ts'
 
 import { activeFormFromActiveNodeArray } from '../utils/activeFormFromActiveNodeArray.ts'
+import { currentSearch, isCurrentUrl } from '../utils/withSearch.ts'
 import { artIdInUrl } from '../utils/idsInUrl.ts'
 import { herkunftIdInUrl } from '../utils/idsInUrl.ts'
 import { gartenIdInUrl } from '../utils/idsInUrl.ts'
@@ -112,6 +113,14 @@ const persistedAtom = <T>(key: string, initialValue: T): PrimitiveAtom<T> => {
   return baseAtom
 }
 
+// resolves when hydratePersistedAtoms has finished; consumers that must
+// not act on pre-hydration state await it (e.g. the search-param sync,
+// which must not write persisted filter values into a clean url)
+let resolveHydrated: (() => void) | undefined
+export const persistedAtomsHydrated = new Promise<void>((resolve) => {
+  resolveHydrated = resolve
+})
+
 export const hydratePersistedAtoms = async () => {
   // hydrate in parallel and never let a slow/blocked storage
   // keep the app from booting
@@ -143,6 +152,7 @@ export const hydratePersistedAtoms = async () => {
   // let the queue observer know about hydrated queries immediately
   // (instead of waiting for the first retry tick)
   store.set(queueSizeAtom, store.get(queuedQueriesAtom).length)
+  resolveHydrated?.()
 }
 
 export const store = createStore()
@@ -310,7 +320,14 @@ export const setActiveNodeArray = (val: string[], nonavigate?: boolean) => {
   const activeNodeArray = split.activeNodeArray
   store.set(activeNodeArrayAtom, activeNodeArray)
   if (!nonavigate) {
-    getNavigate()?.(`/Vermehrung/${val.join('/')}`)
+    // keep the query string: it carries linkable view state (filters)
+    const url = `/Vermehrung/${val.join('/')}${currentSearch()}`
+    // never re-push the current url: NavigationSyncController calls this
+    // after link and pop navigations, and a second push of the same url
+    // would duplicate the history entry (back then needs two presses)
+    if (!isCurrentUrl(url)) {
+      getNavigate()?.(url)
+    }
     addOpenNode(activeNodeArray)
   }
 }
@@ -335,7 +352,7 @@ export const setWidthInPercentOfScreen = (val: number) => {
 }
 
 // === filter ===
-const filterTableNames = [
+export const filterTableNames = [
   'art',
   'bedarf',
   'garten',
@@ -352,6 +369,10 @@ const filterTableNames = [
 ] as const
 
 export const filterShowAtom = persistedAtom('filter:show', false)
+// the filter pane's active tab, url-driven (?ftab=, see searchSync);
+// undefined: no tab chosen via url (or pane closed) - the pane derives
+// its tab from the active form, frozen at the pane's mount
+export const filterTabAtom = atom<string | undefined>(undefined)
 
 export const filterTableAtoms: Record<
   string,

@@ -44,6 +44,26 @@ npm run typecheck        # tsc --noEmit (strict, noUnusedLocals/noUnusedParamete
 - **Revision aggregation**: field edits update the local row immediately (labels stay live) but no longer create a revision per field change. One revision per row and editing session is queued by `src/modules/revAggregation.ts` when it ends: ~5s after the last change, on navigation, on tab-hide/close, plus a boot heal that flushes rows left dirty by a crash (registry in localStorage, `vermehrung:unflushed-revs`) before the sync starts. The sync never overwrites rows with unflushed edits (`isUnflushedRev` guard in `processSubscriptionResult`). The rev-table field lists live in `src/modules/revTableFields.ts` - keep them in sync with the schema.
 - Deploys are manual via `npm run deploy` / `npm run deploy_preview` for the frontend (the former GitHub Actions auto-deploy was removed — see git history, `743acdbce`) and `scripts/deployBackend.mjs` for the backend (see below).
 
+## Refreshing a dev machine after a pull
+
+Runbook for a machine that ran the project before (fresh-clone setup: see the prerequisites above). The gitignored local secrets (`.env.development`, `.env.production`, `backend-dev/.env`, `backend/.env`) survive pulls — nothing to redo unless a file is missing.
+
+1. `node --version` — must be ≥ 24 (`.nvmrc`; `nvm use` if node is managed via nvm).
+2. `npm ci` — dependencies are exact-pinned; reinstall after every pull.
+3. `npx playwright install chromium` — only when Playwright errors about a missing/mismatched browser build (each package version pins an exact build).
+4. Start Docker, then `npm run backend` (health-checked `up -d` of db + api + auth, host ports 5434/8090/7010). If `v_auth`/`v_api` crash-loop, a newly introduced env var is probably missing from the local `backend-dev/.env` — check `backend-dev/docker-compose.yaml` and `backend/auth/server.js` for new keys.
+5. **SQL changes don't apply themselves.** The db init scripts run only on a fresh `db_data` volume, so a pull that changed `src/sql/*` leaves the running dev db stale. The files are idempotent — apply the changed ones to the running db, e.g.:
+   ```bash
+   docker exec -i v_db psql -U postgres -d vermehrung -v ON_ERROR_STOP=1 < src/sql/createSyncFunction.sql
+   ```
+   Exception `createApiAccess.sql`: it needs the api-role password extracted from `PGRST_DB_URI` exactly as in `backend-dev/db/init/04_api_access.sh` (the file is mounted in the container):
+   ```bash
+   docker exec v_db bash -c 'pw="$(printf "%s" "$PGRST_DB_URI" | tr -d "\r" | sed -E "s|^[a-z]+://[^:]+:([^@]+)@.*$|\1|")"; PGOPTIONS="-c app.password=$pw" psql -U postgres -d vermehrung -v ON_ERROR_STOP=1 --file=/api_sql/createApiAccess.sql'
+   ```
+   PostgREST caches its schema — `docker restart v_api` after applying SQL (only `createErrorReport.sql` and `createTables.sql` end in a `NOTIFY pgrst, 'reload schema'` themselves).
+6. Full db reset (schema drift too entangled, or you want fresh production data) — a deliberate decision, not part of the routine (that cost is why the guardrail forbids casual `down -v`): `npm run fetchBackup` refreshes `backend-dev/db/vermehrung.backup`, then `docker compose -f backend-dev/docker-compose.yaml down && docker volume rm vermehrung_db_data && npm run backend`. The restore takes ~5 min and local test edits are gone. The volume is `vermehrung_db_data`, not `backend-dev_db_data` — `COMPOSE_PROJECT_NAME=vermehrung` is pinned in `backend-dev/.env` (and `backend-dev_db_data` belongs to apf2's stack).
+7. Smoke check: `npm run verify` (format + lint + typecheck + unit tests), `npm run test:api` (needs the backend), `npm run test:e2e` (hermetic, mocks every endpoint). Then `npm run dev` → http://localhost:5175.
+
 ## Architecture
 
 This is a **local-first** app. Three concerns are split across the repo:
@@ -70,6 +90,7 @@ Rollback: frontend — `firebase hosting:rollback` (re-releases the previous rel
 
 - **React 19** + **MUI 9** (Emotion; `jsxImportSource: '@emotion/react'`), **React Compiler** enabled, **jotai** for app/UI state.
 - **apiClient** (`src/utils/apiClient.ts`): thin fetch wrapper over PostgREST (auth header from localStorage, `Prefer:` handling for upserts).
+- **Linkable view state in the url** (`src/modules/searchSync.ts`): filter values (`f.<table>.<field>=…`, diff-encoded), the filter pane (`filter=1`), its tab (`ftab=`) and the ap filter (`ap=0`) live in the query string, synced bidirectionally with the atoms. `SearchSyncController` is the ONLY router subscriber for this — components keep reading/writing atoms, never `useSearchParams` (re-render safety). Params in a url win over persisted values; absent params leave them alone; disappeared params (back/forward) revert to defaults. In-app navigation must preserve the query string (`utils/withSearch.ts`, `historyUrl*`).
 - **WatermelonDB** is the local-first store: models in `src/dbModel.ts`, schema in `src/dbSchema/`, persisted via **SQLiteAdapter** (wa-sqlite Asyncify in a **dedicated Web Worker**, IndexedDB VFS — the database work never touches the main thread) in `src/utils/initiateDb.ts`. The adapter's `web.workerFactory`/`web.wasmUrl` overrides point at `src/utils/sqliteWorkerEntry.ts` and the bundled wasm — nitromelondb's defaults assume an unbundled setup that does not work under Vite (see the vite.config bullet below). Legacy LokiJS data is migrated once on boot (`src/utils/migrateLokiToSqlite.ts`): when a login token and a loki IndexedDB exist, all rows are copied into SQLite before the db reaches the app; the loki store is kept as backup, a localStorage flag (`vermehrung:sqlite-migrated-v1`) prevents re-runs. **Async-adapter constraint**: `unsafeResetDatabase` opens a window in which WatermelonDB forbids ALL adapter access (queries crash with `Cannot call database.adapter.underlyingAdapter while the database is being reset`) — resets must run on an idle app before any state churn (see `Login.tsx` `fetchLogin`, `logout.ts`, `reloadData.ts`) and `fetchLogin` is single-flight. Migrations in `src/utils/migrations.ts` — bump the schema version there whenever you change `src/dbSchema/*`.
 - Entry chain: `src/main.tsx` → `src/App.tsx` (wires providers: `DatabaseProvider` → MUI theme) → `src/Router.tsx`.
 

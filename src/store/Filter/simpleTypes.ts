@@ -3,6 +3,7 @@ import { simpleTypes as bedarf } from './bedarf.ts'
 import { simpleTypes as garten } from './garten.ts'
 import { simpleTypes as herkunft } from './herkunft.ts'
 import { simpleTypes as kultur } from './kultur.ts'
+import { simpleTypes as kultur_option } from './kultur_option.ts'
 import { simpleTypes as lieferung } from './lieferung.ts'
 import { simpleTypes as sammel_lieferung } from './sammel_lieferung.ts'
 import { simpleTypes as person } from './person.ts'
@@ -17,6 +18,7 @@ export const simpleTypes: Record<string, Record<string, string>> = {
   garten,
   herkunft,
   kultur,
+  kultur_option,
   lieferung,
   sammel_lieferung,
   person,

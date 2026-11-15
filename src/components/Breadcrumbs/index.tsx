@@ -8,7 +8,9 @@ import {
 import { useAtomValue } from 'jotai'
 import MuiBreadcrumbs from '@mui/material/Breadcrumbs'
 import Link from '@mui/material/Link'
-import { Link as RouterLink } from 'react-router'
+import { Link as RouterLink, useLocation } from 'react-router'
+
+import { withSearch } from '../../utils/withSearch.ts'
 
 import {
   activeNodeArrayAtom,
@@ -136,7 +138,7 @@ const CrumbItem = ({
         <span className={styles.current}>{crumb.label}</span>
       : <Link
           component={RouterLink}
-          to={`/Vermehrung/${crumb.url.join('/')}`}
+          to={withSearch(`/Vermehrung/${crumb.url.join('/')}`)}
           underline="hover"
         >
           {crumb.label}
@@ -153,6 +155,10 @@ export const Breadcrumbs = () => {
   const activeNodeArray = useAtomValue(activeNodeArrayAtom)
   const objectName = useAtomValue(activeObjectNameAtom)
   const treePaneHidden = useAtomValue(treePaneHiddenAtom)
+  // subscribing to the location keeps the crumbs' hrefs fresh when only
+  // the query string changes (filters): the links carry it, but would
+  // otherwise be computed once at render with a stale search
+  useLocation()
   const scrollRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
