@@ -9,6 +9,9 @@ import {
 import { RouterProvider } from 'react-router/dom'
 
 import { Layout } from './components/Layout.tsx'
+// statically imported on purpose: as the errorElement it must load when
+// route chunks fail (stale deploy) - a lazy boundary 404s exactly then
+import { RouterErrorBoundary } from './components/shared/RouterErrorBoundary.tsx'
 
 const Home = lazy(async () => ({
   default: (await import('./routes/index.tsx')).Home,
@@ -152,17 +155,16 @@ const Vermehrung = lazy(async () => ({
 const QueuedQueries = lazy(async () => ({
   default: (await import('./components/QueuedQueries/index.tsx')).QueuedQueries,
 }))
-const RouterErrorBoundary = lazy(async () => ({
-  default: (await import('./components/shared/RouterErrorBoundary.tsx'))
-    .RouterErrorBoundary,
-}))
 
 export const Router = () => {
   // console.log('App rendering')
 
   const router = createBrowserRouter(
     createRoutesFromElements(
-      <Route element={<Layout />}>
+      <Route
+        element={<Layout />}
+        errorElement={<RouterErrorBoundary />}
+      >
         <Route
           path="/"
           element={<Home />}
