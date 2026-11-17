@@ -4,6 +4,7 @@ import Button from '@mui/material/Button'
 import type { ReactNode } from 'react'
 
 import { reportError } from '../../modules/errorTelemetry.ts'
+import { logout } from '../../utils/logout.ts'
 
 import styles from './ErrorBoundary.module.css'
 
@@ -12,11 +13,9 @@ const onReload = () => window.location.reload()
 const ErrorFallback = ({
   error,
   componentStack,
-  resetErrorBoundary,
 }: {
   error: Error
   componentStack?: string | null
-  resetErrorBoundary: () => void
 }) => {
   // ISSUE:
   // WatermelonDB throws error when record not found
@@ -49,7 +48,9 @@ const ErrorFallback = ({
       <div className={styles.buttonContainer}>
         <Button
           variant="outlined"
-          onClick={resetErrorBoundary}
+          // directly, not via resetErrorBoundary: a reset re-renders the
+          // children while logout's unsafeResetDatabase wipes the db
+          onClick={() => void logout()}
           color="inherit"
           className={styles.button}
         >
@@ -69,7 +70,6 @@ export const ErrorBoundary = ({ children }: { children: ReactNode }) => {
           import('react-error-boundary').FallbackProps
         >
       }
-      onReset={onReload}
       onError={(error) => void reportError('boundary', error)}
     >
       {children}
