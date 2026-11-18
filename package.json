@@ -47,7 +47,7 @@
     "date-fns": "4.4.0",
     "diff": "9.0.0",
     "es-toolkit": "1.53.2",
-    "firebase": "13.1.0",
+    "firebase": "13.3.0",
     "fuse.js": "7.5.0",
     "jotai": "3.0.2",
     "jotai-effect": "2.4.2",
@@ -83,17 +83,17 @@
     "@types/luxon": "3.7.6",
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
-    "@typescript-eslint/eslint-plugin": "8.72.1",
-    "@typescript-eslint/parser": "8.72.1",
+    "@typescript-eslint/eslint-plugin": "8.73.0",
+    "@typescript-eslint/parser": "8.73.0",
     "@vitejs/plugin-react": "6.3.0",
     "@vitest/coverage-v8": "5.1.0",
     "babel-plugin-react-compiler": "1.0.0",
-    "eslint": "10.14.0",
+    "eslint": "10.15.0",
     "eslint-plugin-import": "2.32.0",
     "eslint-plugin-react": "7.37.5",
     "eslint-plugin-react-hooks": "7.1.1",
     "eslint-plugin-react-refresh": "0.5.7",
-    "firebase-tools": "15.34.2",
+    "firebase-tools": "15.36.0",
     "globals": "17.14.0",
     "jsdom": "29.1.1",
     "kanel": "4.0.4",
@@ -101,7 +101,7 @@
     "proj4": "2.22.0",
     "type-coverage": "2.31.2",
     "typescript": "6.0.3",
-    "vite": "8.3.5",
+    "vite": "8.3.8",
     "vite-plugin-pwa": "2.0.0",
     "vite-plugin-svgr": "5.2.0",
     "vitest": "5.1.0",
@@ -110,5 +110,9 @@
   "dev-comments": {
     "none": "right now",
     "typescript": "6.0.3: stay until typescript-eslint supports TS 7.1's new API (typescript-eslint#10940); TS 7.0 lacks a programmatic API and breaks our eslint setup. tsconfig already prepared (esModuleInterop deprecation removed 9/2026)"
+  },
+  "overrides": {
+    "@grpc/grpc-js": "^1.13.6",
+    "re2": "^1.27.1"
   }
 }
