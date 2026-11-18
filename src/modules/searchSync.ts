@@ -298,7 +298,11 @@ export const resetSearchSyncForTests = () => {
 }
 
 export const applySearchParams = (search: string) => {
-  if (search === lastSearch) return
+  // no early return on search === lastSearch: history can bounce back to
+  // the last applied search after atoms changed without an intermediate
+  // apply (collapse click pushes the url synchronously, a fast back
+  // restores the old entry before the push's location is applied). Every
+  // group's apply/revert is idempotent, so re-applying is safe.
   const params = new URLSearchParams(search)
   const first = lastSearch === undefined
   const prev = first ? undefined : new URLSearchParams(lastSearch)

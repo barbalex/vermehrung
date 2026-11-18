@@ -154,4 +154,20 @@ describe('applySearchParams', () => {
     applySearchParams('?qk=zzz')
     expect(store.get(qkTabAtom)).toBe('qk')
   })
+
+  it('re-applies a search history bounced back to after atoms drifted', () => {
+    // race pinned by the QK e2e: collapsing a section pushes a param-less
+    // url (synchronous pushState), but lastSearch only updates when the
+    // effect applies that location. A back can restore the previous entry
+    // before that happens — the search equals lastSearch, yet the atoms
+    // drifted, so it must be applied again
+    applySearchParams('?open=qk&qk=waehlen')
+    expect(store.get(openFormSectionsAtom)).toEqual(['qk'])
+    // the collapse click mutates atoms with no intermediate apply
+    store.set(openFormSectionsAtom, [])
+    // history bounces back to the unchanged search
+    applySearchParams('?open=qk&qk=waehlen')
+    expect(store.get(openFormSectionsAtom)).toEqual(['qk'])
+    expect(store.get(qkTabAtom)).toBe('waehlen')
+  })
 })
