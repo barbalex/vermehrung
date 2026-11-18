@@ -10,6 +10,10 @@ on:
     branches: [master]
   pull_request:
 
+# least privilege: the job only checks out and runs tests
+permissions:
+  contents: read
+
 jobs:
   test:
     runs-on: ubuntu-latest

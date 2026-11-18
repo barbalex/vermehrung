@@ -215,7 +215,8 @@ async function start() {
         })
       } catch (error) {
         console.log(
-          `firebase error while creating user for email ${email}:`,
+          'firebase error while creating user for email:',
+          email,
           error,
         )
         const code = error.errorInfo.code

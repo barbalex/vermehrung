@@ -36,7 +36,9 @@ const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)))
 const walk = (dir) =>
   readdirSync(dir, { withFileTypes: true }).flatMap((entry) =>
     entry.isDirectory() ?
-      entry.name === 'node_modules' ? [] : walk(path.join(dir, entry.name))
+      entry.name === 'node_modules' ?
+        []
+      : walk(path.join(dir, entry.name))
     : [path.join(dir, entry.name)],
   )
 
