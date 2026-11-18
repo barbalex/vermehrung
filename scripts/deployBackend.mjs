@@ -31,10 +31,12 @@ const APPLY = process.argv.includes('--apply')
 
 const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)))
 
+// node_modules (a local npm install in backend/auth) must never reach the
+// file list - it would blow past ARG_MAX in the remote sha256sum command
 const walk = (dir) =>
   readdirSync(dir, { withFileTypes: true }).flatMap((entry) =>
     entry.isDirectory() ?
-      walk(path.join(dir, entry.name))
+      entry.name === 'node_modules' ? [] : walk(path.join(dir, entry.name))
     : [path.join(dir, entry.name)],
   )
 
