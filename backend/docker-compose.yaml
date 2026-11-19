@@ -124,6 +124,8 @@ services:
       - ./caddy/Caddyfile:/etc/caddy/Caddyfile
       - caddy_certs:/data/caddy
       - caddy_config:/root/.config/caddy
+      # blue-borders.ch static site, rsynced by bb4's npm run deploy
+      - /root/bb/dist:/srv-bb:ro
 volumes:
   db_data:
   caddy_certs:

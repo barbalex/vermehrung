@@ -20,3 +20,27 @@ auth.vermehrung.ch {
     flush_interval -1
   }
 }
+
+# blue-borders.ch / mediterranean-migration.com: purely static
+# documentation site (frozen). the pages are prerendered in the bb4 repo
+# and rsynced to /root/bb/dist by bb4's npm run deploy
+(blue-borders-static) {
+	encode gzip
+	# the site is frozen documentation; the last documented year is 2024
+	redir / /events/2024/ 308
+	redir /events /events/2024/ 308
+	redir /events/ /events/2024/ 308
+	root * /srv-bb
+	file_server
+	handle_errors {
+		rewrite * /404.html
+		file_server
+	}
+}
+
+blue-borders.ch,
+www.blue-borders.ch,
+mediterranean-migration.com,
+www.mediterranean-migration.com {
+	import blue-borders-static
+}
