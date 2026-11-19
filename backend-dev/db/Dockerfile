@@ -1,5 +1,5 @@
 # https://registry.hub.docker.com/r/postgis/postgis/tags
-FROM postgis/postgis:18-3.6
+FROM postgis/postgis:18-3.7
 
 COPY ./init/ /docker-entrypoint-initdb.d/
 # enable to seed data

@@ -1,7 +1,8 @@
 # https://registry.hub.docker.com/r/postgis/postgis/tags
-# 2026.10.14: live server still runs 14-3.5
-# new production server will run 18-3.6
-FROM postgis/postgis:18-3.6
+# 2026.11.19: live server moved 14-3.5 -> 18-3.6 (pg 18.6); bumped to 18-3.7
+# (pg 18.7, postgis 3.7.0). Minor pg upgrades are storage-compatible; the
+# postgis extension needs ALTER EXTENSION postgis UPDATE; after the swap.
+FROM postgis/postgis:18-3.7
 
 # init db from vermehrung.backup (only runs when no db detected)
 COPY ./init/ /docker-entrypoint-initdb.d/
