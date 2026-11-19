@@ -60,11 +60,28 @@
     },
     {
       "target": "www-redirect",
+      "public": "firebase-www/public",
       "redirects": [
         {
-          "regex": "/(.*)",
+          "source": "/",
+          "destination": "https://vermehrung.ch/",
+          "type": 301
+        },
+        {
+          "regex": "/((?:[^s].*|s(?:[^w].*)?|sw(?:[^.].*)?|sw\\.(?:[^j].*)?|sw\\.j(?:[^s].*)?|sw\\.js.+))$",
           "destination": "https://vermehrung.ch/:1",
           "type": 301
+        }
+      ],
+      "headers": [
+        {
+          "source": "/sw.js",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "no-cache"
+            }
+          ]
         }
       ]
     }
