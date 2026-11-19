@@ -1,5 +1,9 @@
 # see: https://snyk.io/blog/10-best-practices-to-containerize-nodejs-web-applications-with-docker/
-FROM node:slim
+# pinned (was floating node:slim): exact version, bumped with the 5d
+# cooldown like every other dependency — 26.13-slim is what slim resolved
+# to when pinned. postgres.js v4 requires Node >=20.19/22.12 for
+# require('postgres') ESM interop.
+FROM node:26.13-slim
 RUN apt-get update && apt-get install -y dumb-init
 
 ENV NODE_ENV=production

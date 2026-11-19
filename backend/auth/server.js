@@ -8,7 +8,9 @@ const { initializeApp, cert } = require('firebase-admin/app')
 const { getAuth } = require('firebase-admin/auth')
 const crypto = require('node:crypto')
 const { PassThrough } = require('node:stream')
-const postgres = require('postgres')
+// postgres.js v4 is ESM-only: require returns the module namespace,
+// the factory function is on .default
+const postgres = require('postgres').default
 
 const serviceAccount = require('./config.js')
 
