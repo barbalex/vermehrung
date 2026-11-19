@@ -26,6 +26,21 @@ import { store } from './store/index.ts'
 import { installErrorTelemetry, reportError } from './modules/errorTelemetry.ts'
 import { maybeWipeForIdMigration } from './utils/idMigration2026.ts'
 
+// visits via www.vermehrung.ch (bookmark, autocomplete, shared link) are
+// moved to the canonical origin: Firebase Hosting 301s new visits, but
+// navigations already controlled by a www-origin service worker are served
+// from its precache and never reach that redirect. Unregister the stale
+// worker so future visits hit the 301 directly. Nothing else on the www
+// origin should boot - its IndexedDB is a separate, abandoned database
+if (location.hostname === 'www.vermehrung.ch') {
+  void navigator.serviceWorker
+    ?.getRegistrations()
+    .then((registrations) => registrations.forEach((r) => r.unregister()))
+  location.replace(
+    `https://vermehrung.ch${location.pathname}${location.search}${location.hash}`,
+  )
+}
+
 // production error reports (src/sql/createErrorReport.sql); no-op unless
 // VITE_ERROR_TELEMETRY_URL is set at build time. Installed before anything
 // can throw

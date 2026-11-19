@@ -1,5 +1,13 @@
 {
   "projects": {
     "default": "vermehrung-f48c4"
+  },
+  "targets": {
+    "vermehrung-f48c4": {
+      "hosting": {
+        "app": ["vermehrung-f48c4"],
+        "www-redirect": ["vermehrung-redirect"]
+      }
+    }
   }
 }
