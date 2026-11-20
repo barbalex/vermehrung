@@ -1,76 +1,147 @@
 # dumps vermehrung db
+# encrypts the dump with age BEFORE it leaves this container
+# bundles globals + .env as a second encrypted file next to the dump
 # prepends the datetime to filename
 # uploads the backup to nextcloud
-# but only if the size of the dump changed
+# prunes the nextcloud folder to the retention scheme (7/4/12/yearly)
+# but only if the data fingerprint changed
 # BEWARE: rclone config is expected at /root/.config/rclone/rclone.conf
 # it is mounted from the host file /root/backup/rclone.conf, see docker-compose.yaml
 
-# data fingerprint: deterministic md5 over every synced table's rows.
-# replaces the old size-equality check - equal size with different
-# content silently skipped backups
-FINGERPRINT=$(PGPASSWORD=$POSTGRES_PASSWORD psql -U postgres -h localhost -d vermehrung -At -c "
-  select coalesce(md5(string_agg(row_text, '' order by row_text)), '') from (
-    select (to_jsonb(t))::text as row_text from public.art t
-    union all select (to_jsonb(t))::text from public.art_qk t
-    union all select (to_jsonb(t))::text from public.av t
-    union all select (to_jsonb(t))::text from public.bedarf t
-    union all select (to_jsonb(t))::text from public.garten t
-    union all select (to_jsonb(t))::text from public.gv t
-    union all select (to_jsonb(t))::text from public.herkunft t
-    union all select (to_jsonb(t))::text from public.kultur t
-    union all select (to_jsonb(t))::text from public.kultur_option t
-    union all select (to_jsonb(t))::text from public.kultur_qk t
-    union all select (to_jsonb(t))::text from public.lieferung t
-    union all select (to_jsonb(t))::text from public.person t
-    union all select (to_jsonb(t))::text from public.person_option t
-    union all select (to_jsonb(t))::text from public.sammel_lieferung t
-    union all select (to_jsonb(t))::text from public.sammlung t
-    union all select (to_jsonb(t))::text from public.teilkultur t
-    union all select (to_jsonb(t))::text from public.teilzaehlung t
-    union all select (to_jsonb(t))::text from public.user_role t
-    union all select (to_jsonb(t))::text from public.zaehlung t
-    union all select (to_jsonb(t))::text from public.art_rev t
-    union all select (to_jsonb(t))::text from public.art_qk_rev t
-    union all select (to_jsonb(t))::text from public.av_rev t
-    union all select (to_jsonb(t))::text from public.bedarf_rev t
-    union all select (to_jsonb(t))::text from public.garten_rev t
-    union all select (to_jsonb(t))::text from public.gv_rev t
-    union all select (to_jsonb(t))::text from public.herkunft_rev t
-    union all select (to_jsonb(t))::text from public.kultur_rev t
-    union all select (to_jsonb(t))::text from public.lieferung_rev t
-    union all select (to_jsonb(t))::text from public.person_rev t
-    union all select (to_jsonb(t))::text from public.sammel_lieferung_rev t
-    union all select (to_jsonb(t))::text from public.sammlung_rev t
-    union all select (to_jsonb(t))::text from public.teilkultur_rev t
-    union all select (to_jsonb(t))::text from public.teilzaehlung_rev t
-    union all select (to_jsonb(t))::text from public.zaehlung_rev t
-  ) s") || "-$(PGPASSWORD=$POSTGRES_PASSWORD psql -U postgres -h localhost -d vermehrung -At -c 'select count(*) from public.art_rev')"
+# encryption: only the PUBLIC key lives here — creating backups is all it
+# can do, so it is safe to commit. the private key never touches the VM
+# or nextcloud (ransomware model: a compromised VM must not decrypt the
+# offsite copies): it lives on the notebook (~/.config/age/keys.txt, plus
+# Vaultwarden + a printout) — the SAME key as apf2's backups (one key to
+# print, one to keep). decrypt on the notebook via `npm run fetchBackup`
+# or `age -d -i ~/.config/age/keys.txt`. if the private key is lost, all
+# encrypted backups are garbage — the offline copies are part of the
+# system, not optional.
+AGE_RECIPIENT="age13cmlq4g2ycefly443zpdlnfx8f6jcn0jlt6zvfm7vkvrm8y6f4aqq7tveg"
+
+# data fingerprint: deterministic checksum over every base table's
+# rows in the public schema: per table the row count plus an
+# order-independent sum of per-row md5 hashes (to_jsonb normalizes
+# key order, so column order does not matter). replaces the old
+# hardcoded table list + string_agg fingerprint (an agg over the rows
+# can overflow the 1GB string buffer on big tables, and a hardcoded
+# list silently misses future tables). the table list is generated
+# from the catalog, so future tables are covered automatically.
+# error_report is excluded: client-error telemetry changes almost
+# daily without real data changing (it stays in the dump itself).
+# spatial_ref_sys is excluded: postgis' static reference catalog,
+# big and never changes.
+FINGERPRINT=$(
+  PGPASSWORD=$POSTGRES_PASSWORD psql -U postgres -h localhost -d vermehrung -At <<'EOSQL' | md5sum | cut -d' ' -f1
+select format(
+  'select %L, count(*), coalesce(sum(((''x'' || substr(md5((to_jsonb(t))::text), 1, 16))::bit(64)::bigint)), 0) from public.%I t;',
+  c.relname, c.relname
+)
+from pg_class c
+join pg_namespace n on n.oid = c.relnamespace
+where n.nspname = 'public'
+  and c.relkind = 'r'
+  and c.relname not in ('error_report', 'spatial_ref_sys')
+order by c.relname
+\gexec
+EOSQL
+)
 if [ -f /sik_data/last.fingerprint ] && [ "$FINGERPRINT" = "$(cat /sik_data/last.fingerprint)" ]; then
   echo "data fingerprint unchanged - not dumping"
   exit 0
 fi
 
-echo "creating dump file..."
-FILENAME=$(date +"%Y-%m-%d_%H-%M-%S_vermehrung.backup")
-PGPASSWORD=$POSTGRES_PASSWORD pg_dump -U postgres -h localhost --file=/sik_data/$FILENAME -Fc -Z9 vermehrung
-
+TS=$(date +"%Y-%m-%d_%H-%M-%S")
+FILENAME="${TS}_vermehrung.backup.age"
+META_FILENAME="${TS}_vermehrung.meta.age"
 REMOTE_DIR="nextcloud:Gabriel Software/projekte/vermehrung/sik"
+
+# --- meta bundle: globals + .env, encrypted alongside every dump -------
+# roles/tablespaces (with their passwords) plus the VM's compose .env —
+# everything a lost-VM restore needs besides the dump itself. Same
+# timestamp prefix as the dump, so retention pruning treats them as a
+# pair. Built and uploaded FIRST: it is small, so a dead nextcloud
+# fails the run before the expensive dump is built.
+# BEWARE: /backup-env/.env is mounted by docker-compose.yaml
+# (/root/vermehrung/.env:/backup-env/.env:ro)
+echo "bundling globals + env..."
+STAGE=/sik_data/meta-stage
+rm -rf "$STAGE" && mkdir -p "$STAGE"
+if ! PGPASSWORD=$POSTGRES_PASSWORD pg_dumpall -U postgres -h localhost --globals-only > "$STAGE/globals.sql"; then
+  echo "ERROR: pg_dumpall failed"
+  rm -rf "$STAGE"
+  exit 1
+fi
+if [ -f /backup-env/.env ]; then
+  cp /backup-env/.env "$STAGE/env"
+else
+  # degraded, not fatal: the dump is the critical artifact and the env
+  # exists elsewhere too (vault, notes). but this should not happen —
+  # the compose mount is part of this change.
+  echo "WARNING: /backup-env/.env not mounted - env not bundled (see docker-compose.yaml)"
+fi
+if ! tar -C "$STAGE" -cf /sik_data/meta.tmp .; then
+  echo "ERROR: tar of meta bundle failed"
+  rm -rf "$STAGE" /sik_data/meta.tmp
+  exit 1
+fi
+rm -rf "$STAGE"
+if ! age -r "$AGE_RECIPIENT" -o "/sik_data/$META_FILENAME" /sik_data/meta.tmp; then
+  echo "ERROR: age encryption of meta bundle failed"
+  rm -f /sik_data/meta.tmp "/sik_data/$META_FILENAME"
+  exit 1
+fi
+rm -f /sik_data/meta.tmp
+echo "uploading meta bundle..."
+if ! rclone copyto "/sik_data/$META_FILENAME" "$REMOTE_DIR/$META_FILENAME" --retries 3; then
+  echo "ERROR: meta bundle upload to nextcloud failed"
+  rm -f "/sik_data/$META_FILENAME"
+  exit 1
+fi
+
+# --- the dump itself -----------------------------------------------------
+echo "creating dump file..."
+PGPASSWORD=$POSTGRES_PASSWORD pg_dump -U postgres -h localhost --file=/sik_data/dump.tmp -Fc -Z9 vermehrung || {
+  echo "ERROR: pg_dump failed"
+  rm -f /sik_data/dump.tmp "/sik_data/$META_FILENAME"
+  exit 1
+}
+
+echo "encrypting dump file..."
+if ! age -r "$AGE_RECIPIENT" -o "/sik_data/$FILENAME" /sik_data/dump.tmp; then
+  echo "ERROR: age encryption failed"
+  rm -f /sik_data/dump.tmp "/sik_data/$META_FILENAME"
+  exit 1
+fi
+rm -f /sik_data/dump.tmp
+# plaintext-era leftovers — the encrypted pipeline replaced them
+rm -f /sik_data/last.backup
 
 upload() {
   echo "uploading backup file..."
   # BEWARE: the remote name needs to match the one defined in rclone.conf, i.e. nextcloud
   if ! rclone copyto "/sik_data/$FILENAME" "$REMOTE_DIR/$FILENAME" --retries 3; then
-    # on failure: keep last.backup so the next run retries the upload
+    # on failure: keep last.backup.age so the next run retries the upload
     echo "ERROR: upload to nextcloud failed"
-    rm -f "/sik_data/$FILENAME"
+    rm -f "/sik_data/$FILENAME" "/sik_data/$META_FILENAME"
     exit 1
   fi
 }
 
 upload
 
-# only replace last.backup and the fingerprint after a successful upload
-rm -f /sik_data/last.backup
-mv -f "/sik_data/$FILENAME" /sik_data/last.backup
+# only replace the lasts and the fingerprint after a successful upload
+rm -f /sik_data/last.backup.age /sik_data/last.meta.age
+mv -f "/sik_data/$FILENAME" /sik_data/last.backup.age
+mv -f "/sik_data/$META_FILENAME" /sik_data/last.meta.age
 echo "$FINGERPRINT" > /sik_data/last.fingerprint
-echo "backed up $FILENAME"
+echo "backed up $FILENAME (+ $META_FILENAME)"
+
+# prune the nextcloud folder to the retention scheme (7/4/12/yearly).
+# best-effort: the dumps are already safe at this point, so a prune
+# failure warns but does not fail the backup (the dead-man's switch
+# stays green — check the log for the warning line)
+echo "pruning nextcloud folder to retention scheme..."
+if ! ./prune-backups.sh; then
+  echo "WARNING: retention pruning failed - run ./prune-backups.sh manually"
+fi

@@ -2,24 +2,46 @@
 # restores it into a scratch database inside the running postgres,
 # runs sanity counts, drops the scratch database.
 # run inside the v_db container: docker exec -it v_db bash ./test-restore.sh
+# optionally pass a local dump file to skip the download:
+#   docker exec -it v_db bash ./test-restore.sh /sik_data/vermehrung.backup
 # BEWARE: rclone config is expected at /root/.config/rclone/rclone.conf
 # (mounted from the host, see docker-compose.yaml)
+# 2026-11-20: backups are age-encrypted since that date. This container
+# deliberately holds NO private key (a compromised VM must not decrypt
+# the offsite copies), so encrypted backups cannot be tested here —
+# the ongoing drill is notebook-side: npm run fetchBackup + dev rebuild.
+# This script still works for plaintext dumps (the old pre-encryption
+# backups, or a dump decrypted on the notebook and passed explicitly).
 
 set -e
 
 REMOTE_DIR="nextcloud:Gabriel Software/projekte/vermehrung/sik"
 SCRATCH_DB="vermehrung_restore_test"
+NEWEST=${1:-}
 
-echo "finding newest backup..."
-NEWEST=$(rclone lsf "$REMOTE_DIR" | grep -E '^[0-9]{4}-' | sort | tail -1)
 if [ -z "$NEWEST" ]; then
-  echo "ERROR: no backup found in $REMOTE_DIR"
-  exit 1
+  echo "finding newest backup..."
+  NEWEST=$(rclone lsf "$REMOTE_DIR" | grep -E '^[0-9]{4}-' | sort | tail -1)
+  if [ -z "$NEWEST" ]; then
+    echo "ERROR: no backup found in $REMOTE_DIR"
+    exit 1
+  fi
+fi
+case "$NEWEST" in
+  *.age)
+    echo "ERROR: $NEWEST is age-encrypted and this container deliberately holds no"
+    echo "private key (ransomware model: the VM must not decrypt offsite backups)."
+    echo "test notebook-side instead: npm run fetchBackup, then rebuild the dev stack."
+    echo "or decrypt on the notebook and pass the plaintext dump explicitly."
+    exit 1
+    ;;
+esac
+if [ ! -f "$NEWEST" ]; then
+  echo "downloading $NEWEST..."
+  rclone copyto "$REMOTE_DIR/$NEWEST" "/tmp/$NEWEST" --retries 3
+  NEWEST="/tmp/$NEWEST"
 fi
 echo "newest backup: $NEWEST"
-
-echo "downloading..."
-rclone copyto "$REMOTE_DIR/$NEWEST" "/tmp/$NEWEST" --retries 3
 
 echo "restoring into scratch database $SCRATCH_DB..."
 dropdb --if-exists -U postgres -h localhost "$SCRATCH_DB"

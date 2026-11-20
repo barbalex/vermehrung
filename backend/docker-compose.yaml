@@ -24,6 +24,9 @@ services:
       - ../src/sql/createErrorReport.sql:/api_sql/createErrorReport.sql:ro
       # keep the rclone config (nextcloud backup target) across container recreations
       - /root/backup/rclone.conf:/root/.config/rclone/rclone.conf:ro
+      # the backup bundles the .env (encrypted) so a lost VM restores
+      # self-contained — see backend/db/backup.sh
+      - /root/vermehrung/.env:/backup-env/.env:ro
     command: postgres -c max_locks_per_transaction=2000
     logging:
       options:

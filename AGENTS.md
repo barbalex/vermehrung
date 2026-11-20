@@ -86,6 +86,21 @@ The production stack runs at `ssh root@139.162.172.14`, folder `/root/vermehrung
 
 Rollback: frontend — `firebase hosting:rollback` (re-releases the previous release; `firebase hosting:releases` lists them). Backend — untar the backup the deploy script printed over `/root/vermehrung`, rebuild, `up -d`. The secrets live in `/root/vermehrung/.env` (key names: `DATABASE_URL`, `PGRST_JWT_SECRET`, `FIREBASE_*`, …). db/auth publish on `127.0.0.1` only; Caddy reaches them over the compose network.
 
+### Nightly backups
+
+Ported from apf2 on 2026-11-20 (where the full rationale lives in apf2's PRODUCTION.md). Cron on the VM (23:00, root) runs `/root/backup/backup.sh` (in-repo copy: [backend/db/host-backup.sh](backend/db/host-backup.sh)) → [backend/db/backup.sh](backend/db/backup.sh) inside the `v_db` container:
+
+1. catalog-generated data fingerprint (per `public` base table the row count plus an order-independent sum of row hashes; `error_report` and `spatial_ref_sys` excluded) — unchanged fingerprint → no dump
+2. meta bundle: tar of `pg_dumpall --globals-only` (roles with passwords) + the compose `.env` (mounted ro at `/backup-env/.env`), age-encrypted as `<ts>_vermehrung.meta.age` — a lost VM restores self-contained. Uploaded first (small → fail fast)
+3. `pg_dump -Fc -Z9 vermehrung` → age-encrypted as `<ts>_vermehrung.backup.age` — plaintext never leaves the container
+4. both uploaded to nextcloud (`projekte/vermehrung/sik`) via rclone; only after success are `last.*.age` + the fingerprint replaced
+5. [prune-backups.sh](backend/db/prune-backups.sh) prunes the folder server-side to 7 daily + 4 weekly (newest per ISO week) + 12 monthly (newest per month) + the OLDEST backup per calendar year forever (the year-start snapshot contains the complete passed year). Deleted files land in the nextcloud trashbin; `--dry-run` previews
+
+- **Encryption:** the SAME age keypair as apf2 — one key to print, one to keep. Only the public key is committed (in backup.sh); the private key lives on the notebook (`~/.config/age/keys.txt`) plus Vaultwarden and a printout. If it is lost, the encrypted backups are cryptographically garbage.
+- **Dead-man's switch:** the wrapper pings healthchecks.io after every run — plain URL on success (a fingerprint skip counts as success), `/fail` on error, and silence within the check's period (24h + 1h grace) alerts too. The uuid lives in `/root/backup/healthcheck.env` on the VM (mode 600), never in this repo.
+- **Restore drill:** `npm run fetchBackup` decrypts on the notebook — every fetch doubles as the restore drill and as proof that this machine's key still decrypts current backups. [test-restore.sh](backend/db/test-restore.sh) refuses `.age` files by design (the VM holds no private key); it still works for plaintext dumps passed explicitly.
+- The host wrapper is copied manually to `/root/backup/backup.sh` — keep it in sync with `backend/db/host-backup.sh`. The container-side scripts (backup.sh, test-restore.sh, prune-backups.sh, Dockerfile) deploy with the db image via `deployBackend.mjs --apply`.
+
 ### 2. Frontend (`src/` — this Vite app, hosted on Firebase Hosting)
 
 - **React 19** + **MUI 9** (Emotion; `jsxImportSource: '@emotion/react'`), **React Compiler** enabled, **jotai** for app/UI state.
