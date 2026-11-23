@@ -59,7 +59,9 @@ run('ssh', [
 
 if (!existsSync(identity)) {
   console.error(`ERROR: age identity ${identity} not found`)
-  console.error('it holds the private backup key and lives on the notebook only - see CLAUDE.md (Nightly backups)')
+  console.error(
+    'it holds the private backup key and lives on the notebook only - see CLAUDE.md (Nightly backups)',
+  )
   rmSync(encrypted, { force: true })
   process.exit(1)
 }
@@ -69,7 +71,9 @@ try {
   run('age', ['-d', '-i', identity, '-o', decrypted, encrypted])
 } catch (error) {
   if (error.code === 'ENOENT') {
-    console.error('ERROR: age not found - install it (apt install age, or the static binary into ~/.local/bin)')
+    console.error(
+      'ERROR: age not found - install it (apt install age, or the static binary into ~/.local/bin)',
+    )
   }
   rmSync(encrypted, { force: true })
   rmSync(decrypted, { force: true })
@@ -85,7 +89,9 @@ if (!existsSync(decrypted) || statSync(decrypted).size < 1_000_000) {
 // same-directory rename: backend-dev/db/vermehrung.backup is never a half-written file
 renameSync(decrypted, target)
 const mb = Math.round(statSync(target).size / 100_000) / 10
-console.log(`backend-dev/db/vermehrung.backup updated (${mb} MB, decrypted + verified non-trivial size)`)
+console.log(
+  `backend-dev/db/vermehrung.backup updated (${mb} MB, decrypted + verified non-trivial size)`,
+)
 console.log(
   'rebuild the dev stack against it: docker compose -f backend-dev/docker-compose.yaml down -v && up -d --build',
 )

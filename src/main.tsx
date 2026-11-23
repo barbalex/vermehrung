@@ -24,6 +24,7 @@ import browserUpdate from 'browser-update'
 import { App } from './App.tsx'
 import { store } from './store/index.ts'
 import { installErrorTelemetry, reportError } from './modules/errorTelemetry.ts'
+import { installPreloadErrorRecovery } from './modules/installPreloadErrorRecovery.ts'
 import { maybeWipeForIdMigration } from './utils/idMigration2026.ts'
 
 // visits via www.vermehrung.ch (bookmark, autocomplete, shared link) are
@@ -45,6 +46,11 @@ if (location.hostname === 'www.vermehrung.ch') {
 // VITE_ERROR_TELEMETRY_URL is set at build time. Installed before anything
 // can throw
 installErrorTelemetry()
+
+// a failed lazy-chunk preload (deploy cutover, network blip before the
+// service worker controls the page) must not surface the error boundary
+// when a reload fixes it — capped, see the module
+installPreloadErrorRecovery()
 
 // discard local data once for the uuidv7 id migration, before anything
 // reads or creates the local database
