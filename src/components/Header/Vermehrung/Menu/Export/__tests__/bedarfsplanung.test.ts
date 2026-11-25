@@ -37,14 +37,12 @@ it('exports the newest actual outgoing delivery even when only Andere Mengen was
       db
         .get('garten')
         .prepareCreateFromDirtyRaw({ id: 'g', aktiv: true, _deleted: false }),
-      db
-        .get('kultur')
-        .prepareCreateFromDirtyRaw({
-          id: 'k',
-          garten_id: 'g',
-          aktiv: true,
-          _deleted: false,
-        }),
+      db.get('kultur').prepareCreateFromDirtyRaw({
+        id: 'k',
+        garten_id: 'g',
+        aktiv: true,
+        _deleted: false,
+      }),
       delivery({ datum: '2026-04-01', andere_menge: '3 Töpfe' }),
       delivery({ datum: '2025-08-01', anzahl_pflanzen: 12 }),
       delivery({ geplant: true, anzahl_pflanzen: 20 }),
