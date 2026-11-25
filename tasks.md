@@ -5,6 +5,7 @@ Found during the 2026-11-13 codebase survey. Work top to bottom.
 ## A. Bugs found while surveying (fix before optimizing)
 
 - [x] **Bedarfsplanung export (#164)** — Use the newest dated, non-planned outgoing delivery per Kultur, including deliveries without a plant count, and export its `andere_menge`.
+- [~] **Slow tree expansion (#165)** — Reproduced with the top-level Zählungen folder open: each rebuild fetched Teilzählungen once per Zählung. Batched that lookup. On the local manager dataset (4,976 Zählungen), the Zählungen tree build went from 3.45 s to 0.32 s; with Arten also open, from 4.17 s to 0.32 s, with identical node output. The reporter's branch/path is not yet known.
 
 1. [x] **Unauthenticated admin routes on the auth service** — `GET /create-user/{email}` and `GET /delete-user/{uid}` in `backend/auth/server.js` required no auth; `backend/docker-compose.yaml` published Postgres (5432) and auth (7000) on all interfaces. Fixed: routes now require an api JWT with `role=manager` (`Authorization: Bearer`), ports bound to `127.0.0.1`.
 2. [x] **Inverted QK query** — Art's `zaehlungsWithoutDatum` (`src/components/Data/Art/Form/QK/Qk/createMessageFunctions.ts`) selected Zählungen _with_ a datum (`Q.notEq(null)`); Kultur's version filters `!z.datum`. Fixed: `Q.where('datum', null)`. B6 (unifying the two QK libraries) remains the proper cure for this class of drift.

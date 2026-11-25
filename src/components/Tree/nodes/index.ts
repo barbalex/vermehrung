@@ -95,7 +95,7 @@ import { buildSammlungHerkunft } from './sammlung/herkunft/index.ts'
 import { buildSammlungAuslieferungFolder } from './sammlung/auslieferung/folder.ts'
 import { buildSammlungAuslieferung } from './sammlung/auslieferung/index.ts'
 import { buildZaehlungFolder } from './zaehlung/folder.ts'
-import { buildZaehlung } from './zaehlung/index.ts'
+import { buildZaehlungNodes } from './zaehlung/index.ts'
 import { buildLieferungFolder } from './lieferung/folder.ts'
 import { buildLieferung } from './lieferung/index.ts'
 import { buildPersonFolder } from './person/folder.ts'
@@ -2053,16 +2053,13 @@ export const buildNodes = async ({
     const zaehlungCount = (await zaehlungQuery?.fetchCount()) ?? 0
     zaehlungFolderNodes = buildZaehlungFolder({ count: zaehlungCount })
     if (openNodes.some((n) => n.length === 1 && n[0] === 'Zaehlungen')) {
-      let zaehlungs: import('../../../dbModel.ts').Zaehlung[] = []
-      try {
-        zaehlungs = (await zaehlungQuery?.fetch()) ?? []
-      } catch {}
-      const zaehlungsSorted = (zaehlungs ?? []).sort(zaehlungSort)
-      zaehlungNodes = await Promise.all(
-        zaehlungsSorted.map(
-          async (zaehlung, index) => await buildZaehlung({ zaehlung, index }),
-        ),
-      )
+      const zaehlungs = (await zaehlungQuery?.fetch()) ?? []
+      if (db && zaehlungs.length) {
+        zaehlungNodes = await buildZaehlungNodes(
+          db,
+          zaehlungs.sort(zaehlungSort),
+        )
+      }
     }
   }
 
