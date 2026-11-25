@@ -28,7 +28,11 @@ export const Bedarf = () => (
     </p>
     <p>
       Die Bedarfsangaben fliessen in den Export &quot;aktueller Stand Kulturen
-      für die Bedarfsplanung&quot; ein.
+      für die Bedarfsplanung&quot; ein. Die Spalten zur letzten Lieferung zeigen
+      die jüngste datierte, nicht geplante Auslieferung der Kultur. Auch eine
+      Lieferung ohne Pflanzenzahl wird berücksichtigt; ihre Angabe aus
+      &quot;Andere Mengen&quot; steht in der Spalte{' '}
+      <code>letzte_lieferung_andere_mengen</code>.
     </p>
   </>
 )

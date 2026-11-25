@@ -4,6 +4,8 @@ Found during the 2026-11-13 codebase survey. Work top to bottom.
 
 ## A. Bugs found while surveying (fix before optimizing)
 
+- [x] **Bedarfsplanung export (#164)** — Use the newest dated, non-planned outgoing delivery per Kultur, including deliveries without a plant count, and export its `andere_menge`.
+
 1. [x] **Unauthenticated admin routes on the auth service** — `GET /create-user/{email}` and `GET /delete-user/{uid}` in `backend/auth/server.js` required no auth; `backend/docker-compose.yaml` published Postgres (5432) and auth (7000) on all interfaces. Fixed: routes now require an api JWT with `role=manager` (`Authorization: Bearer`), ports bound to `127.0.0.1`.
 2. [x] **Inverted QK query** — Art's `zaehlungsWithoutDatum` (`src/components/Data/Art/Form/QK/Qk/createMessageFunctions.ts`) selected Zählungen _with_ a datum (`Q.notEq(null)`); Kultur's version filters `!z.datum`. Fixed: `Q.where('datum', null)`. B6 (unifying the two QK libraries) remains the proper cure for this class of drift.
 3. [x] **Crash window in the sync loop** — `processSubscriptionResult` persisted the watermark cursor _before_ the SQLite write committed. Fixed: the function now resolves only after the write commits (setTimeout staggering kept), and `setLastUpdated` runs exclusively on the success path — a failed write leaves the cursor put so the next sync re-delivers the rows. Also closes a latent double-create race: the poller's `await` now spans the writes, so overlapping polls can't both see the same rows as missing.

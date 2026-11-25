@@ -178,19 +178,19 @@ export const buildSheetsForKulturBedarfsplanung = async ({
         .map((l) => l.andere_menge)
         .join(', ')
 
-      let lieferungs: import('../../../../../dbModel.ts').Lieferung[] = []
-      try {
-        lieferungs =
-          (await db
-            ?.get<import('../../../../../dbModel.ts').Lieferung>('lieferung')
-            .query(
-              Q.where('_deleted', false),
-              Q.where('geplant', false),
-              Q.where('datum', Q.notEq(null)),
-              Q.where('anzahl_pflanzen', Q.notEq(null)),
-            )
-            .fetch()) ?? []
-      } catch {}
+      const lieferungs =
+        (await db
+          ?.get<import('../../../../../dbModel.ts').Lieferung>('lieferung')
+          .query(
+            Q.where('_deleted', false),
+            Q.where('geplant', false),
+            Q.where('datum', Q.notEq(null)),
+            Q.or(
+              Q.where('von_kultur_id', kultur.id),
+              Q.where('nach_kultur_id', kultur.id),
+            ),
+          )
+          .fetch()) ?? []
       const lieferungsSorted = lieferungs.sort(lieferungSort)
 
       let lieferungsGeplant: import('../../../../../dbModel.ts').Lieferung[] =
@@ -222,7 +222,7 @@ export const buildSheetsForKulturBedarfsplanung = async ({
       const ownAusLieferungen = lieferungsSorted.filter(
         (l) => l.von_kultur_id === kultur.id,
       )
-      const lastAusLieferung = ownAusLieferungen[ownAusLieferungen.length - 1]
+      const lastAusLieferung = ownAusLieferungen[0]
       const letzte_lieferung_anzahl_pflanzen =
         lastAusLieferung?.anzahl_pflanzen ?? ''
       const letzte_lieferung_anzahl_auspflanzbereit =
@@ -374,6 +374,7 @@ export const buildSheetsForKulturBedarfsplanung = async ({
         letzte_lieferung_anzahl_auspflanzbereit,
         letzte_lieferung_anzahl_mutterpflanzen,
         letzte_lieferung_anzahl_jungpflanzen,
+        letzte_lieferung_andere_mengen: lastAusLieferung?.andere_menge ?? '',
         auslieferungen_seit_letzter_zaehlung_daten: auslSinceLastZaehlung
           .map((l) =>
             DateTime.fromJSDate(new Date(l.datum ?? '')).toFormat('yyyy.LL.dd'),
